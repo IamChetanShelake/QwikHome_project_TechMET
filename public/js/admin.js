@@ -51,6 +51,11 @@ function initializeAdminPanel() {
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');
+            // Also update main content
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.classList.toggle('collapsed');
+            }
         });
     }
 }
