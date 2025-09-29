@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 50">
+  <defs>
+    <style>
+      .main-text { font-family: 'Arial', sans-serif; font-weight: bold; font-size: 24px; fill: #ffffff; }
+      .sub-text { font-family: 'Arial', sans-serif; font-weight: normal; font-size: 7px; fill: #cccccc; letter-spacing: 1.5px; }
+    </style>
+  </defs>
+  <text x="5" y="28" class="main-text">QwikHom</text>
+  <text x="5" y="42" class="sub-text">SERVICES</text>
+</svg>
