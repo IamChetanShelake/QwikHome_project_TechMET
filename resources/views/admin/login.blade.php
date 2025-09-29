@@ -39,17 +39,15 @@
             margin-bottom: 30px;
         }
 
-        .logo i {
-            font-size: 48px;
-            color: #00d4ff;
-            margin-bottom: 10px;
+        .logo-image {
+            height: 60px;
+            width: auto;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
         }
 
-        .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 5px;
+        .logo-image:hover {
+            filter: sepia(1) saturate(5) hue-rotate(180deg) brightness(1.2); /* Adds cyan tint on hover */
         }
 
         .logo p {
@@ -213,8 +211,7 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <i class="fas fa-home"></i>
-            <h1>QwikHome</h1>
+            <img src="{{ asset('images/qwikhome-logo-white.svg') }}" alt="QwikHome" class="logo-image">
             <p>Admin Panel Access</p>
         </div>
 
