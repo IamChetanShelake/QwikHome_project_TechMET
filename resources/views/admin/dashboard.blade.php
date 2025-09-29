@@ -130,7 +130,7 @@
                     <div class="user-menu">
                         <div class="user-trigger">
                             <div class="user-avatar">
-                                <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image">
+                                <!-- <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image"> -->
                                 <div class="online-indicator"></div>
                             </div>
                             <div class="user-info">
@@ -142,7 +142,7 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-header">
                                 <div class="user-avatar">
-                                    <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image">
+                                    <!-- <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image"> -->
                                 </div>
                                 <div class="user-details">
                                     <span class="user-name">Admin User</span>
