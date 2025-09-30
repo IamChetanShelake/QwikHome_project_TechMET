@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    //customer management-------------
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
 });
 
 Auth::routes();
