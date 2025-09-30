@@ -6,275 +6,92 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize user menu
     initializeUserMenu();
 
+    // Initialize service menu
+    initializeServiceMenu();
+
+    // Set active state based on current URL for server-rendered pages
+    setActiveNavByUrl();
+
     // Load dashboard by default
     loadSection('dashboard');
 });
 
-function initializeAdminPanel() {
-    // Sidebar navigation
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('sidebar');
-    
-    // Navigation click handlers
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Add active class to clicked item
-            this.parentElement.classList.add('active');
-            
-            // Get section name and load content
-            const section = this.getAttribute('data-section');
-            loadSection(section);
-            
-            // Update page title
-            const pageTitle = document.querySelector('.page-title');
-            pageTitle.textContent = this.querySelector('span').textContent;
-        });
-    });
-    
-    // Mobile menu toggle
-    if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('open');
-        });
-    }
-    
-    // Sidebar toggle
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-        });
-    }
-}
+// function initializeAdminPanel() {
+//     // Sidebar navigation
+//     const navLinks = document.querySelectorAll('.nav-link');
+//     const sidebarToggle = document.getElementById('sidebarToggle');
+//     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+//     const sidebar = document.getElementById('sidebar');
 
-function initializeUserMenu() {
-    const userMenu = document.querySelector('.user-menu');
-    const userTrigger = document.querySelector('.user-trigger');
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+//     // Navigation click handlers
+//     navLinks.forEach(link => {
+//         link.addEventListener('click', function(e) {
+//             const section = this.getAttribute('data-section');
+//             if (section) {
+//                 // Prevent default for section links and load dynamic content
+//                 e.preventDefault();
+//                 console.log()
+//                 // Remove active class from all nav items
+//                 document.querySelectorAll('.nav-item').forEach(item => {
+//                     item.classList.remove('active');
+//                 });
 
-    if (!userMenu || !userTrigger || !dropdownMenu) {
-        return;
-    }
+//                 // Add active class to clicked item
+//                 this.parentElement.classList.add('active');
 
-    // Toggle dropdown on trigger click
-    userTrigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+//                 // Load section content
+//                 loadSection(section);
 
-        const isActive = userMenu.classList.contains('active');
+//                 // Update page title
+//                 const pageTitle = document.querySelector('.page-title');
+//                 pageTitle.textContent = this.querySelector('span').textContent;
+//             }
+//             // For links with href (like customers), allow default navigation
+//         });
+//     });
 
-        // Close all other dropdowns first
-        document.querySelectorAll('.user-menu.active').forEach(menu => {
-            if (menu !== userMenu) {
-                menu.classList.remove('active');
-            }
-        });
+//     // Mobile menu toggle
+//     if (mobileMenuToggle) {
+//         mobileMenuToggle.addEventListener('click', function() {
+//             sidebar.classList.toggle('open');
+//         });
+//     }
 
-        // Toggle current dropdown
-        if (isActive) {
-            closeDropdown();
-        } else {
-            openDropdown();
-        }
-    });
+//     // Sidebar toggle
+//     if (sidebarToggle) {
+//         sidebarToggle.addEventListener('click', function() {
+//             sidebar.classList.toggle('collapsed');
+//         });
+//     }
+// }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!userMenu.contains(e.target)) {
-            closeDropdown();
-        }
-    });
+// function loadSection(sectionName) {
+//     // Hide all sections
+//     const sections = document.querySelectorAll('.content-section');
+//     sections.forEach(section => {
+//         section.classList.remove('active');
+//     });
 
-    // Close dropdown on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && userMenu.classList.contains('active')) {
-            closeDropdown();
-            userTrigger.focus(); // Return focus to trigger
-        }
-    });
+//     // Show dashboard section if it exists
+//     const dashboardSection = document.getElementById('dashboard-section');
+//     const dynamicContent = document.getElementById('dynamic-content');
 
-    // Handle dropdown item clicks
-    dropdownItems.forEach((item, index) => {
-        // Make items focusable for accessibility
-        item.setAttribute('tabindex', '0');
+//     if (sectionName === 'dashboard' && dashboardSection) {
+//         dashboardSection.classList.add('active');
+//         return;
+//     }
 
-        item.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
+//     // Load dynamic content for other sections
+//     const content = getSectionContent(sectionName);
+//     dynamicContent.innerHTML = content;
+//     dynamicContent.classList.add('active');
 
-            // Handle special actions
-            if (href === '#logout') {
-                e.preventDefault();
-                handleLogout();
-            } else if (href.startsWith('#')) {
-                e.preventDefault();
-                // Handle other internal actions
-                const action = href.substring(1);
-                handleMenuAction(action);
-            }
-
-            // Close dropdown after action
-            closeDropdown();
-        });
-
-        // Add keyboard navigation
-        item.addEventListener('keydown', function(e) {
-            switch(e.key) {
-                case 'Enter':
-                case ' ':
-                    e.preventDefault();
-                    this.click();
-                    break;
-                case 'ArrowDown':
-                    e.preventDefault();
-                    focusNextItem(index);
-                    break;
-                case 'ArrowUp':
-                    e.preventDefault();
-                    focusPreviousItem(index);
-                    break;
-                case 'Home':
-                    e.preventDefault();
-                    dropdownItems[0].focus();
-                    break;
-                case 'End':
-                    e.preventDefault();
-                    dropdownItems[dropdownItems.length - 1].focus();
-                    break;
-            }
-        });
-    });
-
-    function focusNextItem(currentIndex) {
-        const nextIndex = currentIndex < dropdownItems.length - 1 ? currentIndex + 1 : 0;
-        dropdownItems[nextIndex].focus();
-    }
-
-    function focusPreviousItem(currentIndex) {
-        const prevIndex = currentIndex > 0 ? currentIndex - 1 : dropdownItems.length - 1;
-        dropdownItems[prevIndex].focus();
-    }
-
-    // Add hover effects for better UX
-    userTrigger.addEventListener('mouseenter', function() {
-        if (!userMenu.classList.contains('active')) {
-            // Add subtle hover effect
-            this.style.transform = 'translateY(-1px)';
-        }
-    });
-
-    userTrigger.addEventListener('mouseleave', function() {
-        if (!userMenu.classList.contains('active')) {
-            this.style.transform = '';
-        }
-    });
-
-    function openDropdown() {
-        userMenu.classList.add('active');
-
-        // Add slight delay for smooth animation
-        setTimeout(() => {
-            dropdownMenu.style.opacity = '1';
-            dropdownMenu.style.visibility = 'visible';
-            dropdownMenu.style.transform = 'translateY(0) scale(1)';
-        }, 10);
-
-        // Focus first dropdown item for accessibility
-        const firstItem = dropdownMenu.querySelector('.dropdown-item');
-        if (firstItem) {
-            setTimeout(() => firstItem.focus(), 100);
-        }
-    }
-
-    function closeDropdown() {
-        userMenu.classList.remove('active');
-
-        // Reset styles
-        dropdownMenu.style.opacity = '0';
-        dropdownMenu.style.visibility = 'hidden';
-        dropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
-
-        // Reset trigger hover effect
-        userTrigger.style.transform = '';
-    }
-
-    function handleLogout() {
-        // Show confirmation dialog
-        if (confirm('Are you sure you want to logout?')) {
-            // Add loading state
-            showNotification('Logging out...', 'info');
-
-            // Simulate logout process
-            setTimeout(() => {
-                // In a real application, this would be handled by the backend
-                window.location.href = '/admin/logout';
-            }, 1000);
-        }
-    }
-
-    function handleMenuAction(action) {
-        switch (action) {
-            case 'profile':
-                showNotification('Opening profile...', 'info');
-                // Load profile content or redirect
-                break;
-            case 'settings':
-                showNotification('Opening settings...', 'info');
-                // Load settings content or redirect
-                break;
-            case 'preferences':
-                showNotification('Opening preferences...', 'info');
-                // Load preferences content or redirect
-                break;
-            case 'activity':
-                showNotification('Opening activity log...', 'info');
-                // Load activity content or redirect
-                break;
-            case 'help':
-                showNotification('Opening help & support...', 'info');
-                // Load help content or redirect
-                break;
-            default:
-                showNotification('Action not implemented yet', 'info');
-        }
-    }
-}
-
-function loadSection(sectionName) {
-    // Hide all sections
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Show dashboard section if it exists
-    const dashboardSection = document.getElementById('dashboard-section');
-    const dynamicContent = document.getElementById('dynamic-content');
-    
-    if (sectionName === 'dashboard' && dashboardSection) {
-        dashboardSection.classList.add('active');
-        return;
-    }
-    
-    // Load dynamic content for other sections
-    const content = getSectionContent(sectionName);
-    dynamicContent.innerHTML = content;
-    dynamicContent.classList.add('active');
-    
-    // Add fade-in animation
-    dynamicContent.classList.add('fade-in');
-    setTimeout(() => {
-        dynamicContent.classList.remove('fade-in');
-    }, 500);
-}
+//     // Add fade-in animation
+//     dynamicContent.classList.add('fade-in');
+//     setTimeout(() => {
+//         dynamicContent.classList.remove('fade-in');
+//     }, 500);
+// }
 
 function getSectionContent(section) {
     const contents = {
@@ -287,7 +104,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Data</button>
                     </div>
                 </div>
-                
+
                 <div class="filter-bar">
                     <div class="filter-group">
                         <select class="filter-select">
@@ -304,7 +121,7 @@ function getSectionContent(section) {
                         <input type="text" placeholder="Search users..." class="filter-input">
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -350,7 +167,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         services: `
             <section class="content-section active">
                 <div class="section-header">
@@ -360,7 +177,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Manage Categories</button>
                     </div>
                 </div>
-                
+
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">
@@ -377,7 +194,7 @@ function getSectionContent(section) {
                             <button class="btn-danger">Delete</button>
                         </div>
                     </div>
-                    
+
                     <div class="service-card">
                         <div class="service-icon">
                             <i class="fas fa-wrench"></i>
@@ -393,7 +210,7 @@ function getSectionContent(section) {
                             <button class="btn-danger">Delete</button>
                         </div>
                     </div>
-                    
+
                     <div class="service-card">
                         <div class="service-icon">
                             <i class="fas fa-bolt"></i>
@@ -412,7 +229,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         bookings: `
             <section class="content-section active">
                 <div class="section-header">
@@ -422,7 +239,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Report</button>
                     </div>
                 </div>
-                
+
                 <div class="booking-stats">
                     <div class="stat-card">
                         <h3>45</h3>
@@ -441,7 +258,7 @@ function getSectionContent(section) {
                         <p>Completed Today</p>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>All Bookings</h3>
@@ -490,7 +307,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         finance: `
             <section class="content-section active">
                 <div class="section-header">
@@ -500,7 +317,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Generate Report</button>
                     </div>
                 </div>
-                
+
                 <div class="finance-overview">
                     <div class="finance-card">
                         <h3>₹2,45,678</h3>
@@ -523,7 +340,7 @@ function getSectionContent(section) {
                         <span class="change neutral">0%</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
                         <div class="card-header">
@@ -552,7 +369,7 @@ function getSectionContent(section) {
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="dashboard-card">
                         <div class="card-header">
                             <h3>Commission Settings</h3>
@@ -574,7 +391,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         promotions: `
             <section class="content-section active">
                 <div class="section-header">
@@ -584,7 +401,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Bulk Actions</button>
                     </div>
                 </div>
-                
+
                 <div class="promotions-stats">
                     <div class="stat-card">
                         <h3>25</h3>
@@ -599,7 +416,7 @@ function getSectionContent(section) {
                         <p>Times Used</p>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -633,7 +450,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         notifications: `
             <section class="content-section active">
                 <div class="section-header">
@@ -643,7 +460,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Templates</button>
                     </div>
                 </div>
-                
+
                 <div class="notification-composer">
                     <div class="dashboard-card">
                         <div class="card-header">
@@ -671,7 +488,7 @@ function getSectionContent(section) {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Recent Notifications</h3>
@@ -701,7 +518,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         reports: `
             <section class="content-section active">
                 <div class="section-header">
@@ -711,7 +528,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Data</button>
                     </div>
                 </div>
-                
+
                 <div class="reports-grid">
                     <div class="report-card">
                         <div class="report-icon">
@@ -721,7 +538,7 @@ function getSectionContent(section) {
                         <p>Monthly revenue analysis and trends</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-calendar-alt"></i>
@@ -730,7 +547,7 @@ function getSectionContent(section) {
                         <p>Booking patterns and statistics</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-star"></i>
@@ -739,7 +556,7 @@ function getSectionContent(section) {
                         <p>Service provider ratings and metrics</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-users"></i>
@@ -749,7 +566,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">View Report</button>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Quick Stats</h3>
@@ -771,7 +588,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         complaints: `
             <section class="content-section active">
                 <div class="section-header">
@@ -781,7 +598,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Report</button>
                     </div>
                 </div>
-                
+
                 <div class="complaints-stats">
                     <div class="stat-card">
                         <h3>15</h3>
@@ -799,7 +616,7 @@ function getSectionContent(section) {
                         <span class="stat-change positive">-0.5</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -833,7 +650,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         content: `
             <section class="content-section active">
                 <div class="section-header">
@@ -843,7 +660,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Manage Media</button>
                     </div>
                 </div>
-                
+
                 <div class="content-grid">
                     <div class="content-card">
                         <div class="content-icon">
@@ -857,7 +674,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-question-circle"></i>
@@ -870,7 +687,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-tags"></i>
@@ -883,7 +700,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-file-alt"></i>
@@ -899,7 +716,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         leads: `
             <section class="content-section active">
                 <div class="section-header">
@@ -909,7 +726,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Import Leads</button>
                     </div>
                 </div>
-                
+
                 <div class="leads-stats">
                     <div class="stat-card">
                         <h3>45</h3>
@@ -932,7 +749,7 @@ function getSectionContent(section) {
                         <span class="stat-change positive">+3%</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Lead Pipeline</h3>
@@ -980,7 +797,7 @@ function getSectionContent(section) {
             </section>
         `
     };
-    
+
     return contents[section] || '<div class="loading">Loading content...</div>';
 }
 
@@ -990,14 +807,125 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
-    
+
     // Add to page
     document.body.appendChild(notification);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Set active navigation based on current URL
+function setActiveNavByUrl() {
+    const pathname = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // First, remove active class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Find matching nav link by href or data-section
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const section = link.getAttribute('data-section');
+
+        // For server-rendered pages with href
+        if (href && href === pathname) {
+            link.parentElement.classList.add('active');
+            // Update page title if span exists
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+
+        // For dashboard
+        if (pathname === '/admin' && section === 'dashboard') {
+            link.parentElement.classList.add('active');
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+    });
+}
+
+function initializeServiceMenu() {
+    const serviceMenu = document.querySelector('.service-menu');
+    const serviceTrigger = document.querySelector('.service-menu-trigger');
+    const serviceDropdownMenu = document.querySelector('.service-dropdown-menu');
+
+    if (!serviceMenu || !serviceTrigger || !serviceDropdownMenu) {
+        return;
+    }
+
+    // Toggle dropdown on trigger click
+    serviceTrigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isActive = serviceMenu.classList.contains('active');
+
+        // Close all other dropdowns first
+        document.querySelectorAll('.service-menu.active').forEach(menu => {
+            if (menu !== serviceMenu) {
+                menu.classList.remove('active');
+            }
+        });
+        document.querySelectorAll('.user-menu.active').forEach(menu => {
+            menu.classList.remove('active');
+        });
+
+        // Toggle current dropdown
+        if (isActive) {
+            closeServiceDropdown();
+        } else {
+            openServiceDropdown();
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!serviceMenu.contains(e.target)) {
+            closeServiceDropdown();
+        }
+    });
+
+    // Close dropdown on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && serviceMenu.classList.contains('active')) {
+            closeServiceDropdown();
+        }
+    });
+
+    function openServiceDropdown() {
+        serviceMenu.classList.add('active');
+
+        // Add slight delay for smooth animation
+        setTimeout(() => {
+            serviceDropdownMenu.style.opacity = '1';
+            serviceDropdownMenu.style.visibility = 'visible';
+            serviceDropdownMenu.style.transform = 'translateY(0) scale(1)';
+        }, 10);
+    }
+
+    function closeServiceDropdown() {
+        serviceMenu.classList.remove('active');
+
+        // Reset styles
+        serviceDropdownMenu.style.opacity = '0';
+        serviceDropdownMenu.style.visibility = 'hidden';
+        serviceDropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
+    }
 }
 
 // Initialize charts (placeholder for Chart.js integration)

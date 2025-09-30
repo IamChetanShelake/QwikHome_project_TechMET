@@ -24,8 +24,8 @@
 
         <nav class="sidebar-nav">
             <ul>
-                <li class="nav-item active">
-                    <a href="#dashboard" class="nav-link" data-section="dashboard">
+                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
@@ -37,10 +37,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#services" class="nav-link" data-section="services">
-                        <i class="fas fa-cogs"></i>
-                        <span>Service Management</span>
-                    </a>
+                    <div class="service-menu">
+                        <a href="#" class="nav-link service-menu-trigger">
+                            <i class="fas fa-cogs"></i>
+                            <span>Service Management</span>
+                            <i class="fas fa-caret-down ml-1"></i>
+                        </a>
+                        <div class="service-dropdown-menu">
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item">Services</a>
+                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">Categories</a>
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">Subcategories</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="#bookings" class="nav-link" data-section="bookings">
@@ -93,7 +101,7 @@
             </ul>
         </nav>
 
-        <div class="sidebar-footer">
+        {{-- <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar">
                     <i class="fas fa-user-shield"></i>
@@ -106,7 +114,7 @@
             <button class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
-        </div>
+        </div> --}}
     </div>
 
     <!-- Main Content -->
@@ -129,19 +137,18 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-                    <div class="user-menu">
-                        {{-- <img src="https://via.placeholder.com/40" alt="User" class="user-avatar"> --}}
-                        {{ auth()->user()->name }}
-                        <div class="dropdown-menu">
-                            <a href="#profile">Profile</a>
-                            <a href="#settings">Settings</a>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <input type="submit" value="Logout">
-                            </form>
-                            {{-- <a href="{{ route('logout') }}">Logout</a> --}}
-                        </div>
+                <div class="user-menu">
+                    <span class="user-trigger">{{ auth()->user()->name }}</span>
+                    <div class="dropdown-menu">
+                        <a href="#profile" class="dropdown-item">Profile</a>
+                        <a href="#settings" class="dropdown-item">Settings</a>
+                        <a href="#logout" class="dropdown-item">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        {{-- <a href="{{ route('logout') }}">Logout</a> --}}
                     </div>
+                </div>
                 </div>
             </div>
         </header>
