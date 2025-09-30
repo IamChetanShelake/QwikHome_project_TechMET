@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
@@ -19,7 +21,7 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        
+
         <nav class="sidebar-nav">
             <ul>
                 <li class="nav-item active">
@@ -90,7 +92,7 @@
                 </li>
             </ul>
         </nav>
-        
+
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar">
@@ -102,7 +104,10 @@
                 </div>
             </div>
             <button class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
+                <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <input type="submit" value="Logout">
+                            </form>
             </button>
         </div>
     </div>
@@ -128,53 +133,16 @@
                         <span class="notification-badge">3</span>
                     </button>
                     <div class="user-menu">
-                        <div class="user-trigger">
-                            <div class="user-avatar">
-                                <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image">
-                                <div class="online-indicator"></div>
-                            </div>
-                            <div class="user-info">
-                                <span class="user-name">Admin User</span>
-                                <span class="user-role">Super Admin</span>
-                            </div>
-                            <i class="fas fa-chevron-down dropdown-arrow"></i>
-                        </div>
+                        {{-- <img src="https://via.placeholder.com/40" alt="User" class="user-avatar"> --}}
+                        {{ auth()->user()->name }}
                         <div class="dropdown-menu">
-                            <div class="dropdown-header">
-                                <div class="user-avatar">
-                                    <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-image">
-                                </div>
-                                <div class="user-details">
-                                    <span class="user-name">Admin User</span>
-                                    <span class="user-email">admin@qwikhome.com</span>
-                                </div>
-                            </div>
-                            <div class="dropdown-divider"></div>
-                            <a href="#profile" class="dropdown-item">
-                                <i class="fas fa-user"></i>
-                                <span>Profile</span>
-                            </a>
-                            <a href="#settings" class="dropdown-item">
-                                <i class="fas fa-cog"></i>
-                                <span>Settings</span>
-                            </a>
-                            <a href="#preferences" class="dropdown-item">
-                                <i class="fas fa-palette"></i>
-                                <span>Preferences</span>
-                            </a>
-                            <a href="#activity" class="dropdown-item">
-                                <i class="fas fa-history"></i>
-                                <span>Activity Log</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#help" class="dropdown-item">
-                                <i class="fas fa-question-circle"></i>
-                                <span>Help & Support</span>
-                            </a>
-                            <a href="#logout" class="dropdown-item logout-item">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Logout</span>
-                            </a>
+                            <a href="#profile">Profile</a>
+                            <a href="#settings">Settings</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <input type="submit" value="Logout">
+                            </form>
+                            {{-- <a href="{{ route('logout') }}">Logout</a> --}}
                         </div>
                     </div>
                 </div>
@@ -290,4 +258,5 @@
 
     <script src="{{ asset('js/admin.js') }}"></script>
 </body>
+
 </html>
