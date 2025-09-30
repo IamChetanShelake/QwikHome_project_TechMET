@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
@@ -19,7 +21,7 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        
+
         <nav class="sidebar-nav">
             <ul>
                 <li class="nav-item active">
@@ -90,7 +92,7 @@
                 </li>
             </ul>
         </nav>
-        
+
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar">
@@ -128,11 +130,16 @@
                         <span class="notification-badge">3</span>
                     </button>
                     <div class="user-menu">
-                        <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
+                        {{-- <img src="https://via.placeholder.com/40" alt="User" class="user-avatar"> --}}
+                        {{ auth()->user()->name }}
                         <div class="dropdown-menu">
                             <a href="#profile">Profile</a>
                             <a href="#settings">Settings</a>
-                            <a href="#logout">Logout</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <input type="submit" value="Logout">
+                            </form>
+                            {{-- <a href="{{ route('logout') }}">Logout</a> --}}
                         </div>
                     </div>
                 </div>
@@ -248,4 +255,5 @@
 
     <script src="{{ asset('js/admin.js') }}"></script>
 </body>
+
 </html>
