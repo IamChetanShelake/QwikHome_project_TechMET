@@ -24,6 +24,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //customer management-------------
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
+    Route::post('/customers/toggle-block', [CustomerController::class, 'toggleBlock'])
+        ->name('customers.toggle-block');
+    Route::get('/admin/search-users', [CustomerController::class, 'search']);
 });
 
 Auth::routes();

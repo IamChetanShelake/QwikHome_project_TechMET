@@ -5,9 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QwikHome - Admin Panel</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet">
+    <!--====== Jquery js ======-->
+    <script src="{{ asset('website/assets/vendor/jquery-3.7.1.min.js') }}"></script>
+
+    <!--====== Bootstrap css ======-->
+    <link rel="stylesheet" href="{{ asset('website/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <!--====== Bootstrap js ======-->
+    <script src="{{ asset('website/assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!--====== Bootstrap js ======-->
+    <script src="{{ asset('website/assets/vendor/popper/popper.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <script src="{{ asset('js/admin.js') }}"></script>
+
 </head>
 
 <body>
@@ -24,22 +42,25 @@
 
         <nav class="sidebar-nav">
             <ul>
-                <li class="nav-item active">
-                    <a href="#dashboard" class="nav-link" data-section="dashboard">
+                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} " style="">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
                     <a href="{{ route('customers') }}" class="nav-link">
                         <i class="fas fa-users"></i>
                         <span>Customer Management</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#services" class="nav-link" data-section="services">
+
+                <li class="nav-item ">
+                    <a href="" class="nav-link" data-section="services">
+
                         <i class="fas fa-cogs"></i>
                         <span>Service Management</span>
+
                     </a>
                 </li>
                 <li class="nav-item">
@@ -120,10 +141,7 @@
                 <h1 class="page-title">Dashboard</h1>
             </div>
             <div class="header-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search...">
-                </div>
+
                 <div class="header-actions">
                     <button class="notification-btn">
                         <i class="fas fa-bell"></i>
