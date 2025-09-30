@@ -42,12 +42,7 @@
         </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tabs">
-        <a href="{{ route('services.services.index') }}" class="tab-link active">Services</a>
-        <a href="{{ route('services.categories.index') }}" class="tab-link">Categories</a>
-        <a href="{{ route('services.subcategories.index') }}" class="tab-link">Subcategories</a>
-    </div>
+
 
     <!-- Search and Filter -->
     <div class="filter-bar">
@@ -107,13 +102,11 @@
                         </td>
                         <td>
                             <a href="{{ route('services.services.edit', $service) }}" class="action-btn edit">Edit</a>
-                            @if($service->status == 'active')
                             <form method="POST" action="{{ route('services.services.destroy', $service) }}" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure?')">Deactivate</button>
+                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure you want to delete this service?')">Delete</button>
                             </form>
-                            @endif
                         </td>
                     </tr>
                     @empty
@@ -130,5 +123,3 @@
     </div>
 </section>
 @endsection
-
-

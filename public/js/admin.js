@@ -6,9 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize user menu
     initializeUserMenu();
 
-    // Initialize service menu
-    initializeServiceMenu();
-
     // Set active state based on current URL for server-rendered pages
     setActiveNavByUrl();
 
@@ -859,74 +856,7 @@ function setActiveNavByUrl() {
     });
 }
 
-function initializeServiceMenu() {
-    const serviceMenu = document.querySelector('.service-menu');
-    const serviceTrigger = document.querySelector('.service-menu-trigger');
-    const serviceDropdownMenu = document.querySelector('.service-dropdown-menu');
 
-    if (!serviceMenu || !serviceTrigger || !serviceDropdownMenu) {
-        return;
-    }
-
-    // Toggle dropdown on trigger click
-    serviceTrigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const isActive = serviceMenu.classList.contains('active');
-
-        // Close all other dropdowns first
-        document.querySelectorAll('.service-menu.active').forEach(menu => {
-            if (menu !== serviceMenu) {
-                menu.classList.remove('active');
-            }
-        });
-        document.querySelectorAll('.user-menu.active').forEach(menu => {
-            menu.classList.remove('active');
-        });
-
-        // Toggle current dropdown
-        if (isActive) {
-            closeServiceDropdown();
-        } else {
-            openServiceDropdown();
-        }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!serviceMenu.contains(e.target)) {
-            closeServiceDropdown();
-        }
-    });
-
-    // Close dropdown on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && serviceMenu.classList.contains('active')) {
-            closeServiceDropdown();
-        }
-    });
-
-    function openServiceDropdown() {
-        serviceMenu.classList.add('active');
-
-        // Add slight delay for smooth animation
-        setTimeout(() => {
-            serviceDropdownMenu.style.opacity = '1';
-            serviceDropdownMenu.style.visibility = 'visible';
-            serviceDropdownMenu.style.transform = 'translateY(0) scale(1)';
-        }, 10);
-    }
-
-    function closeServiceDropdown() {
-        serviceMenu.classList.remove('active');
-
-        // Reset styles
-        serviceDropdownMenu.style.opacity = '0';
-        serviceDropdownMenu.style.visibility = 'hidden';
-        serviceDropdownMenu.style.transform = 'translateY(-10px) scale(0.95)';
-    }
-}
 
 // Initialize charts (placeholder for Chart.js integration)
 function initializeCharts() {

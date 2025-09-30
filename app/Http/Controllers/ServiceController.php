@@ -69,10 +69,15 @@ class ServiceController extends Controller
 
     public function categoriesDestroy(Category $category)
     {
-        // Soft delete by setting status to inactive
-        $category->update(['status' => 'inactive']);
+        // Check if category has related subcategories or services
+        if ($category->subcategories()->count() > 0 || $category->services()->count() > 0) {
+            return redirect()->route('services.categories.index')->with('error', 'Cannot delete category with existing subcategories or services.');
+        }
 
-        return redirect()->route('services.categories.index')->with('success', 'Category deactivated successfully.');
+        // Delete the category
+        $category->delete();
+
+        return redirect()->route('services.categories.index')->with('success', 'Category deleted successfully.');
     }
 
     // SUBCATEGORIES
@@ -145,9 +150,15 @@ class ServiceController extends Controller
 
     public function subcategoriesDestroy(Subcategory $subcategory)
     {
-        $subcategory->update(['status' => 'inactive']);
+        // Check if subcategory has related services
+        if ($subcategory->services()->count() > 0) {
+            return redirect()->route('services.subcategories.index')->with('error', 'Cannot delete subcategory with existing services.');
+        }
 
-        return redirect()->route('services.subcategories.index')->with('success', 'Subcategory deactivated successfully.');
+        // Delete the subcategory
+        $subcategory->delete();
+
+        return redirect()->route('services.subcategories.index')->with('success', 'Subcategory deleted successfully.');
     }
 
     // SERVICES
@@ -234,8 +245,9 @@ class ServiceController extends Controller
 
     public function servicesDestroy(Service $service)
     {
-        $service->update(['status' => 'inactive']);
+        // Delete the service
+        $service->delete();
 
-        return redirect()->route('services.services.index')->with('success', 'Service deactivated successfully.');
+        return redirect()->route('services.services.index')->with('success', 'Service deleted successfully.');
     }
 }

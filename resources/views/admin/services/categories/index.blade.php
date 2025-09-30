@@ -53,13 +53,11 @@
                         <td>{{ $category->created_at->format('Y-m-d') }}</td>
                         <td>
                             <a href="{{ route('services.categories.edit', $category) }}" class="action-btn edit">Edit</a>
-                            @if($category->status == 'active')
                             <form method="POST" action="{{ route('services.categories.destroy', $category) }}" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure?')">Deactivate</button>
+                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
                             </form>
-                            @endif
                         </td>
                     </tr>
                     @empty

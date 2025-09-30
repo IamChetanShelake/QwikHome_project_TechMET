@@ -61,13 +61,11 @@
                         <td>{{ $subcategory->created_at->format('Y-m-d') }}</td>
                         <td>
                             <a href="{{ route('services.subcategories.edit', $subcategory) }}" class="action-btn edit">Edit</a>
-                            @if($subcategory->status == 'active')
                             <form method="POST" action="{{ route('services.subcategories.destroy', $subcategory) }}" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure?')">Deactivate</button>
+                                <button type="submit" class="action-btn block" onclick="return confirm('Are you sure you want to delete this subcategory?')">Delete</button>
                             </form>
-                            @endif
                         </td>
                     </tr>
                     @empty
