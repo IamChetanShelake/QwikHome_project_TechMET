@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize admin panel
     initializeAdminPanel();
 
+    // Set active state based on current URL for server-rendered pages
+    setActiveNavByUrl();
+
+
     // Initialize user menu
     initializeUserMenu();
 
@@ -62,33 +66,33 @@ document.addEventListener('DOMContentLoaded', function() {
 //     }
 // }
 
-// function loadSection(sectionName) {
-//     // Hide all sections
-//     const sections = document.querySelectorAll('.content-section');
-//     sections.forEach(section => {
-//         section.classList.remove('active');
-//     });
+// // function loadSection(sectionName) {
+// //     // Hide all sections
+// //     const sections = document.querySelectorAll('.content-section');
+// //     sections.forEach(section => {
+// //         section.classList.remove('active');
+// //     });
 
-//     // Show dashboard section if it exists
-//     const dashboardSection = document.getElementById('dashboard-section');
-//     const dynamicContent = document.getElementById('dynamic-content');
+// //     // Show dashboard section if it exists
+// //     const dashboardSection = document.getElementById('dashboard-section');
+// //     const dynamicContent = document.getElementById('dynamic-content');
 
-//     if (sectionName === 'dashboard' && dashboardSection) {
-//         dashboardSection.classList.add('active');
-//         return;
-//     }
+// //     if (sectionName === 'dashboard' && dashboardSection) {
+// //         dashboardSection.classList.add('active');
+// //         return;
+// //     }
 
-//     // Load dynamic content for other sections
-//     const content = getSectionContent(sectionName);
-//     dynamicContent.innerHTML = content;
-//     dynamicContent.classList.add('active');
+// //     // Load dynamic content for other sections
+// //     const content = getSectionContent(sectionName);
+// //     dynamicContent.innerHTML = content;
+// //     dynamicContent.classList.add('active');
 
-//     // Add fade-in animation
-//     dynamicContent.classList.add('fade-in');
-//     setTimeout(() => {
-//         dynamicContent.classList.remove('fade-in');
-//     }, 500);
-// }
+// //     // Add fade-in animation
+// //     dynamicContent.classList.add('fade-in');
+// //     setTimeout(() => {
+// //         dynamicContent.classList.remove('fade-in');
+// //     }, 500);
+// // }
 
 function getSectionContent(section) {
     const contents = {
@@ -812,6 +816,48 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Set active navigation based on current URL
+function setActiveNavByUrl() {
+    const pathname = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // First, remove active class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Find matching nav link by href or data-section
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const section = link.getAttribute('data-section');
+
+        // For server-rendered pages with href
+        if (href && href === pathname) {
+            link.parentElement.classList.add('active');
+            // Update page title if span exists
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+
+        // For dashboard
+        if (pathname === '/admin' && section === 'dashboard') {
+            link.parentElement.classList.add('active');
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+    });
 }
 
 // Set active navigation based on current URL

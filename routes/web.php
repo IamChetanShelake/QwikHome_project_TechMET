@@ -55,6 +55,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //service management old-------------
     Route::get('/services1', [ServiceController::class, 'index'])->name('services');
+    Route::post('/customers/toggle-block', [CustomerController::class, 'toggleBlock'])
+        ->name('customers.toggle-block');
+    Route::get('/admin/search-users', [CustomerController::class, 'search']);
 });
 
 Auth::routes();
