@@ -17,7 +17,8 @@ class isAdmin
     {
         if (auth()->check() && auth()->user()->role == 'admin') {
             return $next($request);
-        } else {
+        } 
+        else {
             return redirect('/'); // Redirect to home or any other page
         }
     }
