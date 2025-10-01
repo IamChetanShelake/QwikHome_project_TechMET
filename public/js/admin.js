@@ -6,65 +6,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set active state based on current URL for server-rendered pages
     setActiveNavByUrl();
 
-
-    // Initialize user menu
-    initializeUserMenu();
-
-    // Set active state based on current URL for server-rendered pages
-    setActiveNavByUrl();
-
     // Load dashboard by default
     loadSection('dashboard');
 });
 
-// function initializeAdminPanel() {
-//     // Sidebar navigation
-//     const navLinks = document.querySelectorAll('.nav-link');
-//     const sidebarToggle = document.getElementById('sidebarToggle');
-//     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-//     const sidebar = document.getElementById('sidebar');
+function initializeUserMenu() {
+    const userTrigger = document.querySelector('.user-trigger');
+    const userMenu = document.querySelector('.user-menu');
+    const logoutLink = document.querySelector('a[href="#logout"]');
 
-//     // Navigation click handlers
-//     navLinks.forEach(link => {
-//         link.addEventListener('click', function(e) {
-//             const section = this.getAttribute('data-section');
-//             if (section) {
-//                 // Prevent default for section links and load dynamic content
-//                 e.preventDefault();
-//                 console.log()
-//                 // Remove active class from all nav items
-//                 document.querySelectorAll('.nav-item').forEach(item => {
-//                     item.classList.remove('active');
-//                 });
+    if (userTrigger && userMenu) {
+        // Toggle dropdown on click
+        userTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('active');
+        });
 
-//                 // Add active class to clicked item
-//                 this.parentElement.classList.add('active');
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenu.contains(e.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+    }
 
-//                 // Load section content
-//                 loadSection(section);
-
-//                 // Update page title
-//                 const pageTitle = document.querySelector('.page-title');
-//                 pageTitle.textContent = this.querySelector('span').textContent;
-//             }
-//             // For links with href (like customers), allow default navigation
-//         });
-//     });
-
-//     // Mobile menu toggle
-//     if (mobileMenuToggle) {
-//         mobileMenuToggle.addEventListener('click', function() {
-//             sidebar.classList.toggle('open');
-//         });
-//     }
-
-//     // Sidebar toggle
-//     if (sidebarToggle) {
-//         sidebarToggle.addEventListener('click', function() {
-//             sidebar.classList.toggle('collapsed');
-//         });
-//     }
-// }
+    // Handle logout click
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const logoutForm = document.getElementById('logout-form');
+            if (logoutForm) {
+                logoutForm.submit();
+            }
+        });
+    }
+}
 
 // // function loadSection(sectionName) {
 // //     // Hide all sections
