@@ -166,24 +166,13 @@ body {
 .sidebar-nav {
     padding: 20px 0;
     flex: 1;
-<<<<<<< HEAD
-    width: 100%;
-    overflow: visible;
-=======
 
     /* height: 90%; */
->>>>>>> mayur
 }
 
 .sidebar-nav ul {
     list-style: none;
-<<<<<<< HEAD
-    width: 100%;
-    padding: 0;
-    margin: 0;
-=======
     padding-left: 0px !important;
->>>>>>> mayur
 }
 
 .nav-item {
