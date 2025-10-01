@@ -25,5 +25,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@gmail.com',
             'password' => bcrypt('user123'),
         ]);
+
+        // Seed services data
+        $this->call([
+            ServiceSeeder::class,
+        ]);
     }
 }

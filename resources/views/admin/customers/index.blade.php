@@ -20,27 +20,27 @@
         <div id="searchResults"></div> --}}
         </div>
     </div>
-    <div class="content-area">
-        <!-- Dashboard Section -->
-        <section id="dashboard-section" class="content-section active">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Customer Management</h3>
-                </div>
-                <div class="table-container">
-                    <table class="data-table ">
-                        <thead>
-                            <tr>
-                                <th>Sr.</th>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
-                                <th>status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Customer Management</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table ">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
                             @foreach ($customers as $customer)
                                 <tr>

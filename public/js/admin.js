@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set active state based on current URL for server-rendered pages
     setActiveNavByUrl();
 
+
+    // Initialize user menu
+    initializeUserMenu();
+
+    // Set active state based on current URL for server-rendered pages
+    setActiveNavByUrl();
+
     // Load dashboard by default
     loadSection('dashboard');
 });
@@ -16,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //     const sidebarToggle = document.getElementById('sidebarToggle');
 //     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 //     const sidebar = document.getElementById('sidebar');
-    
+
 //     // Navigation click handlers
 //     navLinks.forEach(link => {
 //         link.addEventListener('click', function(e) {
@@ -43,14 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
 //             // For links with href (like customers), allow default navigation
 //         });
 //     });
-    
+
 //     // Mobile menu toggle
 //     if (mobileMenuToggle) {
 //         mobileMenuToggle.addEventListener('click', function() {
 //             sidebar.classList.toggle('open');
 //         });
 //     }
-    
+
 //     // Sidebar toggle
 //     if (sidebarToggle) {
 //         sidebarToggle.addEventListener('click', function() {
@@ -59,33 +66,33 @@ document.addEventListener('DOMContentLoaded', function() {
 //     }
 // }
 
-// function loadSection(sectionName) {
-//     // Hide all sections
-//     const sections = document.querySelectorAll('.content-section');
-//     sections.forEach(section => {
-//         section.classList.remove('active');
-//     });
-    
-//     // Show dashboard section if it exists
-//     const dashboardSection = document.getElementById('dashboard-section');
-//     const dynamicContent = document.getElementById('dynamic-content');
-    
-//     if (sectionName === 'dashboard' && dashboardSection) {
-//         dashboardSection.classList.add('active');
-//         return;
-//     }
-    
-//     // Load dynamic content for other sections
-//     const content = getSectionContent(sectionName);
-//     dynamicContent.innerHTML = content;
-//     dynamicContent.classList.add('active');
-    
-//     // Add fade-in animation
-//     dynamicContent.classList.add('fade-in');
-//     setTimeout(() => {
-//         dynamicContent.classList.remove('fade-in');
-//     }, 500);
-// }
+// // function loadSection(sectionName) {
+// //     // Hide all sections
+// //     const sections = document.querySelectorAll('.content-section');
+// //     sections.forEach(section => {
+// //         section.classList.remove('active');
+// //     });
+
+// //     // Show dashboard section if it exists
+// //     const dashboardSection = document.getElementById('dashboard-section');
+// //     const dynamicContent = document.getElementById('dynamic-content');
+
+// //     if (sectionName === 'dashboard' && dashboardSection) {
+// //         dashboardSection.classList.add('active');
+// //         return;
+// //     }
+
+// //     // Load dynamic content for other sections
+// //     const content = getSectionContent(sectionName);
+// //     dynamicContent.innerHTML = content;
+// //     dynamicContent.classList.add('active');
+
+// //     // Add fade-in animation
+// //     dynamicContent.classList.add('fade-in');
+// //     setTimeout(() => {
+// //         dynamicContent.classList.remove('fade-in');
+// //     }, 500);
+// // }
 
 function getSectionContent(section) {
     const contents = {
@@ -98,7 +105,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Data</button>
                     </div>
                 </div>
-                
+
                 <div class="filter-bar">
                     <div class="filter-group">
                         <select class="filter-select">
@@ -115,7 +122,7 @@ function getSectionContent(section) {
                         <input type="text" placeholder="Search users..." class="filter-input">
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -161,7 +168,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         services: `
             <section class="content-section active">
                 <div class="section-header">
@@ -171,7 +178,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Manage Categories</button>
                     </div>
                 </div>
-                
+
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">
@@ -188,7 +195,7 @@ function getSectionContent(section) {
                             <button class="btn-danger">Delete</button>
                         </div>
                     </div>
-                    
+
                     <div class="service-card">
                         <div class="service-icon">
                             <i class="fas fa-wrench"></i>
@@ -204,7 +211,7 @@ function getSectionContent(section) {
                             <button class="btn-danger">Delete</button>
                         </div>
                     </div>
-                    
+
                     <div class="service-card">
                         <div class="service-icon">
                             <i class="fas fa-bolt"></i>
@@ -223,7 +230,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         bookings: `
             <section class="content-section active">
                 <div class="section-header">
@@ -233,7 +240,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Report</button>
                     </div>
                 </div>
-                
+
                 <div class="booking-stats">
                     <div class="stat-card">
                         <h3>45</h3>
@@ -252,7 +259,7 @@ function getSectionContent(section) {
                         <p>Completed Today</p>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>All Bookings</h3>
@@ -301,7 +308,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         finance: `
             <section class="content-section active">
                 <div class="section-header">
@@ -311,7 +318,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Generate Report</button>
                     </div>
                 </div>
-                
+
                 <div class="finance-overview">
                     <div class="finance-card">
                         <h3>₹2,45,678</h3>
@@ -334,7 +341,7 @@ function getSectionContent(section) {
                         <span class="change neutral">0%</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
                         <div class="card-header">
@@ -363,7 +370,7 @@ function getSectionContent(section) {
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="dashboard-card">
                         <div class="card-header">
                             <h3>Commission Settings</h3>
@@ -385,7 +392,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         promotions: `
             <section class="content-section active">
                 <div class="section-header">
@@ -395,7 +402,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Bulk Actions</button>
                     </div>
                 </div>
-                
+
                 <div class="promotions-stats">
                     <div class="stat-card">
                         <h3>25</h3>
@@ -410,7 +417,7 @@ function getSectionContent(section) {
                         <p>Times Used</p>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -444,7 +451,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         notifications: `
             <section class="content-section active">
                 <div class="section-header">
@@ -454,7 +461,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Templates</button>
                     </div>
                 </div>
-                
+
                 <div class="notification-composer">
                     <div class="dashboard-card">
                         <div class="card-header">
@@ -482,7 +489,7 @@ function getSectionContent(section) {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Recent Notifications</h3>
@@ -512,7 +519,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         reports: `
             <section class="content-section active">
                 <div class="section-header">
@@ -522,7 +529,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Data</button>
                     </div>
                 </div>
-                
+
                 <div class="reports-grid">
                     <div class="report-card">
                         <div class="report-icon">
@@ -532,7 +539,7 @@ function getSectionContent(section) {
                         <p>Monthly revenue analysis and trends</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-calendar-alt"></i>
@@ -541,7 +548,7 @@ function getSectionContent(section) {
                         <p>Booking patterns and statistics</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-star"></i>
@@ -550,7 +557,7 @@ function getSectionContent(section) {
                         <p>Service provider ratings and metrics</p>
                         <button class="btn-secondary">View Report</button>
                     </div>
-                    
+
                     <div class="report-card">
                         <div class="report-icon">
                             <i class="fas fa-users"></i>
@@ -560,7 +567,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">View Report</button>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Quick Stats</h3>
@@ -582,7 +589,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         complaints: `
             <section class="content-section active">
                 <div class="section-header">
@@ -592,7 +599,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Export Report</button>
                     </div>
                 </div>
-                
+
                 <div class="complaints-stats">
                     <div class="stat-card">
                         <h3>15</h3>
@@ -610,7 +617,7 @@ function getSectionContent(section) {
                         <span class="stat-change positive">-0.5</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="table-container">
                         <table class="data-table">
@@ -644,7 +651,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         content: `
             <section class="content-section active">
                 <div class="section-header">
@@ -654,7 +661,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Manage Media</button>
                     </div>
                 </div>
-                
+
                 <div class="content-grid">
                     <div class="content-card">
                         <div class="content-icon">
@@ -668,7 +675,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-question-circle"></i>
@@ -681,7 +688,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-tags"></i>
@@ -694,7 +701,7 @@ function getSectionContent(section) {
                         </div>
                         <button class="btn-secondary">Manage</button>
                     </div>
-                    
+
                     <div class="content-card">
                         <div class="content-icon">
                             <i class="fas fa-file-alt"></i>
@@ -710,7 +717,7 @@ function getSectionContent(section) {
                 </div>
             </section>
         `,
-        
+
         leads: `
             <section class="content-section active">
                 <div class="section-header">
@@ -720,7 +727,7 @@ function getSectionContent(section) {
                         <button class="btn-secondary">Import Leads</button>
                     </div>
                 </div>
-                
+
                 <div class="leads-stats">
                     <div class="stat-card">
                         <h3>45</h3>
@@ -743,7 +750,7 @@ function getSectionContent(section) {
                         <span class="stat-change positive">+3%</span>
                     </div>
                 </div>
-                
+
                 <div class="dashboard-card">
                     <div class="card-header">
                         <h3>Lead Pipeline</h3>
@@ -791,7 +798,7 @@ function getSectionContent(section) {
             </section>
         `
     };
-    
+
     return contents[section] || '<div class="loading">Loading content...</div>';
 }
 
@@ -801,10 +808,10 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
-    
+
     // Add to page
     document.body.appendChild(notification);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
         notification.remove();
@@ -852,6 +859,50 @@ function setActiveNavByUrl() {
         }
     });
 }
+
+// Set active navigation based on current URL
+function setActiveNavByUrl() {
+    const pathname = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // First, remove active class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Find matching nav link by href or data-section
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const section = link.getAttribute('data-section');
+
+        // For server-rendered pages with href
+        if (href && href === pathname) {
+            link.parentElement.classList.add('active');
+            // Update page title if span exists
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+
+        // For dashboard
+        if (pathname === '/admin' && section === 'dashboard') {
+            link.parentElement.classList.add('active');
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+    });
+}
+
+
 
 // Initialize charts (placeholder for Chart.js integration)
 function initializeCharts() {
