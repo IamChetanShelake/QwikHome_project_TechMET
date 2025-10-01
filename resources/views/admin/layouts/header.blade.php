@@ -26,6 +26,40 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <script src="{{ asset('js/admin.js') }}"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .service-dropdown-menu {
+            display: none;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            z-index: 1000;
+        }
+        .service-dropdown-menu .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .service-dropdown-menu .dropdown-item:hover,
+        .service-dropdown-menu .dropdown-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .service-dropdown-menu .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .fa-caret-down.rotate {
+            transform: rotate(180deg);
+            transition: transform 0.2s ease;
+        }
+        .fa-caret-down {
+            transition: transform 0.2s ease;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,7 +76,7 @@
 
         <nav class="sidebar-nav">
             <ul>
-                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} " style="">
+                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
@@ -54,15 +88,58 @@
                         <span>Customer Management</span>
                     </a>
                 </li>
-
-                <li class="nav-item ">
-                    <a href="" class="nav-link" data-section="services">
-
-                        <i class="fas fa-cogs"></i>
-                        <span>Service Management</span>
-
-                    </a>
+                <li class="nav-item">
+                    <div class="service-menu">
+                        <a href="javascript:void(0)" class="nav-link service-menu-trigger">
+                            <i class="fas fa-cogs"></i>
+                            <span>Service Management</span>
+                            <i class="fas fa-caret-down ml-1"></i>
+                        </a>
+                        <div class="service-dropdown-menu" style="display: none;">
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item">Services</a>
+                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">Categories</a>
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">Subcategories</a>
+                        </div>
+                    </div>
                 </li>
+                <script>
+                    $(document).ready(function () {
+                        function isServiceManagementPage() {
+                            return window.location.pathname.startsWith('/services');
+                        }
+
+                        // Check if on service management page and show dropdown
+                        if (isServiceManagementPage()) {
+                            $(".service-dropdown-menu").show();
+                            $(".service-menu-trigger").find(".fa-caret-down").addClass("rotate");
+
+                            // Highlight active section
+                            const currentPath = window.location.pathname;
+                            if (currentPath === '/services' || currentPath.startsWith('/services?')) {
+                                $('.service-dropdown-menu a[href*="services.services.index"]').addClass('active');
+                            } else if (currentPath.includes('/categories')) {
+                                $('.service-dropdown-menu a[href*="services.categories.index"]').addClass('active');
+                            } else if (currentPath.includes('/subcategories')) {
+                                $('.service-dropdown-menu a[href*="services.subcategories.index"]').addClass('active');
+                            }
+                        }
+
+                        $(".service-menu-trigger").on("click", function (e) {
+                            e.preventDefault();
+                            const $dropdown = $(this).next(".service-dropdown-menu");
+                            const $arrow = $(this).find(".fa-caret-down");
+
+                            if (isServiceManagementPage() && $dropdown.is(':visible')) {
+                                // Allow closing dropdown only if not on service management page
+                                return;
+                            }
+
+                            $dropdown.slideToggle(200);
+                            $arrow.toggleClass("rotate");
+                        });
+                    });
+                </script>
+
                 <li class="nav-item">
                     <a href="#bookings" class="nav-link" data-section="bookings">
                         <i class="fas fa-calendar-check"></i>
@@ -114,7 +191,7 @@
             </ul>
         </nav>
 
-        <div class="sidebar-footer">
+        {{-- <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar">
                     <i class="fas fa-user-shield"></i>
@@ -127,7 +204,7 @@
             <button class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
-        </div>
+        </div> --}}
     </div>
 
     <!-- Main Content -->
@@ -147,19 +224,18 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-                    <div class="user-menu">
-                        {{-- <img src="https://via.placeholder.com/40" alt="User" class="user-avatar"> --}}
-                        {{ auth()->user()->name }}
-                        <div class="dropdown-menu">
-                            <a href="#profile">Profile</a>
-                            <a href="#settings">Settings</a>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <input type="submit" value="Logout">
-                            </form>
-                            {{-- <a href="{{ route('logout') }}">Logout</a> --}}
-                        </div>
+                <div class="user-menu">
+                    <span class="user-trigger">{{ auth()->user()->name }}</span>
+                    <div class="dropdown-menu">
+                        <a href="#profile" class="dropdown-item">Profile</a>
+                        <a href="#settings" class="dropdown-item">Settings</a>
+                        <a href="#logout" class="dropdown-item">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        {{-- <a href="{{ route('logout') }}">Logout</a> --}}
                     </div>
+                </div>
                 </div>
             </div>
         </header>
