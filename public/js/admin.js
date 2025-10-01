@@ -3,20 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize admin panel
     initializeAdminPanel();
 
+<<<<<<< HEAD
     // Initialize user menu
     initializeUserMenu();
+=======
+    // Set active state based on current URL for server-rendered pages
+    setActiveNavByUrl();
+>>>>>>> mayur
 
     // Load dashboard by default
     loadSection('dashboard');
 });
 
-function initializeAdminPanel() {
-    // Sidebar navigation
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('sidebar');
+// function initializeAdminPanel() {
+//     // Sidebar navigation
+//     const navLinks = document.querySelectorAll('.nav-link');
+//     const sidebarToggle = document.getElementById('sidebarToggle');
+//     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+//     const sidebar = document.getElementById('sidebar');
     
+<<<<<<< HEAD
     // Navigation click handlers
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -259,27 +265,77 @@ function loadSection(sectionName) {
     sections.forEach(section => {
         section.classList.remove('active');
     });
+=======
+//     // Navigation click handlers
+//     navLinks.forEach(link => {
+//         link.addEventListener('click', function(e) {
+//             const section = this.getAttribute('data-section');
+//             if (section) {
+//                 // Prevent default for section links and load dynamic content
+//                 e.preventDefault();
+//                 console.log()
+//                 // Remove active class from all nav items
+//                 document.querySelectorAll('.nav-item').forEach(item => {
+//                     item.classList.remove('active');
+//                 });
+
+//                 // Add active class to clicked item
+//                 this.parentElement.classList.add('active');
+
+//                 // Load section content
+//                 loadSection(section);
+
+//                 // Update page title
+//                 const pageTitle = document.querySelector('.page-title');
+//                 pageTitle.textContent = this.querySelector('span').textContent;
+//             }
+//             // For links with href (like customers), allow default navigation
+//         });
+//     });
+>>>>>>> mayur
     
-    // Show dashboard section if it exists
-    const dashboardSection = document.getElementById('dashboard-section');
-    const dynamicContent = document.getElementById('dynamic-content');
+//     // Mobile menu toggle
+//     if (mobileMenuToggle) {
+//         mobileMenuToggle.addEventListener('click', function() {
+//             sidebar.classList.toggle('open');
+//         });
+//     }
     
-    if (sectionName === 'dashboard' && dashboardSection) {
-        dashboardSection.classList.add('active');
-        return;
-    }
+//     // Sidebar toggle
+//     if (sidebarToggle) {
+//         sidebarToggle.addEventListener('click', function() {
+//             sidebar.classList.toggle('collapsed');
+//         });
+//     }
+// }
+
+// function loadSection(sectionName) {
+//     // Hide all sections
+//     const sections = document.querySelectorAll('.content-section');
+//     sections.forEach(section => {
+//         section.classList.remove('active');
+//     });
     
-    // Load dynamic content for other sections
-    const content = getSectionContent(sectionName);
-    dynamicContent.innerHTML = content;
-    dynamicContent.classList.add('active');
+//     // Show dashboard section if it exists
+//     const dashboardSection = document.getElementById('dashboard-section');
+//     const dynamicContent = document.getElementById('dynamic-content');
     
-    // Add fade-in animation
-    dynamicContent.classList.add('fade-in');
-    setTimeout(() => {
-        dynamicContent.classList.remove('fade-in');
-    }, 500);
-}
+//     if (sectionName === 'dashboard' && dashboardSection) {
+//         dashboardSection.classList.add('active');
+//         return;
+//     }
+    
+//     // Load dynamic content for other sections
+//     const content = getSectionContent(sectionName);
+//     dynamicContent.innerHTML = content;
+//     dynamicContent.classList.add('active');
+    
+//     // Add fade-in animation
+//     dynamicContent.classList.add('fade-in');
+//     setTimeout(() => {
+//         dynamicContent.classList.remove('fade-in');
+//     }, 500);
+// }
 
 function getSectionContent(section) {
     const contents = {
@@ -1003,6 +1059,48 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Set active navigation based on current URL
+function setActiveNavByUrl() {
+    const pathname = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // First, remove active class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Find matching nav link by href or data-section
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        const section = link.getAttribute('data-section');
+
+        // For server-rendered pages with href
+        if (href && href === pathname) {
+            link.parentElement.classList.add('active');
+            // Update page title if span exists
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+
+        // For dashboard
+        if (pathname === '/admin' && section === 'dashboard') {
+            link.parentElement.classList.add('active');
+            const span = link.querySelector('span');
+            if (span) {
+                const pageTitle = document.querySelector('.page-title');
+                if (pageTitle) {
+                    pageTitle.textContent = span.textContent;
+                }
+            }
+        }
+    });
 }
 
 // Initialize charts (placeholder for Chart.js integration)
