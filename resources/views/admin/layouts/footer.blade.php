@@ -24,6 +24,25 @@
  <script src="{{ asset('website/assets/js/theme.js') }}"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js" defer></script>
 
+ <!--====== Summernote JS ======-->
+ <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+ <script>
+     $(document).ready(function() {
+         $('.summernote').summernote({
+             height: 200, // Set the height of the editor
+             tabsize: 2,
+             toolbar: [
+                 ['style', ['bold', 'italic', 'underline', 'clear']],
+                 ['font', ['strikethrough', 'superscript', 'subscript']],
+                 ['fontsize', ['fontsize']],
+                 ['color', ['color']],
+                 ['para', ['ul', 'ol', 'paragraph']],
+                 ['height', ['height']]
+             ]
+         });
+     });
+ </script>
+
 
 
  </body>

@@ -4,6 +4,9 @@
     padding: 0;
     box-sizing: border-box;
 }
+a {
+    text-decoration: none;
+}
 
 body {
     font-family: "Inter", sans-serif;
@@ -331,6 +334,7 @@ body {
 .header-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 20px;
 }
 
@@ -602,7 +606,7 @@ body {
 }
 
 .dropdown-item::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;
@@ -1120,14 +1124,19 @@ body {
     align-items: center;
     flex-wrap: wrap;
 }
+/* input::placeholder {
+    color: rgb(0, 0, 0); 
+    opacity: 1; 
+    font-style: italic; 
+} */
 
 .filter-select,
 .filter-input {
-    background: rgba(255, 255, 255, 0.1);
+    /* background: rgba(255, 255, 255, 0.1); */
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     padding: 10px 15px;
-    color: #ffffff;
+    color: #000000;
     font-size: 14px;
 }
 

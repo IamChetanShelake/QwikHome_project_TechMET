@@ -42,4 +42,9 @@ class CustomerController extends Controller
 
         return response()->json($users);
     }
+
+    public function view($id){
+        $customer = User::find($id);
+        return view('admin.customers.view', compact('customer'));   
+    }
 }
