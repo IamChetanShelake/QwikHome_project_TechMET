@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Service;
+use App\Models\ServiceRequirement;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -250,23 +251,58 @@ class ServiceController extends Controller
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0|max:999999.99',
+            'whats_include' => 'nullable|array',
+            'whats_include.*' => 'nullable|string|max:255',
+            'price_onetime' => 'required|numeric|min:0|max:999999.99',
+            'price_weekly' => 'nullable|numeric|min:0|max:999999.99',
+            'price_monthly' => 'nullable|numeric|min:0|max:999999.99',
+            'price_yearly' => 'nullable|numeric|min:0|max:999999.99',
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'is_arabic' => 'nullable|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'requirements' => 'nullable|array',
+            'requirements.*.title' => 'required|string|max:255',
         ]);
 
+        // Handle main service image
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move('Service_images', $imageName);
+            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $request->image->move(public_path('Service_images'), $imageName);
         } else {
             $imageName = '';
         }
 
         $validated['image'] = $imageName;
 
-        Service::create($validated);
+        // Remove requirements from validated as they are handled separately
+        unset($validated['requirements']);
+
+        // Encode whats_include as JSON
+        $validated['whats_include'] = $request->whats_include;
+
+        $service = Service::create($validated);
+
+        // Handle requirements
+        if ($request->has('requirements') && is_array($request->requirements)) {
+            foreach ($request->requirements as $index => $requirementData) {
+                $reqImage = '';
+                $fileKey = "requirements.{$index}.image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    $reqImage = time() . '_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('Service_requirement_images'), $reqImage);
+                }
+
+                ServiceRequirement::create([
+                    'service_id' => $service->id,
+                    'title' => $requirementData['title'],
+                    'image' => $reqImage,
+                ]);
+            }
+        }
 
         return redirect()->route('services.services.index')->with('success', 'Service created successfully.');
     }
@@ -284,24 +320,61 @@ class ServiceController extends Controller
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0|max:999999.99',
+            'whats_include' => 'nullable|array',
+            'whats_include.*' => 'nullable|string|max:255',
+            'price_onetime' => 'required|numeric|min:0|max:999999.99',
+            'price_weekly' => 'nullable|numeric|min:0|max:999999.99',
+            'price_monthly' => 'nullable|numeric|min:0|max:999999.99',
+            'price_yearly' => 'nullable|numeric|min:0|max:999999.99',
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'is_arabic' => 'nullable|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'requirements' => 'nullable|array',
+            'requirements.*.title' => 'required|string|max:255',
         ]);
 
+        // Handle main service image
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($service->image && file_exists(public_path('Service_images/' . $service->image))) {
                 unlink(public_path('Service_images/' . $service->image));
             }
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move('Service_images', $imageName);
+            $imageName = time() . '_' . $request->image->getClientOriginalName();
+            $request->image->move(public_path('Service_images'), $imageName);
             $validated['image'] = $imageName;
         }
 
+        // Remove requirements from validated
+        unset($validated['requirements']);
+
+        // Handle whats_include
+        $validated['whats_include'] = $request->whats_include;
+
         $service->update($validated);
+
+        // Handle requirements: delete old and create new, preserving existing images
+        $service->requirements()->delete();
+
+        if ($request->has('requirements') && is_array($request->requirements)) {
+            foreach ($request->requirements as $index => $requirementData) {
+                $reqImage = $requirementData['existing_image'] ?? '';
+                $fileKey = "requirements.{$index}.image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    $reqImage = time() . '_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('Service_requirement_images'), $reqImage);
+                }
+
+                ServiceRequirement::create([
+                    'service_id' => $service->id,
+                    'title' => $requirementData['title'],
+                    'image' => $reqImage,
+                ]);
+            }
+        }
 
         return redirect()->route('services.services.index')->with('success', 'Service updated successfully.');
     }

@@ -12,7 +12,12 @@ class Service extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'whats_include' => 'array',
+        'price_onetime' => 'decimal:2',
+        'price_weekly' => 'decimal:2',
+        'price_monthly' => 'decimal:2',
+        'price_yearly' => 'decimal:2',
+        'is_arabic' => 'boolean',
     ];
 
     public function category()
@@ -23,5 +28,10 @@ class Service extends Model
     public function subcategory()
     {
         return $this->belongsTo(Subcategory::class);
+    }
+
+    public function requirements()
+    {
+        return $this->hasMany(ServiceRequirement::class);
     }
 }
