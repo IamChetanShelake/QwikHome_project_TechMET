@@ -42,7 +42,17 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Category_images', $imageName);
+        } else {
+            $imageName = '';
+        }
+
+        $validated['image'] = $imageName;
 
         Category::create($validated);
 
@@ -60,7 +70,18 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($category->image && file_exists(public_path('Category_images/' . $category->image))) {
+                unlink(public_path('Category_images/' . $category->image));
+            }
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Category_images', $imageName);
+            $validated['image'] = $imageName;
+        }
 
         $category->update($validated);
 
@@ -121,7 +142,17 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Subcategory_images', $imageName);
+        } else {
+            $imageName = '';
+        }
+
+        $validated['image'] = $imageName;
 
         Subcategory::create($validated);
 
@@ -141,7 +172,18 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($subcategory->image && file_exists(public_path('Subcategory_images/' . $subcategory->image))) {
+                unlink(public_path('Subcategory_images/' . $subcategory->image));
+            }
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Subcategory_images', $imageName);
+            $validated['image'] = $imageName;
+        }
 
         $subcategory->update($validated);
 
@@ -212,7 +254,17 @@ class ServiceController extends Controller
             'price' => 'required|numeric|min:0|max:999999.99',
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Service_images', $imageName);
+        } else {
+            $imageName = '';
+        }
+
+        $validated['image'] = $imageName;
 
         Service::create($validated);
 
@@ -236,7 +288,18 @@ class ServiceController extends Controller
             'price' => 'required|numeric|min:0|max:999999.99',
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($service->image && file_exists(public_path('Service_images/' . $service->image))) {
+                unlink(public_path('Service_images/' . $service->image));
+            }
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move('Service_images', $imageName);
+            $validated['image'] = $imageName;
+        }
 
         $service->update($validated);
 

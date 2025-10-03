@@ -9,7 +9,7 @@
     </div>
 
     <div class="dashboard-card">
-        <form method="POST" action="{{ route('services.categories.update', $category) }}">
+        <form method="POST" action="{{ route('services.categories.update', $category) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -36,6 +36,17 @@
                     <option value="inactive" {{ old('status', $category->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
                 @error('status')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+                @if($category->image)
+                    <p>Current Image: <img src="{{ asset('Category_images/' . $category->image) }}" width="100" alt="Category Image"></p>
+                @endif
+                @error('image')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>

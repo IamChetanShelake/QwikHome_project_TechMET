@@ -106,14 +106,13 @@
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
+                                <i class="fas fa-folder-open"></i>
+                                <span>Sub-Categories</span>
+                            </a>
                             <a href="{{ route('services.services.index') }}" class="dropdown-item">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
-                            </a>
-
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
-                                <i class="fas fa-folder-open"></i>
-                                <span>Sub-Services</span>
                             </a>
                         </div>
                     </div>

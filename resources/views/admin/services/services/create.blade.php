@@ -9,7 +9,7 @@
     </div>
 
     <div class="dashboard-card">
-        <form method="POST" action="{{ route('services.services.store') }}">
+        <form method="POST" action="{{ route('services.services.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -77,6 +77,14 @@
                     <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
                 @error('status')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+                @error('image')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>

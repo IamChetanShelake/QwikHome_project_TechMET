@@ -9,7 +9,7 @@
     </div>
 
     <div class="dashboard-card">
-        <form method="POST" action="{{ route('services.subcategories.update', $subcategory) }}">
+        <form method="POST" action="{{ route('services.subcategories.update', $subcategory) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -49,6 +49,17 @@
                     <option value="inactive" {{ old('status', $subcategory->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
                 @error('status')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image</label>
+                <input type="file" name="image" id="image" accept="image/*">
+                @if($subcategory->image)
+                    <p>Current Image: <img src="{{ asset('Subcategory_images/' . $subcategory->image) }}" width="100" alt="Subcategory Image"></p>
+                @endif
+                @error('image')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
