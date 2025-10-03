@@ -38,7 +38,6 @@
                                 <th>Sr.</th>
                                 <th>Code</th>
                                 <th>Discount</th>
-                                <th>For Active Subscription</th>
                                 <th>Used</th>
                                 <th>Expiry Date</th>
                                 <th>Action</th>
@@ -51,13 +50,6 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $promocode->code }}</td>
                                     <td>{{ number_format($promocode->discount, 2) }} {{ config('app.currency', 'AED') }}</td>
-                                    <td>
-                                        @if ($promocode->for_active_subscription)
-                                            <span class="status-badge completed"> Yes </span>
-                                        @else
-                                            <span class="status-badge pending"> No </span>
-                                        @endif
-                                    </td>
                                     <td>
                                         @if ($promocode->is_used)
                                             <span class="status-badge pending"> Used </span>

@@ -106,7 +106,7 @@
                             value="{{ request('date_to') }}">
                     </div>
                     <div class="col-md-2">
-                        <div class="d-flex gap-5">
+                        <div class="d-flex gap-1">
 
                             <button type="submit" class="btn btn-primary">Filter</button>
                             <a href="{{ route('complaints.index') }}" class="btn btn-secondary">Clear</a>
