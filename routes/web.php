@@ -6,6 +6,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ServiceProviderController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +104,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::post('/complaints/{id}/resolve', [ComplaintController::class, 'resolveComplaint'])->name('complaints.resolveComplaint');
     Route::post('/complaints/{id}/update-notes', [ComplaintController::class, 'updateNotes'])->name('complaints.updateNotes');
     Route::get('/complaints-stats', [ComplaintController::class, 'getStats'])->name('complaints.stats');
+
+    //Service Providers management-------------
+    Route::resource('serviceProviders', ServiceProviderController::class);
 });
 
 Auth::routes();
