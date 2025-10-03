@@ -21,7 +21,7 @@
     @endif
     <div class="header-right mt-3 mx-3">
         <div class="search-box">
-            <a href="{{ route('faq.create') }}" class="btn btn-primary">Create FAQ</a>
+            <a href="{{ route('promocodes.create') }}" class="btn btn-primary">Create Promocode</a>
         </div>
     </div>
     <div class="content-area">
@@ -29,49 +29,57 @@
         <section id="dashboard-section" class="content-section active">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>FAQ's Management</h3>
+                    <h3>Promocodes Management</h3>
                 </div>
                 <div class="table-container">
                     <table class="data-table ">
                         <thead>
                             <tr>
                                 <th>Sr.</th>
-                                <th>Service</th>
-                                <th>Question</th>
-                                <th>Answer</th>
-                                <th>Status</th>
+                                <th>Code</th>
+                                <th>Discount</th>
+                                <th>For Active Subscription</th>
+                                <th>Used</th>
+                                <th>Expiry Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($faqs as $faq)
+                            @foreach ($promocodes as $promocode)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $faq->service->name ?? 'N/A' }}</td>
-                                    <td>{{ Str::limit($faq->question, 50) }}</td>
-                                    <td>{{ Str::limit($faq->answer, 100) }}</td>
+                                    <td>{{ $promocode->code }}</td>
+                                    <td>{{ number_format($promocode->discount, 2) }} {{ config('app.currency', 'AED') }}</td>
                                     <td>
-                                        @if ($faq->status == 1)
-                                            <span class="status-badge completed"> Active </span>
+                                        @if ($promocode->for_active_subscription)
+                                            <span class="status-badge completed"> Yes </span>
                                         @else
-                                            <span class="status-badge pending"> Inactive </span>
+                                            <span class="status-badge pending"> No </span>
                                         @endif
                                     </td>
                                     <td>
+                                        @if ($promocode->is_used)
+                                            <span class="status-badge pending"> Used </span>
+                                        @else
+                                            <span class="status-badge completed"> Not Used </span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $promocode->expiry_date ? $promocode->expiry_date->format('d/m/Y') : 'No Expiry' }}</td>
+                                    <td>
                                         <div class="d-flex gap-1 justify-content-center">
-                                            <a href="{{ route('faq.view', $faq->id) }}">
+                                            <a href="{{ route('promocodes.view', $promocode->id) }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('faq.edit', $faq->id) }}">
+                                            <a href="{{ route('promocodes.edit', $promocode->id) }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form method="POST" action="{{ route('faq.delete', $faq->id) }}"
+                                            <form method="POST" action="{{ route('promocodes.delete', $promocode->id) }}"
                                                 style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    onclick="return confirm('Are you sure you want to delete this FAQ?')"
+                                                    onclick="return confirm('Are you sure you want to delete this promocode?')"
                                                     class="btn btn-sm btn-danger p-0">
                                                     <i class="fas fa-trash"></i>
                                                 </button>

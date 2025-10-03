@@ -3,6 +3,9 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\faqController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\PromocodeController;
+use App\Http\Controllers\ComplaintController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +72,37 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::put('/faq-update/{id}', [faqController::class, 'update'])->name('faq.update');
     Route::get('/faq-view/{id}', [faqController::class, 'view'])->name('faq.view');
     Route::delete('/faq-delete/{id}', [faqController::class, 'delete'])->name('faq.delete');
+
+    //Coupons management-------------
+    Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
+    Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
+    Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
+    Route::get('/coupons/{id}', [CouponController::class, 'view'])->name('coupons.view');
+    Route::get('/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
+    Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');
+    Route::delete('/coupons/{id}', [CouponController::class, 'delete'])->name('coupons.delete');
+
+    //Promocodes management-------------
+    Route::get('/promocodes', [PromocodeController::class, 'index'])->name('promocodes.index');
+    Route::get('/promocodes/create', [PromocodeController::class, 'create'])->name('promocodes.create');
+    Route::post('/promocodes', [PromocodeController::class, 'store'])->name('promocodes.store');
+    Route::get('/promocodes/{id}', [PromocodeController::class, 'view'])->name('promocodes.view');
+    Route::get('/promocodes/{id}/edit', [PromocodeController::class, 'edit'])->name('promocodes.edit');
+    Route::put('/promocodes/{id}', [PromocodeController::class, 'update'])->name('promocodes.update');
+    Route::delete('/promocodes/{id}', [PromocodeController::class, 'delete'])->name('promocodes.delete');
+
+    //FAQ Ajax endpoints-------------
+    Route::get('/faqs/get-subcategories/{categoryId}', [faqController::class, 'getSubcategories'])->name('faqs.getSubcategories');
+    Route::get('/faqs/get-services/{categoryId}/{subcategoryId?}', [faqController::class, 'getServices'])->name('faqs.getServices');
+
+    //Complaints management-------------
+    Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+    Route::get('/complaints/{id}', [ComplaintController::class, 'view'])->name('complaints.view');
+    Route::post('/complaints/{id}/assign-admin', [ComplaintController::class, 'assignAdmin'])->name('complaints.assignAdmin');
+    Route::post('/complaints/{id}/update-status', [ComplaintController::class, 'updateStatus'])->name('complaints.updateStatus');
+    Route::post('/complaints/{id}/resolve', [ComplaintController::class, 'resolveComplaint'])->name('complaints.resolveComplaint');
+    Route::post('/complaints/{id}/update-notes', [ComplaintController::class, 'updateNotes'])->name('complaints.updateNotes');
+    Route::get('/complaints-stats', [ComplaintController::class, 'getStats'])->name('complaints.stats');
 });
 
 Auth::routes();

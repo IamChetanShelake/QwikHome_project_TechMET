@@ -21,7 +21,7 @@
     @endif
     <div class="header-right mt-3 mx-3">
         <div class="search-box">
-            <a href="{{ route('faq.create') }}" class="btn btn-primary">Create FAQ</a>
+            <a href="{{ route('coupons.create') }}" class="btn btn-primary">Create Coupon</a>
         </div>
     </div>
     <div class="content-area">
@@ -29,30 +29,43 @@
         <section id="dashboard-section" class="content-section active">
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h3>FAQ's Management</h3>
+                    <h3>Coupons Management</h3>
                 </div>
                 <div class="table-container">
                     <table class="data-table ">
                         <thead>
                             <tr>
                                 <th>Sr.</th>
-                                <th>Service</th>
-                                <th>Question</th>
-                                <th>Answer</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Discount</th>
+                                <th>Expiry Date</th>
+                                <th>Usage Limit</th>
+                                <th>Used</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($faqs as $faq)
+                            @foreach ($coupons as $coupon)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $faq->service->name ?? 'N/A' }}</td>
-                                    <td>{{ Str::limit($faq->question, 50) }}</td>
-                                    <td>{{ Str::limit($faq->answer, 100) }}</td>
+                                    <td>{{ $coupon->code }}</td>
+                                    <td>{{ Str::limit($coupon->description, 50) }}</td>
                                     <td>
-                                        @if ($faq->status == 1)
+                                        {{ $coupon->discount_value }}
+                                        @if ($coupon->discount_type == 'percentage')
+                                            %
+                                        @else
+                                            {{ config('app.currency', 'AED') }}
+                                        @endif
+                                    </td>
+                                    <td>{{ $coupon->expiry_date->format('d/m/Y') }}</td>
+                                    <td>{{ $coupon->usage_limit ?: 'Unlimited' }}</td>
+                                    <td>{{ $coupon->used_count }}</td>
+                                    <td>
+                                        @if ($coupon->status == 1)
                                             <span class="status-badge completed"> Active </span>
                                         @else
                                             <span class="status-badge pending"> Inactive </span>
@@ -60,18 +73,18 @@
                                     </td>
                                     <td>
                                         <div class="d-flex gap-1 justify-content-center">
-                                            <a href="{{ route('faq.view', $faq->id) }}">
+                                            <a href="{{ route('coupons.view', $coupon->id) }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('faq.edit', $faq->id) }}">
+                                            <a href="{{ route('coupons.edit', $coupon->id) }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form method="POST" action="{{ route('faq.delete', $faq->id) }}"
+                                            <form method="POST" action="{{ route('coupons.delete', $coupon->id) }}"
                                                 style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    onclick="return confirm('Are you sure you want to delete this FAQ?')"
+                                                    onclick="return confirm('Are you sure you want to delete this coupon?')"
                                                     class="btn btn-sm btn-danger p-0">
                                                     <i class="fas fa-trash"></i>
                                                 </button>

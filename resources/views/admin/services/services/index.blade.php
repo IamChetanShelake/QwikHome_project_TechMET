@@ -3,13 +3,13 @@
 
 
 @section('content')
-    <section class="content-section active">
+    <section class="content-section active p-3">
         <style>
             .tabs {
                 margin-bottom: 20px;
             }
 
-           
+
 
             .tab-link {
                 display: inline-block;
@@ -44,7 +44,7 @@
         </style>
         <div class="section-header">
             <h2>Service Management</h2>
-            <div class="section-actions">
+            <div class="section-actions m-3">
                 <a href="{{ route('services.services.create') }}" class="btn-primary">Add New Service</a>
             </div>
         </div>
@@ -112,15 +112,17 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('services.services.edit', $service) }}"
-                                        class="action-btn edit">Edit</a>
-                                    <form method="POST" action="{{ route('services.services.destroy', $service) }}"
-                                        style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-btn block"
-                                            onclick="return confirm('Are you sure you want to delete this service?')">Delete</button>
-                                    </form>
+                                    <div class="d-flex">
+                                        <a href="{{ route('services.services.edit', $service) }}"
+                                            class="action-btn edit">Edit</a>
+                                        <form method="POST" action="{{ route('services.services.destroy', $service) }}"
+                                            style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="action-btn block"
+                                                onclick="return confirm('Are you sure you want to delete this service?')">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

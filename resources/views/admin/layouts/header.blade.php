@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css" rel="stylesheet">
+    <!--====== Summernote CSS ======-->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <!--====== Jquery js ======-->
     <script src="{{ asset('website/assets/vendor/jquery-3.7.1.min.js') }}"></script>
 
@@ -36,6 +38,7 @@
             min-width: 200px;
             z-index: 1000;
         }
+
         .service-dropdown-menu .dropdown-item {
             display: flex;
             align-items: center;
@@ -46,22 +49,27 @@
             border-bottom: 1px solid #eee;
             transition: all 0.2s ease;
         }
+
         .service-dropdown-menu .dropdown-item:hover,
         .service-dropdown-menu .dropdown-item.active {
             background-color: #007bff;
             color: white;
         }
+
         .service-dropdown-menu .dropdown-item i {
             width: 16px;
             text-align: center;
         }
+
         .service-dropdown-menu .dropdown-item:last-child {
             border-bottom: none;
         }
+
         .fa-caret-down.rotate {
             transform: rotate(180deg);
             transition: transform 0.2s ease;
         }
+
         .fa-caret-down {
             transition: transform 0.2s ease;
         }
@@ -106,20 +114,20 @@
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
-                                <i class="fas fa-concierge-bell"></i>
-                                <span>Services</span>
-                            </a>
 
                             <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
                                 <i class="fas fa-folder-open"></i>
-                                <span>Sub-Services</span>
+                                <span>Sub-Category</span>
+                            </a>
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span>Services</span>
                             </a>
                         </div>
                     </div>
                 </li>
                 <script>
-                    $(document).ready(function () {
+                    $(document).ready(function() {
                         function isServiceManagementPage() {
                             return window.location.pathname.startsWith('/services');
                         }
@@ -140,7 +148,7 @@
                             }
                         }
 
-                        $(".service-menu-trigger").on("click", function (e) {
+                        $(".service-menu-trigger").on("click", function(e) {
                             e.preventDefault();
                             const $dropdown = $(this).next(".service-dropdown-menu");
                             const $arrow = $(this).find(".fa-caret-down");
@@ -151,33 +159,33 @@
                     });
 
                     // Initialize user menu dropdown
-                    $(document).on("click", ".user-trigger", function (e) {
+                    $(document).on("click", ".user-trigger", function(e) {
                         e.stopPropagation();
                         $(this).closest(".user-menu").toggleClass("active");
                     });
 
                     // Close user menu when clicking outside
-                    $(document).on("click", function (e) {
+                    $(document).on("click", function(e) {
                         if (!$(e.target).closest(".user-menu").length) {
                             $(".user-menu").removeClass("active");
                         }
                     });
 
                     // Handle logout
-                    $(document).on("click", ".user-menu .dropdown-item[href='#logout']", function (e) {
+                    $(document).on("click", ".user-menu .dropdown-item[href='#logout']", function(e) {
                         e.preventDefault();
                         $("#logout-form").submit();
                     });
 
                     // Mobile menu toggle
-                    $(document).on("click", "#mobileMenuToggle", function (e) {
+                    $(document).on("click", "#mobileMenuToggle", function(e) {
                         if ($(window).width() <= 768) {
                             $("#sidebar").toggleClass("open");
                         }
                     });
 
                     // Close mobile sidebar when clicking outside, on sidebar content, or hamburger again
-                    $(document).on("click", "#mobileMenuToggle, #sidebar a", function (e) {
+                    $(document).on("click", "#mobileMenuToggle, #sidebar a", function(e) {
                         if ($(window).width() <= 768) {
                             // For sidebar links, close immediately
                             if ($(e.target).closest("#sidebar a").length) {
@@ -187,7 +195,7 @@
                     });
 
                     // Close mobile sidebar when clicking outside
-                    $(document).on("click", function (e) {
+                    $(document).on("click", function(e) {
                         if ($(window).width() <= 768) {
                             if (!$(e.target).closest("#sidebar, #mobileMenuToggle").length) {
                                 $("#sidebar").removeClass("open");
@@ -202,12 +210,12 @@
                         let touchEndX = 0;
                         let touchEndY = 0;
 
-                        $("#sidebar").on("touchstart", function (e) {
+                        $("#sidebar").on("touchstart", function(e) {
                             touchStartX = e.originalEvent.touches[0].clientX;
                             touchStartY = e.originalEvent.touches[0].clientY;
                         });
 
-                        $("#sidebar").on("touchmove", function (e) {
+                        $("#sidebar").on("touchmove", function(e) {
                             if (!touchStartX || !touchStartY) return;
 
                             touchEndX = e.originalEvent.touches[0].clientX;
@@ -225,7 +233,7 @@
                             }
                         });
 
-                        $("#sidebar").on("touchend", function () {
+                        $("#sidebar").on("touchend", function() {
                             touchStartX = 0;
                             touchStartY = 0;
                             touchEndX = 0;
@@ -234,62 +242,68 @@
                     }
 
                     // Sidebar toggle (desktop)
-                    $(document).on("click", "#sidebarToggle", function (e) {
+                    $(document).on("click", "#sidebarToggle", function(e) {
                         $("#sidebar").removeClass("open").toggleClass("collapsed");
                         $(".main-content").toggleClass("collapsed");
                     });
                 </script>
 
                 <li class="nav-item">
-                    <a href="#bookings" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-calendar-check"></i>
                         <span>Booking Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#finance" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Finance & Wallet</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#promotions" class="nav-link">
+                    <a href="{{ route('coupons.index') }}" class="nav-link">
                         <i class="fas fa-tags"></i>
-                        <span>Coupons & Promotions</span>
+                        <span>Coupons</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#notifications" class="nav-link">
+                    <a href="{{ route('promocodes.index') }}" class="nav-link">
+                        <i class="fas fa-gift"></i>
+                        <span>Promo Codes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-bell"></i>
                         <span>Notifications</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#reports" class="nav-link" >
+                    <a href="#" class="nav-link">
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports & Analytics</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#complaints" class="nav-link">
+                    <a href="{{ route('complaints.index') }}" class="nav-link">
                         <i class="fas fa-exclamation-triangle"></i>
                         <span>Complaints</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#content" class="nav-link" >
+                    <a href="#" class="nav-link">
                         <i class="fas fa-edit"></i>
                         <span>Content Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#leads" class="nav-link" >
+                    <a href="#" class="nav-link">
                         <i class="fas fa-user-plus"></i>
                         <span>Lead Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('faq')}}" class="nav-link" >
+                    <a href="{{ route('faq') }}" class="nav-link">
                         <i class="fas fa-user-plus"></i>
                         <span>FAQ's</span>
                     </a>
@@ -321,7 +335,8 @@
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 class="page-title">Dashboard</h1>
+
+                <h1 class="page-title">Admin Dashboard</h1>
             </div>
             <div class="header-right">
 
@@ -330,20 +345,21 @@
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
-                <div class="user-menu">
-                    <span class="user-trigger">{{ auth()->user()->name }}
-                        <a href="#logout" class="dropdown-item">Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </span>
+                    <div class="user-menu">
+                        <span class="user-trigger">{{ auth()->user()->name }}
+                            <a href="#logout" class="dropdown-item">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
+                        </span>
 
-                    {{-- <div class="dropdown-menu">
+                        {{-- <div class="dropdown-menu">
                         <a href="#profile" class="dropdown-item">Profile</a>
                         <a href="#settings" class="dropdown-item">Settings</a>
 
                     </div> --}}
-                </div>
+                    </div>
                 </div>
             </div>
         </header>

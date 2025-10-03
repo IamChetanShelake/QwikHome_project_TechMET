@@ -3,7 +3,7 @@
 @section('title', 'Add Service')
 
 @section('content')
-    <section class="content-section active">
+    <section class="content-section active p-3">
         <div class="section-header">
             <h2>Add New Service</h2>
         </div>
