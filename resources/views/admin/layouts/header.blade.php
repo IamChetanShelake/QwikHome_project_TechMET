@@ -24,9 +24,8 @@
     <!--====== Bootstrap js ======-->
     <script src="{{ asset('website/assets/vendor/popper/popper.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <script src="{{ asset('js/admin.js') }}"></script>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
     <style>
         .service-dropdown-menu {
             display: none;
@@ -38,16 +37,23 @@
             z-index: 1000;
         }
         .service-dropdown-menu .dropdown-item {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 10px 15px;
             color: #333;
             text-decoration: none;
             border-bottom: 1px solid #eee;
+            transition: all 0.2s ease;
         }
         .service-dropdown-menu .dropdown-item:hover,
         .service-dropdown-menu .dropdown-item.active {
             background-color: #007bff;
             color: white;
+        }
+        .service-dropdown-menu .dropdown-item i {
+            width: 16px;
+            text-align: center;
         }
         .service-dropdown-menu .dropdown-item:last-child {
             border-bottom: none;
@@ -96,9 +102,19 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item">Services</a>
-                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">Categories</a>
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">Subcategories</a>
+                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">
+                                <i class="fas fa-folder"></i>
+                                <span>Categories</span>
+                            </a>
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span>Services</span>
+                            </a>
+
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
+                                <i class="fas fa-folder-open"></i>
+                                <span>Sub-Services</span>
+                            </a>
                         </div>
                     </div>
                 </li>
@@ -129,14 +145,98 @@
                             const $dropdown = $(this).next(".service-dropdown-menu");
                             const $arrow = $(this).find(".fa-caret-down");
 
-                            if (isServiceManagementPage() && $dropdown.is(':visible')) {
-                                // Allow closing dropdown only if not on service management page
-                                return;
-                            }
-
                             $dropdown.slideToggle(200);
                             $arrow.toggleClass("rotate");
                         });
+                    });
+
+                    // Initialize user menu dropdown
+                    $(document).on("click", ".user-trigger", function (e) {
+                        e.stopPropagation();
+                        $(this).closest(".user-menu").toggleClass("active");
+                    });
+
+                    // Close user menu when clicking outside
+                    $(document).on("click", function (e) {
+                        if (!$(e.target).closest(".user-menu").length) {
+                            $(".user-menu").removeClass("active");
+                        }
+                    });
+
+                    // Handle logout
+                    $(document).on("click", ".user-menu .dropdown-item[href='#logout']", function (e) {
+                        e.preventDefault();
+                        $("#logout-form").submit();
+                    });
+
+                    // Mobile menu toggle
+                    $(document).on("click", "#mobileMenuToggle", function (e) {
+                        if ($(window).width() <= 768) {
+                            $("#sidebar").toggleClass("open");
+                        }
+                    });
+
+                    // Close mobile sidebar when clicking outside, on sidebar content, or hamburger again
+                    $(document).on("click", "#mobileMenuToggle, #sidebar a", function (e) {
+                        if ($(window).width() <= 768) {
+                            // For sidebar links, close immediately
+                            if ($(e.target).closest("#sidebar a").length) {
+                                $("#sidebar").removeClass("open");
+                            }
+                        }
+                    });
+
+                    // Close mobile sidebar when clicking outside
+                    $(document).on("click", function (e) {
+                        if ($(window).width() <= 768) {
+                            if (!$(e.target).closest("#sidebar, #mobileMenuToggle").length) {
+                                $("#sidebar").removeClass("open");
+                            }
+                        }
+                    });
+
+                    // Swipe gesture for mobile sidebar
+                    if ($(window).width() <= 768) {
+                        let touchStartX = 0;
+                        let touchStartY = 0;
+                        let touchEndX = 0;
+                        let touchEndY = 0;
+
+                        $("#sidebar").on("touchstart", function (e) {
+                            touchStartX = e.originalEvent.touches[0].clientX;
+                            touchStartY = e.originalEvent.touches[0].clientY;
+                        });
+
+                        $("#sidebar").on("touchmove", function (e) {
+                            if (!touchStartX || !touchStartY) return;
+
+                            touchEndX = e.originalEvent.touches[0].clientX;
+                            touchEndY = e.originalEvent.touches[0].clientY;
+
+                            const deltaX = touchStartX - touchEndX;
+                            const deltaY = Math.abs(touchStartY - touchEndY);
+
+                            // If horizontal swipe is greater than vertical, handle it
+                            if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 50) {
+                                if (deltaX > 50) { // Left swipe
+                                    e.preventDefault();
+                                    $("#sidebar").removeClass("open");
+                                }
+                            }
+                        });
+
+                        $("#sidebar").on("touchend", function () {
+                            touchStartX = 0;
+                            touchStartY = 0;
+                            touchEndX = 0;
+                            touchEndY = 0;
+                        });
+                    }
+
+                    // Sidebar toggle (desktop)
+                    $(document).on("click", "#sidebarToggle", function (e) {
+                        $("#sidebar").removeClass("open").toggleClass("collapsed");
+                        $(".main-content").toggleClass("collapsed");
                     });
                 </script>
 
@@ -231,16 +331,18 @@
                         <span class="notification-badge">3</span>
                     </button>
                 <div class="user-menu">
-                    <span class="user-trigger">{{ auth()->user()->name }}</span>
-                    <div class="dropdown-menu">
-                        <a href="#profile" class="dropdown-item">Profile</a>
-                        <a href="#settings" class="dropdown-item">Settings</a>
+                    <span class="user-trigger">{{ auth()->user()->name }}
                         <a href="#logout" class="dropdown-item">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        {{-- <a href="{{ route('logout') }}">Logout</a> --}}
-                    </div>
+                    </span>
+
+                    {{-- <div class="dropdown-menu">
+                        <a href="#profile" class="dropdown-item">Profile</a>
+                        <a href="#settings" class="dropdown-item">Settings</a>
+
+                    </div> --}}
                 </div>
                 </div>
             </div>
