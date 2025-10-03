@@ -29,49 +29,130 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <style>
+        /* Modern Service Management Dropdown Styling */
         .service-dropdown-menu {
             display: none;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 0 0 4px 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            min-width: 220px;
             z-index: 1000;
+            margin-top: 8px;
+            overflow: hidden;
         }
 
         .service-dropdown-menu .dropdown-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            color: #333;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #ffffff;
             text-decoration: none;
-            border-bottom: 1px solid #eee;
-            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .service-dropdown-menu .dropdown-item:hover,
         .service-dropdown-menu .dropdown-item.active {
-            background-color: #007bff;
-            color: white;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateX(4px);
         }
 
         .service-dropdown-menu .dropdown-item i {
-            width: 16px;
+            width: 18px;
             text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .service-dropdown-menu .dropdown-item:hover i,
+        .service-dropdown-menu .dropdown-item.active i {
+            color: #00d4ff;
+            transform: scale(1.1);
         }
 
         .service-dropdown-menu .dropdown-item:last-child {
             border-bottom: none;
         }
 
+        .service-dropdown-menu .dropdown-item span {
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced arrow animation */
         .fa-caret-down.rotate {
             transform: rotate(180deg);
-            transition: transform 0.2s ease;
+            transition: transform 0.3s ease;
+            color: #00d4ff;
         }
 
         .fa-caret-down {
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Service menu trigger hover effect */
+        .service-menu-trigger:hover .fa-caret-down {
+            color: #00d4ff;
+        }
+
+        /* Add subtle glow effect */
+        .service-dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+            border-radius: 12px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-dropdown-menu:hover::before {
+            opacity: 1;
+        }
+
+        /* Smooth slide animation */
+        .service-dropdown-menu {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .service-dropdown-menu {
+                min-width: 200px;
+                margin-top: 4px;
+            }
+
+            .service-dropdown-menu .dropdown-item {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .service-dropdown-menu .dropdown-item i {
+                width: 16px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -260,13 +341,13 @@
                         <span>Finance & Wallet</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
                     <a href="{{ route('coupons.index') }}" class="nav-link">
                         <i class="fas fa-tags"></i>
                         <span>Coupons</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('promocodes.*') ? 'active' : '' }}">
                     <a href="{{ route('promocodes.index') }}" class="nav-link">
                         <i class="fas fa-gift"></i>
                         <span>Promo Codes</span>

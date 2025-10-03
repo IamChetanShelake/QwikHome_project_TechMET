@@ -2,82 +2,705 @@
 
 @section('content')
     <div class="content-area">
-        <div class="">
-            <div class="dashboard-card p-3">
-                <div class="card-header">
-                    <h3>Edit Coupon</h3>
-                    <a href="{{ route('coupons.index') }}" class="btn btn-secondary">Back</a>
+        <div class="modern-form-container">
+            <!-- Header Section -->
+            <div class="form-header-section">
+                <div class="form-header-content">
+                    <div class="form-title-group">
+                        <div class="form-icon-wrapper">
+                            <i class="fas fa-edit form-main-icon"></i>
+                        </div>
+                        <div class="form-title-text">
+                            <h2 class="form-title">Edit Coupon</h2>
+                            <p class="form-subtitle">Update coupon details and discount settings</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('coupons.index') }}" class="modern-btn modern-btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to List</span>
+                    </a>
                 </div>
-                <div class="card-body p-3">
-                    <form method="POST" action="{{ route('coupons.update', $coupon->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="code">Coupon Code</label>
-                            <input type="text" class="form-control" id="code" name="code"
-                                value="{{ $coupon->code }}" required>
+            </div>
+
+            <!-- Form Section -->
+            <div class="modern-form-card">
+                <form method="POST" action="{{ route('coupons.update', $coupon->id) }}" class="modern-form" id="couponEditForm">
+                    @csrf
+                    @method('PUT')
+                    
+                    <!-- Form Grid -->
+                    <div class="form-grid">
+                        <!-- Coupon Code Field -->
+                        <div class="form-group-modern">
+                            <label for="code" class="modern-label">
+                                <i class="fas fa-barcode label-icon"></i>
+                                Coupon Code
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <input type="text" 
+                                       class="modern-input @error('code') error @enderror" 
+                                       id="code" 
+                                       name="code" 
+                                       value="{{ old('code', $coupon->code) }}"
+                                       placeholder="Enter unique coupon code (e.g. SUMMER2024)"
+                                       required>
+                                <div class="input-border"></div>
+                            </div>
                             @error('code')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Create a memorable and unique coupon code
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3">{{ $coupon->description }}</textarea>
-                            @error('description')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="discount_type">Discount Type</label>
-                            <select class="form-control" id="discount_type" name="discount_type" required>
-                                <option value="">Select Type</option>
-                                <option value="percentage" {{ $coupon->discount_type == 'percentage' ? 'selected' : '' }}>
-                                    Percentage (%)</option>
-                                <option value="fixed" {{ $coupon->discount_type == 'fixed' ? 'selected' : '' }}>Fixed
-                                    Amount</option>
-                            </select>
+
+                        <!-- Discount Type Field -->
+                        <div class="form-group-modern">
+                            <label for="discount_type" class="modern-label">
+                                <i class="fas fa-percentage label-icon"></i>
+                                Discount Type
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <select class="modern-select @error('discount_type') error @enderror" 
+                                        id="discount_type" 
+                                        name="discount_type" 
+                                        required>
+                                    <option value="">Choose discount type</option>
+                                    <option value="percentage" {{ old('discount_type', $coupon->discount_type) == 'percentage' ? 'selected' : '' }}>Percentage (%)</option>
+                                    <option value="fixed" {{ old('discount_type', $coupon->discount_type) == 'fixed' ? 'selected' : '' }}>Fixed Amount</option>
+                                </select>
+                                <div class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="input-border"></div>
+                            </div>
                             @error('discount_type')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Select how the discount will be calculated
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="discount_value">Discount Value</label>
-                            <input type="number" step="0.01" class="form-control" id="discount_value"
-                                name="discount_value" value="{{ $coupon->discount_value }}" required>
+
+                        <!-- Discount Value Field -->
+                        <div class="form-group-modern">
+                            <label for="discount_value" class="modern-label">
+                                <i class="fas fa-coins label-icon"></i>
+                                Discount Value
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <input type="number" 
+                                       step="0.01" 
+                                       min="0"
+                                       class="modern-input @error('discount_value') error @enderror" 
+                                       id="discount_value"
+                                       name="discount_value" 
+                                       value="{{ old('discount_value', $coupon->discount_value) }}"
+                                       placeholder="0.00"
+                                       required>
+                                <div class="input-suffix" id="valueSuffix">
+                                    @if($coupon->discount_type == 'percentage')
+                                        %
+                                    @elseif($coupon->discount_type == 'fixed')
+                                        {{ config('app.currency', 'AED') }}
+                                    @else
+                                        Value
+                                    @endif
+                                </div>
+                                <div class="input-border"></div>
+                            </div>
                             @error('discount_value')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="valueHint">
+                                    @if($coupon->discount_type == 'percentage')
+                                        Enter percentage value (e.g., 10 for 10%)
+                                    @elseif($coupon->discount_type == 'fixed')
+                                        Enter fixed discount amount in {{ config('app.currency', 'AED') }}
+                                    @else
+                                        Enter the discount value
+                                    @endif
+                                </span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="expiry_date">Expiry Date</label>
-                            <input type="datetime-local" class="form-control" id="expiry_date" name="expiry_date"
-                                value="{{ $coupon->expiry_date->format('Y-m-d\TH:i') }}" required>
+
+                        <!-- Expiry Date Field -->
+                        <div class="form-group-modern">
+                            <label for="expiry_date" class="modern-label">
+                                <i class="fas fa-calendar-times label-icon"></i>
+                                Expiry Date
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <input type="datetime-local" 
+                                       class="modern-input @error('expiry_date') error @enderror" 
+                                       id="expiry_date" 
+                                       name="expiry_date"
+                                       value="{{ old('expiry_date', $coupon->expiry_date->format('Y-m-d\TH:i')) }}"
+                                       required>
+                                <div class="input-border"></div>
+                            </div>
                             @error('expiry_date')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Set when this coupon will expire
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="usage_limit">Usage Limit (leave blank for unlimited)</label>
-                            <input type="number" min="1" class="form-control" id="usage_limit" name="usage_limit"
-                                value="{{ $coupon->usage_limit }}">
+
+                        <!-- Usage Limit Field -->
+                        <div class="form-group-modern">
+                            <label for="usage_limit" class="modern-label">
+                                <i class="fas fa-users label-icon"></i>
+                                Usage Limit
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <input type="number" 
+                                       min="1" 
+                                       class="modern-input @error('usage_limit') error @enderror" 
+                                       id="usage_limit" 
+                                       name="usage_limit"
+                                       value="{{ old('usage_limit', $coupon->usage_limit) }}"
+                                       placeholder="Leave empty for unlimited">
+                                <div class="input-border"></div>
+                            </div>
                             @error('usage_limit')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Maximum number of times this coupon can be used
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status" name="status" required>
-                                <option value="1" {{ $coupon->status == 1 ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ $coupon->status == 0 ? 'selected' : '' }}>Inactive</option>
-                            </select>
+
+                        <!-- Status Field -->
+                        <div class="form-group-modern">
+                            <label for="status" class="modern-label">
+                                <i class="fas fa-toggle-on label-icon"></i>
+                                Status
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-power-off"></i>
+                                </div>
+                                <select class="modern-select @error('status') error @enderror" 
+                                        id="status" 
+                                        name="status" 
+                                        required>
+                                    <option value="1" {{ old('status', $coupon->status) == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ old('status', $coupon->status) == 0 ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                                <div class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="input-border"></div>
+                            </div>
                             @error('status')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
                             @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Set coupon availability status
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update Coupon</button>
-                    </form>
-                </div>
+
+                        <!-- Description Field -->
+                        <div class="form-group-modern full-width">
+                            <label for="description" class="modern-label">
+                                <i class="fas fa-align-left label-icon"></i>
+                                Description
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon textarea-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <textarea class="modern-textarea @error('description') error @enderror" 
+                                          id="description" 
+                                          name="description" 
+                                          rows="4"
+                                          placeholder="Enter a brief description of this coupon (e.g., Summer sale discount for all products)">{{ old('description', $coupon->description) }}</textarea>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('description')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Provide additional details about this coupon
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="modern-btn modern-btn-outline" onclick="resetForm()">
+                            <i class="fas fa-undo"></i>
+                            <span>Reset Changes</span>
+                        </button>
+                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            <span>Update Coupon</span>
+                            <div class="btn-loader">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <style>
+        /* Modern Form Styles */
+        .modern-form-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-header-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px 20px 0 0;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none;
+        }
+
+        .form-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-title-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .form-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .form-main-icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0 0 0;
+        }
+
+        .modern-form-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 0 0 20px 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .form-group-modern.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .modern-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .label-icon {
+            color: #00d4ff;
+        }
+
+        .optional-badge {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .modern-input, .modern-select, .modern-textarea {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modern-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .modern-select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        /* Dropdown option styling */
+        .modern-select option {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .modern-select option:hover,
+        .modern-select option:focus,
+        .modern-select option:checked {
+            background-color: #404040;
+            color: #00d4ff;
+        }
+
+        .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .modern-input.error, .modern-select.error, .modern-textarea.error {
+            border-color: #ff4757;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.2);
+        }
+
+        .modern-input::placeholder, .modern-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            z-index: 2;
+        }
+
+        .textarea-icon {
+            top: 20px;
+            transform: none;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        .input-border {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #0099cc);
+            transition: width 0.3s ease;
+        }
+
+        .modern-input:focus + .input-border,
+        .modern-select:focus + .select-arrow + .input-border,
+        .modern-textarea:focus + .input-border {
+            width: 100%;
+        }
+
+        .error-message {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ff4757;
+            font-size: 12px;
+            margin-top: 8px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .field-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .modern-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .modern-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+        }
+
+        .modern-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modern-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .modern-btn-outline {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modern-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-loader {
+            display: none;
+            margin-left: 8px;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modern-form-container {
+                padding: 10px;
+            }
+
+            .form-header-section,
+            .modern-form-card {
+                padding: 20px;
+            }
+
+            .form-header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-actions {
+                justify-content: stretch;
+            }
+
+            .modern-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <script>
+        // Form Enhancement Scripts
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('couponEditForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const inputs = form.querySelectorAll('.modern-input, .modern-select, .modern-textarea');
+            const discountTypeSelect = document.getElementById('discount_type');
+            const valueSuffix = document.getElementById('valueSuffix');
+            const valueHint = document.getElementById('valueHint');
+
+            // Add input animations
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+
+                // Auto-uppercase for code field
+                if (input.name === 'code') {
+                    input.addEventListener('input', function() {
+                        this.value = this.value.toUpperCase();
+                    });
+                }
+            });
+
+            // Dynamic discount type handling
+            discountTypeSelect.addEventListener('change', function() {
+                const selectedType = this.value;
+                if (selectedType === 'percentage') {
+                    valueSuffix.textContent = '%';
+                    valueHint.textContent = 'Enter percentage value (e.g., 10 for 10%)';
+                } else if (selectedType === 'fixed') {
+                    valueSuffix.textContent = '{{ config("app.currency", "AED") }}';
+                    valueHint.textContent = 'Enter fixed discount amount in {{ config("app.currency", "AED") }}';
+                } else {
+                    valueSuffix.textContent = 'Value';
+                    valueHint.textContent = 'Enter the discount value';
+                }
+            });
+
+            // Form submission with loading state
+            form.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.querySelector('span').style.display = 'none';
+                submitBtn.querySelector('.btn-loader').style.display = 'block';
+            });
+        });
+
+        function resetForm() {
+            if (confirm('Are you sure you want to reset all changes? This will restore the original values.')) {
+                location.reload();
+            }
+        }
+    </script>
 @endsection
