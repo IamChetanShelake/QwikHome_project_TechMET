@@ -20,7 +20,6 @@
         <div id="searchResults"></div> --}}
         </div>
     </div>
-<<<<<<< HEAD
     <div class="content-area">
         <!-- Dashboard Section -->
         <section id="dashboard-section" class="content-section active">
@@ -44,18 +43,6 @@
                         <tbody>
 
                             @foreach ($customers as $customer)
-=======
-        <div class="content-area">
-            <!-- Dashboard Section -->
-            <section id="dashboard-section" class="content-section active">
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>Customer Management</h3>
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table ">
-                            <thead>
->>>>>>> shivam
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
@@ -81,6 +68,11 @@
                                     <td>
                                         <div class="d-flex gap-1 justify-content-center">
 
+                                            {{-- <a href="{{ route('customer.view', $customer->id) }}">
+                                                <i class="fas fa-eye">
+
+                                                </i>
+                                            </a> --}}
                                             @if ($customer->active == 0)
                                                 <button type="button" class="btn btn-danger block"
                                                     data-id="{{ $customer->id }}">block

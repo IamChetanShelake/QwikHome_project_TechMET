@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\faqController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -25,6 +26,7 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //customer management-------------
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
+    Route::get('/customer-view/{id}', [CustomerController::class, 'view'])->name('customer.view');
 
     //service management-------------
     Route::prefix('services')->group(function () {
@@ -58,6 +60,15 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::post('/customers/toggle-block', [CustomerController::class, 'toggleBlock'])
         ->name('customers.toggle-block');
     Route::get('/admin/search-users', [CustomerController::class, 'search']);
+
+    //FAQ management-------------
+    Route::get('/faqs', [faqController::class, 'index'])->name('faq');
+    Route::get('/faq-create', [faqController::class, 'create'])->name('faq.create');
+    Route::post('/faq-store', [faqController::class, 'store'])->name('faq.store');
+    Route::get('/faq-edit/{id}', [faqController::class, 'edit'])->name('faq.edit');
+    Route::put('/faq-update/{id}', [faqController::class, 'update'])->name('faq.update');
+    Route::get('/faq-view/{id}', [faqController::class, 'view'])->name('faq.view');
+    Route::delete('/faq-delete/{id}', [faqController::class, 'delete'])->name('faq.delete');
 });
 
 Auth::routes();

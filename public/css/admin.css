@@ -4,6 +4,9 @@
     padding: 0;
     box-sizing: border-box;
 }
+a {
+    text-decoration: none;
+}
 
 body {
     font-family: "Inter", sans-serif;
@@ -224,6 +227,7 @@ body {
 .header-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 20px;
 }
 
@@ -495,7 +499,7 @@ body {
 }
 
 .dropdown-item::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;

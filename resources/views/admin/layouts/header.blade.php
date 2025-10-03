@@ -141,51 +141,57 @@
                 </script>
 
                 <li class="nav-item">
-                    <a href="#bookings" class="nav-link" data-section="bookings">
+                    <a href="#bookings" class="nav-link">
                         <i class="fas fa-calendar-check"></i>
                         <span>Booking Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#finance" class="nav-link" data-section="finance">
+                    <a href="#finance" class="nav-link">
                         <i class="fas fa-wallet"></i>
                         <span>Finance & Wallet</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#promotions" class="nav-link" data-section="promotions">
+                    <a href="#promotions" class="nav-link">
                         <i class="fas fa-tags"></i>
                         <span>Coupons & Promotions</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#notifications" class="nav-link" data-section="notifications">
+                    <a href="#notifications" class="nav-link">
                         <i class="fas fa-bell"></i>
                         <span>Notifications</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#reports" class="nav-link" data-section="reports">
+                    <a href="#reports" class="nav-link" >
                         <i class="fas fa-chart-bar"></i>
                         <span>Reports & Analytics</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#complaints" class="nav-link" data-section="complaints">
+                    <a href="#complaints" class="nav-link">
                         <i class="fas fa-exclamation-triangle"></i>
                         <span>Complaints</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#content" class="nav-link" data-section="content">
+                    <a href="#content" class="nav-link" >
                         <i class="fas fa-edit"></i>
                         <span>Content Management</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#leads" class="nav-link" data-section="leads">
+                    <a href="#leads" class="nav-link" >
                         <i class="fas fa-user-plus"></i>
                         <span>Lead Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('faq')}}" class="nav-link" >
+                        <i class="fas fa-user-plus"></i>
+                        <span>FAQ's</span>
                     </a>
                 </li>
             </ul>
