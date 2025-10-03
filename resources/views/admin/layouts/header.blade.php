@@ -102,17 +102,18 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
-                                <i class="fas fa-concierge-bell"></i>
-                                <span>Services</span>
-                            </a>
                             <a href="{{ route('services.categories.index') }}" class="dropdown-item">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span>Services</span>
+                            </a>
+
                             <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
                                 <i class="fas fa-folder-open"></i>
-                                <span>Subcategories</span>
+                                <span>Sub-Services</span>
                             </a>
                         </div>
                     </div>
