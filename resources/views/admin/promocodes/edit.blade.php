@@ -17,43 +17,40 @@
                     <form method="POST" action="{{ route('promocodes.update', $promocode->id) }}">
                         @csrf
                         @method('PUT')
-                        <div class="form-group">
-                            <label for="code">Promocode (alphanumeric only, e.g. ABC123)</label>
-                            <input type="text" class="form-control" id="code" name="code"
-                                   value="{{ old('code', $promocode->code) }}" required
-                                   pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed">
-                            @error('code')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="discount">Discount Amount ({{ config('app.currency', 'AED') }})</label>
-                            <input type="number" step="0.01" min="0" class="form-control" id="discount"
-                                name="discount" value="{{ old('discount', $promocode->discount) }}" required>
-                            @error('discount')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="for_active_subscription"
-                                    name="for_active_subscription" value="1"
-                                    {{ old('for_active_subscription', $promocode->for_active_subscription) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="for_active_subscription">
-                                    Applicable only for users with active subscription
-                                </label>
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="code">Promocode (alphanumeric only, e.g. ABC123)</label>
+                                    <input type="text" class="form-control" id="code" name="code"
+                                           value="{{ old('code', $promocode->code) }}" required
+                                           pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed">
+                                    @error('code')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                            @error('for_active_subscription')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="discount">Discount Amount ({{ config('app.currency', 'AED') }})</label>
+                                    <input type="number" step="0.01" min="0" class="form-control" id="discount"
+                                        name="discount" value="{{ old('discount', $promocode->discount) }}" required>
+                                    @error('discount')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="expiry_date">Expiry Date (optional)</label>
-                            <input type="datetime-local" class="form-control" id="expiry_date" name="expiry_date"
-                                   value="{{ old('expiry_date', $promocode->expiry_date ? $promocode->expiry_date->format('Y-m-d\TH:i') : '') }}">
-                            @error('expiry_date')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="expiry_date">Expiry Date (optional)</label>
+                                    <input type="datetime-local" class="form-control" id="expiry_date" name="expiry_date"
+                                           value="{{ old('expiry_date', $promocode->expiry_date ? $promocode->expiry_date->format('Y-m-d\TH:i') : '') }}">
+                                    @error('expiry_date')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Update Promocode</button>
                     </form>

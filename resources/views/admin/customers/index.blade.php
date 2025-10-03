@@ -12,12 +12,10 @@
 
 
     <!-- Content Area -->
-    <div class="header-right mt-3">
+    <div class="header-right mt-3 mx-4  ">
         <div class="search-box">
-            {{-- <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search...">
-        </div>
-        <div id="searchResults"></div> --}}
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by name, email, or mobile...">
         </div>
     </div>
     <div class="content-area">
@@ -138,31 +136,137 @@
 
     {{-- search user script --> --}}
     <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let query = this.value;
+        let currentTableHTML = document.querySelector('.data-table tbody').innerHTML; // Store original table
 
-            if (query.length > 0) {
-                fetch(`/admin/search-users?query=${query}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let resultsBox = document.getElementById('searchResults');
-                        resultsBox.innerHTML = '';
-                        console.log(resultsBox);
-                        if (data.length > 0) {
-                            data.forEach(user => {
-                                resultsBox.innerHTML += `
-                            <div class="result-item">
-                                ${user.name} - ${user.email} - ${user.phone}
-                            </div>`;
-                            });
-                        } else {
-                            resultsBox.innerHTML = '<p>No results found</p>';
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let query = this.value.trim();
+
+            fetch(`/admin/search-users?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tbody = document.querySelector('.data-table tbody');
+                    tbody.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach((user, index) => {
+                            let imageHTML = user.image ?
+                                `<img src="/customer_images/${user.image}" alt="Image" class="designer-img">` :
+                                `<p>No Image</p>`;
+
+                            let statusHTML = user.active == 0 ?
+                                `<span class="status-badge completed"> Active </span>` :
+                                `<span class="status-badge pending"> Blocked </span>`;
+
+                            let actionHTML = user.active == 0 ?
+                                `<button type="button" class="btn btn-danger block" data-id="${user.id}">block</button>` :
+                                `<button type="button" class="btn btn-success unblock" data-id="${user.id}">unblock</button>`;
+
+                            let rowHTML = `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${imageHTML}</td>
+                                    <td>${user.name}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.phone || 'N/A'}</td>
+                                    <td>${statusHTML}</td>
+                                    <td>
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            ${actionHTML}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                            tbody.innerHTML += rowHTML;
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
+                    }
+
+                    // Re-attach event listeners to new buttons
+                    attachToggleListeners();
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Function to attach listeners to block/unblock buttons
+        function attachToggleListeners() {
+            document.querySelectorAll(".block, .unblock").forEach(button => {
+                button.addEventListener("click", function() {
+                    let userId = this.getAttribute("data-id");
+
+                    fetch("{{ route('customers.toggle-block') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                id: userId
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                // Reload table data after status change
+                                let query = document.getElementById('searchInput').value.trim();
+                                fetch(`/admin/search-users?query=${encodeURIComponent(query)}`)
+                                    .then(response => response.json())
+                                    .then(data => updateTableWithData(data));
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                });
+            });
+        }
+
+        // Function to update table with data
+        function updateTableWithData(data) {
+            let tbody = document.querySelector('.data-table tbody');
+            tbody.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach((user, index) => {
+                    let imageHTML = user.image ?
+                        `<img src="/customer_images/${user.image}" alt="Image" class="designer-img">` :
+                        `<p>No Image</p>`;
+
+                    let statusHTML = user.active == 0 ?
+                        `<span class="status-badge completed"> Active </span>` :
+                        `<span class="status-badge pending"> Blocked </span>`;
+
+                    let actionHTML = user.active == 0 ?
+                        `<button type="button" class="btn btn-danger block" data-id="${user.id}">block</button>` :
+                        `<button type="button" class="btn btn-success unblock" data-id="${user.id}">unblock</button>`;
+
+                    let rowHTML = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${imageHTML}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone || 'N/A'}</td>
+                            <td>${statusHTML}</td>
+                            <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                    ${actionHTML}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += rowHTML;
+                });
             } else {
-                document.getElementById('searchResults').innerHTML = '';
+                tbody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
             }
+
+            // Re-attach listeners
+            attachToggleListeners();
+        }
+
+        // Attach initial listeners on load
+        document.addEventListener("DOMContentLoaded", function() {
+            attachToggleListeners();
         });
     </script>
 @endsection

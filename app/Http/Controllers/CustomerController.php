@@ -34,11 +34,19 @@ class CustomerController extends Controller
     {
         $query = $request->get('query');
 
-        $users = User::where('name', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
-            ->orWhere('phone', 'like', "%{$query}%")
-            ->limit(10) // optional, limit results
-            ->get();
+        if (empty($query)) {
+            // Return all customers when no query
+            $users = User::where('role', 'user')->get();
+        } else {
+            // Search by name, email, or phone
+            $users = User::where('role', 'user')
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%")
+                      ->orWhere('email', 'like', "%{$query}%")
+                      ->orWhere('phone', 'like', "%{$query}%");
+                })
+                ->get();
+        }
 
         return response()->json($users);
     }
