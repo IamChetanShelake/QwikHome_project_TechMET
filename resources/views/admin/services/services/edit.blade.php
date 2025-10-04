@@ -407,8 +407,8 @@
                             <input type="number" class="modern-input" id="price_onetime" name="price_onetime"
                                    value="{{ old('price_onetime', $service->price_onetime) }}" step="0.01" min="0"
                                    placeholder="0.00">
-                            <i class="fas fa-dollar-sign input-icon"></i>
-                            <span class="input-suffix">USD</span>
+                            {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
+                            <span class="input-suffix">AED</span>
                         </div>
                         @error('price_onetime')
                             <div class="error-message">
@@ -434,8 +434,8 @@
                             <input type="number" class="modern-input" id="price_weekly" name="price_weekly"
                                    value="{{ old('price_weekly', $service->price_weekly) }}" step="0.01" min="0"
                                    placeholder="0.00">
-                            <i class="fas fa-dollar-sign input-icon"></i>
-                            <span class="input-suffix">USD</span>
+                            {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
+                            <span class="input-suffix">AED</span>
                         </div>
                         @error('price_weekly')
                             <div class="error-message">
@@ -461,8 +461,8 @@
                             <input type="number" class="modern-input" id="price_monthly" name="price_monthly"
                                    value="{{ old('price_monthly', $service->price_monthly) }}" step="0.01" min="0"
                                    placeholder="0.00">
-                            <i class="fas fa-dollar-sign input-icon"></i>
-                            <span class="input-suffix">USD</span>
+                            {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
+                            <span class="input-suffix">AED</span>
                         </div>
                         @error('price_monthly')
                             <div class="error-message">
@@ -488,8 +488,8 @@
                             <input type="number" class="modern-input" id="price_yearly" name="price_yearly"
                                    value="{{ old('price_yearly', $service->price_yearly) }}" step="0.01" min="0"
                                    placeholder="0.00">
-                            <i class="fas fa-dollar-sign input-icon"></i>
-                            <span class="input-suffix">USD</span>
+                            {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
+                            <span class="input-suffix">AED</span>
                         </div>
                         @error('price_yearly')
                             <div class="error-message">

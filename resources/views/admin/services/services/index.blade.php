@@ -34,10 +34,10 @@
                     <i class="fas fa-search"></i>
                     Search
                 </label>
-                <input type="text" name="search" id="search" value="{{ $search }}" 
+                <input type="text" name="search" id="search" value="{{ $search }}"
                        placeholder="Search services..." class="modern-filter-input">
             </div>
-            
+
             <div class="filter-group">
                 <label for="category_id" class="filter-label">
                     <i class="fas fa-folder"></i>
@@ -151,7 +151,7 @@
                             <td class="td-name">
                                 <div class="name-cell">
                                     @if($service->image)
-                                        <img src="{{ asset('Service_images/' . $service->image) }}" 
+                                        <img src="{{ asset('Service_images/' . $service->image) }}"
                                              alt="{{ $service->name }}" class="service-image">
                                     @else
                                         <div class="service-placeholder">
@@ -172,7 +172,7 @@
                                 @endif
                             </td>
                             <td class="td-price">
-                                <span class="price-text">${{ number_format($service->price_onetime ?? 0, 2) }}</span>
+                                <span class="price-text">AED &nbsp;{{ number_format($service->price_onetime ?? 0, 2) }}</span>
                             </td>
                             <td class="td-status">
                                 <span class="status-badge status-{{ $service->status }}">
@@ -186,23 +186,23 @@
                             </td>
                             <td class="td-actions">
                                 <div class="action-buttons">
-                                    <a href="{{ route('services.services.show', $service) }}" 
+                                    <a href="{{ route('services.services.show', $service) }}"
                                        class="action-btn action-view" title="View Service">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('services.services.edit', $service) }}" 
+                                    <a href="{{ route('services.services.edit', $service) }}"
                                        class="action-btn action-edit" title="Edit Service">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button type="button" class="action-btn action-delete" 
-                                            onclick="confirmDelete({{ $service->id }}, '{{ $service->name }}')" 
+                                    <button type="button" class="action-btn action-delete"
+                                            onclick="confirmDelete({{ $service->id }}, '{{ $service->name }}')"
                                             title="Delete Service">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
-                                
+
                                 <!-- Hidden Delete Form -->
-                                <form id="deleteForm{{ $service->id }}" method="POST" 
+                                <form id="deleteForm{{ $service->id }}" method="POST"
                                       action="{{ route('services.services.destroy', $service) }}" style="display: none;">
                                     @csrf
                                     @method('DELETE')
@@ -700,24 +700,24 @@
         const categorySelect = document.getElementById('category_id');
         const subcategorySelect = document.getElementById('subcategory_id');
         const statusSelect = document.getElementById('status');
-        
+
         let searchTimeout;
-        
+
         searchInput.addEventListener('input', function() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 document.getElementById('filtersForm').submit();
             }, 500);
         });
-        
+
         categorySelect.addEventListener('change', function() {
             document.getElementById('filtersForm').submit();
         });
-        
+
         subcategorySelect.addEventListener('change', function() {
             document.getElementById('filtersForm').submit();
         });
-        
+
         statusSelect.addEventListener('change', function() {
             document.getElementById('filtersForm').submit();
         });
