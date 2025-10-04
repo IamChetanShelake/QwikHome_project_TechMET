@@ -131,6 +131,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         'destroy' => 'admin.vendors.destroy',
     ]);
 
+    //Analytics management-------------
+    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
+
     //Profile management-------------
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

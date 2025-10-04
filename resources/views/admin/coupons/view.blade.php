@@ -49,24 +49,7 @@
                             </div>
                         </div>
 
-                        <!-- Discount Type -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-percentage"></i>
-                                <span>Discount Type</span>
-                            </div>
-                            <div class="info-value">
-                                <div class="type-badge">
-                                    @if($coupon->discount_type == 'percentage')
-                                        <i class="fas fa-percent"></i>
-                                        <span>Percentage Discount</span>
-                                    @else
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>Fixed Amount</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Discount Value -->
                         <div class="info-item">

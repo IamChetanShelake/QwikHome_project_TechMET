@@ -108,7 +108,7 @@
                     <div class="col-md-2">
                         <div class="d-flex gap-1">
 
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary py-0">Filter</button>
                             <a href="{{ route('complaints.index') }}" class="btn btn-secondary">Clear</a>
                         </div>
                     </div>

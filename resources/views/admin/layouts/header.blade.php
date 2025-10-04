@@ -185,7 +185,7 @@
             animation: fadeInTooltip 0.3s ease forwards;
         }
 
-        .sidebar.collapsed .service-menu .service-flyout-menu.show ~ .service-menu-trigger:hover::after {
+        .sidebar.collapsed .service-menu .service-flyout-menu.show~.service-menu-trigger:hover::after {
             display: none;
         }
 
@@ -373,7 +373,8 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item {{ request()->routeIs('services.*') || str_contains(request()->url(), '/services') ? 'active' : '' }}">
+                <li
+                    class="nav-item {{ request()->routeIs('services.*') || str_contains(request()->url(), '/services') ? 'active' : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -416,7 +417,8 @@
                     $(document).ready(function() {
                         function isServiceManagementPage() {
                             const path = window.location.pathname;
-                            return path.includes('/services') || path.includes('/categories') || path.includes('/subcategories');
+                            return path.includes('/services') || path.includes('/categories') || path.includes(
+                                '/subcategories');
                         }
 
                         // Check if on service management page and show dropdown
@@ -427,38 +429,40 @@
                             // Highlight active section based on current route
                             const currentPath = window.location.pathname;
                             const currentRoute = window.location.href;
-                            
+
                             // Check for services routes (more specific patterns)
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') || 
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath.includes('/subcategories'))) {
+                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
+                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
+                                    .includes('/subcategories'))) {
                                 $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
-                            } 
+                            }
                             // Check for categories routes
                             else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
-                            } 
+                            }
                             // Check for subcategories routes
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
 
                         $(".service-menu-trigger").on("click", function(e) {
                             e.preventDefault();
-                            
+
                             // Handle collapsed sidebar - show flyout menu
                             if ($('.sidebar').hasClass('collapsed')) {
                                 const $flyout = $(this).siblings(".service-flyout-menu");
-                                
+
                                 // Close any other open flyouts first
                                 $('.service-flyout-menu').not($flyout).removeClass('show');
-                                
+
                                 // Toggle current flyout
                                 $flyout.toggleClass('show');
-                                
+
                                 return false;
                             }
-                            
+
                             const $dropdown = $(this).next(".service-dropdown-menu");
                             const $arrow = $(this).find(".fa-caret-down");
 
@@ -489,19 +493,19 @@
                         function updateFlyoutActiveStates() {
                             const currentPath = window.location.pathname;
                             const currentRoute = window.location.href;
-                            
+
                             // Remove all active classes first
                             $('.service-flyout-menu .flyout-item').removeClass('active');
-                            
+
                             // Add active class based on current route
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') || 
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath.includes('/subcategories'))) {
+                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
+                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
+                                    .includes('/subcategories'))) {
                                 $('.service-flyout-menu a[href*="services.services"]').addClass('active');
-                            } 
-                            else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
+                            } else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
-                            } 
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            } else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -631,28 +635,23 @@
                 </script>
 
                 @if (auth()->user()->role == 'admin')
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Booking Management</span>
-                        </a>
-                    </li>
                     <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.vendors.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
                             <span>Vendor Management</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Booking Management</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Service Providers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Service Monitoring</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
@@ -670,11 +669,11 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-bell"></i>
-                            <span>Notifications</span>
+                            <span>Push Notifications</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ request()->routeIs('admin.analytics.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.analytics.index') }}" class="nav-link">
                             <i class="fas fa-chart-bar"></i>
                             <span>Reports & Analytics</span>
                         </a>
@@ -691,12 +690,12 @@
                             <span>Content Management</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Lead Management</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item {{ request()->routeIs('faq*') ? 'active' : '' }}">
                         <a href="{{ route('faq') }}" class="nav-link">
                             <i class="fas fa-question-circle"></i>
@@ -710,12 +709,7 @@
                             <span>Service Providers</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
-                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
-                            <i class="fas fa-tasks"></i>
-                            <span>Service Monitoring</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                         <a href="{{ route('profile.show') }}" class="nav-link">
                             <i class="fas fa-user"></i>

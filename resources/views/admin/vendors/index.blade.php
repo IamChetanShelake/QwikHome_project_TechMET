@@ -115,8 +115,9 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="user-info">
-                                                @if($vendor->image)
-                                                    <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}" class="user-avatar-small">
+                                                @if ($vendor->image)
+                                                    <img src="{{ asset('user_images/' . $vendor->image) }}"
+                                                        alt="{{ $vendor->name }}" class="user-avatar-small">
                                                 @else
                                                     <div class="user-avatar-small no-image">
                                                         <i class="fas fa-user"></i>
@@ -161,19 +162,16 @@
                                         <div class="td-content">
                                             <div class="action-buttons">
                                                 <a href="{{ route('admin.vendors.show', $vendor->id) }}"
-                                                   class="action-btn action-view"
-                                                   title="View Details">
+                                                    class="action-btn action-view" title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <a href="{{ route('admin.vendors.edit', $vendor->id) }}"
-                                                   class="action-btn action-edit"
-                                                   title="Edit Vendor">
+                                                    class="action-btn action-edit" title="Edit Vendor">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button"
-                                                        class="action-btn action-delete"
-                                                        title="Delete Vendor"
-                                                        onclick="deleteVendor({{ $vendor->id }}, '{{ $vendor->name }}')">
+                                                <button type="button" class="action-btn action-delete"
+                                                    title="Delete Vendor"
+                                                    onclick="deleteVendor({{ $vendor->id }}, '{{ $vendor->name }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -189,7 +187,8 @@
                                             </div>
                                             <h3>No Vendors Found</h3>
                                             <p>Start by creating your first vendor account</p>
-                                            <a href="{{ route('admin.vendors.create') }}" class="modern-btn modern-btn-primary">
+                                            <a href="{{ route('admin.vendors.create') }}"
+                                                class="modern-btn modern-btn-primary">
                                                 <i class="fas fa-plus"></i>
                                                 <span>Add First Vendor</span>
                                             </a>
@@ -322,7 +321,7 @@
         }
 
         .list-subtitle {
-            font-size: 14px;
+
             color: rgba(255, 255, 255, 0.7);
             margin: 5px 0 0 0;
         }
@@ -357,14 +356,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+
             font-weight: 600;
             color: #ffffff;
         }
 
         .th-content i {
             color: #00d4ff;
-            font-size: 12px;
+
         }
 
         .modern-table td {
@@ -389,6 +388,7 @@
         .serial-number {
             color: rgba(255, 255, 255, 0.7);
             font-weight: 500;
+
         }
 
         .user-info {
@@ -411,12 +411,13 @@
             justify-content: center;
             background: rgba(0, 212, 255, 0.1);
             color: #00d4ff;
-            font-size: 14px;
+
         }
 
         .user-name {
             color: #ffffff;
             font-weight: 600;
+
         }
 
         .email-badge {
@@ -424,7 +425,7 @@
             align-items: center;
             gap: 6px;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+
         }
 
         .phone-number {
@@ -432,12 +433,12 @@
             align-items: center;
             gap: 6px;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+
         }
 
         .address-text {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+
             max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -449,12 +450,12 @@
             align-items: center;
             gap: 6px;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
+
         }
 
         .joined-date i {
             color: #00d4ff;
-            font-size: 12px;
+
         }
 
         /* Action Buttons */
@@ -516,7 +517,7 @@
             gap: 8px;
             padding: 14px 28px;
             border-radius: 12px;
-            font-size: 14px;
+
             font-weight: 600;
             text-decoration: none;
             border: none;
@@ -564,6 +565,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -590,10 +592,6 @@
                 padding: 12px 8px;
             }
 
-            .th-content,
-            .td-content {
-                font-size: 12px;
-            }
 
             .action-buttons {
                 flex-direction: column;

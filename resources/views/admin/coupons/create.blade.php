@@ -26,7 +26,7 @@
             <div class="modern-form-card">
                 <form method="POST" action="{{ route('coupons.store') }}" class="modern-form" id="couponForm">
                     @csrf
-                    
+
                     <!-- Form Grid -->
                     <div class="form-grid">
                         <!-- Coupon Code Field -->
@@ -37,14 +37,10 @@
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
-                                    <i class="fas fa-hashtag"></i>
+                                    {{-- <i class="fas fa-hashtag"></i> --}}
                                 </div>
-                                <input type="text" 
-                                       class="modern-input @error('code') error @enderror" 
-                                       id="code" 
-                                       name="code" 
-                                       placeholder="Enter unique coupon code (e.g. SUMMER2024)"
-                                       required>
+                                <input type="text" class="modern-input @error('code') error @enderror" id="code"
+                                    name="code" placeholder="Enter unique coupon code (e.g. SUMMER2024)" required>
                                 <div class="input-border"></div>
                             </div>
                             @error('code')
@@ -59,60 +55,22 @@
                             </div>
                         </div>
 
-                        <!-- Discount Type Field -->
-                        <div class="form-group-modern">
-                            <label for="discount_type" class="modern-label">
-                                <i class="fas fa-percentage label-icon"></i>
-                                Discount Type
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <select class="modern-select @error('discount_type') error @enderror" 
-                                        id="discount_type" 
-                                        name="discount_type" 
-                                        required>
-                                    <option value="">Choose discount type</option>
-                                    <option value="percentage">Percentage (%)</option>
-                                    <option value="fixed">Fixed Amount</option>
-                                </select>
-                                <div class="select-arrow">
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('discount_type')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Select how the discount will be calculated
-                            </div>
-                        </div>
+
 
                         <!-- Discount Value Field -->
                         <div class="form-group-modern">
                             <label for="discount_value" class="modern-label">
                                 <i class="fas fa-coins label-icon"></i>
-                                Discount Value
+                                Discount Percentage
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
                                     <i class="fas fa-calculator"></i>
                                 </div>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0"
-                                       class="modern-input @error('discount_value') error @enderror" 
-                                       id="discount_value"
-                                       name="discount_value" 
-                                       placeholder="0.00"
-                                       required>
-                                <div class="input-suffix" id="valueSuffix">Value</div>
+                                <input type="number" step="0.01" min="0"
+                                    class="modern-input @error('discount_value') error @enderror" id="discount_value"
+                                    name="discount_value" placeholder="0.00" required>
+                                <div class="input-suffix" id="valueSuffix">%</div>
                                 <div class="input-border"></div>
                             </div>
                             @error('discount_value')
@@ -123,7 +81,7 @@
                             @enderror
                             <div class="field-hint">
                                 <i class="fas fa-info-circle"></i>
-                                <span id="valueHint">Enter the discount value</span>
+                                <span id="valueHint">Enter percentage value (e.g., 10 for 10%)</span>
                             </div>
                         </div>
 
@@ -137,11 +95,8 @@
                                 <div class="input-icon">
                                     <i class="fas fa-clock"></i>
                                 </div>
-                                <input type="datetime-local" 
-                                       class="modern-input @error('expiry_date') error @enderror" 
-                                       id="expiry_date" 
-                                       name="expiry_date"
-                                       required>
+                                <input type="datetime-local" class="modern-input @error('expiry_date') error @enderror"
+                                    id="expiry_date" name="expiry_date" required>
                                 <div class="input-border"></div>
                             </div>
                             @error('expiry_date')
@@ -167,12 +122,9 @@
                                 <div class="input-icon">
                                     <i class="fas fa-hashtag"></i>
                                 </div>
-                                <input type="number" 
-                                       min="1" 
-                                       class="modern-input @error('usage_limit') error @enderror" 
-                                       id="usage_limit" 
-                                       name="usage_limit"
-                                       placeholder="Leave empty for unlimited">
+                                <input type="number" min="1"
+                                    class="modern-input @error('usage_limit') error @enderror" id="usage_limit"
+                                    name="usage_limit" placeholder="Leave empty for unlimited">
                                 <div class="input-border"></div>
                             </div>
                             @error('usage_limit')
@@ -197,10 +149,8 @@
                                 <div class="input-icon">
                                     <i class="fas fa-power-off"></i>
                                 </div>
-                                <select class="modern-select @error('status') error @enderror" 
-                                        id="status" 
-                                        name="status" 
-                                        required>
+                                <select class="modern-select @error('status') error @enderror" id="status"
+                                    name="status" required>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
                                 </select>
@@ -232,11 +182,9 @@
                                 <div class="input-icon textarea-icon">
                                     <i class="fas fa-edit"></i>
                                 </div>
-                                <textarea class="modern-textarea @error('description') error @enderror" 
-                                          id="description" 
-                                          name="description" 
-                                          rows="4"
-                                          placeholder="Enter a brief description of this coupon (e.g., Summer sale discount for all products)"></textarea>
+                                <textarea class="modern-textarea @error('description') error @enderror" id="description" name="description"
+                                    rows="4"
+                                    placeholder="Enter a brief description of this coupon (e.g., Summer sale discount for all products)"></textarea>
                                 <div class="input-border"></div>
                             </div>
                             @error('description')
@@ -382,7 +330,9 @@
             position: relative;
         }
 
-        .modern-input, .modern-select, .modern-textarea {
+        .modern-input,
+        .modern-select,
+        .modern-textarea {
             width: 100%;
             padding: 16px 20px 16px 50px;
             background: rgba(255, 255, 255, 0.05);
@@ -453,7 +403,9 @@
             color: #ffffff;
         }
 
-        .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+        .modern-input:focus,
+        .modern-select:focus,
+        .modern-textarea:focus {
             outline: none;
             border-color: #00d4ff;
             background: rgba(255, 255, 255, 0.08);
@@ -461,12 +413,15 @@
             transform: translateY(-2px);
         }
 
-        .modern-input.error, .modern-select.error, .modern-textarea.error {
+        .modern-input.error,
+        .modern-select.error,
+        .modern-textarea.error {
             border-color: #ff4757;
             box-shadow: 0 0 20px rgba(255, 71, 87, 0.2);
         }
 
-        .modern-input::placeholder, .modern-textarea::placeholder {
+        .modern-input::placeholder,
+        .modern-textarea::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
@@ -515,9 +470,9 @@
             transition: width 0.3s ease;
         }
 
-        .modern-input:focus + .input-border,
-        .modern-select:focus + .select-arrow + .input-border,
-        .modern-textarea:focus + .input-border {
+        .modern-input:focus+.input-border,
+        .modern-select:focus+.select-arrow+.input-border,
+        .modern-textarea:focus+.input-border {
             width: 100%;
         }
 
@@ -611,8 +566,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes slideInUp {
@@ -620,6 +580,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -664,10 +625,6 @@
             const form = document.getElementById('couponForm');
             const submitBtn = document.getElementById('submitBtn');
             const inputs = form.querySelectorAll('.modern-input, .modern-select, .modern-textarea');
-            const discountTypeSelect = document.getElementById('discount_type');
-            const valueSuffix = document.getElementById('valueSuffix');
-            const valueHint = document.getElementById('valueHint');
-
             // Add input animations
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
@@ -683,21 +640,6 @@
                     input.addEventListener('input', function() {
                         this.value = this.value.toUpperCase();
                     });
-                }
-            });
-
-            // Dynamic discount type handling
-            discountTypeSelect.addEventListener('change', function() {
-                const selectedType = this.value;
-                if (selectedType === 'percentage') {
-                    valueSuffix.textContent = '%';
-                    valueHint.textContent = 'Enter percentage value (e.g., 10 for 10%)';
-                } else if (selectedType === 'fixed') {
-                    valueSuffix.textContent = '{{ config("app.currency", "AED") }}';
-                    valueHint.textContent = 'Enter fixed discount amount in {{ config("app.currency", "AED") }}';
-                } else {
-                    valueSuffix.textContent = 'Value';
-                    valueHint.textContent = 'Enter the discount value';
                 }
             });
 
@@ -718,12 +660,13 @@
         function resetForm() {
             document.getElementById('couponForm').reset();
             // Remove any error states
-            document.querySelectorAll('.modern-input.error, .modern-select.error, .modern-textarea.error').forEach(input => {
-                input.classList.remove('error');
-            });
+            document.querySelectorAll('.modern-input.error, .modern-select.error, .modern-textarea.error').forEach(
+                input => {
+                    input.classList.remove('error');
+                });
             // Reset dynamic elements
-            document.getElementById('valueSuffix').textContent = 'Value';
-            document.getElementById('valueHint').textContent = 'Enter the discount value';
+            document.getElementById('valueSuffix').textContent = '%';
+            document.getElementById('valueHint').textContent = 'Enter percentage value (e.g., 10 for 10%)';
         }
     </script>
 @endsection

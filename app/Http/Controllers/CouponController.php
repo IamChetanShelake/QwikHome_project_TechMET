@@ -30,14 +30,16 @@ class CouponController extends Controller
         $request->validate([
             'code' => 'required|string|max:50|unique:coupons,code',
             'description' => 'nullable|string',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
+            'discount_value' => 'required|numeric|min:0|max:100',
             'expiry_date' => 'required|date|after:today',
             'usage_limit' => 'nullable|integer|min:1',
             'status' => 'required|in:0,1'
         ]);
 
-        Coupon::create($request->all());
+        $data = $request->all();
+        $data['discount_type'] = 'percentage';
+
+        Coupon::create($data);
 
         return redirect()->route('coupons.index')->with('success', 'Coupon created successfully.');
     }
@@ -53,15 +55,17 @@ class CouponController extends Controller
         $request->validate([
             'code' => ['required', 'string', 'max:50', Rule::unique('coupons')->ignore($id)],
             'description' => 'nullable|string',
-            'discount_type' => 'required|in:percentage,fixed',
-            'discount_value' => 'required|numeric|min:0',
+            'discount_value' => 'required|numeric|min:0|max:100',
             'expiry_date' => 'required|date',
             'usage_limit' => 'nullable|integer|min:1',
             'status' => 'required|in:0,1'
         ]);
 
+        $data = $request->all();
+        $data['discount_type'] = 'percentage';
+
         $coupon = Coupon::findOrFail($id);
-        $coupon->update($request->all());
+        $coupon->update($data);
 
         return redirect()->route('coupons.index')->with('success', 'Coupon updated successfully.');
     }
