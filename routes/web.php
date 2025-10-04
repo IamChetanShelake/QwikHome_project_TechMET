@@ -8,6 +8,7 @@ use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Vendor\BookingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -108,6 +109,15 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //Service Providers management-------------
     Route::resource('serviceProviders', ServiceProviderController::class);
+
+    //Vendor Bookings management-------------
+    Route::prefix('vendor')->name('vendor.')->group(function () {
+        Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+        Route::get('bookings/create', [BookingController::class, 'create'])->name('bookings.create');
+        Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
+        Route::get('bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
+        Route::post('bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+    });
 
     //Profile management-------------
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

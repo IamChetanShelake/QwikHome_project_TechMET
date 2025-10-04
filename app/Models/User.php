@@ -41,4 +41,41 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relationships for different roles
+    public function bookingsAsCustomer()
+    {
+        return $this->hasMany(Booking::class, 'customer_id');
+    }
+
+    public function bookingsAsServiceProvider()
+    {
+        return $this->hasMany(Booking::class, 'service_provider_id');
+    }
+
+    public function bookingsAsVendor()
+    {
+        return $this->hasMany(Booking::class, 'vendor_id');
+    }
+
+    // Helper methods
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isVendor()
+    {
+        return $this->role === 'vendor';
+    }
+
+    public function isServiceProvider()
+    {
+        return $this->role === 'serviceprovider';
+    }
+
+    public function isCustomer()
+    {
+        return $this->role === 'user';
+    }
 }

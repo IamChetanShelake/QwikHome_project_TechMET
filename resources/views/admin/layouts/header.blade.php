@@ -398,6 +398,13 @@
                             <i class="fas fa-user-plus"></i>
                             <span>Service Providers</span>
                         </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Service Monitoring</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                         <a href="{{ route('profile.show') }}" class="nav-link">
                             <i class="fas fa-user"></i>
