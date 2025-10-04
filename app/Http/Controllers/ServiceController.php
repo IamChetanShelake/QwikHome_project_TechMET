@@ -333,6 +333,14 @@ class ServiceController extends Controller
         return redirect()->route('services.services.index')->with('success', 'Service created successfully.');
     }
 
+    public function servicesShow(Service $service)
+    {
+        $service->load(['category', 'subcategory', 'processes' => function($query) {
+            $query->orderBy('order');
+        }, 'requirements']);
+        return view('admin.services.services.show', compact('service'));
+    }
+
     public function servicesEdit(Service $service)
     {
         $service->load('processes', 'requirements');

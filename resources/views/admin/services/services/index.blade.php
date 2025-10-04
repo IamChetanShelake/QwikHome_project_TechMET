@@ -186,6 +186,10 @@
                             </td>
                             <td class="td-actions">
                                 <div class="action-buttons">
+                                    <a href="{{ route('services.services.show', $service) }}" 
+                                       class="action-btn action-view" title="View Service">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                     <a href="{{ route('services.services.edit', $service) }}" 
                                        class="action-btn action-edit" title="Edit Service">
                                         <i class="fas fa-edit"></i>
@@ -520,6 +524,18 @@
         cursor: pointer;
         transition: all 0.3s ease;
         font-size: 14px;
+    }
+
+    .action-view {
+        background: rgba(0, 212, 255, 0.2);
+        color: #00d4ff;
+        text-decoration: none;
+    }
+
+    .action-view:hover {
+        background: rgba(0, 212, 255, 0.3);
+        transform: translateY(-2px);
+        color: #00d4ff;
     }
 
     .action-edit {
