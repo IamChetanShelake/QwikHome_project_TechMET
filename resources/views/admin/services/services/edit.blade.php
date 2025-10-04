@@ -156,8 +156,9 @@
                                                        class="modern-input file-input" accept="image/*">
                                                 <i class="fas fa-image input-icon"></i>
                                                 @if($process->image)
-                                                    <div class="current-image-info">
-                                                        <small class="text-cyan">Current: {{ $process->image }}</small>
+                                                    <div class="current-image-preview" style="margin-top: 5px;">
+                                                        <small style="display: block; margin-bottom: 5px;">Current Image:</small>
+                                                        <img src="{{ asset('Process_images/' . $process->image) }}" width="100" height="100" style="object-fit: cover; border-radius: 8px;" alt="Process Image">
                                                     </div>
                                                 @endif
                                             </div>
