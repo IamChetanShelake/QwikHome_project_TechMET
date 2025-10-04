@@ -3,50 +3,103 @@
 @section('title', 'Edit Service')
 
 @section('content')
-    <section class="content-section active p-3">
-        <div class="section-header">
-            <h2>Edit Service</h2>
+<div class="modern-form-container">
+    <!-- Form Header Section -->
+    <div class="form-header-section">
+        <div class="form-header-content">
+            <div class="form-icon-wrapper">
+                <i class="fas fa-edit"></i>
+            </div>
+            <div class="form-header-text">
+                <h1 class="form-title">Edit Service</h1>
+                <p class="form-subtitle">Update service details and configuration</p>
+            </div>
         </div>
+        <div class="form-header-actions">
+            <a href="{{ route('services.services.index') }}" class="modern-btn modern-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Services
+            </a>
+        </div>
+    </div>
 
-        <div class="dashboard-card p-3">
-            <form method="POST" action="{{ route('services.services.update', $service) }}" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+    <!-- Form Card -->
+    <div class="modern-form-card">
+        <form method="POST" action="{{ route('services.services.update', $service) }}" id="serviceEditForm" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            
+            <div class="form-grid">
 
-                <div class="form-group">
-                    <label for="category_id">Category *</label>
-                    <select name="category_id" id="category_id" class="filter-select" required>
-                        <option value="">Select Category</option>
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ $service->category_id == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}</option>
-                        @endforeach
-                    </select>
+                <!-- Category Dropdown -->
+                <div class="form-group-modern">
+                    <label for="category_id" class="modern-label">
+                        <i class="fas fa-folder text-cyan"></i>
+                        Category
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <select class="modern-select" id="category_id" name="category_id" required>
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ $service->category_id == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-folder input-icon"></i>
+                    </div>
                     @error('category_id')
-                        <div class="error">{{ $message }}</div>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <div class="form-group">
-                    <label for="subcategory_id">Subcategory (Optional)</label>
-                    <select name="subcategory_id" id="subcategory_id" class="filter-select">
-                        <option value="">None</option>
-                        @foreach ($subcategories as $sub)
-                            <option value="{{ $sub->id }}"
-                                {{ $service->subcategory_id == $sub->id ? 'selected' : '' }}>{{ $sub->name }}</option>
-                        @endforeach
-                    </select>
+                <!-- Subcategory Dropdown -->
+                <div class="form-group-modern">
+                    <label for="subcategory_id" class="modern-label">
+                        <i class="fas fa-folder-open text-cyan"></i>
+                        Subcategory
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <select class="modern-select" id="subcategory_id" name="subcategory_id">
+                            <option value="">None</option>
+                            @foreach ($subcategories as $sub)
+                                <option value="{{ $sub->id }}" {{ $service->subcategory_id == $sub->id ? 'selected' : '' }}>
+                                    {{ $sub->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-folder-open input-icon"></i>
+                    </div>
                     @error('subcategory_id')
-                        <div class="error">{{ $message }}</div>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $service->name) }}"
-                        class="filter-input" required>
+                <!-- Service Name (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label for="name" class="modern-label">
+                        <i class="fas fa-tag text-cyan"></i>
+                        Service Name
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="modern-input" id="name" name="name" 
+                               value="{{ old('name', $service->name) }}" placeholder="Enter service name" required>
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
                     @error('name')
-                        <div class="error">{{ $message }}</div>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
 
