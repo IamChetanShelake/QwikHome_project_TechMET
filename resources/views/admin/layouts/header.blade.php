@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QwikHome - Admin Panel</title>
+    <title>QwikHome - {{ auth()->user()->role == 'admin' ? 'Admin' : 'Vendor' }} Panel</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -171,18 +171,20 @@
 
         <nav class="sidebar-nav">
             <ul>
-                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
-                    <a href="{{ route('customers') }}" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span>Customer Management</span>
-                    </a>
-                </li>
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
+                        <a href="{{ route('customers') }}" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Customer Management</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
@@ -329,66 +331,80 @@
                     });
                 </script>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-calendar-check"></i>
-                        <span>Booking Management</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-wallet"></i>
-                        <span>Finance & Wallet</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
-                    <a href="{{ route('coupons.index') }}" class="nav-link">
-                        <i class="fas fa-tags"></i>
-                        <span>Coupons</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('promocodes.*') ? 'active' : '' }}">
-                    <a href="{{ route('promocodes.index') }}" class="nav-link">
-                        <i class="fas fa-gift"></i>
-                        <span>Promo Codes</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-bell"></i>
-                        <span>Notifications</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Reports & Analytics</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('complaints.index') }}" class="nav-link">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>Complaints</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-edit"></i>
-                        <span>Content Management</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Lead Management</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('faq') }}" class="nav-link">
-                        <i class="fas fa-user-plus"></i>
-                        <span>FAQ's</span>
-                    </a>
-                </li>
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Booking Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-wallet"></i>
+                            <span>Finance & Wallet</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('coupons.index') }}" class="nav-link">
+                            <i class="fas fa-tags"></i>
+                            <span>Coupons</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('promocodes.index') }}" class="nav-link">
+                            <i class="fas fa-gift"></i>
+                            <span>Promo Codes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports & Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('complaints.index') }}" class="nav-link">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Complaints</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-edit"></i>
+                            <span>Content Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Lead Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('faq') }}" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>FAQ's</span>
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                        <a href="{{ route('serviceProviders.index') }}" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Service Providers</span>
+                        </a>
+                    <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                        <a href="{{ route('profile.show') }}" class="nav-link">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </nav>
 
@@ -417,7 +433,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <h1 class="page-title">Admin Dashboard</h1>
+                <h1 class="page-title">{{ auth()->user()->role == 'admin' ? 'Admin' : 'Vendor' }} Dashboard</h1>
             </div>
             <div class="header-right">
 
