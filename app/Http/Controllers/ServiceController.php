@@ -335,6 +335,7 @@ class ServiceController extends Controller
 
     public function servicesEdit(Service $service)
     {
+        $service->load('processes', 'requirements');
         $categories = Category::where('status', 'active')->get();
         $subcategories = Subcategory::where('status', 'active')->get();
         return view('admin.services.services.edit', compact('service', 'categories', 'subcategories'));
