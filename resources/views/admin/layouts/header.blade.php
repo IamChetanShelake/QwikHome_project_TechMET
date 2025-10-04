@@ -131,6 +131,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -338,22 +339,28 @@
                             <span>Booking Management</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.vendors.index') }}" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="fas fa-wallet"></i>
-                            <span>Finance & Wallet</span>
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Booking Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                        <a href="{{ route('serviceProviders.index') }}" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Service Providers</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('coupons.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <span>Coupons</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('promocodes.index') }}" class="nav-link">
-                            <i class="fas fa-gift"></i>
-                            <span>Promo Codes</span>
                         </a>
                     </li>
                     <li class="nav-item">

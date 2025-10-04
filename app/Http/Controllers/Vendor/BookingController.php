@@ -70,7 +70,7 @@ class BookingController extends Controller
         $customers = User::where('role', 'user')->get();
         $serviceProviders = User::where('role', 'serviceprovider')->get(); // Filtered by vendor
 
-        return view('vendor.bookings.create', compact('services', 'customers', 'serviceProviders'));
+        return view('vendor.bookings.create', compact('services', 'customers', 'serviceProviders'));    
     }
 
     /**

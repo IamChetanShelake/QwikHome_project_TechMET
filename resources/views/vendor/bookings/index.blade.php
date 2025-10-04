@@ -17,37 +17,47 @@
         }
 
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: #e2e3e5;
+            color: #495057;
         }
 
         .status-ongoing {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: #d6d8db;
+            color: #495057;
         }
 
         .status-completed {
-            background: #d4edda;
-            color: #155724;
+            background: #adb5bd;
+            color: #000;
         }
 
         .stats-card {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             padding: 15px;
             margin-bottom: 20px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
         }
 
         .stats-number {
             font-size: 24px;
             font-weight: bold;
-            color: #007bff;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .filter-form {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -62,35 +72,35 @@
     @endif
 
     <!-- Stats Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="stats-card">
-                <h5>Total Bookings</h5>
-                <div class="stats-number">{{ $stats['total'] }}</div>
-            </div>
-        </div>
-        <div class="col-md-3">
+    <div class="row mb-4 p-4">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Pending</h5>
-                <div class="stats-number" style="color: #856404;">{{ $stats['pending'] }}</div>
+                <div class="stats-number">{{ $stats['pending'] }}</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Ongoing</h5>
-                <div class="stats-number" style="color: #0c5460;">{{ $stats['ongoing'] }}</div>
+                <div class="stats-number">{{ $stats['ongoing'] }}</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stats-card">
                 <h5>Completed</h5>
-                <div class="stats-number" style="color: #155724;">{{ $stats['completed'] }}</div>
+                <div class="stats-number">{{ $stats['completed'] }}</div>
             </div>
         </div>
+        {{-- <div class="col-md-3">
+            <div class="stats-card" style="background: #adb5bd;">
+                <h5>Completed</h5>
+                <div class="stats-number" style="color: #fff;">{{ $stats['completed'] }}</div>
+            </div>
+        </div> --}}
     </div>
 
     <!-- Filter Form -->
-    <div class="filter-form">
+    <div class="filter-form m-4">
         <form method="GET" action="{{ route('vendor.bookings.index') }}" class="row g-3">
             <div class="col-md-2">
                 <select name="status" class="form-select">
@@ -120,7 +130,7 @@
                     placeholder="End Date">
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
+                <button type="submit" class="btn btn-primary w-100 py-2">Filter</button>
             </div>
             <div class="col-md-2">
                 <a href="{{ route('vendor.bookings.index') }}" class="btn btn-secondary w-100">Clear</a>

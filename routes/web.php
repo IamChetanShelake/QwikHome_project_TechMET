@@ -119,6 +119,17 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::post('bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
     });
 
+    //Vendor management-------------
+    Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)->names([
+        'index' => 'admin.vendors.index',
+        'create' => 'admin.vendors.create',
+        'store' => 'admin.vendors.store',
+        'show' => 'admin.vendors.show',
+        'edit' => 'admin.vendors.edit',
+        'update' => 'admin.vendors.update',
+        'destroy' => 'admin.vendors.destroy',
+    ]);
+
     //Profile management-------------
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
