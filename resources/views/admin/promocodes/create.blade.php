@@ -26,7 +26,7 @@
             <div class="modern-form-card">
                 <form method="POST" action="{{ route('promocodes.store') }}" class="modern-form" id="promocodeForm">
                     @csrf
-                    
+
                     <!-- Form Grid -->
                     <div class="form-grid">
                         <!-- Promocode Field -->
@@ -37,16 +37,11 @@
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
-                                    <i class="fas fa-hashtag"></i>
+                                    {{-- <i class="fas fa-hashtag"></i> --}}
                                 </div>
-                                <input type="text" 
-                                       class="modern-input @error('code') error @enderror" 
-                                       id="code" 
-                                       name="code" 
-                                       placeholder="Enter promocode (e.g. SAVE20, WELCOME50)"
-                                       pattern="[A-Za-z0-9]+" 
-                                       title="Only letters and numbers allowed"
-                                       required>
+                                <input type="text" class="modern-input @error('code') error @enderror" id="code"
+                                    name="code" placeholder="Enter promocode (e.g. SAVE20, WELCOME50)"
+                                    pattern="[A-Za-z0-9]+" title="Only letters and numbers allowed" required>
                                 <div class="input-border"></div>
                             </div>
                             @error('code')
@@ -64,21 +59,16 @@
                         <!-- Discount Amount Field -->
                         <div class="form-group-modern">
                             <label for="discount" class="modern-label">
-                                <i class="fas fa-dollar-sign label-icon"></i>
+                                {{-- <i class="fas fa-dollar-sign label-icon"></i> --}}
                                 Discount Amount
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
                                     <i class="fas fa-money-bill-wave"></i>
                                 </div>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0" 
-                                       class="modern-input @error('discount') error @enderror" 
-                                       id="discount"
-                                       name="discount" 
-                                       placeholder="0.00"
-                                       required>
+                                <input type="number" step="0.01" min="0"
+                                    class="modern-input @error('discount') error @enderror" id="discount" name="discount"
+                                    placeholder="0.00" required>
                                 <div class="input-suffix">{{ config('app.currency', 'AED') }}</div>
                                 <div class="input-border"></div>
                             </div>
@@ -105,10 +95,8 @@
                                 <div class="input-icon">
                                     <i class="fas fa-clock"></i>
                                 </div>
-                                <input type="datetime-local" 
-                                       class="modern-input @error('expiry_date') error @enderror" 
-                                       id="expiry_date" 
-                                       name="expiry_date">
+                                <input type="datetime-local" class="modern-input @error('expiry_date') error @enderror"
+                                    id="expiry_date" name="expiry_date">
                                 <div class="input-border"></div>
                             </div>
                             @error('expiry_date')
@@ -313,7 +301,7 @@
             transition: width 0.3s ease;
         }
 
-        .modern-input:focus + .input-border {
+        .modern-input:focus+.input-border {
             width: 100%;
         }
 
@@ -405,8 +393,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes slideInUp {
@@ -414,6 +407,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

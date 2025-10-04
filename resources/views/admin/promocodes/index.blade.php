@@ -58,7 +58,7 @@
                                 </th>
                                 <th>
                                     <div class="th-content">
-                                        <i class="fas fa-dollar-sign"></i>
+                                        {{-- <i class="fas fa-dollar-sign"></i> --}}
                                         <span>Discount</span>
                                     </div>
                                 </th>
@@ -93,7 +93,7 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="code-badge">
-                                                <i class="fas fa-hashtag"></i>
+                                                {{-- <i class="fas fa-hashtag"></i> --}}
                                                 <span>{{ $promocode->code }}</span>
                                             </div>
                                         </div>
@@ -137,20 +137,17 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="action-buttons">
-                                                <a href="{{ route('promocodes.view', $promocode->id) }}" 
-                                                   class="action-btn action-view" 
-                                                   title="View Details">
+                                                <a href="{{ route('promocodes.view', $promocode->id) }}"
+                                                    class="action-btn action-view" title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('promocodes.edit', $promocode->id) }}" 
-                                                   class="action-btn action-edit" 
-                                                   title="Edit Promocode">
+                                                <a href="{{ route('promocodes.edit', $promocode->id) }}"
+                                                    class="action-btn action-edit" title="Edit Promocode">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" 
-                                                        class="action-btn action-delete" 
-                                                        title="Delete Promocode"
-                                                        onclick="deletePromocode({{ $promocode->id }}, '{{ $promocode->code }}')">
+                                                <button type="button" class="action-btn action-delete"
+                                                    title="Delete Promocode"
+                                                    onclick="deletePromocode({{ $promocode->id }}, '{{ $promocode->code }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -166,7 +163,8 @@
                                             </div>
                                             <h3>No Promocodes Found</h3>
                                             <p>Start by creating your first promotional code</p>
-                                            <a href="{{ route('promocodes.create') }}" class="modern-btn modern-btn-primary">
+                                            <a href="{{ route('promocodes.create') }}"
+                                                class="modern-btn modern-btn-primary">
                                                 <i class="fas fa-plus"></i>
                                                 <span>Create First Promocode</span>
                                             </a>
@@ -533,6 +531,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

@@ -678,7 +678,7 @@
                             <span>Reports & Analytics</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('complaints.index') ? 'active' : '' }}">
                         <a href="{{ route('complaints.index') }}" class="nav-link">
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Complaints</span>

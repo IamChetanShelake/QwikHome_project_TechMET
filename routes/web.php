@@ -27,7 +27,22 @@ Route::get('/admin/login', function () {
 Route::middleware(['auth', isAdmin::class])->group(function () {
     // Add more admin routes here that require authentication
     Route::get('/admin', function () {
-        return view('admin.dashboard');
+        $stats = [
+            'total_bookings' => \App\Models\Booking::count(),
+            'total_revenue' => \App\Models\Booking::sum('price'),
+            'total_customers' => \App\Models\User::where('role', 'user')->count(),
+            'total_providers' => \App\Models\User::where('role', 'serviceprovider')->count(),
+            'total_services' => \App\Models\Service::count(),
+            'total_coupons' => \App\Models\Coupon::count(),
+            'total_vendors' => \App\Models\User::where('role', 'vendor')->count(),
+            'total_complaints' => \App\Models\Complaint::count(),
+            'recent_bookings' => \App\Models\Booking::with(['customer', 'service', 'serviceProvider'])
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
+        ];
+
+        return view('admin.dashboard', compact('stats'));
     })->name('admin.dashboard');
 
     //customer management-------------

@@ -68,6 +68,12 @@
                                 </th>
                                 <th>
                                     <div class="th-content">
+                                        <i class="fas fa-image"></i>
+                                        <span>photo</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
                                         <i class="fas fa-user"></i>
                                         <span>Name</span>
                                     </div>
@@ -113,16 +119,19 @@
                                         </div>
                                     </td>
                                     <td>
+                                        @if ($vendor->image)
+                                            <img src="{{ asset('user_images/' . $vendor->image) }}"
+                                                alt="{{ $vendor->name }}" class="user-avatar-small">
+                                        @else
+                                            <div class="user-avatar-small no-image">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <div class="td-content">
                                             <div class="user-info">
-                                                @if ($vendor->image)
-                                                    <img src="{{ asset('user_images/' . $vendor->image) }}"
-                                                        alt="{{ $vendor->name }}" class="user-avatar-small">
-                                                @else
-                                                    <div class="user-avatar-small no-image">
-                                                        <i class="fas fa-user"></i>
-                                                    </div>
-                                                @endif
+
                                                 <span class="user-name">{{ $vendor->name }}</span>
                                             </div>
                                         </div>
@@ -398,8 +407,7 @@
         }
 
         .user-avatar-small {
-            width: 36px;
-            height: 36px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(0, 212, 255, 0.3);
