@@ -34,4 +34,9 @@ class Service extends Model
     {
         return $this->hasMany(ServiceRequirement::class);
     }
+
+    public function processes()
+    {
+        return $this->hasMany(Process::class)->orderBy('order');
+    }
 }

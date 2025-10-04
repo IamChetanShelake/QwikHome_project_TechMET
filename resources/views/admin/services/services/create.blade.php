@@ -137,6 +137,82 @@
                     </div>
                 </div>
 
+                <!-- Add Our Processes (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label class="modern-label">
+                        <i class="fas fa-cogs text-cyan"></i>
+                        Add Our Processes
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="processes-container">
+                        <div id="processes_container">
+                            @if(old('processes'))
+                                @foreach(old('processes') as $index => $process)
+                                    <div class="process-item">
+                                        <div class="process-fields">
+                                            <div class="input-wrapper">
+                                                <input type="text" name="processes[{{ $index }}][title]"
+                                                       value="{{ $process['title'] ?? '' }}"
+                                                       class="modern-input" placeholder="Process title">
+                                                <i class="fas fa-text-width input-icon"></i>
+                                            </div>
+                                            <div class="input-wrapper">
+                                                <textarea name="processes[{{ $index }}][description]"
+                                                          class="modern-textarea" placeholder="Process description">{{ $process['description'] ?? '' }}</textarea>
+                                                <i class="fas fa-align-left input-icon"></i>
+                                            </div>
+                                            <div class="input-wrapper">
+                                                <input type="file" name="processes[{{ $index }}][image]"
+                                                       class="modern-input file-input" accept="image/*">
+                                                <i class="fas fa-image input-icon"></i>
+                                            </div>
+                                        </div>
+                                        @if($index > 0)
+                                            <button type="button" class="modern-btn-remove remove-process">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="process-item">
+                                    <div class="process-fields">
+                                        <div class="input-wrapper">
+                                            <input type="text" name="processes[0][title]"
+                                                   class="modern-input" placeholder="Process title">
+                                            <i class="fas fa-text-width input-icon"></i>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <textarea name="processes[0][description]"
+                                                      class="modern-textarea" placeholder="Process description"></textarea>
+                                            <i class="fas fa-align-left input-icon"></i>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <input type="file" name="processes[0][image]"
+                                                   class="modern-input file-input" accept="image/*">
+                                            <i class="fas fa-image input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <button type="button" id="add_process" class="modern-btn modern-btn-outline">
+                            <i class="fas fa-plus"></i>
+                            Add Process
+                        </button>
+                    </div>
+                    @error('processes')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Define the step-by-step processes involved in delivering this service
+                    </div>
+                </div>
+
                 <!-- Description (Full Width) -->
                 <div class="form-group-modern full-width">
                     <label for="description" class="modern-label">
@@ -703,7 +779,7 @@
     }
 
     /* Dynamic Lists */
-    .dynamic-list-container, .requirements-container {
+    .dynamic-list-container, .requirements-container, .processes-container {
         background: rgba(255, 255, 255, 0.03);
         border-radius: 12px;
         padding: 20px;
@@ -739,6 +815,28 @@
         grid-template-columns: 1fr 1fr;
         gap: 15px;
         margin-bottom: 15px;
+    }
+
+    .process-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    .process-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .process-fields {
+            grid-template-columns: 1fr;
+        }
     }
 
     .modern-btn-remove {
@@ -1055,6 +1153,24 @@
                         </div>
                     </div>
                 `);
+                $('#processes_container').html(`
+                    <div class="process-item">
+                        <div class="process-fields">
+                            <div class="input-wrapper">
+                                <input type="text" name="processes[0][title]" class="modern-input" placeholder="Process title">
+                                <i class="fas fa-text-width input-icon"></i>
+                            </div>
+                            <div class="input-wrapper">
+                                <textarea name="processes[0][description]" class="modern-textarea" placeholder="Process description"></textarea>
+                                <i class="fas fa-align-left input-icon"></i>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="file" name="processes[0][image]" class="modern-input file-input" accept="image/*">
+                                <i class="fas fa-image input-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                `);
             }
         });
 
@@ -1108,6 +1224,40 @@
 
         $(document).on('click', '.remove-requirement', function() {
             $(this).closest('.requirement-item').remove();
+        });
+
+        // Processes functionality
+        let processIndex = {{ count(old('processes', [1])) }};
+        $('#add_process').on('click', function(e) {
+            e.preventDefault();
+            const container = $('#processes_container');
+            const currentIndex = processIndex++;
+            const newItem = $(`
+                <div class="process-item">
+                    <div class="process-fields">
+                        <div class="input-wrapper">
+                            <input type="text" name="processes[${currentIndex}][title]" class="modern-input" placeholder="Process title">
+                            <i class="fas fa-text-width input-icon"></i>
+                        </div>
+                        <div class="input-wrapper">
+                            <textarea name="processes[${currentIndex}][description]" class="modern-textarea" placeholder="Process description"></textarea>
+                            <i class="fas fa-align-left input-icon"></i>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="file" name="processes[${currentIndex}][image]" class="modern-input file-input" accept="image/*">
+                            <i class="fas fa-image input-icon"></i>
+                        </div>
+                    </div>
+                    <button type="button" class="modern-btn-remove remove-process">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `);
+            container.append(newItem);
+        });
+
+        $(document).on('click', '.remove-process', function() {
+            $(this).closest('.process-item').remove();
         });
 
         // Pricing options visibility toggle

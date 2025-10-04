@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Service;
 use App\Models\ServiceRequirement;
+use App\Models\Process;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -265,6 +266,9 @@ class ServiceController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
+            'processes' => 'nullable|array',
+            'processes.*.title' => 'required|string|max:255',
+            'processes.*.description' => 'required|string',
         ]);
 
         // Handle main service image
@@ -277,8 +281,9 @@ class ServiceController extends Controller
 
         $validated['image'] = $imageName;
 
-        // Remove requirements from validated as they are handled separately
+        // Remove requirements and processes from validated as they are handled separately
         unset($validated['requirements']);
+        unset($validated['processes']);
 
         // Encode whats_include as JSON
         $validated['whats_include'] = $request->whats_include;
@@ -300,6 +305,27 @@ class ServiceController extends Controller
                     'service_id' => $service->id,
                     'title' => $requirementData['title'],
                     'image' => $reqImage,
+                ]);
+            }
+        }
+
+        // Handle processes
+        if ($request->has('processes') && is_array($request->processes)) {
+            foreach ($request->processes as $index => $processData) {
+                $processImage = '';
+                $fileKey = "processes.{$index}.image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    $processImage = time() . '_process_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('Process_images'), $processImage);
+                }
+
+                Process::create([
+                    'service_id' => $service->id,
+                    'title' => $processData['title'],
+                    'description' => $processData['description'],
+                    'image' => $processImage,
+                    'order' => $index,
                 ]);
             }
         }
@@ -334,6 +360,9 @@ class ServiceController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
+            'processes' => 'nullable|array',
+            'processes.*.title' => 'required|string|max:255',
+            'processes.*.description' => 'required|string',
         ]);
 
         // Handle main service image
@@ -347,8 +376,9 @@ class ServiceController extends Controller
             $validated['image'] = $imageName;
         }
 
-        // Remove requirements from validated
+        // Remove requirements and processes from validated
         unset($validated['requirements']);
+        unset($validated['processes']);
 
         // Handle whats_include
         $validated['whats_include'] = $request->whats_include;
@@ -372,6 +402,29 @@ class ServiceController extends Controller
                     'service_id' => $service->id,
                     'title' => $requirementData['title'],
                     'image' => $reqImage,
+                ]);
+            }
+        }
+
+        // Handle processes: delete old and create new
+        $service->processes()->delete();
+
+        if ($request->has('processes') && is_array($request->processes)) {
+            foreach ($request->processes as $index => $processData) {
+                $processImage = '';
+                $fileKey = "processes.{$index}.image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    $processImage = time() . '_process_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('Process_images'), $processImage);
+                }
+
+                Process::create([
+                    'service_id' => $service->id,
+                    'title' => $processData['title'],
+                    'description' => $processData['description'],
+                    'image' => $processImage,
+                    'order' => $index,
                 ]);
             }
         }
