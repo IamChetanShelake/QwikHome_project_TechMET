@@ -105,7 +105,7 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="code-badge">
-                                                <i class="fas fa-hashtag"></i>
+                                                {{-- <i class="fas fa-hashtag"></i> --}}
                                                 <span>{{ $coupon->code }}</span>
                                             </div>
                                         </div>
@@ -165,20 +165,17 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="action-buttons">
-                                                <a href="{{ route('coupons.view', $coupon->id) }}" 
-                                                   class="action-btn action-view" 
-                                                   title="View Details">
+                                                <a href="{{ route('coupons.view', $coupon->id) }}"
+                                                    class="action-btn action-view" title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('coupons.edit', $coupon->id) }}" 
-                                                   class="action-btn action-edit" 
-                                                   title="Edit Coupon">
+                                                <a href="{{ route('coupons.edit', $coupon->id) }}"
+                                                    class="action-btn action-edit" title="Edit Coupon">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" 
-                                                        class="action-btn action-delete" 
-                                                        title="Delete Coupon"
-                                                        onclick="deleteCoupon({{ $coupon->id }}, '{{ $coupon->code }}')">
+                                                <button type="button" class="action-btn action-delete"
+                                                    title="Delete Coupon"
+                                                    onclick="deleteCoupon({{ $coupon->id }}, '{{ $coupon->code }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -587,6 +584,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

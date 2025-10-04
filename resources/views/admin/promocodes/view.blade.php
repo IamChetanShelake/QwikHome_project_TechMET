@@ -52,7 +52,7 @@
                         <!-- Discount Amount -->
                         <div class="info-item">
                             <div class="info-label">
-                                <i class="fas fa-dollar-sign"></i>
+                                {{-- <i class="fas fa-dollar-sign"></i> --}}
                                 <span>Discount Amount</span>
                             </div>
                             <div class="info-value">
@@ -516,7 +516,7 @@
                 const originalIcon = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check"></i>';
                 btn.style.color = '#22c55e';
-                
+
                 setTimeout(function() {
                     btn.innerHTML = originalIcon;
                     btn.style.color = '';
