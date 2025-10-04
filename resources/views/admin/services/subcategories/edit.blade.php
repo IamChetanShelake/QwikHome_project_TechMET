@@ -9,7 +9,7 @@
         </div>
 
         <div class="dashboard-card p-3">
-            <form method="POST" action="{{ route('services.subcategories.update', $subcategory) }}">
+            <form method="POST" action="{{ route('services.subcategories.update', $subcategory) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
