@@ -7,6 +7,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ServiceProviderController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -107,6 +108,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //Service Providers management-------------
     Route::resource('serviceProviders', ServiceProviderController::class);
+
+    //Profile management-------------
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload.image');
 });
 
 Auth::routes();

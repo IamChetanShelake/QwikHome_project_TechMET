@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QwikHome - Admin Panel</title>
+    <title>QwikHome - {{ auth()->user()->role == 'admin' ? 'Admin' : 'Vendor' }} Panel</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -90,13 +90,13 @@
 
         <nav class="sidebar-nav">
             <ul>
-                <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
                 @if (auth()->user()->role == 'admin')
+                    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
                         <a href="{{ route('customers') }}" class="nav-link">
                             <i class="fas fa-users"></i>
@@ -312,10 +312,15 @@
                         </a>
                     </li>
                 @else
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
-                            <span>Service Provider Management</span>
+                            <span>Service Providers</span>
+                        </a>
+                    <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                        <a href="{{ route('profile.show') }}" class="nav-link">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
                         </a>
                     </li>
                 @endif
@@ -347,7 +352,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <h1 class="page-title">Admin Dashboard</h1>
+                <h1 class="page-title">{{ auth()->user()->role == 'admin' ? 'Admin' : 'Vendor' }} Dashboard</h1>
             </div>
             <div class="header-right">
 

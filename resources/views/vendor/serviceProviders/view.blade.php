@@ -11,11 +11,14 @@
                 <div class="card-body p-4">
                     <!-- Service Provider Image -->
                     <div class="row mb-4">
-                        <div class="col-12 text-center">
-                            @if($serviceProvider->image)
-                                <img src="{{ asset('User_images/' . $serviceProvider->image) }}" alt="{{ $serviceProvider->name }}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                        <div class="col-12 text-center d-flex justify-content-flex-start">
+                            @if ($serviceProvider->image)
+                                <img src="{{ asset('User_images/' . $serviceProvider->image) }}"
+                                    alt="{{ $serviceProvider->name }}" class="rounded-circle"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
                             @else
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto"
+                                    style="width: 100px; height: 100px;">
                                     <i class="fas fa-user text-white" style="font-size: 40px;"></i>
                                 </div>
                             @endif
