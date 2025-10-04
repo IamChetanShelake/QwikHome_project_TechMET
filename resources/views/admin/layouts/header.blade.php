@@ -154,6 +154,21 @@
                 font-size: 13px;
             }
         }
+
+        /* Enhanced active state for service management */
+        .nav-item.active .service-menu-trigger {
+            color: #ffffff !important;
+            background: rgba(0, 212, 255, 0.1) !important;
+        }
+
+        .nav-item.active .service-menu-trigger i {
+            color: #00d4ff !important;
+        }
+
+        /* Ensure parent nav-item gets active styling */
+        .nav-item.active {
+            border-left: 3px solid #00d4ff;
+        }
     </style>
 </head>
 
@@ -185,7 +200,7 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item">
+                <li class="nav-item {{ request()->routeIs('services.*') || str_contains(request()->url(), '/services') ? 'active' : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -212,7 +227,8 @@
                 <script>
                     $(document).ready(function() {
                         function isServiceManagementPage() {
-                            return window.location.pathname.startsWith('/services');
+                            const path = window.location.pathname;
+                            return path.includes('/services') || path.includes('/categories') || path.includes('/subcategories');
                         }
 
                         // Check if on service management page and show dropdown
@@ -220,14 +236,22 @@
                             $(".service-dropdown-menu").show();
                             $(".service-menu-trigger").find(".fa-caret-down").addClass("rotate");
 
-                            // Highlight active section
+                            // Highlight active section based on current route
                             const currentPath = window.location.pathname;
-                            if (currentPath === '/services' || currentPath.startsWith('/services?')) {
-                                $('.service-dropdown-menu a[href*="services.services.index"]').addClass('active');
-                            } else if (currentPath.includes('/categories')) {
-                                $('.service-dropdown-menu a[href*="services.categories.index"]').addClass('active');
-                            } else if (currentPath.includes('/subcategories')) {
-                                $('.service-dropdown-menu a[href*="services.subcategories.index"]').addClass('active');
+                            const currentRoute = window.location.href;
+                            
+                            // Check for services routes (more specific patterns)
+                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') || 
+                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath.includes('/subcategories'))) {
+                                $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
+                            } 
+                            // Check for categories routes
+                            else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
+                                $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
+                            } 
+                            // Check for subcategories routes
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                                $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
 
@@ -344,13 +368,13 @@
                             <span>Finance & Wallet</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
                         <a href="{{ route('coupons.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <span>Coupons</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('promocodes.*') ? 'active' : '' }}">
                         <a href="{{ route('promocodes.index') }}" class="nav-link">
                             <i class="fas fa-gift"></i>
                             <span>Promo Codes</span>
@@ -386,9 +410,9 @@
                             <span>Lead Management</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->routeIs('faq*') ? 'active' : '' }}">
                         <a href="{{ route('faq') }}" class="nav-link">
-                            <i class="fas fa-user-plus"></i>
+                            <i class="fas fa-question-circle"></i>
                             <span>FAQ's</span>
                         </a>
                     </li>
