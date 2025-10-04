@@ -43,6 +43,178 @@
             overflow: hidden;
         }
 
+        /* Collapsed Sidebar Service Management Fixes */
+        .sidebar.collapsed .service-menu {
+            position: relative;
+        }
+
+        .sidebar.collapsed .service-menu-trigger {
+            justify-content: center !important;
+            padding: 12px 5px !important;
+            min-height: 45px !important;
+            display: flex !important;
+            align-items: center !important;
+            position: relative !important;
+            width: 100% !important;
+            max-width: 80px !important;
+        }
+
+        .sidebar.collapsed .service-menu-trigger span,
+        .sidebar.collapsed .service-menu-trigger .fa-caret-down {
+            display: none !important;
+            opacity: 0 !important;
+        }
+
+        .sidebar.collapsed .service-menu-trigger i.fas.fa-cogs {
+            margin-right: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            font-size: 18px !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            width: 20px !important;
+            height: 20px !important;
+            text-align: center !important;
+            display: inline-block !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+        .sidebar.collapsed .service-dropdown-menu {
+            display: none !important;
+        }
+
+        /* Hide flyout menu by default and only show in collapsed sidebar */
+        .service-flyout-menu {
+            display: none !important;
+        }
+
+        /* Collapsed sidebar flyout menu */
+        .sidebar.collapsed .service-flyout-menu {
+            display: block !important;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            min-width: 220px;
+            z-index: 1002;
+            margin-left: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .sidebar.collapsed .service-flyout-menu.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateX(5px);
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item i {
+            width: 16px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item:hover i {
+            color: #00d4ff;
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item.active {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .sidebar.collapsed .service-flyout-menu .flyout-item.active i {
+            color: #00d4ff;
+        }
+
+        .sidebar.collapsed .service-menu:hover .service-menu-trigger {
+            background: rgba(0, 212, 255, 0.1) !important;
+            border-left: 3px solid #00d4ff !important;
+        }
+
+        .sidebar.collapsed .service-menu:hover .service-menu-trigger i.fas.fa-cogs {
+            color: #00d4ff !important;
+        }
+
+        /* Tooltip for collapsed service menu - hide when flyout is open */
+        .sidebar.collapsed .service-menu-trigger:hover::after {
+            content: "Service Management";
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1001;
+            margin-left: 10px;
+            opacity: 0;
+            animation: fadeInTooltip 0.3s ease forwards;
+        }
+
+        .sidebar.collapsed .service-menu .service-flyout-menu.show ~ .service-menu-trigger:hover::after {
+            display: none;
+        }
+
+        @keyframes fadeInTooltip {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Additional fixes for service menu in collapsed state */
+        .sidebar.collapsed .nav-item .service-menu {
+            width: 100%;
+            display: block;
+        }
+
+        .sidebar.collapsed .nav-item .service-menu .service-menu-trigger {
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed .nav-item.active .service-menu-trigger {
+            background: rgba(0, 212, 255, 0.1);
+            border-left-color: #00d4ff;
+        }
+
+        .sidebar.collapsed .nav-item.active .service-menu-trigger i.fas.fa-cogs {
+            color: #00d4ff;
+        }
+
         .service-dropdown-menu .dropdown-item {
             display: flex;
             align-items: center;
@@ -131,6 +303,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -222,6 +395,21 @@
                                 <span>Services</span>
                             </a>
                         </div>
+                        <!-- Flyout menu for collapsed sidebar -->
+                        <div class="service-flyout-menu">
+                            <a href="{{ route('services.categories.index') }}" class="flyout-item">
+                                <i class="fas fa-folder"></i>
+                                <span>Categories</span>
+                            </a>
+                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item">
+                                <i class="fas fa-folder-open"></i>
+                                <span>Sub-Category</span>
+                            </a>
+                            <a href="{{ route('services.services.index') }}" class="flyout-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span>Services</span>
+                            </a>
+                        </div>
                     </div>
                 </li>
                 <script>
@@ -257,12 +445,99 @@
 
                         $(".service-menu-trigger").on("click", function(e) {
                             e.preventDefault();
+                            
+                            // Handle collapsed sidebar - show flyout menu
+                            if ($('.sidebar').hasClass('collapsed')) {
+                                const $flyout = $(this).siblings(".service-flyout-menu");
+                                
+                                // Close any other open flyouts first
+                                $('.service-flyout-menu').not($flyout).removeClass('show');
+                                
+                                // Toggle current flyout
+                                $flyout.toggleClass('show');
+                                
+                                return false;
+                            }
+                            
                             const $dropdown = $(this).next(".service-dropdown-menu");
                             const $arrow = $(this).find(".fa-caret-down");
 
                             $dropdown.slideToggle(200);
                             $arrow.toggleClass("rotate");
                         });
+
+                        // Handle sidebar collapse behavior for service menu
+                        function handleServiceMenuCollapse() {
+                            if ($('.sidebar').hasClass('collapsed')) {
+                                // Hide dropdown and reset arrow when collapsed
+                                $('.service-dropdown-menu').hide();
+                                $('.service-menu-trigger .fa-caret-down').removeClass('rotate');
+                                // Also hide any open flyout menus
+                                $('.service-flyout-menu').removeClass('show');
+                            } else {
+                                // Show dropdown if on service management page when expanded
+                                if (isServiceManagementPage()) {
+                                    $('.service-dropdown-menu').show();
+                                    $('.service-menu-trigger .fa-caret-down').addClass('rotate');
+                                }
+                                // Hide flyout menu when expanded
+                                $('.service-flyout-menu').removeClass('show');
+                            }
+                        }
+
+                        // Handle flyout menu active states
+                        function updateFlyoutActiveStates() {
+                            const currentPath = window.location.pathname;
+                            const currentRoute = window.location.href;
+                            
+                            // Remove all active classes first
+                            $('.service-flyout-menu .flyout-item').removeClass('active');
+                            
+                            // Add active class based on current route
+                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') || 
+                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath.includes('/subcategories'))) {
+                                $('.service-flyout-menu a[href*="services.services"]').addClass('active');
+                            } 
+                            else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
+                                $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
+                            } 
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                                $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
+                            }
+                        }
+
+                        // Initialize flyout active states
+                        updateFlyoutActiveStates();
+
+                        // Close flyout menu when clicking outside
+                        $(document).on('click', function(e) {
+                            if (!$(e.target).closest('.service-menu').length) {
+                                $('.service-flyout-menu').removeClass('show');
+                            }
+                        });
+
+                        // Prevent flyout from closing when clicking inside it
+                        $(document).on('click', '.service-flyout-menu', function(e) {
+                            e.stopPropagation();
+                        });
+
+                        // Watch for sidebar collapse changes
+                        const observer = new MutationObserver(function(mutations) {
+                            mutations.forEach(function(mutation) {
+                                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                                    handleServiceMenuCollapse();
+                                }
+                            });
+                        });
+
+                        // Start observing sidebar for class changes
+                        const sidebar = document.querySelector('.sidebar');
+                        if (sidebar) {
+                            observer.observe(sidebar, {
+                                attributes: true,
+                                attributeFilter: ['class']
+                            });
+                        }
                     });
 
                     // Initialize user menu dropdown
@@ -362,10 +637,22 @@
                             <span>Booking Management</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.vendors.index') }}" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="fas fa-wallet"></i>
-                            <span>Finance & Wallet</span>
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Booking Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                        <a href="{{ route('serviceProviders.index') }}" class="nav-link">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Service Providers</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
@@ -422,6 +709,13 @@
                             <i class="fas fa-user-plus"></i>
                             <span>Service Providers</span>
                         </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Service Monitoring</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
                         <a href="{{ route('profile.show') }}" class="nav-link">
                             <i class="fas fa-user"></i>
