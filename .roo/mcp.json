@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "C:/Users/CHETAN/Desktop/qwikhome/laravel-app/"
+      },
+      "alwaysAllow": [
+        "create_entities"
+      ]
+    }
+  }
+}

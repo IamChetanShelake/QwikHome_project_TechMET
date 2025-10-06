@@ -343,6 +343,40 @@
         .nav-item.active {
             border-left: 3px solid #00d4ff;
         }
+
+        /* Specific styling for Employees nav item */
+        .nav-item.nav-employees.active {
+            border-left: 3px solid #10b981 !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .nav-item.nav-employees.active .nav-link {
+            color: #ffffff !important;
+        }
+
+        .nav-item.nav-employees.active .nav-link i {
+            color: #10b981 !important;
+        }
+
+        /* Specific styling for Bookings nav item */
+        .nav-item.nav-bookings.active {
+            border-left: 3px solid #3b82f6 !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .nav-item.nav-bookings.active .nav-link {
+            color: #ffffff !important;
+        }
+
+        .nav-item.nav-bookings.active .nav-link i {
+            color: #3b82f6 !important;
+        }
+
+        /* Protection against Service Management JS interference */
+        .nav-item.nav-employees, .nav-item.nav-bookings {
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
 
@@ -360,22 +394,27 @@
 
         <nav class="sidebar-nav">
             <ul>
-                @if (auth()->user()->role == 'admin')
                     <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
+
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-item {{ str_contains(request()->url(), '/customers') ? 'active' : '' }} ">
                         <a href="{{ route('customers') }}" class="nav-link">
                             <i class="fas fa-users"></i>
                             <span>Customer Management</span>
                         </a>
                     </li>
                 @endif
-                <li
-                    class="nav-item {{ request()->routeIs('services.*') || str_contains(request()->url(), '/services') ? 'active' : '' }}">
+
+                <li class="nav-item {{ (
+                    str_contains(request()->url(), '/services') ||
+                    str_contains(request()->url(), '/categories') ||
+                    str_contains(request()->url(), '/subcategories')
+                ) ? 'active' : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -383,31 +422,31 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.categories.index') }}" class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
 
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
                         </div>
                         <!-- Flyout menu for collapsed sidebar -->
                         <div class="service-flyout-menu">
-                            <a href="{{ route('services.categories.index') }}" class="flyout-item">
+                            <a href="{{ route('services.categories.index') }}" class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
-                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item">
+                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="flyout-item">
+                            <a href="{{ route('services.services.index') }}" class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
@@ -418,8 +457,13 @@
                     $(document).ready(function() {
                         function isServiceManagementPage() {
                             const path = window.location.pathname;
-                            return path.includes('/services') || path.includes('/categories') || path.includes(
-                                '/subcategories');
+                            const href = window.location.href;
+                            return path.includes('/services') ||
+                                   path.includes('/categories') ||
+                                   path.includes('/subcategories') ||
+                                   href.includes('services.categories') ||
+                                   href.includes('services.subcategories') ||
+                                   href.includes('services.services');
                         }
 
                         // Check if on service management page and show dropdown
@@ -432,9 +476,9 @@
                             const currentRoute = window.location.href;
 
                             // Check for services routes (more specific patterns)
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
-                                    .includes('/subcategories'))) {
+                            if (currentPath.includes('/services') &&
+                                (currentRoute.includes('services.services') ||
+                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
                             }
                             // Check for categories routes
@@ -442,8 +486,7 @@
                                 $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
                             }
                             // Check for subcategories routes
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes(
-                                    'services.subcategories')) {
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
                                 $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -499,14 +542,13 @@
                             $('.service-flyout-menu .flyout-item').removeClass('active');
 
                             // Add active class based on current route
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
-                                    .includes('/subcategories'))) {
+                            if (currentPath.includes('/services') &&
+                                (currentRoute.includes('services.services') ||
+                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-flyout-menu a[href*="services.services"]').addClass('active');
                             } else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
-                            } else if (currentPath.includes('/subcategories') || currentRoute.includes(
-                                    'services.subcategories')) {
+                            } else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
                                 $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -526,16 +568,19 @@
                             e.stopPropagation();
                         });
 
-                        // Watch for sidebar collapse changes
+                        // Watch for sidebar collapse changes - only for service menu
                         const observer = new MutationObserver(function(mutations) {
                             mutations.forEach(function(mutation) {
                                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                                    handleServiceMenuCollapse();
+                                    const target = mutation.target;
+                                    if (target.classList.contains('sidebar')) {
+                                        handleServiceMenuCollapse();
+                                    }
                                 }
                             });
                         });
 
-                        // Start observing sidebar for class changes
+                        // Start observing sidebar for class changes - be more specific
                         const sidebar = document.querySelector('.sidebar');
                         if (sidebar) {
                             observer.observe(sidebar, {
@@ -543,6 +588,44 @@
                                 attributeFilter: ['class']
                             });
                         }
+
+                        // Ensure other nav items are not affected by service menu JS
+                        $(document).ready(function() {
+                            // Store original active states before any JS manipulation
+                            $('.nav-item').each(function() {
+                                const $navItem = $(this);
+                                if ($navItem.hasClass('active')) {
+                                    $navItem.attr('data-original-active', 'true');
+                                }
+                            });
+
+                            // Re-apply active states after service menu JS runs
+                            setTimeout(function() {
+                                $('.nav-item[data-original-active="true"]').each(function() {
+                                    const $navItem = $(this);
+                                    // Ensure active state is maintained and not overridden
+                                    $navItem.addClass('active');
+                                });
+                            }, 200);
+                        });
+
+                        // Specific protection for Employees and Bookings nav items
+                        $(document).on('click', '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]', function(e) {
+                            const $navItem = $(this).closest('.nav-item');
+                            // Ensure active state is applied immediately and protected
+                            setTimeout(function() {
+                                $('.nav-item').removeClass('active');
+                                $navItem.addClass('active');
+                            }, 10);
+                        });
+
+                        // Protect against Service Management JS interference
+                        $(document).on('DOMSubtreeModified', '.nav-employees, .nav-bookings', function() {
+                            const $navItem = $(this);
+                            if ($navItem.attr('data-original-active') === 'true' && !$navItem.hasClass('active')) {
+                                $navItem.addClass('active');
+                            }
+                        });
                     });
 
                     // Initialize user menu dropdown
@@ -636,33 +719,33 @@
                 </script>
 
                 @if (auth()->user()->role == 'admin')
-                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                    <li class="nav-item nav-bookings {{ request()->routeIs('vendor.bookings.*') ? 'active' : '' }}">
                         <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
                             <i class="fas fa-tasks"></i>
                             <span>Bookings Monitoring</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/vendors') ? 'active' : '' }}">
                         <a href="{{ route('admin.vendors.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
                             <span>Vendor Management</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                    <li class="nav-item nav-employees {{ request()->routeIs('serviceProviders.*') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Employees</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/coupons') ? 'active' : '' }}">
                         <a href="{{ route('coupons.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <span>Coupons</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('promocodes.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/promocodes') || str_contains(request()->url(), '/promo') ? 'active' : '' }}">
                         <a href="{{ route('promocodes.index') }}" class="nav-link">
                             <i class="fas fa-gift"></i>
                             <span>Promo Codes</span>
@@ -674,13 +757,13 @@
                             <span>Push Notifications</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.analytics.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/analytics') || str_contains(request()->url(), '/reports') ? 'active' : '' }}">
                         <a href="{{ route('admin.analytics.index') }}" class="nav-link">
                             <i class="fas fa-chart-bar"></i>
                             <span>Reports & Analytics</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('complaints.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/complaints') ? 'active' : '' }}">
                         <a href="{{ route('complaints.index') }}" class="nav-link">
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Complaints</span>
@@ -698,21 +781,21 @@
                             <span>Lead Management</span>
                         </a>
                     </li> --}}
-                    <li class="nav-item {{ request()->routeIs('faq*') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/faq') ? 'active' : '' }}">
                         <a href="{{ route('faq') }}" class="nav-link">
                             <i class="fas fa-question-circle"></i>
                             <span>FAQ's</span>
                         </a>
                     </li>
                 @else
-                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                    <li class="nav-item nav-employees {{ request()->routeIs('serviceProviders.*') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Service Providers</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                    <li class="nav-item {{ str_contains(request()->url(), '/profile') ? 'active' : '' }}">
                         <a href="{{ route('profile.show') }}" class="nav-link">
                             <i class="fas fa-user"></i>
                             <span>My Profile</span>
