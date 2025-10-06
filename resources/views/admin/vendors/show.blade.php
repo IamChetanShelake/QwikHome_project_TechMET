@@ -7,7 +7,7 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <div class="profile-avatar">
-                        @if($vendor->image)
+                        @if ($vendor->image)
                             <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}">
                         @else
                             <div class="avatar-placeholder">
@@ -90,7 +90,7 @@
                         <div class="info-row">
                             <div class="info-label">Phone Number</div>
                             <div class="info-value">
-                                @if($vendor->phone)
+                                @if ($vendor->phone)
                                     <a href="tel:{{ $vendor->phone }}" class="phone-link">
                                         <i class="fas fa-phone"></i>
                                         {{ $vendor->phone }}
@@ -103,7 +103,7 @@
                         <div class="info-row full-width">
                             <div class="info-label">Address</div>
                             <div class="info-value">
-                                @if($vendor->address)
+                                @if ($vendor->address)
                                     <div class="address-display">
                                         <i class="fas fa-map-marker-alt"></i>
                                         <span>{{ $vendor->address }}</span>
@@ -129,7 +129,7 @@
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
                                 <div class="stat-info">
-                                    <div class="stat-value">{{ $vendor->created_at->diffInDays(now()) }}</div>
+                                    <div class="stat-value">{{ round($vendor->created_at->diffInDays(now()), 2) git }}</div>
                                     <div class="stat-label">Days Active</div>
                                 </div>
                             </div>
@@ -178,7 +178,8 @@
                                 </div>
                                 <div class="activity-content">
                                     <div class="activity-title">Profile Last Updated</div>
-                                    <div class="activity-time">{{ $vendor->updated_at->format('M j, Y \a\t g:i A') }}</div>
+                                    <div class="activity-time">{{ $vendor->updated_at->format('M j, Y \a\t g:i A') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -386,7 +387,8 @@
             font-weight: 500;
         }
 
-        .email-link, .phone-link {
+        .email-link,
+        .phone-link {
             color: #00d4ff;
             text-decoration: none;
             display: flex;
@@ -395,7 +397,8 @@
             transition: all 0.3s ease;
         }
 
-        .email-link:hover, .phone-link:hover {
+        .email-link:hover,
+        .phone-link:hover {
             color: #0099cc;
             transform: translateX(2px);
         }

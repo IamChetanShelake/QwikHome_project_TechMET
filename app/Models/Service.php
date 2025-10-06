@@ -11,6 +11,7 @@ class Service extends Model
 
     protected $guarded = [];
 
+
     protected $casts = [
         'whats_include' => 'array',
         'price_onetime' => 'decimal:2',
@@ -38,5 +39,11 @@ class Service extends Model
     public function processes()
     {
         return $this->hasMany(Process::class)->orderBy('order');
+    }
+
+    // Many-to-many relationship with users (service providers and vendors)
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
     }
 }

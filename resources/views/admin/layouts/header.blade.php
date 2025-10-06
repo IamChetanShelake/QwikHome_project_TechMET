@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>QwikHome - {{ auth()->user()->role == 'admin' ? 'Admin' : 'Vendor' }} Panel</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap"
@@ -635,6 +636,12 @@
                 </script>
 
                 @if (auth()->user()->role == 'admin')
+                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
+                            <i class="fas fa-tasks"></i>
+                            <span>Bookings Monitoring</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.vendors.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
@@ -645,15 +652,10 @@
                     <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
-                            <span>Service Providers</span>
+                            <span>Employees</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
-                        <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
-                            <i class="fas fa-tasks"></i>
-                            <span>Service Monitoring</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
                         <a href="{{ route('coupons.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>

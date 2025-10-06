@@ -125,6 +125,7 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     //Service Providers management-------------
     Route::resource('serviceProviders', ServiceProviderController::class);
+    Route::get('/admin/search-service-providers', [ServiceProviderController::class, 'search'])->name('serviceProviders.search');
 
     //Vendor Bookings management-------------
     Route::prefix('vendor')->name('vendor.')->group(function () {

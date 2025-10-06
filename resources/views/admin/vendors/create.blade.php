@@ -167,19 +167,64 @@
                             </div>
                         </div>
 
-                        <!-- Image Preview -->
-                        <div class="image-preview-section" id="imagePreview" style="display: none;">
-                            <div class="preview-header">
-                                <h4>Image Preview</h4>
-                                <button type="button" class="remove-image-btn" onclick="removeImage()">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                            <!-- Image Preview -->
+                            <div class="image-preview-section" id="imagePreview" style="display: none;">
+                                <div class="preview-header">
+                                    <h4>Image Preview</h4>
+                                    <button type="button" class="remove-image-btn" onclick="removeImage()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="image-preview-container">
+                                    <img id="previewImg" src="" alt="Preview" class="preview-image">
+                                </div>
                             </div>
-                            <div class="image-preview-container">
-                                <img id="previewImg" src="" alt="Preview" class="preview-image">
+
+                            <!-- Services Section -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <i class="fas fa-tools"></i>
+                                    <h3>Services Offered</h3>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group full-width">
+                                        <label class="form-label">
+                                            <i class="fas fa-check-square"></i>
+                                            Select Services
+                                        </label>
+                                        <div class="services-grid">
+                                            @if($services->count() > 0)
+                                                @foreach($services as $service)
+                                                    <div class="service-item">
+                                                        <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="service-checkbox"
+                                                               {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
+                                                        <label for="service_{{ $service->id }}" class="service-label">
+                                                            <span class="service-icon"><i class="fas fa-wrench"></i></span>
+                                                            <span class="service-name">{{ $service->name }}</span>
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <p class="no-services">No services available</p>
+                                            @endif
+                                        </div>
+                                        @error('services')
+                                            <div class="error-message">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @error('services.*')
+                                            <div class="error-message">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     <!-- Form Actions -->
                     <div class="form-actions">
@@ -552,6 +597,65 @@
             box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
         }
 
+        /* Services Grid Styles */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .service-checkbox {
+            display: none;
+        }
+
+        .service-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .service-label:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .service-checkbox:checked + .service-label {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .service-icon {
+            color: #00d4ff;
+            font-size: 16px;
+        }
+
+        .service-name {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .no-services {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+            padding: 20px;
+            margin: 0;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .form-container {
@@ -584,6 +688,15 @@
             .cancel-btn, .submit-btn {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .service-label {
+                padding: 10px 12px;
             }
         }
     </style>
