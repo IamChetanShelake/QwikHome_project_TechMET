@@ -25,7 +25,6 @@ class CustomerController extends Controller
 
         return response()->json([
             'success' => true,
-            'status' => $customer->active,
             'message' => $customer->active ? 'User blocked' : 'User unblocked'
         ]);
     }

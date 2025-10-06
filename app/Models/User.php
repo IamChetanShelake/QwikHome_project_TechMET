@@ -78,4 +78,10 @@ class User extends Authenticatable
     {
         return $this->role === 'user';
     }
+
+    // Many-to-many relationship with services
+    public function services()
+    {
+        return $this->belongsToMany(Service::class,'user_services')->withTimestamps();
+    }
 }

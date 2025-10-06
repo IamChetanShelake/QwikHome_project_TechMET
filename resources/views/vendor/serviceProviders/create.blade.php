@@ -20,7 +20,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
                                     @error('name')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -29,7 +29,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="phone">Phone (optional)</label>
-                                    <input type="number" class="form-control" id="phone" name="phone">
+                                    <input type="number" class="form-control" id="phone" name="phone" value="{{ old('phone') }}">
                                     @error('phone')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -41,7 +41,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                                     @error('email')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -75,7 +75,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label for="address">Address (optional)</label>
-                                    <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                                    <textarea class="form-control" id="address" name="address" rows="3">{{ old('address') }}</textarea>
                                     @error('address')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -86,6 +86,36 @@
                                     <label for="image">Image (optional)</label>
                                     <input type="file" class="form-control" id="image" name="image" accept="image/*">
                                     @error('image')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Services (Select services this provider can work on)</label>
+                                    <div class="row">
+                                        @if($services->count() > 0)
+                                            @foreach($services as $service)
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}"
+                                                               {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="service_{{ $service->id }}">
+                                                            {{ $service->name }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="text-muted">No services available</p>
+                                        @endif
+                                    </div>
+                                    @error('services.*')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('services')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -1,13 +1,13 @@
 // Admin Panel JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize admin panel
-    initializeAdminPanel();
+    // initializeAdminPanel();
 
     // Set active state based on current URL for server-rendered pages
     setActiveNavByUrl();
 
     // Load dashboard by default
-    loadSection('dashboard');
+    // loadSection('dashboard');
 });
 
 function initializeUserMenu() {

@@ -105,9 +105,10 @@
     {{-- script to toggle block/unblock user -->  --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".block, .unblock").forEach(button => {
-                button.addEventListener("click", function() {
-                    let userId = this.getAttribute("data-id");
+            document.querySelector('.data-table').addEventListener('click', function(e) {
+                if (e.target.classList.contains('block') || e.target.classList.contains('unblock')) {
+                    e.preventDefault();
+                    let userId = e.target.getAttribute("data-id");
 
                     fetch("{{ route('customers.toggle-block') }}", {
                             method: "POST",
@@ -119,16 +120,26 @@
                                 id: userId
                             })
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             if (data.success) {
-                                alert(data.message);
+                                // alert(data.message);
                                 // reload page or update button dynamically
                                 location.reload();
+                            } else {
+                                alert('Error: ' + data.message);
                             }
                         })
-                        .catch(error => console.error("Error:", error));
-                });
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert('There was an error processing your request.');
+                        });
+                }
             });
         });
     </script>
@@ -182,91 +193,9 @@
                         tbody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
                     }
 
-                    // Re-attach event listeners to new buttons
-                    attachToggleListeners();
+
                 })
                 .catch(error => console.error('Error:', error));
-        });
-
-        // Function to attach listeners to block/unblock buttons
-        function attachToggleListeners() {
-            document.querySelectorAll(".block, .unblock").forEach(button => {
-                button.addEventListener("click", function() {
-                    let userId = this.getAttribute("data-id");
-
-                    fetch("{{ route('customers.toggle-block') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                            },
-                            body: JSON.stringify({
-                                id: userId
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert(data.message);
-                                // Reload table data after status change
-                                let query = document.getElementById('searchInput').value.trim();
-                                fetch(`/admin/search-users?query=${encodeURIComponent(query)}`)
-                                    .then(response => response.json())
-                                    .then(data => updateTableWithData(data));
-                            }
-                        })
-                        .catch(error => console.error("Error:", error));
-                });
-            });
-        }
-
-        // Function to update table with data
-        function updateTableWithData(data) {
-            let tbody = document.querySelector('.data-table tbody');
-            tbody.innerHTML = '';
-
-            if (data.length > 0) {
-                data.forEach((user, index) => {
-                    let imageHTML = user.image ?
-                        `<img src="/customer_images/${user.image}" alt="Image" class="designer-img">` :
-                        `<p>No Image</p>`;
-
-                    let statusHTML = user.active == 0 ?
-                        `<span class="status-badge completed"> Active </span>` :
-                        `<span class="status-badge pending"> Blocked </span>`;
-
-                    let actionHTML = user.active == 0 ?
-                        `<button type="button" class="btn btn-danger block" data-id="${user.id}">block</button>` :
-                        `<button type="button" class="btn btn-success unblock" data-id="${user.id}">unblock</button>`;
-
-                    let rowHTML = `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${imageHTML}</td>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${user.phone || 'N/A'}</td>
-                            <td>${statusHTML}</td>
-                            <td>
-                                <div class="d-flex gap-1 justify-content-center">
-                                    ${actionHTML}
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += rowHTML;
-                });
-            } else {
-                tbody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
-            }
-
-            // Re-attach listeners
-            attachToggleListeners();
-        }
-
-        // Attach initial listeners on load
-        document.addEventListener("DOMContentLoaded", function() {
-            attachToggleListeners();
         });
     </script>
 @endsection

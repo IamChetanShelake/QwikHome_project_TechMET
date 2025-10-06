@@ -23,7 +23,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        return view('admin.vendors.create');
+        $services = \App\Models\Service::all();
+        return view('admin.vendors.create', compact('services'));
     }
 
     /**
@@ -38,6 +39,8 @@ class VendorController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:3048',
+            'services' => 'array',
+            'services.*' => 'exists:services,id',
         ]);
 
         $imageName = '';
@@ -46,7 +49,7 @@ class VendorController extends Controller
             $request->image->move('user_images', $imageName);
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -55,6 +58,11 @@ class VendorController extends Controller
             'image' => $imageName,
             'role' => 'vendor',
         ]);
+
+        // Attach selected services
+        if ($request->has('services') && is_array($request->services)) {
+            $user->services()->attach($request->services);
+        }
 
         return redirect()->route('admin.vendors.index')->with('success', 'Vendor created successfully.');
     }

@@ -22,7 +22,8 @@ class ServiceProviderController extends Controller
      */
     public function create()
     {
-        return view('vendor.serviceProviders.create');
+        $services = \App\Models\Service::all();
+        return view('vendor.serviceProviders.create', compact('services'));
     }
 
     /**
@@ -37,6 +38,8 @@ class ServiceProviderController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:3048',
+            'services' => 'array',
+            'services.*' => 'exists:services,id',
         ]);
 
         if ($request->hasFile('image')) {
@@ -46,7 +49,7 @@ class ServiceProviderController extends Controller
             $imageName = '';
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -55,6 +58,11 @@ class ServiceProviderController extends Controller
             'image' => $imageName,
             'role' => 'serviceprovider',
         ]);
+
+        // Attach selected services
+        if ($request->has('services') && is_array($request->services)) {
+            $user->services()->attach($request->services);
+        }
 
         return redirect()->route('serviceProviders.index')->with('success', 'Service Provider created successfully.');
     }
@@ -135,5 +143,29 @@ class ServiceProviderController extends Controller
         $serviceProvider->delete();
 
         return redirect()->route('serviceProviders.index')->with('success', 'Service Provider deleted successfully.');
+    }
+
+    /**
+     * Search service providers by name, email, or phone.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+
+        if (empty($query)) {
+            // Return all service providers when no query
+            $users = User::where('role', 'serviceprovider')->get();
+        } else {
+            // Search by name, email, or phone
+            $users = User::where('role', 'serviceprovider')
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'like', "%{$query}%")
+                      ->orWhere('email', 'like', "%{$query}%")
+                      ->orWhere('phone', 'like', "%{$query}%");
+                })
+                ->get();
+        }
+
+        return response()->json($users);
     }
 }

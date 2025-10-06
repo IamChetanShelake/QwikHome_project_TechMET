@@ -185,7 +185,7 @@
                                 <span class="time-text">{{ $service->created_at->format('H:i') }}</span>
                             </td>
                             <td class="td-actions">
-                                <div class="action-buttons">
+                                <div class="action-buttons" >
                                     <a href="{{ route('services.services.show', $service) }}" 
                                        class="action-btn action-view" title="View Service">
                                         <i class="fas fa-eye"></i>
