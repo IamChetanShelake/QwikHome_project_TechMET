@@ -66,6 +66,18 @@ class Booking extends Model
         return $query->where('vendor_id', $vendorId);
     }
 
+    // Scope for completed bookings
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    // Feedback relationship
+    public function feedback()
+    {
+        return $this->hasOne(Feedback::class);
+    }
+
     // Generate booking reference
     protected static function boot()
     {

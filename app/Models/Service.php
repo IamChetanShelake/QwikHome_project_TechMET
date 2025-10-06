@@ -46,4 +46,16 @@ class Service extends Model
     {
         return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
     }
+
+    // Feedback relationships
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    // Average rating calculation
+    public function getAverageRatingAttribute()
+    {
+        return $this->feedbacks()->avg('rating_service');
+    }
 }

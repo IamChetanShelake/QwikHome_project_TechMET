@@ -795,56 +795,17 @@ function showNotification(message, type = 'info') {
 }
 
 // Set active navigation based on current URL
+// Set active navigation based on current URL (only if not already set by server)
 function setActiveNavByUrl() {
+    // Check if any nav-item already has the active class (set by server-side rendering)
+    const activeItems = document.querySelectorAll('.nav-item.active');
+    if (activeItems.length > 0) {
+        // Server already set active states, don't override
+        return;
+    }
+
     const pathname = window.location.pathname;
     const navLinks = document.querySelectorAll('.nav-link');
-
-    // First, remove active class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Find matching nav link by href or data-section
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        const section = link.getAttribute('data-section');
-
-        // For server-rendered pages with href
-        if (href && href === pathname) {
-            link.parentElement.classList.add('active');
-            // Update page title if span exists
-            const span = link.querySelector('span');
-            if (span) {
-                const pageTitle = document.querySelector('.page-title');
-                if (pageTitle) {
-                    pageTitle.textContent = span.textContent;
-                }
-            }
-        }
-
-        // For dashboard
-        if (pathname === '/admin' && section === 'dashboard') {
-            link.parentElement.classList.add('active');
-            const span = link.querySelector('span');
-            if (span) {
-                const pageTitle = document.querySelector('.page-title');
-                if (pageTitle) {
-                    pageTitle.textContent = span.textContent;
-                }
-            }
-        }
-    });
-}
-
-// Set active navigation based on current URL
-function setActiveNavByUrl() {
-    const pathname = window.location.pathname;
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    // First, remove active class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
 
     // Find matching nav link by href or data-section
     navLinks.forEach(link => {

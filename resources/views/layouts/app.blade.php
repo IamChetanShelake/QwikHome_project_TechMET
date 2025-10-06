@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Qwikhom') }}</title>
+    <title>{{ config('app.name', 'Qwikhom') }} @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -16,6 +16,9 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    @yield('styles')
 </head>
 
 <body>
@@ -80,6 +83,8 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        @yield('scripts')
     </div>
 </body>
 

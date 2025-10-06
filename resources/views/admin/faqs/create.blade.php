@@ -324,6 +324,53 @@
         resize: vertical;
     }
 
+    /* Summernote Editor Styling */
+    .note-editor .note-editing-area .note-editable {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .note-editing-area .note-editable {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        padding: 16px 20px 16px 50px !important;
+    }
+
+    .note-editing-area .note-editable:focus {
+        border-color: #00d4ff !important;
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .note-editor {
+        color: #ffffff !important;
+    }
+
+    .note-editor .note-toolbar {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px 12px 0 0 !important;
+        border-bottom: none !important;
+    }
+
+    .note-editor .note-toolbar .btn {
+        color: #ffffff !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .note-editor .note-toolbar .btn:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #00d4ff !important;
+    }
+
+    .note-editor .note-toolbar .btn.active {
+        background: rgba(0, 212, 255, 0.2) !important;
+        color: #ffffff !important;
+    }
+
     .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
         outline: none;
         border-color: #00d4ff;

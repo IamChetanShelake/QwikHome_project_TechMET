@@ -361,13 +361,13 @@
         <nav class="sidebar-nav">
             <ul>
                 @if (auth()->user()->role == 'admin')
-                    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} ">
+                    <li class="nav-item {{ request()->is('admin') ? 'active' : '' }} ">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('customers') ? 'active' : '' }} ">
+                    <li class="nav-item {{ request()->is('customers*') ? 'active' : '' }} ">
                         <a href="{{ route('customers') }}" class="nav-link">
                             <i class="fas fa-users"></i>
                             <span>Customer Management</span>
@@ -414,6 +414,9 @@
                         </div>
                     </div>
                 </li>
+
+
+
                 <script>
                     $(document).ready(function() {
                         function isServiceManagementPage() {
@@ -636,33 +639,33 @@
                 </script>
 
                 @if (auth()->user()->role == 'admin')
-                    <li class="nav-item {{ request()->routeIs('vendor.bookings.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('vendor/bookings*') ? 'active' : '' }}">
                         <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
                             <i class="fas fa-tasks"></i>
                             <span>Bookings Monitoring</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('vendors*') ? 'active' : '' }}">
                         <a href="{{ route('admin.vendors.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
                             <span>Vendor Management</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('serviceProviders*') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Employees</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('coupons.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('coupons*') ? 'active' : '' }}">
                         <a href="{{ route('coupons.index') }}" class="nav-link">
                             <i class="fas fa-tags"></i>
                             <span>Coupons</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('promocodes.*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('promocodes*') ? 'active' : '' }}">
                         <a href="{{ route('promocodes.index') }}" class="nav-link">
                             <i class="fas fa-gift"></i>
                             <span>Promo Codes</span>
@@ -674,16 +677,22 @@
                             <span>Push Notifications</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('admin.analytics.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('analytics') ? 'active' : '' }}">
                         <a href="{{ route('admin.analytics.index') }}" class="nav-link">
                             <i class="fas fa-chart-bar"></i>
                             <span>Reports & Analytics</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->routeIs('complaints.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('complaints*') ? 'active' : '' }}">
                         <a href="{{ route('complaints.index') }}" class="nav-link">
                             <i class="fas fa-exclamation-triangle"></i>
                             <span>Complaints</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->is('feedback*') ? 'active' : '' }}">
+                        <a href="{{ route('feedback.index') }}" class="nav-link">
+                            <i class="fas fa-comments"></i>
+                            <span>Feedbacks</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -698,21 +707,21 @@
                             <span>Lead Management</span>
                         </a>
                     </li> --}}
-                    <li class="nav-item {{ request()->routeIs('faq*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('faqs*') ? 'active' : '' }}">
                         <a href="{{ route('faq') }}" class="nav-link">
                             <i class="fas fa-question-circle"></i>
                             <span>FAQ's</span>
                         </a>
                     </li>
                 @else
-                    <li class="nav-item {{ request()->routeIs('serviceProviders.index') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('serviceProviders*') ? 'active' : '' }}">
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Service Providers</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('profile*') ? 'active' : '' }}">
                         <a href="{{ route('profile.show') }}" class="nav-link">
                             <i class="fas fa-user"></i>
                             <span>My Profile</span>
