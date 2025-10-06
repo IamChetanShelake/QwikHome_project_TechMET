@@ -44,7 +44,7 @@ class AuthApiController extends Controller
                 'active' => 1
             ]);
 
-            
+
 
             return response()->json([
                 'success' => true,
