@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\isAdmin;
+use App\Http\Controllers\Admin\VendorController;
+use App\Http\Controllers\Admin\FeedbackController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -137,7 +140,7 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     });
 
     //Vendor management-------------
-    Route::resource('vendors', \App\Http\Controllers\Admin\VendorController::class)->names([
+    Route::resource('vendors', VendorController::class)->names([
         'index' => 'admin.vendors.index',
         'create' => 'admin.vendors.create',
         'store' => 'admin.vendors.store',
@@ -154,11 +157,16 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload.image');
+
+    //Feedback management-------------
+    Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('/feedback/search', [\App\Http\Controllers\Admin\FeedbackController::class, 'search'])->name('feedback.search');
 });
 
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 
 Route::get('/clean-cache', function () {
     $exitCode = Artisan::call('cache:clear');
