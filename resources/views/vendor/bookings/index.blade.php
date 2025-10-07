@@ -1,4 +1,4 @@
-zue@extends('admin.layouts.masterlayout')
+@extends('admin.layouts.masterlayout')
 
 @section('content')
     <div class="content-area">
