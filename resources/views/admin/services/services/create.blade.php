@@ -367,25 +367,46 @@
                                 <input type="checkbox" class="modern-checkbox" id="enable_onetime" checked>
                                 <label for="enable_onetime" class="checkbox-text">One Time Price</label>
                             </div>
-                            <div class="form-group-modern pricing-input" id="onetime_input">
-                                <label for="price_onetime" class="modern-label">
-                                    <i class="fas fa-money-bill text-cyan"></i>
-                                    One Time Price
-                                    <span class="optional-badge">Optional</span>
-                                </label>
-                                <div class="input-wrapper">
-                                    <input type="number" class="modern-input" id="price_onetime" name="price_onetime"
-                                           value="{{ old('price_onetime') }}" step="0.01" min="0"
-                                           placeholder="0.00">
-                                    {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
-                                    <span class="input-suffix">AED</span>
-                                </div>
-                                @error('price_onetime')
-                                    <div class="error-message">
-                                        <i class="fas fa-exclamation-circle"></i>
-                                        {{ $message }}
+                            <div class="pricing-horizontal-layout" id="onetime_input" style="display: block;">
+                                <div class="form-group-modern pricing-input">
+                                    <label for="price_onetime" class="modern-label">
+                                        <i class="fas fa-money-bill text-cyan"></i>
+                                        Price
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="number" class="modern-input" id="price_onetime" name="price_onetime"
+                                               value="{{ old('price_onetime') }}" step="0.01" min="0"
+                                               placeholder="0.00">
+                                        <span class="input-suffix">AED</span>
                                     </div>
-                                @enderror
+                                    @error('price_onetime')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <!-- One Time Price Description -->
+                                <div class="form-group-modern pricing-description">
+                                    <label for="price_onetime_description" class="modern-label">
+                                        <i class="fas fa-align-left text-cyan"></i>
+                                        Description
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <textarea class="modern-textarea" id="price_onetime_description" name="price_onetime_description"
+                                                  placeholder="Enter description for one time price">{{ old('price_onetime_description') }}</textarea>
+                                        <i class="fas fa-align-left input-icon"></i>
+                                    </div>
+                                    @error('price_onetime_description')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -395,25 +416,46 @@
                                 <input type="checkbox" class="modern-checkbox" id="enable_weekly">
                                 <label for="enable_weekly" class="checkbox-text">Weekly Price</label>
                             </div>
-                            <div class="form-group-modern pricing-input" id="weekly_input" style="display: none;">
-                                <label for="price_weekly" class="modern-label">
-                                    <i class="fas fa-calendar-week text-cyan"></i>
-                                    Weekly Price
-                                    <span class="optional-badge">Optional</span>
-                                </label>
-                                <div class="input-wrapper">
-                                    <input type="number" class="modern-input" id="price_weekly" name="price_weekly"
-                                           value="{{ old('price_weekly') }}" step="0.01" min="0"
-                                           placeholder="0.00">
-                                    {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
-                                    <span class="input-suffix">AED</span>
-                                </div>
-                                @error('price_weekly')
-                                    <div class="error-message">
-                                        <i class="fas fa-exclamation-circle"></i>
-                                        {{ $message }}
+                            <div class="pricing-horizontal-layout" id="weekly_input" style="display: none;">
+                                <div class="form-group-modern pricing-input">
+                                    <label for="price_weekly" class="modern-label">
+                                        <i class="fas fa-calendar-week text-cyan"></i>
+                                        Weekly Price
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="number" class="modern-input" id="price_weekly" name="price_weekly"
+                                               value="{{ old('price_weekly') }}" step="0.01" min="0"
+                                               placeholder="0.00">
+                                        <span class="input-suffix">AED</span>
                                     </div>
-                                @enderror
+                                    @error('price_weekly')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <!-- Weekly Price Description -->
+                                <div class="form-group-modern pricing-description">
+                                    <label for="price_weekly_description" class="modern-label">
+                                        <i class="fas fa-align-left text-cyan"></i>
+                                        Description
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <textarea class="modern-textarea" id="price_weekly_description" name="price_weekly_description"
+                                                  placeholder="Enter description for weekly price">{{ old('price_weekly_description') }}</textarea>
+                                        <i class="fas fa-align-left input-icon"></i>
+                                    </div>
+                                    @error('price_weekly_description')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -423,25 +465,46 @@
                                 <input type="checkbox" class="modern-checkbox" id="enable_monthly">
                                 <label for="enable_monthly" class="checkbox-text">Monthly Price</label>
                             </div>
-                            <div class="form-group-modern pricing-input" id="monthly_input" style="display: none;">
-                                <label for="price_monthly" class="modern-label">
-                                    <i class="fas fa-calendar-alt text-cyan"></i>
-                                    Monthly Price
-                                    <span class="optional-badge">Optional</span>
-                                </label>
-                                <div class="input-wrapper">
-                                    <input type="number" class="modern-input" id="price_monthly" name="price_monthly"
-                                           value="{{ old('price_monthly') }}" step="0.01" min="0"
-                                           placeholder="0.00">
-                                    {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
-                                    <span class="input-suffix">AED</span>
-                                </div>
-                                @error('price_monthly')
-                                    <div class="error-message">
-                                        <i class="fas fa-exclamation-circle"></i>
-                                        {{ $message }}
+                            <div class="pricing-horizontal-layout" id="monthly_input" style="display: none;">
+                                <div class="form-group-modern pricing-input">
+                                    <label for="price_monthly" class="modern-label">
+                                        <i class="fas fa-calendar-alt text-cyan"></i>
+                                        Monthly Price
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="number" class="modern-input" id="price_monthly" name="price_monthly"
+                                               value="{{ old('price_monthly') }}" step="0.01" min="0"
+                                               placeholder="0.00">
+                                        <span class="input-suffix">AED</span>
                                     </div>
-                                @enderror
+                                    @error('price_monthly')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <!-- Monthly Price Description -->
+                                <div class="form-group-modern pricing-description">
+                                    <label for="price_monthly_description" class="modern-label">
+                                        <i class="fas fa-align-left text-cyan"></i>
+                                        Description
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <textarea class="modern-textarea" id="price_monthly_description" name="price_monthly_description"
+                                                  placeholder="Enter description for monthly price">{{ old('price_monthly_description') }}</textarea>
+                                        <i class="fas fa-align-left input-icon"></i>
+                                    </div>
+                                    @error('price_monthly_description')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -451,53 +514,51 @@
                                 <input type="checkbox" class="modern-checkbox" id="enable_yearly">
                                 <label for="enable_yearly" class="checkbox-text">Yearly Price</label>
                             </div>
-                            <div class="form-group-modern pricing-input" id="yearly_input" style="display: none;">
-                                <label for="price_yearly" class="modern-label">
-                                    <i class="fas fa-calendar text-cyan"></i>
-                                    Yearly Price
-                                    <span class="optional-badge">Optional</span>
-                                </label>
-                                <div class="input-wrapper">
-                                    <input type="number" class="modern-input" id="price_yearly" name="price_yearly"
-                                           value="{{ old('price_yearly') }}" step="0.01" min="0"
-                                           placeholder="0.00">
-                                    {{-- <i class="fas fa-dollar-sign input-icon"></i> --}}
-                                    <span class="input-suffix">AED</span>
-                                </div>
-                                @error('price_yearly')
-                                    <div class="error-message">
-                                        <i class="fas fa-exclamation-circle"></i>
-                                        {{ $message }}
+                            <div class="pricing-horizontal-layout" id="yearly_input" style="display: none;">
+                                <div class="form-group-modern pricing-input">
+                                    <label for="price_yearly" class="modern-label">
+                                        <i class="fas fa-calendar text-cyan"></i>
+                                        Yearly Price
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="number" class="modern-input" id="price_yearly" name="price_yearly"
+                                               value="{{ old('price_yearly') }}" step="0.01" min="0"
+                                               placeholder="0.00">
+                                        <span class="input-suffix">AED</span>
                                     </div>
-                                @enderror
+                                    @error('price_yearly')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <!-- Yearly Price Description -->
+                                <div class="form-group-modern pricing-description">
+                                    <label for="price_yearly_description" class="modern-label">
+                                        <i class="fas fa-align-left text-cyan"></i>
+                                        Description
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <textarea class="modern-textarea" id="price_yearly_description" name="price_yearly_description"
+                                                  placeholder="Enter description for yearly price">{{ old('price_yearly_description') }}</textarea>
+                                        <i class="fas fa-align-left input-icon"></i>
+                                    </div>
+                                    @error('price_yearly_description')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Duration -->
-                <div class="form-group-modern">
-                    <label for="duration" class="modern-label">
-                        <i class="fas fa-clock text-cyan"></i>
-                        Duration
-                        <span class="optional-badge">Optional</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="text" class="modern-input" id="duration" name="duration"
-                               value="{{ old('duration') }}" placeholder="e.g., 2 hours">
-                        <i class="fas fa-clock input-icon"></i>
-                    </div>
-                    @error('duration')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Estimated time to complete this service
-                    </div>
-                </div>
 
                 <!-- Status -->
                 <div class="form-group-modern">
@@ -911,6 +972,23 @@
         transition: all 0.3s ease;
     }
 
+    .pricing-description {
+        margin-top: 15px;
+    }
+
+    .pricing-horizontal-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .pricing-horizontal-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
     /* Checkbox Styling */
     .checkbox-wrapper {
         display: flex;
@@ -1269,8 +1347,9 @@
                     inputContainer.slideDown(300);
                 } else {
                     inputContainer.slideUp(300, function() {
-                        // Clear input value when hiding
-                        inputContainer.find('input').val('');
+                        // Clear input values when hiding
+                        inputContainer.find('input[type="number"]').val('');
+                        inputContainer.find('textarea').val('');
                     });
                 }
             });
@@ -1284,13 +1363,13 @@
         togglePricingInput('enable_yearly', 'yearly_input');
 
         // Check and show inputs if old data exists
-        @if(old('price_weekly'))
+        @if(old('price_weekly') || old('price_weekly_description'))
             $('#enable_weekly').prop('checked', true).trigger('change');
         @endif
-        @if(old('price_monthly'))
+        @if(old('price_monthly') || old('price_monthly_description'))
             $('#enable_monthly').prop('checked', true).trigger('change');
         @endif
-        @if(old('price_yearly'))
+        @if(old('price_yearly') || old('price_yearly_description'))
             $('#enable_yearly').prop('checked', true).trigger('change');
         @endif
         // One time price is always visible by default (checkbox checked)

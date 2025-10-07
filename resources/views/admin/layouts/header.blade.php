@@ -343,6 +343,40 @@
         .nav-item.active {
             border-left: 3px solid #00d4ff;
         }
+
+        /* Specific styling for Employees nav item */
+        .nav-item.nav-employees.active {
+            border-left: 3px solid #10b981 !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .nav-item.nav-employees.active .nav-link {
+            color: #ffffff !important;
+        }
+
+        .nav-item.nav-employees.active .nav-link i {
+            color: #10b981 !important;
+        }
+
+        /* Specific styling for Bookings nav item */
+        .nav-item.nav-bookings.active {
+            border-left: 3px solid #3b82f6 !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .nav-item.nav-bookings.active .nav-link {
+            color: #ffffff !important;
+        }
+
+        .nav-item.nav-bookings.active .nav-link i {
+            color: #3b82f6 !important;
+        }
+
+        /* Protection against Service Management JS interference */
+        .nav-item.nav-employees, .nav-item.nav-bookings {
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
 
@@ -374,8 +408,12 @@
                         </a>
                     </li>
                 @endif
-                <li
-                    class="nav-item {{ request()->routeIs('services.*') || str_contains(request()->url(), '/services') ? 'active' : '' }}">
+
+                <li class="nav-item {{ (
+                    str_contains(request()->url(), '/services') ||
+                    str_contains(request()->url(), '/categories') ||
+                    str_contains(request()->url(), '/subcategories')
+                ) ? 'active' : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -383,31 +421,31 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.categories.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.categories.index') }}" class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
 
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item">
+                            <a href="{{ route('services.services.index') }}" class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
                         </div>
                         <!-- Flyout menu for collapsed sidebar -->
                         <div class="service-flyout-menu">
-                            <a href="{{ route('services.categories.index') }}" class="flyout-item">
+                            <a href="{{ route('services.categories.index') }}" class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
-                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item">
+                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="flyout-item">
+                            <a href="{{ route('services.services.index') }}" class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
@@ -421,8 +459,13 @@
                     $(document).ready(function() {
                         function isServiceManagementPage() {
                             const path = window.location.pathname;
-                            return path.includes('/services') || path.includes('/categories') || path.includes(
-                                '/subcategories');
+                            const href = window.location.href;
+                            return path.includes('/services') ||
+                                   path.includes('/categories') ||
+                                   path.includes('/subcategories') ||
+                                   href.includes('services.categories') ||
+                                   href.includes('services.subcategories') ||
+                                   href.includes('services.services');
                         }
 
                         // Check if on service management page and show dropdown
@@ -435,9 +478,9 @@
                             const currentRoute = window.location.href;
 
                             // Check for services routes (more specific patterns)
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
-                                    .includes('/subcategories'))) {
+                            if (currentPath.includes('/services') &&
+                                (currentRoute.includes('services.services') ||
+                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
                             }
                             // Check for categories routes
@@ -445,8 +488,7 @@
                                 $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
                             }
                             // Check for subcategories routes
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes(
-                                    'services.subcategories')) {
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
                                 $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -502,14 +544,13 @@
                             $('.service-flyout-menu .flyout-item').removeClass('active');
 
                             // Add active class based on current route
-                            if (currentPath.includes('/services/services') || currentRoute.includes('services.services') ||
-                                (currentPath.includes('/services') && !currentPath.includes('/categories') && !currentPath
-                                    .includes('/subcategories'))) {
+                            if (currentPath.includes('/services') &&
+                                (currentRoute.includes('services.services') ||
+                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-flyout-menu a[href*="services.services"]').addClass('active');
                             } else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
-                            } else if (currentPath.includes('/subcategories') || currentRoute.includes(
-                                    'services.subcategories')) {
+                            } else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
                                 $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -529,16 +570,19 @@
                             e.stopPropagation();
                         });
 
-                        // Watch for sidebar collapse changes
+                        // Watch for sidebar collapse changes - only for service menu
                         const observer = new MutationObserver(function(mutations) {
                             mutations.forEach(function(mutation) {
                                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                                    handleServiceMenuCollapse();
+                                    const target = mutation.target;
+                                    if (target.classList.contains('sidebar')) {
+                                        handleServiceMenuCollapse();
+                                    }
                                 }
                             });
                         });
 
-                        // Start observing sidebar for class changes
+                        // Start observing sidebar for class changes - be more specific
                         const sidebar = document.querySelector('.sidebar');
                         if (sidebar) {
                             observer.observe(sidebar, {
@@ -546,6 +590,44 @@
                                 attributeFilter: ['class']
                             });
                         }
+
+                        // Ensure other nav items are not affected by service menu JS
+                        $(document).ready(function() {
+                            // Store original active states before any JS manipulation
+                            $('.nav-item').each(function() {
+                                const $navItem = $(this);
+                                if ($navItem.hasClass('active')) {
+                                    $navItem.attr('data-original-active', 'true');
+                                }
+                            });
+
+                            // Re-apply active states after service menu JS runs
+                            setTimeout(function() {
+                                $('.nav-item[data-original-active="true"]').each(function() {
+                                    const $navItem = $(this);
+                                    // Ensure active state is maintained and not overridden
+                                    $navItem.addClass('active');
+                                });
+                            }, 200);
+                        });
+
+                        // Specific protection for Employees and Bookings nav items
+                        $(document).on('click', '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]', function(e) {
+                            const $navItem = $(this).closest('.nav-item');
+                            // Ensure active state is applied immediately and protected
+                            setTimeout(function() {
+                                $('.nav-item').removeClass('active');
+                                $navItem.addClass('active');
+                            }, 10);
+                        });
+
+                        // Protect against Service Management JS interference
+                        $(document).on('DOMSubtreeModified', '.nav-employees, .nav-bookings', function() {
+                            const $navItem = $(this);
+                            if ($navItem.attr('data-original-active') === 'true' && !$navItem.hasClass('active')) {
+                                $navItem.addClass('active');
+                            }
+                        });
                     });
 
                     // Initialize user menu dropdown

@@ -2,68 +2,160 @@
 
 @section('content')
     <div class="content-area">
-        <div class="">
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <h3>Service Provider Details</h3>
-                    <a href="{{ route('serviceProviders.index') }}" class="btn btn-secondary">Back</a>
+        <div class="profile-container">
+            <!-- Header Section -->
+            <div class="profile-header">
+                <div class="profile-title-group">
+                    <div class="profile-icon-wrapper">
+                        <i class="fas fa-user-circle profile-main-icon"></i>
+                    </div>
+                    <div class="profile-title-text">
+                        <h2 class="profile-title">Employee Details</h2>
+                        <p class="profile-subtitle">View complete employee information and account details</p>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <!-- Service Provider Image -->
-                    <div class="row mb-4">
-                        <div class="col-12 text-center d-flex justify-content-flex-start">
+                <a href="{{ route('serviceProviders.index') }}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Employees</span>
+                </a>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-grid">
+                    <!-- Profile Image Section -->
+                    <div class="profile-image-section">
+                        <div class="image-container">
                             @if ($serviceProvider->image)
-                                <img src="{{ asset('User_images/' . $serviceProvider->image) }}"
-                                    alt="{{ $serviceProvider->name }}" class="rounded-circle"
-                                    style="width: 100px; height: 100px; object-fit: cover;">
+                                <img src="{{ asset('user_images/' . $serviceProvider->image) }}"
+                                    alt="{{ $serviceProvider->name }}" class="profile-image">
                             @else
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto"
-                                    style="width: 100px; height: 100px;">
-                                    <i class="fas fa-user text-white" style="font-size: 40px;"></i>
+                                <div class="profile-image no-image">
+                                    <i class="fas fa-user"></i>
                                 </div>
                             @endif
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5><strong>Name:</strong></h5>
-                            <p>{{ $serviceProvider->name }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><strong>Email:</strong></h5>
-                            <p>{{ $serviceProvider->email ?? 'N/A' }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5><strong>Phone:</strong></h5>
-                            <p>{{ $serviceProvider->phone ?? 'N/A' }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><strong>Role:</strong></h5>
-                            <p>{{ $serviceProvider->role ?? 'serviceprovider' }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <h5><strong>Address:</strong></h5>
-                            <p>{{ $serviceProvider->address ?? 'N/A' }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5><strong>Created At:</strong></h5>
-                            <p>{{ $serviceProvider->created_at->format('d/m/Y H:i') }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><strong>Updated At:</strong></h5>
-                            <p>{{ $serviceProvider->updated_at->format('d/m/Y H:i') }}</p>
+                        <div class="employee-status">
+                            <span class="status-badge active">
+                                <i class="fas fa-circle"></i>
+                                Service Provider
+                            </span>
                         </div>
                     </div>
 
+                    <!-- Profile Information Section -->
+                    <div class="profile-info-section">
+                        <!-- Basic Information -->
+                        <div class="info-section">
+                            <div class="section-header">
+                                <i class="fas fa-user"></i>
+                                <h3>Basic Information</h3>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-user"></i>
+                                        <span>Full Name</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->name }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>Email Address</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->email ?? 'Not provided' }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-phone"></i>
+                                        <span>Phone Number</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->phone ?? 'Not provided' }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-user-tag"></i>
+                                        <span>Role</span>
+                                    </div>
+                                    <div class="info-value">
+                                        <span class="role-badge">{{ ucfirst($serviceProvider->role ?? 'serviceprovider') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="info-section">
+                            <div class="section-header">
+                                <i class="fas fa-address-book"></i>
+                                <h3>Contact Information</h3>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-item full-width">
+                                    <div class="info-label">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Address</span>
+                                    </div>
+                                    <div class="info-value address-value">
+                                        {{ $serviceProvider->address ?? 'Not provided' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Information -->
+                        <div class="info-section">
+                            <div class="section-header">
+                                <i class="fas fa-calendar"></i>
+                                <h3>Account Information</h3>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-plus"></i>
+                                        <span>Account Created</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->created_at->format('M d, Y \a\t H:i') }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>Last Updated</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->updated_at->format('M d, Y \a\t H:i') }}</div>
+                                </div>
+
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Member Since</span>
+                                    </div>
+                                    <div class="info-value">{{ $serviceProvider->created_at->format('F Y') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="profile-actions">
+                    <a href="{{ route('serviceProviders.edit', $serviceProvider->id) }}" class="action-btn edit-btn">
+                        <i class="fas fa-edit"></i>
+                        <span>Edit Employee</span>
+                    </a>
+                    <a href="{{ route('serviceProviders.index') }}" class="action-btn back-btn">
+                        <i class="fas fa-list"></i>
+                        <span>View All Employees</span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-@endsection
