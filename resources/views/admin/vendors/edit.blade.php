@@ -376,7 +376,7 @@
                                     <i class="fas fa-cash-register"></i>
                                     Payment Type
                                 </label>
-                                <select id="payment_type" name="payment_type" class="form-input">
+                                <select id="payment_type" name="payment_type" class="modern-filter-select">
                                     <option value="">Select Payment Type</option>
                                     <option value="fixed_rate" {{ old('payment_type', $vendor->payment_type) == 'fixed_rate' ? 'selected' : '' }}>Fixed Rate</option>
                                     <option value="commission" {{ old('payment_type', $vendor->payment_type) == 'commission' ? 'selected' : '' }}>Commission</option>
@@ -460,6 +460,37 @@
     </div>
 
     <style>
+
+        .modern-filter-input, .modern-filter-select {
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #ffffff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .modern-filter-select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+
+    .modern-filter-select option {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+
+    .modern-filter-input:focus, .modern-filter-select:focus {
+        outline: none;
+        border-color: #00d4ff;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    }
         .form-container {
             max-width: 1200px;
             margin: 0 auto;

@@ -31,6 +31,23 @@
             <!-- Content Section -->
             <div class="modern-view-card">
                 <div class="view-content">
+                    <!-- Vendor Profile Section -->
+                    <div class="vendor-profile-section">
+                        <div class="vendor-avatar">
+                            @if ($vendor->image)
+                                <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}" class="vendor-avatar-img">
+                            @else
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="vendor-info">
+                            <h2 class="vendor-name">{{ $vendor->name }}</h2>
+                            <p class="vendor-role">Vendor Account</p>
+                        </div>
+                    </div>
+
                     <!-- Main Info Grid -->
                     <div class="info-grid">
                         <!-- Vendor Name -->
@@ -291,6 +308,64 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        /* Vendor Profile Section */
+        .vendor-profile-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vendor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+        }
+
+        .vendor-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 212, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d4ff;
+            font-size: 40px;
+        }
+
+        .vendor-info {
+            flex: 1;
+        }
+
+        .vendor-name {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vendor-role {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin: 0;
         }
 
         /* Header Styles */
@@ -659,6 +734,22 @@
             .info-val {
                 max-width: 100%;
                 text-align: left;
+            }
+
+            /* Vendor Profile Responsive */
+            .vendor-profile-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .vendor-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .vendor-name {
+                font-size: 24px;
             }
         }
     </style>
