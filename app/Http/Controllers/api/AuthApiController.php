@@ -104,7 +104,8 @@ class AuthApiController extends Controller
                 ], 401);
             }
 
-            $user = Auth::user();
+            $usr = Auth::user();
+            $user = User::where($loginField, $loginValue)->first();
 
             // Check if user is active
             if ($user->active != 1) {

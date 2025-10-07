@@ -38,28 +38,28 @@ class ServiceController extends Controller
         return view('admin.services.categories.create');
     }
 
-    public function categoriesStore(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
-            'description' => 'nullable|string',
-            'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        public function categoriesStore(Request $request)
+        {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255|unique:categories',
+                'description' => 'nullable|string',
+                'status' => 'required|in:active,inactive',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move('Category_images', $imageName);
-        } else {
-            $imageName = '';
+            if ($request->hasFile('image')) {
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move('Category_images', $imageName);
+            } else {
+                $imageName = '';
+            }
+
+            $validated['image'] = $imageName;
+
+            Category::create($validated);
+
+            return redirect()->route('services.categories.index')->with('success', 'Category created successfully.');
         }
-
-        $validated['image'] = $imageName;
-
-        Category::create($validated);
-
-        return redirect()->route('services.categories.index')->with('success', 'Category created successfully.');
-    }
 
     public function categoriesEdit(Category $category)
     {
