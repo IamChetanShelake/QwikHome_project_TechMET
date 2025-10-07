@@ -35,6 +35,7 @@
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>status</th>
+                                <th>Created at</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,6 +62,9 @@
                                             <span class="status-badge pending"> Blocked </span>
                                         @endif
 
+                                    </td>
+                                    <td>
+                                        {{ $customer->created_at->format('d M, Y') }}
                                     </td>
 
                                     <td>

@@ -44,7 +44,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -72,13 +72,14 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($category->image && file_exists(public_path('Category_images/' . $category->image))) {
-                unlink(public_path('Category_images/' . $category->image));
+            $oldfile = public_path('Category_images/' . $category->image);
+            if ($category->image && file_exists($oldfile)) {
+                unlink($oldfile);
             }
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move('Category_images', $imageName);
@@ -144,7 +145,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -174,13 +175,14 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($subcategory->image && file_exists(public_path('Subcategory_images/' . $subcategory->image))) {
-                unlink(public_path('Subcategory_images/' . $subcategory->image));
+            $oldfile = public_path('Subcategory_images/' . $subcategory->image);
+            if ($subcategory->image && file_exists($oldfile)) {
+                unlink($oldfile);
             }
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move('Subcategory_images', $imageName);
@@ -263,7 +265,7 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -274,7 +276,7 @@ class ServiceController extends Controller
         // Handle main service image
         if ($request->hasFile('image')) {
             $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->move(public_path('Service_images'), $imageName);
+            $request->image->move('Service_images', $imageName);
         } else {
             $imageName = '';
         }
@@ -298,7 +300,7 @@ class ServiceController extends Controller
                 if ($request->hasFile($fileKey)) {
                     $file = $request->file($fileKey);
                     $reqImage = time() . '_' . $index . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('Service_requirement_images'), $reqImage);
+                    $file->move('Service_requirement_images', $reqImage);
                 }
 
                 ServiceRequirement::create([
@@ -317,7 +319,7 @@ class ServiceController extends Controller
                 if ($request->hasFile($fileKey)) {
                     $file = $request->file($fileKey);
                     $processImage = time() . '_process_' . $index . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('Process_images'), $processImage);
+                    $file->move('Process_images', $processImage);
                 }
 
                 Process::create([
@@ -335,7 +337,7 @@ class ServiceController extends Controller
 
     public function servicesShow(Service $service)
     {
-        $service->load(['category', 'subcategory', 'processes' => function($query) {
+        $service->load(['category', 'subcategory', 'processes' => function ($query) {
             $query->orderBy('order');
         }, 'requirements']);
         return view('admin.services.services.show', compact('service'));
@@ -366,7 +368,7 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -377,11 +379,12 @@ class ServiceController extends Controller
         // Handle main service image
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($service->image && file_exists(public_path('Service_images/' . $service->image))) {
-                unlink(public_path('Service_images/' . $service->image));
+            $oldfile = public_path('Service_images/' . $service->image);
+            if ($service->image && file_exists($oldfile)) {
+                unlink($oldfile);
             }
             $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->move(public_path('Service_images'), $imageName);
+            $request->image->move('Service_images', $imageName);
             $validated['image'] = $imageName;
         }
 
@@ -404,7 +407,7 @@ class ServiceController extends Controller
                 if ($request->hasFile($fileKey)) {
                     $file = $request->file($fileKey);
                     $reqImage = time() . '_' . $index . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('Service_requirement_images'), $reqImage);
+                    $file->move('Service_requirement_images', $reqImage);
                 }
 
                 ServiceRequirement::create([
@@ -425,7 +428,7 @@ class ServiceController extends Controller
                 if ($request->hasFile($fileKey)) {
                     $file = $request->file($fileKey);
                     $processImage = time() . '_process_' . $index . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('Process_images'), $processImage);
+                    $file->move('Process_images', $processImage);
                 }
 
                 Process::create([

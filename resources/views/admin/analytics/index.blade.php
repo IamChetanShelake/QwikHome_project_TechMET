@@ -20,18 +20,21 @@
                             <div class="filter-row">
                                 <div class="filter-group">
                                     <label for="start_date">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}" class="filter-input">
+                                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}"
+                                        class="filter-input">
                                 </div>
                                 <div class="filter-group">
                                     <label for="end_date">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}" class="filter-input">
+                                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}"
+                                        class="filter-input">
                                 </div>
                                 <div class="filter-group">
                                     <label for="service_id">Service</label>
                                     <select id="service_id" name="service_id" class="filter-select">
                                         <option value="">All Services</option>
-                                        @foreach($services as $service)
-                                            <option value="{{ $service->id }}" {{ $serviceId == $service->id ? 'selected' : '' }}>
+                                        @foreach ($services as $service)
+                                            <option value="{{ $service->id }}"
+                                                {{ $serviceId == $service->id ? 'selected' : '' }}>
                                                 {{ $service->name }}
                                             </option>
                                         @endforeach
@@ -41,8 +44,9 @@
                                     <label for="provider_id">Provider</label>
                                     <select id="provider_id" name="provider_id" class="filter-select">
                                         <option value="">All Providers</option>
-                                        @foreach($providers as $provider)
-                                            <option value="{{ $provider->id }}" {{ $providerId == $provider->id ? 'selected' : '' }}>
+                                        @foreach ($providers as $provider)
+                                            <option value="{{ $provider->id }}"
+                                                {{ $providerId == $provider->id ? 'selected' : '' }}>
                                                 {{ $provider->name }}
                                             </option>
                                         @endforeach
@@ -79,10 +83,11 @@
 
             <div class="summary-card revenue-card">
                 <div class="card-icon">
-                    <i class="fas fa-dollar-sign"></i>
+                    {{-- <i class="fas fa-dollar-sign"></i> --}}
+                    <b>AED</b>
                 </div>
                 <div class="card-content">
-                    <h3>₹{{ number_format($analytics['total_revenue'], 2) }}</h3>
+                    <h3>{{ number_format($analytics['total_revenue'], 2) }}</h3>
                     <p>Total Revenue</p>
                     <div class="card-trend positive">
                         <i class="fas fa-arrow-up"></i>
@@ -99,7 +104,8 @@
                     <h3>{{ number_format($analytics['completed_bookings']) }}</h3>
                     <p>Completed Bookings</p>
                     <div class="card-trend">
-                        <span>{{ $analytics['total_bookings'] > 0 ? round(($analytics['completed_bookings'] / $analytics['total_bookings']) * 100) : 0 }}% Rate</span>
+                        <span>{{ $analytics['total_bookings'] > 0 ? round(($analytics['completed_bookings'] / $analytics['total_bookings']) * 100) : 0 }}%
+                            Rate</span>
                     </div>
                 </div>
             </div>
@@ -726,7 +732,7 @@
                 data: {
                     labels: revenueData.map(item => item.month),
                     datasets: [{
-                        label: 'Revenue (₹)',
+                        label: 'Revenue (AED)',
                         data: revenueData.map(item => item.revenue),
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
@@ -755,7 +761,7 @@
                             ticks: {
                                 color: 'rgba(255, 255, 255, 0.7)',
                                 callback: function(value) {
-                                    return '₹' + value.toLocaleString();
+                                    return value.toLocaleString() + ' AED';
                                 }
                             }
                         },
@@ -780,7 +786,10 @@
                 data: {
                     labels: dailyData.map(item => {
                         const date = new Date(item.date);
-                        return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+                        return date.toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short'
+                        });
                     }),
                     datasets: [{
                         label: 'Bookings',
@@ -840,7 +849,8 @@
                     labels: statusData.map(item => item.status),
                     datasets: [{
                         data: statusData.map(item => item.count),
-                        backgroundColor: statusData.map(item => statusColors[item.status] || '#6b7280'),
+                        backgroundColor: statusData.map(item => statusColors[item.status] ||
+                            '#6b7280'),
                         borderWidth: 0,
                         hoverBorderWidth: 2,
                         hoverBorderColor: '#ffffff'
