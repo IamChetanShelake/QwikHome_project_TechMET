@@ -20,39 +20,39 @@
                 </a>
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fas fa-rupee-sign"></i>
+                        <b>AED</b>
                     </div>
                     <div class="stat-content">
-                        <h3>₹{{ number_format($stats['total_revenue'], 2) }}</h3>
+                        <h3>{{ number_format($stats['total_revenue'], 2) }}</h3>
                         <p>Total Revenue</p>
                         <span class="stat-info">From all bookings</span>
                     </div>
                 </div>
-                @if(auth()->user()->isAdmin())
-                <a href="{{ route('customers') }}" class="stat-card-link">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('customers') }}" class="stat-card-link">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>{{ number_format($stats['total_customers']) }}</h3>
+                                <p>Total Customers</p>
+                                <span class="stat-change positive">View All</span>
+                            </div>
                         </div>
-                        <div class="stat-content">
-                            <h3>{{ number_format($stats['total_customers']) }}</h3>
-                            <p>Total Customers</p>
-                            <span class="stat-change positive">View All</span>
+                    </a>
+                    <a href="{{ route('serviceProviders.index') }}" class="stat-card-link">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>{{ number_format($stats['total_providers']) }}</h3>
+                                <p>Service Providers</p>
+                                <span class="stat-change positive">Manage</span>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                <a href="{{ route('serviceProviders.index') }}" class="stat-card-link">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="stat-content">
-                            <h3>{{ number_format($stats['total_providers']) }}</h3>
-                            <p>Service Providers</p>
-                            <span class="stat-change positive">Manage</span>
-                        </div>
-                    </div>
-                </a>
+                    </a>
                 @endif
             </div>
 
@@ -69,40 +69,40 @@
                             </div>
                         </div>
                     </a>
-                    @if(auth()->user()->isAdmin())
-                    <a href="{{ route('coupons.index') }}" class="stats-item">
-                        <div class="stats-item-content">
-                            <div class="stats-icon">
-                                <i class="fas fa-tags"></i>
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('coupons.index') }}" class="stats-item">
+                            <div class="stats-item-content">
+                                <div class="stats-icon">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                                <div class="stats-info">
+                                    <h4>{{ number_format($stats['total_coupons']) }}</h4>
+                                    <p>Coupons</p>
+                                </div>
                             </div>
-                            <div class="stats-info">
-                                <h4>{{ number_format($stats['total_coupons']) }}</h4>
-                                <p>Coupons</p>
+                        </a>
+                        <a href="{{ route('admin.vendors.index') }}" class="stats-item">
+                            <div class="stats-item-content">
+                                <div class="stats-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div class="stats-info">
+                                    <h4>{{ number_format($stats['total_vendors']) }}</h4>
+                                    <p>Vendors</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <a href="{{ route('admin.vendors.index') }}" class="stats-item">
-                        <div class="stats-item-content">
-                            <div class="stats-icon">
-                                <i class="fas fa-user-tie"></i>
+                        </a>
+                        <a href="{{ route('complaints.index') }}" class="stats-item">
+                            <div class="stats-item-content">
+                                <div class="stats-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stats-info">
+                                    <h4>{{ number_format($stats['total_complaints']) }}</h4>
+                                    <p>Complaints</p>
+                                </div>
                             </div>
-                            <div class="stats-info">
-                                <h4>{{ number_format($stats['total_vendors']) }}</h4>
-                                <p>Vendors</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="{{ route('complaints.index') }}" class="stats-item">
-                        <div class="stats-item-content">
-                            <div class="stats-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                            <div class="stats-info">
-                                <h4>{{ number_format($stats['total_complaints']) }}</h4>
-                                <p>Complaints</p>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
                     @endif
                 </div>
             </div>
@@ -131,11 +131,12 @@
                                         <td>{{ $booking->customer->name ?? 'N/A' }}</td>
                                         <td>{{ $booking->service->name ?? 'N/A' }}</td>
                                         <td>
-                                            <span class="status-badge {{ strtolower(str_replace(' ', '-', $booking->status)) }}">
+                                            <span
+                                                class="status-badge {{ strtolower(str_replace(' ', '-', $booking->status)) }}">
                                                 {{ $booking->status }}
                                             </span>
                                         </td>
-                                        <td>₹{{ number_format($booking->price, 2) }}</td>
+                                        <td>{{ number_format($booking->price, 2) }}&nbsp;AED</td>
                                     </tr>
                                 @empty
                                     <tr>

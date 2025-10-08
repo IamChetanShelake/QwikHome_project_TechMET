@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthApiController extends Controller
 {
-    public function signup(Request $request)
+  public function signup(Request $request)
     {
         try {
             // Validate input data
@@ -20,7 +20,7 @@ class AuthApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'required|string|max:15|unique:users',
-                'role' => 'nullable|in:user,vendor,admin'
+                'role' => 'nullable'
             ]);
 
             if ($validator->fails()) {
@@ -37,6 +37,7 @@ class AuthApiController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
+                 'password' => null,
                 'role' => 'user',
                 'active' => 0
             ]);
@@ -71,9 +72,6 @@ class AuthApiController extends Controller
             $validator->after(function ($validator) use ($request) {
                 if (empty($request->phone)) {
                     $validator->errors()->add('login', 'phone number is required for login.');
-                }
-                if (!empty($request->phone)) {
-                    $validator->errors()->add('login', 'Please provide phone number.');
                 }
             });
 
@@ -163,6 +161,49 @@ class AuthApiController extends Controller
                 'success' => false,
                 'status_code' => 500,
                 'message' => 'Logout failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        try {
+            // Validate userid
+            $validator = Validator::make($request->all(), [
+                'userid' => 'required|exists:users,id',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 422,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $user = User::find($request->userid);
+
+            // Mark account as deleted
+            $user->update([
+                'is_deleted' => 1,
+                'deleted_at' => now()
+            ]);
+
+            // Optional: Delete current access token so they can't use it anymore
+            $user->currentAccessToken()->delete();
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Account deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Account deletion failed',
                 'error' => $e->getMessage()
             ], 500);
         }

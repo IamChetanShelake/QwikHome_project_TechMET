@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthApiController;
+use App\Http\Controllers\api\ProfileApiController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,17 +14,21 @@ Route::get('/test', function (Request $request) {
     ], 200);
 });
 
-// Authentication routes
+// Authentication routes--------------
 Route::post('/signup', [AuthApiController::class, 'signup']);
 Route::post('/login', [AuthApiController::class, 'login']);
+Route::post('/logout', [AuthApiController::class, 'logout']);
+Route::post('/delete-account', [AuthApiController::class, 'deleteAccount']);
+
+// profile routes-------------------
+Route::post('/update-profile', [ProfileApiController::class, 'updateProfile']);
 
 // Protected routes (require authentication)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    Route::post('/logout', [AuthApiController::class, 'logout']);
+    // Profile API route
 
     // Feedback API routes
     Route::post('/feedbacks/{bookingId}', [FeedbackController::class, 'store'])->name('api.feedback.store');
