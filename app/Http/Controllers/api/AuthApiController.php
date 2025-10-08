@@ -20,9 +20,7 @@ class AuthApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'phone' => 'required|string|max:15|unique:users',
-                'password' => ['required', 'confirmed'],
-                'password_confirmation' => 'required',
-                'role' => 'nullable|in:customer,vendor,admin'
+                'role' => 'nullable|in:user,vendor,admin'
             ]);
 
             if ($validator->fails()) {
@@ -39,17 +37,15 @@ class AuthApiController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'password' => Hash::make($request->password),
-                'role' => $request->role ?? 'customer',
-                'active' => 1
+                'role' => 'user',
+                'active' => 0
             ]);
-
-
 
             return response()->json([
                 'success' => true,
                 'status_code' => 201,
                 'message' => 'User registered successfully',
+                'otp' => '123456',
                 'user' => $user,
             ], 201);
         } catch (\Exception $e) {
@@ -65,20 +61,19 @@ class AuthApiController extends Controller
     public function login(Request $request)
     {
         try {
-            // Validate input data - user can login with either email or phone
+            // Validate input data - user can login with either email or phone and otp
             $validator = Validator::make($request->all(), [
-                'password' => 'required|string',
-                'email' => 'nullable|email|exists:users,email',
-                'phone' => 'nullable|string|exists:users,phone',
+                'otp' => 'nullable|string',
+                'phone' => 'required|string|exists:users,phone',
             ]);
 
             // Custom validation: at least one of email or phone must be provided
             $validator->after(function ($validator) use ($request) {
-                if (empty($request->email) && empty($request->phone)) {
-                    $validator->errors()->add('login', 'Either email or phone number is required for login.');
+                if (empty($request->phone)) {
+                    $validator->errors()->add('login', 'phone number is required for login.');
                 }
-                if (!empty($request->email) && !empty($request->phone)) {
-                    $validator->errors()->add('login', 'Please provide either email OR phone number, not both.');
+                if (!empty($request->phone)) {
+                    $validator->errors()->add('login', 'Please provide phone number.');
                 }
             });
 
@@ -91,12 +86,14 @@ class AuthApiController extends Controller
                 ], 422);
             }
 
-            // Check if user exists and password is correct
+            // Check if user exists and OTP is correct
             // User can login with either email or phone
-            $loginField = $request->has('email') ? 'email' : 'phone';
+            $loginField = $request->has('phone') ?? 'phone';
             $loginValue = $request->input($loginField);
 
-            if (!Auth::attempt([$loginField => $loginValue, 'password' => $request->password])) {
+            $user = User::where($loginField, $loginValue)->first();
+
+            if (!$user) {
                 return response()->json([
                     'success' => false,
                     'status_code' => 401,
@@ -104,11 +101,10 @@ class AuthApiController extends Controller
                 ], 401);
             }
 
-            $usr = Auth::user();
-            $user = User::where($loginField, $loginValue)->first();
+            Auth::login($user);
 
             // Check if user is active
-            if ($user->active != 1) {
+            if ($user->active == 1) {
                 return response()->json([
                     'success' => false,
                     'status_code' => 403,
@@ -127,6 +123,7 @@ class AuthApiController extends Controller
                 'status_code' => 200,
                 'message' => 'Login successful',
                 'data' => [
+                    'otp' => 654321,
                     'user' => $user,
                     'token' => $token
                 ]
@@ -144,6 +141,15 @@ class AuthApiController extends Controller
     public function logout(Request $request)
     {
         try {
+            $userID = $request->userid;
+            $user = User::find($userID);
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 404,
+                    'message' => 'User not found'
+                ], 404);
+            }
             // Delete the current access token
             $request->user()->currentAccessToken()->delete();
 

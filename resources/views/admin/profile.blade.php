@@ -24,7 +24,7 @@
                             <div class="col-md-12 text-center">
                                 <div class="profile-image-container position-relative d-inline-block mb-3">
                                     @if (auth()->user()->image)
-                                        <img src="{{ asset('User_images/' . auth()->user()->image) }}"
+                                        <img src="{{ asset('user_images/' . auth()->user()->image) }}"
                                             alt="{{ auth()->user()->name }}" class="rounded-circle profile-image"
                                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                                     @else
@@ -244,7 +244,8 @@
 
                         if (xhr.status === 419) {
                             errorMessage = 'CSRF token expired. Please refresh the page and try again.';
-                        } else if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.image) {
+                        } else if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON
+                            .errors.image) {
                             errorMessage = xhr.responseJSON.errors.image[0];
                         } else if (xhr.responseText) {
                             errorMessage = 'Server error: ' + xhr.status + ' ' + xhr.statusText;
@@ -276,7 +277,7 @@
                 statusDiv.removeClass('success error info').addClass(type);
                 statusDiv.html(
                     `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`
-                    );
+                );
                 statusDiv.show();
 
                 if (type === 'error') {

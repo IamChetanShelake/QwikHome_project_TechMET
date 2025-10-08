@@ -373,7 +373,8 @@
         }
 
         /* Protection against Service Management JS interference */
-        .nav-item.nav-employees, .nav-item.nav-bookings {
+        .nav-item.nav-employees,
+        .nav-item.nav-bookings {
             position: relative;
             z-index: 10;
         }
@@ -394,13 +395,15 @@
 
         <nav class="sidebar-nav">
             <ul>
-                @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'vendor')
                     <li class="nav-item {{ request()->is('admin') ? 'active' : '' }} ">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
+                @endif
+                @if (auth()->user()->role == 'admin')
                     <li class="nav-item {{ request()->is('customers*') ? 'active' : '' }} ">
                         <a href="{{ route('customers') }}" class="nav-link">
                             <i class="fas fa-users"></i>
@@ -409,11 +412,12 @@
                     </li>
                 @endif
 
-                <li class="nav-item {{ (
-                    str_contains(request()->url(), '/services') ||
+                <li
+                    class="nav-item {{ str_contains(request()->url(), '/services') ||
                     str_contains(request()->url(), '/categories') ||
                     str_contains(request()->url(), '/subcategories')
-                ) ? 'active' : '' }}">
+                        ? 'active'
+                        : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -421,31 +425,37 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.categories.index') }}" class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.categories.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
 
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.subcategories.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.services.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
                         </div>
                         <!-- Flyout menu for collapsed sidebar -->
                         <div class="service-flyout-menu">
-                            <a href="{{ route('services.categories.index') }}" class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.categories.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
-                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.subcategories.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.services.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
@@ -461,11 +471,11 @@
                             const path = window.location.pathname;
                             const href = window.location.href;
                             return path.includes('/services') ||
-                                   path.includes('/categories') ||
-                                   path.includes('/subcategories') ||
-                                   href.includes('services.categories') ||
-                                   href.includes('services.subcategories') ||
-                                   href.includes('services.services');
+                                path.includes('/categories') ||
+                                path.includes('/subcategories') ||
+                                href.includes('services.categories') ||
+                                href.includes('services.subcategories') ||
+                                href.includes('services.services');
                         }
 
                         // Check if on service management page and show dropdown
@@ -480,7 +490,7 @@
                             // Check for services routes (more specific patterns)
                             if (currentPath.includes('/services') &&
                                 (currentRoute.includes('services.services') ||
-                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
+                                    (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
                             }
                             // Check for categories routes
@@ -488,7 +498,8 @@
                                 $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
                             }
                             // Check for subcategories routes
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -546,11 +557,12 @@
                             // Add active class based on current route
                             if (currentPath.includes('/services') &&
                                 (currentRoute.includes('services.services') ||
-                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
+                                    (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-flyout-menu a[href*="services.services"]').addClass('active');
                             } else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
-                            } else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            } else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -612,14 +624,16 @@
                         });
 
                         // Specific protection for Employees and Bookings nav items
-                        $(document).on('click', '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]', function(e) {
-                            const $navItem = $(this).closest('.nav-item');
-                            // Ensure active state is applied immediately and protected
-                            setTimeout(function() {
-                                $('.nav-item').removeClass('active');
-                                $navItem.addClass('active');
-                            }, 10);
-                        });
+                        $(document).on('click',
+                            '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]',
+                            function(e) {
+                                const $navItem = $(this).closest('.nav-item');
+                                // Ensure active state is applied immediately and protected
+                                setTimeout(function() {
+                                    $('.nav-item').removeClass('active');
+                                    $navItem.addClass('active');
+                                }, 10);
+                            });
 
                         // Protect against Service Management JS interference
                         $(document).on('DOMSubtreeModified', '.nav-employees, .nav-bookings', function() {

@@ -28,6 +28,7 @@
                         <span class="stat-info">From all bookings</span>
                     </div>
                 </div>
+                @if(auth()->user()->isAdmin())
                 <a href="{{ route('customers') }}" class="stat-card-link">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -52,6 +53,7 @@
                         </div>
                     </div>
                 </a>
+                @endif
             </div>
 
             <div class="dashboard-stats-secondary">
@@ -67,6 +69,7 @@
                             </div>
                         </div>
                     </a>
+                    @if(auth()->user()->isAdmin())
                     <a href="{{ route('coupons.index') }}" class="stats-item">
                         <div class="stats-item-content">
                             <div class="stats-icon">
@@ -100,6 +103,7 @@
                             </div>
                         </div>
                     </a>
+                    @endif
                 </div>
             </div>
 

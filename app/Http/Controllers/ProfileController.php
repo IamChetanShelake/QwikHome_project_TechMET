@@ -33,7 +33,7 @@ class ProfileController extends Controller
             'email' => ['required', 'email', Rule::unique('users')->ignore(auth()->id())],
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'current_password' => 'nullable|required_with:new_password',
             'new_password' => 'nullable|min:8|confirmed',
         ]);
@@ -57,11 +57,12 @@ class ProfileController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($user->image && file_exists(public_path('User_images/' . $user->image))) {
-                unlink(public_path('User_images/' . $user->image));
+            $oldfile = public_path('user_images/' . $user->image);
+            if ($user->image && file_exists()) {
+                unlink($oldfile);
             }
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move('User_images', $imageName);
+            $request->image->move('user_images', $imageName);
             $data['image'] = $imageName;
         }
 
@@ -81,30 +82,30 @@ class ProfileController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = auth()->user();
 
         try {
             // Delete old image if exists
-            if ($user->image && file_exists(public_path('User_images/' . $user->image))) {
-                unlink(public_path('User_images/' . $user->image));
+            $oldfile = public_path('user_images/' . $user->image);
+            if ($user->image && file_exists($oldfile)) {
+                unlink($oldfile);
             }
 
             // Upload new image
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move('User_images', $imageName);
+            $request->image->move('user_images', $imageName);
 
             // Update user with new image
             $user->update(['image' => $imageName]);
 
             return response()->json([
                 'success' => true,
-                'image_url' => asset('User_images/' . $imageName),
+                'image_url' => asset('user_images/' . $imageName),
                 'message' => 'Profile image updated successfully!'
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
