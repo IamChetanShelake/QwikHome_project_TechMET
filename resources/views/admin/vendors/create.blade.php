@@ -226,6 +226,211 @@
                             </div>
                         </div>
 
+                        <!-- Document Upload Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-file-alt"></i>
+                                <h3>Required Documents</h3>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="application_document" class="form-label">
+                                        <i class="fas fa-file-signature"></i>
+                                        Signed Application <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="application_document" name="application_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <div class="file-input-display">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Choose signed application...</span>
+                                        </div>
+                                    </div>
+                                    <div class="file-info">
+                                        <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
+                                    </div>
+                                    @error('application_document')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="trade_license_document" class="form-label">
+                                        <i class="fas fa-file-contract"></i>
+                                        Trade License (Valid) <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="trade_license_document" name="trade_license_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <div class="file-input-display">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Choose trade license...</span>
+                                        </div>
+                                    </div>
+                                    <div class="file-info">
+                                        <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
+                                    </div>
+                                    @error('trade_license_document')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="vat_certificate_document" class="form-label">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        VAT Certificate/Tax Certificate <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="vat_certificate_document" name="vat_certificate_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <div class="file-input-display">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Choose VAT certificate...</span>
+                                        </div>
+                                    </div>
+                                    <div class="file-info">
+                                        <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
+                                    </div>
+                                    @error('vat_certificate_document')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="staff_documents" class="form-label">
+                                        <i class="fas fa-users"></i>
+                                        Staff Documents (Police Clearance) <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="staff_documents" name="staff_documents" class="file-input" accept="application/pdf,image/*" required>
+                                        <div class="file-input-display">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Choose staff documents...</span>
+                                        </div>
+                                    </div>
+                                    <div class="file-info">
+                                        <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
+                                    </div>
+                                    @error('staff_documents')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="contract_document" class="form-label">
+                                        <i class="fas fa-file-contract"></i>
+                                        Contract to be Signed <span class="required">*</span>
+                                    </label>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="contract_document" name="contract_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <div class="file-input-display">
+                                            <i class="fas fa-upload"></i>
+                                            <span>Choose contract document...</span>
+                                        </div>
+                                    <div class="file-info">
+                                        <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
+                                    </div>
+                                    @error('contract_document')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Terms Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <h3>Payment Terms</h3>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="payment_type" class="form-label">
+                                        <i class="fas fa-cash-register"></i>
+                                        Payment Type <span class="required">*</span>
+                                    </label>
+                                    <select id="payment_type" name="payment_type" class="modern-filter-select" required>
+                                        <option value="">Select Payment Type</option>
+                                        <option value="fixed_rate">Fixed Rate</option>
+                                        <option value="commission">Commission</option>
+                                        <option value="revenue_share">Revenue Share</option>
+                                    </select>
+                                    @error('payment_type')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="fixed_rate_container" style="display: none;">
+                                    <label for="fixed_rate_amount" class="form-label">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        Fixed Rate Amount
+                                    </label>
+                                    <input type="number" id="fixed_rate_amount" name="fixed_rate_amount" class="form-input" step="0.01" placeholder="Enter fixed rate amount" value="{{ old('fixed_rate_amount') }}">
+                                    @error('fixed_rate_amount')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" id="commission_container" style="display: none;">
+                                    <label for="commission_rate" class="form-label">
+                                        <i class="fas fa-percent"></i>
+                                        Commission Rate (%)
+                                    </label>
+                                    <input type="number" id="commission_rate" name="commission_rate" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate" value="{{ old('commission_rate') }}">
+                                    @error('commission_rate')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="revenue_share_container" style="display: none;">
+                                    <label for="revenue_share_ratio" class="form-label">
+                                        <i class="fas fa-chart-pie"></i>
+                                        Revenue Share Ratio
+                                    </label>
+                                    <input type="text" id="revenue_share_ratio" name="revenue_share_ratio" class="form-input" placeholder="e.g., 40:60" value="{{ old('revenue_share_ratio') }}">
+                                    <div class="field-info">
+                                        <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
+                                    </div>
+                                    @error('revenue_share_ratio')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Form Actions -->
                     <div class="form-actions">
                         <a href="{{ route('admin.vendors.index') }}" class="cancel-btn">
@@ -243,6 +448,36 @@
     </div>
 
     <style>
+        .modern-filter-input, .modern-filter-select {
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #ffffff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .modern-filter-select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+
+    .modern-filter-select option {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+
+    .modern-filter-input:focus, .modern-filter-select:focus {
+        outline: none;
+        border-color: #00d4ff;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    }
         .form-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -748,6 +983,27 @@
                 this.setCustomValidity('Passwords do not match');
             } else {
                 this.setCustomValidity('');
+            }
+        });
+    </script>
+
+    <script>
+        // Handle payment type selection
+        document.getElementById('payment_type').addEventListener('change', function() {
+            const selectedValue = this.value;
+
+            // Hide all containers
+            document.getElementById('fixed_rate_container').style.display = 'none';
+            document.getElementById('commission_container').style.display = 'none';
+            document.getElementById('revenue_share_container').style.display = 'none';
+
+            // Show the appropriate container based on selection
+            if (selectedValue === 'fixed_rate') {
+                document.getElementById('fixed_rate_container').style.display = 'flex';
+            } else if (selectedValue === 'commission') {
+                document.getElementById('commission_container').style.display = 'flex';
+            } else if (selectedValue === 'revenue_share') {
+                document.getElementById('revenue_share_container').style.display = 'flex';
             }
         });
     </script>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('whats_include')->nullable()->after('description');
 
             // One-time price and description
-            $table->decimal('price_onetime', 10, 2)->nullable()->after('price');
+            $table->decimal('price_onetime', 10, 2)->nullable();
             $table->text('price_onetime_desc')->nullable()->after('price_onetime');
 
             // Weekly price and description
@@ -35,14 +35,7 @@ return new class extends Migration
 
             $table->boolean('is_arabic')->default(false)->after('price_yearly_desc');
 
-            // Rename existing price column to price_onetime
-            $table->renameColumn('price', 'price_onetime');
-        });
-
-        // Copy existing price values to price_onetime and set default description
-        DB::table('services')->update([
-            'price_onetime_desc' => 'One-time service charge'
-        ]);
+           });
     }
 
     /**
@@ -52,7 +45,7 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             // Reverse the column rename first
-            $table->renameColumn('price_onetime', 'price');
+             // $table->renameColumn('price_onetime', 'price');
 
             // Drop the added columns
             $table->dropColumn([

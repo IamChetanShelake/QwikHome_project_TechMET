@@ -2,185 +2,298 @@
 
 @section('content')
     <div class="content-area">
-        <div class="profile-container">
+        <div class="modern-view-container">
             <!-- Header Section -->
-            <div class="profile-header">
-                <div class="profile-info">
-                    <div class="profile-avatar">
-                        @if ($vendor->image)
-                            <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}">
-                        @else
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="profile-details">
-                        <h1 class="profile-name">{{ $vendor->name }}</h1>
-                        <p class="profile-role">Vendor Account</p>
-                        <div class="profile-meta">
-                            <span class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                Joined {{ $vendor->created_at->format('M j, Y') }}
-                            </span>
-                            <span class="meta-item">
-                                <i class="fas fa-clock"></i>
-                                Last updated {{ $vendor->updated_at->diffForHumans() }}
-                            </span>
+            <div class="view-header-section">
+                <div class="view-header-content">
+                    <div class="view-title-group">
+                        <div class="view-icon-wrapper">
+                            <i class="fas fa-user-tie view-main-icon"></i>
+                        </div>
+                        <div class="view-title-text">
+                            <h2 class="view-title">Vendor Details</h2>
+                            <p class="view-subtitle">Complete information about this vendor account</p>
                         </div>
                     </div>
-                </div>
-                <div class="profile-actions">
-                    <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="action-btn primary">
-                        <i class="fas fa-edit"></i>
-                        <span>Edit Vendor</span>
-                    </a>
-                    <a href="{{ route('admin.vendors.index') }}" class="action-btn secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Back to List</span>
-                    </a>
+                    <div class="view-actions">
+                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="modern-btn modern-btn-primary">
+                            <i class="fas fa-edit"></i>
+                            <span>Edit Vendor</span>
+                        </a>
+                        <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back to List</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Content Grid -->
-            <div class="profile-content">
-                <!-- Basic Information -->
-                <div class="info-card">
-                    <div class="card-header">
-                        <i class="fas fa-user"></i>
-                        <h3>Basic Information</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="info-row">
-                            <div class="info-label">Full Name</div>
-                            <div class="info-value">{{ $vendor->name }}</div>
+            <!-- Content Section -->
+            <div class="modern-view-card">
+                <div class="view-content">
+                    <!-- Vendor Profile Section -->
+                    <div class="vendor-profile-section">
+                        <div class="vendor-avatar">
+                            @if ($vendor->image)
+                                <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}" class="vendor-avatar-img">
+                            @else
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Email Address</div>
+                        <div class="vendor-info">
+                            <h2 class="vendor-name">{{ $vendor->name }}</h2>
+                            <p class="vendor-role">Vendor Account</p>
+                        </div>
+                    </div>
+
+                    <!-- Main Info Grid -->
+                    <div class="info-grid">
+                        <!-- Vendor Name -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user"></i>
+                                <span>Vendor Name</span>
+                            </div>
+                            <div class="info-value">
+                                <span class="text-primary">{{ $vendor->name }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email Address</span>
+                            </div>
                             <div class="info-value">
                                 <a href="mailto:{{ $vendor->email }}" class="email-link">
-                                    <i class="fas fa-envelope"></i>
+                                    <i class="fas fa-external-link-alt"></i>
                                     {{ $vendor->email }}
                                 </a>
                             </div>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Account Status</div>
+
+                        <!-- Phone Number -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-phone"></i>
+                                <span>Phone Number</span>
+                            </div>
                             <div class="info-value">
-                                <span class="status-badge active">
+                                @if($vendor->phone)
+                                    <a href="tel:{{ $vendor->phone }}" class="phone-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        {{ $vendor->phone }}
+                                    </a>
+                                @else
+                                    <span class="text-muted">Not provided</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-toggle-on"></i>
+                                <span>Status</span>
+                            </div>
+                            <div class="info-value">
+                                <span class="status-badge status-active">
                                     <i class="fas fa-check-circle"></i>
                                     Active
                                 </span>
                             </div>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Member Since</div>
-                            <div class="info-value">{{ $vendor->created_at->format('F j, Y') }}</div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Contact Information -->
-                <div class="info-card">
-                    <div class="card-header">
-                        <i class="fas fa-address-book"></i>
-                        <h3>Contact Information</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="info-row">
-                            <div class="info-label">Phone Number</div>
+                        <!-- Member Since -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Member Since</span>
+                            </div>
                             <div class="info-value">
-                                @if ($vendor->phone)
-                                    <a href="tel:{{ $vendor->phone }}" class="phone-link">
-                                        <i class="fas fa-phone"></i>
-                                        {{ $vendor->phone }}
-                                    </a>
-                                @else
-                                    <span class="no-data">Not provided</span>
-                                @endif
+                                <div class="date-display">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ $vendor->created_at->format('d/m/Y H:i') }}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="info-row full-width">
-                            <div class="info-label">Address</div>
+
+                        <!-- Last Updated -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-edit"></i>
+                                <span>Last Updated</span>
+                            </div>
                             <div class="info-value">
-                                @if ($vendor->address)
-                                    <div class="address-display">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>{{ $vendor->address }}</span>
-                                    </div>
-                                @else
-                                    <span class="no-data">Not provided</span>
+                                <div class="date-display">
+                                    <i class="fas fa-calendar-edit"></i>
+                                    <span>{{ $vendor->updated_at->format('d/m/Y H:i') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address Section -->
+                    @if($vendor->address)
+                    <div class="description-section">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </h3>
+                        </div>
+                        <div class="description-content">
+                            <p>{{ $vendor->address }}</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Document Information -->
+                    <div class="additional-info">
+                        <div class="info-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-file-alt"></i>
+                                Required Documents
+                            </h3>
+                            <div class="section-content">
+                                <div class="info-row">
+                                    <span class="info-key">Signed Application:</span>
+                                    <span class="info-val">
+                                        @if($vendor->application_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->application_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->application_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Trade License (Valid):</span>
+                                    <span class="info-val">
+                                        @if($vendor->trade_license_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->trade_license_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->trade_license_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">VAT Certificate/Tax Certificate:</span>
+                                    <span class="info-val">
+                                        @if($vendor->vat_certificate_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->vat_certificate_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->vat_certificate_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Staff Documents (Police Clearance):</span>
+                                    <span class="info-val">
+                                        @if($vendor->staff_documents)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->staff_documents) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->staff_documents }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Contract to be Signed:</span>
+                                    <span class="info-val">
+                                        @if($vendor->contract_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->contract_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->contract_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Terms -->
+                    <div class="additional-info">
+                        <div class="info-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-money-bill-wave"></i>
+                                Payment Terms
+                            </h3>
+                            <div class="section-content">
+                                <div class="info-row">
+                                    <span class="info-key">Payment Type:</span>
+                                    <span class="info-val">
+                                        @if($vendor->payment_type)
+                                            <span class="payment-type-badge {{ $vendor->payment_type }}">
+                                                <i class="fas fa-cash-register"></i>
+                                                {{ ucfirst(str_replace('_', ' ', $vendor->payment_type)) }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted">Not set</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                @if($vendor->payment_type == 'fixed_rate')
+                                <div class="info-row">
+                                    <span class="info-key">Fixed Rate Amount:</span>
+                                    <span class="info-val">
+                                        @if($vendor->fixed_rate_amount)
+                                            <span class="fixed-rate-value">
+                                                AED &nbsp;
+                                                {{ number_format($vendor->fixed_rate_amount, 2) }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted">Not set</span>
+                                        @endif
+                                    </span>
+                                </div>
                                 @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                @if($vendor->payment_type == 'commission')
+                                <div class="info-row">
+                                    <span class="info-key">Commission Rate:</span>
+                                    <span class="info-val">
+                                        @if($vendor->commission_rate)
+                                            <span class="commission-rate-value">
 
-                <!-- Account Statistics -->
-                <div class="info-card">
-                    <div class="card-header">
-                        <i class="fas fa-chart-bar"></i>
-                        <h3>Account Overview</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-icon">
-                                    <i class="fas fa-calendar-check"></i>
+                                                {{ $vendor->commission_rate }}%
+                                            </span>
+                                        @else
+                                            <span class="text-muted">Not set</span>
+                                        @endif
+                                    </span>
                                 </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">{{ round($vendor->created_at->diffInDays(now()), 2) git }}</div>
-                                    <div class="stat-label">Days Active</div>
+                                @endif
+                                @if($vendor->payment_type == 'revenue_share')
+                                <div class="info-row">
+                                    <span class="info-key">Revenue Share Ratio:</span>
+                                    <span class="info-val">
+                                        @if($vendor->revenue_share_ratio)
+                                            <span class="revenue-share-value">
+                                                <i class="fas fa-chart-pie"></i>
+                                                {{ $vendor->revenue_share_ratio }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted">Not set</span>
+                                        @endif
+                                    </span>
                                 </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-icon">
-                                    <i class="fas fa-user-shield"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">{{ $vendor->role }}</div>
-                                    <div class="stat-label">User Role</div>
-                                </div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-icon">
-                                    <i class="fas fa-id-badge"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <div class="stat-value">#{{ $vendor->id }}</div>
-                                    <div class="stat-label">User ID</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity (Placeholder) -->
-                <div class="info-card full-width">
-                    <div class="card-header">
-                        <i class="fas fa-history"></i>
-                        <h3>Recent Activity</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Account Created</div>
-                                    <div class="activity-time">{{ $vendor->created_at->format('M j, Y \a\t g:i A') }}</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-edit"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Profile Last Updated</div>
-                                    <div class="activity-time">{{ $vendor->updated_at->format('M j, Y \a\t g:i A') }}
-                                    </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -190,43 +303,35 @@
     </div>
 
     <style>
-        .profile-container {
+        /* Modern View Styles */
+        .modern-view-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Profile Header */
-        .profile-header {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .profile-info {
+        /* Vendor Profile Section */
+        .vendor-profile-section {
             display: flex;
             align-items: center;
             gap: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
+        .vendor-avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid rgba(0, 212, 255, 0.3);
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
         }
 
-        .profile-avatar img {
+        .vendor-avatar-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -240,52 +345,324 @@
             align-items: center;
             justify-content: center;
             color: #00d4ff;
-            font-size: 32px;
+            font-size: 40px;
         }
 
-        .profile-details h1 {
+        .vendor-info {
+            flex: 1;
+        }
+
+        .vendor-name {
             color: #ffffff;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             margin: 0 0 5px 0;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .profile-role {
+        .vendor-role {
             color: rgba(255, 255, 255, 0.7);
             font-size: 16px;
-            margin: 0 0 15px 0;
+            margin: 0;
         }
 
-        .profile-meta {
+        /* Header Styles */
+        .view-header-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px 0 0;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none;
+        }
+
+        .view-header-content {
             display: flex;
-            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .meta-item {
+        .view-title-group {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
+            gap: 20px;
         }
 
-        .meta-item i {
-            color: #00d4ff;
-            font-size: 12px;
-        }
-
-        .profile-actions {
+        .view-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 15px;
             display: flex;
-            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .view-main-icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .view-title-text h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .view-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0 0 0;
+        }
+
+        .view-actions {
+            display: flex;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        .action-btn {
+        /* Content Styles */
+        .modern-view-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 0 0 20px 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .info-label {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+        }
+
+        .info-label i {
+            color: #00d4ff;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .text-primary {
+            color: #00d4ff;
+        }
+
+        .text-muted {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* Links */
+        .email-link,
+        .phone-link,
+        .document-link {
+            color: #00d4ff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .email-link:hover,
+        .phone-link:hover,
+        .document-link:hover {
+            color: #0099cc;
+            transform: translateX(2px);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        /* Date Display */
+        .date-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-display i {
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        /* Description Section */
+        .description-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .section-title i {
+            color: #00d4ff;
+        }
+
+        .description-content p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Additional Info Section */
+        .additional-info {
+            margin-top: 40px;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-section:first-child {
+            margin-top: 0;
+        }
+
+        .section-content {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-key {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info-val {
+            font-weight: 600;
+            color: #ffffff;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        /* Payment Type Badges */
+        .payment-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .payment-type-badge.fixed_rate {
+            background: rgba(0, 100, 255, 0.1);
+            color: #0064ff;
+            border: 1px solid rgba(0, 100, 255, 0.3);
+        }
+
+        .payment-type-badge.commission {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+        }
+
+        .payment-type-badge.revenue_share {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .fixed-rate-value,
+        .commission-rate-value,
+        .revenue-share-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 6px;
+            color: #00d4ff;
+        }
+
+        /* Button Styles */
+        .modern-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
@@ -295,291 +672,84 @@
             transition: all 0.3s ease;
         }
 
-        .action-btn.primary {
+        .modern-btn-primary {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .action-btn.primary:hover {
+        .modern-btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
         }
 
-        .action-btn.secondary {
+        .modern-btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .action-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Profile Content */
-        .profile-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px 25px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-header i {
-            color: #00d4ff;
-            font-size: 18px;
-        }
-
-        .card-header h3 {
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .card-content {
-            padding: 25px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row.full-width {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .info-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .info-value {
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .email-link,
-        .phone-link {
-            color: #00d4ff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .email-link:hover,
-        .phone-link:hover {
-            color: #0099cc;
-            transform: translateX(2px);
-        }
-
-        .no-data {
-            color: rgba(255, 255, 255, 0.5);
-            font-style: italic;
-        }
-
-        .address-display {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            max-width: 300px;
-        }
-
-        .address-display i {
-            color: #00d4ff;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        /* Status Badge */
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status-badge.active {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-        }
-
-        .stat-info {
-            flex: 1;
-        }
-
-        .stat-value {
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .stat-label {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        /* Activity List */
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00d4ff;
-            font-size: 16px;
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-title {
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .activity-time {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
-        }
-
-        /* Full Width */
-        .full-width {
-            grid-column: 1 / -1;
+        .modern-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
 
         /* Responsive Design */
-        @media (max-width: 1024px) {
-            .profile-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
-            .profile-container {
+            .modern-view-container {
                 padding: 10px;
             }
 
-            .profile-header {
+            .view-header-section,
+            .modern-view-card {
                 padding: 20px;
-                flex-direction: column;
-                text-align: center;
             }
 
-            .profile-info {
+            .view-header-content {
                 flex-direction: column;
-                gap: 20px;
+                align-items: flex-start;
             }
 
-            .profile-actions {
+            .view-actions {
                 width: 100%;
+                justify-content: stretch;
             }
 
-            .action-btn {
+            .modern-btn {
                 flex: 1;
                 justify-content: center;
             }
 
-            .stats-grid {
+            .info-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .info-row {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 5px;
+                gap: 8px;
             }
 
-            .address-display {
+            .info-val {
                 max-width: 100%;
+                text-align: left;
+            }
+
+            /* Vendor Profile Responsive */
+            .vendor-profile-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .vendor-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .vendor-name {
+                font-size: 24px;
             }
         }
     </style>
