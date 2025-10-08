@@ -44,12 +44,19 @@ class VendorController extends Controller
             'vat_certificate_document' => 'required|file|mimes:pdf,jpeg,png|max:5120',
             'staff_documents' => 'required|file|mimes:pdf,jpeg,png|max:5120',
             'contract_document' => 'required|file|mimes:pdf,jpeg,png|max:5120',
-            'payment_type' => 'required|in:fixed_rate,commission,revenue_share',
-            'fixed_rate_amount' => 'nullable|numeric|min:0',
-            'commission_rate' => 'nullable|numeric|min:0|max:100',
-            'revenue_share_ratio' => 'nullable|string',
             'services' => 'array',
             'services.*' => 'exists:services,id',
+            // Global payment terms validation
+            'apply_same_terms' => 'nullable|boolean',
+            'global_payment_type' => 'required_if:apply_same_terms,1|nullable|in:fixed_rate,commission,revenue_share',
+            'global_fixed_rate_amount' => 'nullable|numeric|min:0',
+            'global_commission_rate' => 'nullable|numeric|min:0|max:100',
+            'global_revenue_share_ratio' => 'nullable|string',
+            // Individual payment terms validation
+            'service_payment_type.*' => 'required_if:apply_same_terms,0|nullable|in:fixed_rate,commission,revenue_share',
+            'fixed_rate_amount.*' => 'nullable|numeric|min:0',
+            'commission_rate.*' => 'nullable|numeric|min:0|max:100',
+            'revenue_share_ratio.*' => 'nullable|string',
         ]);
 
         // Handle image upload
@@ -104,16 +111,37 @@ class VendorController extends Controller
             'vat_certificate_document' => $vatCertificateDocument,
             'staff_documents' => $staffDocuments,
             'contract_document' => $contractDocument,
-            // Payment terms fields
-            'payment_type' => $request->payment_type,
-            'fixed_rate_amount' => $request->payment_type === 'fixed_rate' ? $request->fixed_rate_amount : null,
-            'commission_rate' => $request->payment_type === 'commission' ? $request->commission_rate : null,
-            'revenue_share_ratio' => $request->payment_type === 'revenue_share' ? $request->revenue_share_ratio : null,
         ]);
 
-        // Attach selected services
+        // Attach selected services with payment terms
         if ($request->has('services') && is_array($request->services)) {
-            $user->services()->attach($request->services);
+            $serviceData = [];
+
+            // Check if global payment terms are applied
+            $applySameTerms = $request->boolean('apply_same_terms');
+            if ($applySameTerms) {
+                // Use same payment terms for all services
+                foreach ($request->services as $serviceId) {
+                    $serviceData[$serviceId] = [
+                        'payment_type' => $request->global_payment_type,
+                        'fixed_rate_amount' => $request->global_payment_type === 'fixed_rate' ? $request->global_fixed_rate_amount : null,
+                        'commission_rate' => $request->global_payment_type === 'commission' ? $request->global_commission_rate : null,
+                        'revenue_share_ratio' => $request->global_payment_type === 'revenue_share' ? $request->global_revenue_share_ratio : null,
+                    ];
+                }
+            } else {
+                // Use individual payment terms for each service
+                foreach ($request->services as $index => $serviceId) {
+                    $serviceData[$serviceId] = [
+                        'payment_type' => $request->service_payment_type[$index] ?? null,
+                        'fixed_rate_amount' => ($request->service_payment_type[$index] ?? null) === 'fixed_rate' ? ($request->fixed_rate_amount[$index] ?? null) : null,
+                        'commission_rate' => ($request->service_payment_type[$index] ?? null) === 'commission' ? ($request->commission_rate[$index] ?? null) : null,
+                        'revenue_share_ratio' => ($request->service_payment_type[$index] ?? null) === 'revenue_share' ? ($request->revenue_share_ratio[$index] ?? null) : null,
+                    ];
+                }
+            }
+
+            $user->services()->attach($serviceData);
         }
 
         return redirect()->route('admin.vendors.index')->with('success', 'Vendor created successfully.');
@@ -134,7 +162,8 @@ class VendorController extends Controller
     public function edit(string $id)
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);
-        return view('admin.vendors.edit', compact('vendor'));
+        $services = \App\Models\Service::all();
+        return view('admin.vendors.edit', compact('vendor', 'services'));
     }
 
     /**
@@ -154,10 +183,19 @@ class VendorController extends Controller
             'vat_certificate_document' => 'nullable|file|mimes:pdf,jpeg,png|max:5120',
             'staff_documents' => 'nullable|file|mimes:pdf,jpeg,png|max:5120',
             'contract_document' => 'nullable|file|mimes:pdf,jpeg,png|max:5120',
-            'payment_type' => 'required|in:fixed_rate,commission,revenue_share',
-            'fixed_rate_amount' => 'nullable|numeric|min:0',
-            'commission_rate' => 'nullable|numeric|min:0|max:100',
-            'revenue_share_ratio' => 'nullable|string',
+            'services' => 'array',
+            'services.*' => 'exists:services,id',
+            // Global payment terms validation
+            'apply_same_terms' => 'nullable|boolean',
+            'global_payment_type' => 'required_if:apply_same_terms,1|nullable|in:fixed_rate,commission,revenue_share',
+            'global_fixed_rate_amount' => 'nullable|numeric|min:0',
+            'global_commission_rate' => 'nullable|numeric|min:0|max:100',
+            'global_revenue_share_ratio' => 'nullable|string',
+            // Individual payment terms validation
+            'service_payment_type.*' => 'required_if:apply_same_terms,0|nullable|in:fixed_rate,commission,revenue_share',
+            'fixed_rate_amount.*' => 'nullable|numeric|min:0',
+            'commission_rate.*' => 'nullable|numeric|min:0|max:100',
+            'revenue_share_ratio.*' => 'nullable|string',
         ]);
 
         $vendor = User::where('role', 'vendor')->findOrFail($id);
@@ -166,11 +204,6 @@ class VendorController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            // Payment terms fields
-            'payment_type' => $request->payment_type,
-            'fixed_rate_amount' => $request->payment_type === 'fixed_rate' ? $request->fixed_rate_amount : null,
-            'commission_rate' => $request->payment_type === 'commission' ? $request->commission_rate : null,
-            'revenue_share_ratio' => $request->payment_type === 'revenue_share' ? $request->revenue_share_ratio : null,
         ];
 
         if ($request->filled('password')) {
@@ -246,6 +279,41 @@ class VendorController extends Controller
         }
 
         $vendor->update($data);
+
+        // Update services with payment terms
+        // First, detach all existing services
+        $vendor->services()->detach();
+
+        // Then attach the selected services with payment terms
+        if ($request->has('services') && is_array($request->services)) {
+            $serviceData = [];
+
+            // Check if global payment terms are applied
+            $applySameTerms = $request->boolean('apply_same_terms');
+            if ($applySameTerms) {
+                // Use same payment terms for all services
+                foreach ($request->services as $serviceId) {
+                    $serviceData[$serviceId] = [
+                        'payment_type' => $request->global_payment_type,
+                        'fixed_rate_amount' => $request->global_payment_type === 'fixed_rate' ? $request->global_fixed_rate_amount : null,
+                        'commission_rate' => $request->global_payment_type === 'commission' ? $request->global_commission_rate : null,
+                        'revenue_share_ratio' => $request->global_payment_type === 'revenue_share' ? $request->global_revenue_share_ratio : null,
+                    ];
+                }
+            } else {
+                // Use individual payment terms for each service
+                foreach ($request->services as $index => $serviceId) {
+                    $serviceData[$serviceId] = [
+                        'payment_type' => $request->service_payment_type[$index] ?? null,
+                        'fixed_rate_amount' => ($request->service_payment_type[$index] ?? null) === 'fixed_rate' ? ($request->fixed_rate_amount[$index] ?? null) : null,
+                        'commission_rate' => ($request->service_payment_type[$index] ?? null) === 'commission' ? ($request->commission_rate[$index] ?? null) : null,
+                        'revenue_share_ratio' => ($request->service_payment_type[$index] ?? null) === 'revenue_share' ? ($request->revenue_share_ratio[$index] ?? null) : null,
+                    ];
+                }
+            }
+
+            $vendor->services()->attach($serviceData);
+        }
 
         return redirect()->route('admin.vendors.index')->with('success', 'Vendor updated successfully.');
     }

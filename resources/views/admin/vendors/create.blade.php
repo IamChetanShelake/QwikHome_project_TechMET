@@ -168,63 +168,242 @@
                         </div>
 
                             <!-- Image Preview -->
-                            <div class="image-preview-section" id="imagePreview" style="display: none;">
-                                <div class="preview-header">
-                                    <h4>Image Preview</h4>
-                                    <button type="button" class="remove-image-btn" onclick="removeImage()">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                <div class="image-preview-container">
-                                    <img id="previewImg" src="" alt="Preview" class="preview-image">
-                                </div>
+                        <div class="image-preview-section" id="imagePreview" style="display: none;">
+                            <div class="preview-header">
+                                <h4>Image Preview</h4>
+                                <button type="button" class="remove-image-btn" onclick="removeImage()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="image-preview-container">
+                                <img id="previewImg" src="" alt="Preview" class="preview-image">
+                            </div>
+                        </div>
+
+                        <!-- Services Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-tools"></i>
+                                <h3>Services Offered</h3>
                             </div>
 
-                            <!-- Services Section -->
-                            <div class="form-section">
-                                <div class="section-header">
-                                    <i class="fas fa-tools"></i>
-                                    <h3>Services Offered</h3>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group full-width">
-                                        <label class="form-label">
-                                            <i class="fas fa-check-square"></i>
-                                            Select Services
-                                        </label>
-                                        <div class="services-grid">
-                                            @if($services->count() > 0)
-                                                @foreach($services as $service)
-                                                    <div class="service-item">
-                                                        <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="service-checkbox"
-                                                               {{ in_array($service->id, old('services', [])) ? 'checked' : '' }}>
-                                                        <label for="service_{{ $service->id }}" class="service-label">
-                                                            <span class="service-icon"><i class="fas fa-wrench"></i></span>
-                                                            <span class="service-name">{{ $service->name }}</span>
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                <p class="no-services">No services available</p>
-                                            @endif
-                                        </div>
-                                        @error('services')
-                                            <div class="error-message">
-                                                <i class="fas fa-exclamation-circle"></i>
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                        @error('services.*')
-                                            <div class="error-message">
-                                                <i class="fas fa-exclamation-circle"></i>
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label class="form-label">
+                                        <i class="fas fa-check-square"></i>
+                                        Select Services
+                                    </label>
+                                    <div class="services-grid">
+                                        @if($services->count() > 0)
+                                            @foreach($services as $service)
+                                                <div class="service-item">
+                                                    <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="service-checkbox"
+                                                           {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="toggleServicePayment({{ $service->id }})">
+                                                    <label for="service_{{ $service->id }}" class="service-label">
+                                                        <span class="service-icon"><i class="fas fa-wrench"></i></span>
+                                                        <span class="service-name">{{ $service->name }}</span>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="no-services">No services available</p>
+                                        @endif
                                     </div>
+                                    @error('services')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    @error('services.*')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Service Payment Terms Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <h3>Service Payment Terms</h3>
+                            </div>
+
+                            <!-- Apply Same Payment Terms Option -->
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <div class="checkbox-container">
+                                        <input type="checkbox" id="apply_same_terms" name="apply_same_terms" value="1" onchange="togglePaymentModes(this)">
+                                        <label for="apply_same_terms" class="checkbox-label">
+                                            <span class="checkmark"></span>
+                                            Apply same payment terms to all selected services
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Global Payment Terms (when applying same terms to all services) -->
+                            <div id="global-payment-section" style="display: none;">
+                                <div class="global-payment-header">
+                                    <h4>All Selected Services</h4>
+                                </div>
+                                <div class="global-payment-fields">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <i class="fas fa-cash-register"></i>
+                                                Payment Type <span class="required">*</span>
+                                            </label>
+                                            <select id="global_payment_type" name="global_payment_type" class="modern-filter-select" onchange="toggleGlobalPaymentFields(this)">
+                                                <option value="">Select Payment Type</option>
+                                                <option value="fixed_rate">Fixed Rate</option>
+                                                <option value="commission">Commission</option>
+                                                <option value="revenue_share">Revenue Share</option>
+                                            </select>
+                                            @error('global_payment_type')
+                                                <div class="error-message">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group" id="global_fixed_rate_container" style="display: none;">
+                                            <label class="form-label">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                Fixed Rate Amount
+                                            </label>
+                                            <input type="number" id="global_fixed_rate_amount" name="global_fixed_rate_amount" class="form-input" step="0.01" placeholder="Enter fixed rate amount" value="{{ old('global_fixed_rate_amount') }}">
+                                            @error('global_fixed_rate_amount')
+                                                <div class="error-message">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group" id="global_commission_container" style="display: none;">
+                                            <label class="form-label">
+                                                <i class="fas fa-percent"></i>
+                                                Commission Rate (%)
+                                            </label>
+                                            <input type="number" id="global_commission_rate" name="global_commission_rate" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate" value="{{ old('global_commission_rate') }}">
+                                            @error('global_commission_rate')
+                                                <div class="error-message">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group" id="global_revenue_share_container" style="display: none;">
+                                            <label class="form-label">
+                                                <i class="fas fa-chart-pie"></i>
+                                                Revenue Share Ratio
+                                            </label>
+                                            <input type="text" id="global_revenue_share_ratio" name="global_revenue_share_ratio" class="form-input" placeholder="e.g., 40:60" value="{{ old('global_revenue_share_ratio') }}">
+                                            <div class="field-info">
+                                                <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
+                                            </div>
+                                            @error('global_revenue_share_ratio')
+                                                <div class="error-message">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Individual Service Payment Terms -->
+                            <div id="individual-payment-section">
+                                @if($services->count() > 0)
+                                    @foreach($services as $service)
+                                        <div class="service-payment-item" id="payment-service-{{ $service->id }}" style="display: {{ in_array($service->id, old('services', [])) ? 'block' : 'none' }};">
+                                            <div class="service-payment-header">
+                                                <h4>{{ $service->name }}</h4>
+                                            </div>
+                                            <div class="service-payment-fields">
+                                                <div class="form-row">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-cash-register"></i>
+                                                            Payment Type <span class="required">*</span>
+                                                        </label>
+                                                        <select name="service_payment_type[]" class="modern-filter-select" onchange="togglePaymentFields(this)">
+                                                            <option value="">Select Payment Type</option>
+                                                            <option value="fixed_rate">Fixed Rate</option>
+                                                            <option value="commission">Commission</option>
+                                                            <option value="revenue_share">Revenue Share</option>
+                                                        </select>
+                                                        @error('service_payment_type.*')
+                                                            <div class="error-message">
+                                                                <i class="fas fa-exclamation-circle"></i>
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="form-group fixed-rate-field" style="display: none;">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-dollar-sign"></i>
+                                                            Fixed Rate Amount
+                                                        </label>
+                                                        <input type="number" name="fixed_rate_amount[]" class="form-input" step="0.01" placeholder="Enter fixed rate amount">
+                                                        @error('fixed_rate_amount.*')
+                                                            <div class="error-message">
+                                                                <i class="fas fa-exclamation-circle"></i>
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group commission-field" style="display: none;">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-percent"></i>
+                                                            Commission Rate (%)
+                                                        </label>
+                                                        <input type="number" name="commission_rate[]" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate">
+                                                        @error('commission_rate.*')
+                                                            <div class="error-message">
+                                                                <i class="fas fa-exclamation-circle"></i>
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="form-group revenue-share-field" style="display: none;">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-chart-pie"></i>
+                                                            Revenue Share Ratio
+                                                        </label>
+                                                        <input type="text" name="revenue_share_ratio[]" class="form-input" placeholder="e.g., 40:60">
+                                                        <div class="field-info">
+                                                            <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
+                                                        </div>
+                                                        @error('revenue_share_ratio.*')
+                                                            <div class="error-message">
+                                                                <i class="fas fa-exclamation-circle"></i>
+                                                                {{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
                         <!-- Document Upload Section -->
                         <div class="form-section">
@@ -354,82 +533,7 @@
                             </div>
                         </div>
 
-                        <!-- Payment Terms Section -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <i class="fas fa-money-bill-wave"></i>
-                                <h3>Payment Terms</h3>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="payment_type" class="form-label">
-                                        <i class="fas fa-cash-register"></i>
-                                        Payment Type <span class="required">*</span>
-                                    </label>
-                                    <select id="payment_type" name="payment_type" class="modern-filter-select" required>
-                                        <option value="">Select Payment Type</option>
-                                        <option value="fixed_rate">Fixed Rate</option>
-                                        <option value="commission">Commission</option>
-                                        <option value="revenue_share">Revenue Share</option>
-                                    </select>
-                                    @error('payment_type')
-                                        <div class="error-message">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group" id="fixed_rate_container" style="display: none;">
-                                    <label for="fixed_rate_amount" class="form-label">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        Fixed Rate Amount
-                                    </label>
-                                    <input type="number" id="fixed_rate_amount" name="fixed_rate_amount" class="form-input" step="0.01" placeholder="Enter fixed rate amount" value="{{ old('fixed_rate_amount') }}">
-                                    @error('fixed_rate_amount')
-                                        <div class="error-message">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group" id="commission_container" style="display: none;">
-                                    <label for="commission_rate" class="form-label">
-                                        <i class="fas fa-percent"></i>
-                                        Commission Rate (%)
-                                    </label>
-                                    <input type="number" id="commission_rate" name="commission_rate" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate" value="{{ old('commission_rate') }}">
-                                    @error('commission_rate')
-                                        <div class="error-message">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group" id="revenue_share_container" style="display: none;">
-                                    <label for="revenue_share_ratio" class="form-label">
-                                        <i class="fas fa-chart-pie"></i>
-                                        Revenue Share Ratio
-                                    </label>
-                                    <input type="text" id="revenue_share_ratio" name="revenue_share_ratio" class="form-input" placeholder="e.g., 40:60" value="{{ old('revenue_share_ratio') }}">
-                                    <div class="field-info">
-                                        <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
-                                    </div>
-                                    @error('revenue_share_ratio')
-                                        <div class="error-message">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
-                    </div>
 
                     <!-- Form Actions -->
                     <div class="form-actions">
@@ -891,6 +995,46 @@
             margin: 0;
         }
 
+        /* Service Payment Terms Styles */
+        .service-payment-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .service-payment-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .service-payment-header h4 {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-payment-fields {
+            display: grid;
+            gap: 15px;
+        }
+
+        .fixed-rate-field, .commission-field, .revenue-share-field {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .fixed-rate-field[style*="display: flex"],
+        .commission-field[style*="display: flex"],
+        .revenue-share-field[style*="display: flex"] {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .form-container {
@@ -988,23 +1132,79 @@
     </script>
 
     <script>
-        // Handle payment type selection
-        document.getElementById('payment_type').addEventListener('change', function() {
-            const selectedValue = this.value;
+        // Toggle payment modes (global vs individual)
+        function togglePaymentModes(checkbox) {
+            const globalSection = document.getElementById('global-payment-section');
+            const individualSection = document.getElementById('individual-payment-section');
 
-            // Hide all containers
-            document.getElementById('fixed_rate_container').style.display = 'none';
-            document.getElementById('commission_container').style.display = 'none';
-            document.getElementById('revenue_share_container').style.display = 'none';
+            if (checkbox.checked) {
+                globalSection.style.display = 'block';
+                individualSection.style.display = 'none';
+            } else {
+                globalSection.style.display = 'none';
+                individualSection.style.display = 'block';
+            }
+        }
+
+        // Toggle global payment fields based on payment type
+        function toggleGlobalPaymentFields(selectElement) {
+            const paymentSection = document.getElementById('global-payment-section');
+            const selectedValue = selectElement.value;
+
+            // Hide all field containers
+            paymentSection.querySelectorAll('.fixed-rate-field, .commission-field, .revenue-share-field').forEach(field => {
+                field.style.display = 'none';
+            });
 
             // Show the appropriate container based on selection
             if (selectedValue === 'fixed_rate') {
-                document.getElementById('fixed_rate_container').style.display = 'flex';
+                paymentSection.querySelector('#global_fixed_rate_container').style.display = 'flex';
             } else if (selectedValue === 'commission') {
-                document.getElementById('commission_container').style.display = 'flex';
+                paymentSection.querySelector('#global_commission_container').style.display = 'flex';
             } else if (selectedValue === 'revenue_share') {
-                document.getElementById('revenue_share_container').style.display = 'flex';
+                paymentSection.querySelector('#global_revenue_share_container').style.display = 'flex';
             }
-        });
+        }
+
+        // Toggle service payment sections
+        function toggleServicePayment(serviceId) {
+            const checkbox = document.getElementById('service_' + serviceId);
+            const paymentSection = document.getElementById('payment-service-' + serviceId);
+
+            if (checkbox.checked) {
+                paymentSection.style.display = 'block';
+            } else {
+                paymentSection.style.display = 'none';
+                // Reset payment fields when unchecked
+                const selects = paymentSection.querySelectorAll('select');
+                const inputs = paymentSection.querySelectorAll('input');
+                selects.forEach(select => select.selectedIndex = 0);
+                inputs.forEach(input => input.value = '');
+                // Hide all payment field containers
+                paymentSection.querySelectorAll('.fixed-rate-field, .commission-field, .revenue-share-field').forEach(field => {
+                    field.style.display = 'none';
+                });
+            }
+        }
+
+        // Toggle payment fields based on payment type
+        function togglePaymentFields(selectElement) {
+            const paymentSection = selectElement.closest('.service-payment-item');
+            const selectedValue = selectElement.value;
+
+            // Hide all field containers
+            paymentSection.querySelectorAll('.fixed-rate-field, .commission-field, .revenue-share-field').forEach(field => {
+                field.style.display = 'none';
+            });
+
+            // Show the appropriate container based on selection
+            if (selectedValue === 'fixed_rate') {
+                paymentSection.querySelector('.fixed-rate-field').style.display = 'flex';
+            } else if (selectedValue === 'commission') {
+                paymentSection.querySelector('.commission-field').style.display = 'flex';
+            } else if (selectedValue === 'revenue_share') {
+                paymentSection.querySelector('.revenue-share-field').style.display = 'flex';
+            }
+        }
     </script>
 @endsection

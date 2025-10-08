@@ -102,7 +102,9 @@ class User extends Authenticatable
     // Many-to-many relationship with services
     public function services()
     {
-        return $this->belongsToMany(Service::class,'user_services')->withTimestamps();
+        return $this->belongsToMany(Service::class,'user_services')
+            ->withPivot(['payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio'])
+            ->withTimestamps();
     }
 
     // Feedback relationships
