@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('faqs', function (Blueprint $table) {
-            $table->unsignedBigInteger('service_id')->nullable()->after('id');
-            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
+        Schema::table('services', function (Blueprint $table) {
+            $table->boolean('qwikpick')->default(0);
+            $table->boolean('beauty_and_easy')->default(0);
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('faqs', function (Blueprint $table) {
+        Schema::table('services', function (Blueprint $table) {
             //
         });
     }

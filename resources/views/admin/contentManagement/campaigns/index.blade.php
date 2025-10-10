@@ -1,11 +1,9 @@
 @extends('admin.layouts.masterlayout')
 
-@section('title', 'Subcategories')
 
 @section('content')
-
     <style>
-        /* Modern Subcategories Index Styling */
+        /* Modern Campaigns Index Styling */
         .modern-index-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -64,77 +62,6 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 0.8);
             margin: 5px 0 0 0;
-        }
-
-        .filters-section {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .filters-form {
-            display: flex;
-            gap: 20px;
-            align-items: end;
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 200px;
-        }
-
-        .filter-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .modern-filter-input,
-        .modern-filter-select {
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .modern-filter-select {
-            appearance: none;
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-        }
-
-        .modern-filter-select option {
-            background-color: #2d2d2d;
-            color: #ffffff;
-        }
-
-        .modern-filter-input:focus,
-        .modern-filter-select:focus {
-            outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 10px;
-            align-items: end;
         }
 
         .table-section {
@@ -202,44 +129,33 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        .name-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .campaign-title {
+            font-weight: 500;
+            font-size: 14px;
         }
 
-        .subcategory-image {
-            width: 40px;
-            height: 40px;
+        .description-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+
+        .campaign-image {
+            width: 80px;
+            height: 50px;
             border-radius: 8px;
             object-fit: cover;
             border: 2px solid rgba(0, 212, 255, 0.3);
         }
 
-        .subcategory-placeholder {
-            width: 40px;
-            height: 40px;
+        .campaign-placeholder {
+            width: 80px;
+            height: 50px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: rgba(255, 255, 255, 0.5);
-        }
-
-        .subcategory-name {
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .category-text {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
-        }
-
-        .description-text {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 13px;
         }
 
         .status-badge {
@@ -293,6 +209,18 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 14px;
+        }
+
+        .action-view {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .action-view:hover {
+            background: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+            color: #00d4ff;
         }
 
         .action-edit {
@@ -366,34 +294,29 @@
             color: white;
         }
 
-        .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #00d4ff;
-            color: #00d4ff;
-            transform: translateY(-2px);
-        }
-
-        .modern-btn-outline {
-            background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .modern-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
         .pagination-section {
             padding: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .alert {
+            position: relative;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.375rem;
+        }
+
+        .alert-success {
+            color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .alert-danger {
+            color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
         }
 
         /* Responsive Design */
@@ -401,19 +324,6 @@
             .index-header-section {
                 flex-direction: column;
                 text-align: center;
-            }
-
-            .filters-form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-group {
-                min-width: auto;
-            }
-
-            .filter-actions {
-                justify-content: center;
             }
 
             .table-header {
@@ -431,10 +341,11 @@
                 padding: 10px 8px;
             }
 
-            .name-cell {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
+            .campaign-title {
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
     </style>
@@ -446,82 +357,50 @@
         <div class="index-header-section">
             <div class="header-content">
                 <div class="header-icon-wrapper">
-                    <i class="fas fa-folder-open"></i>
+                    <i class="fas fa-bullhorn"></i>
                 </div>
                 <div class="header-text">
-                    <h1 class="header-title">Subcategories</h1>
-                    <p class="header-subtitle">Manage and organize your service subcategories</p>
+                    <h1 class="header-title">Campaigns</h1>
+                    <p class="header-subtitle">Manage marketing campaigns and promotional activities</p>
                 </div>
             </div>
             <div class="header-actions">
-                <a href="{{ route('services.subcategories.create') }}" class="modern-btn modern-btn-primary">
+                <a href="{{ route('contentManagement.campaigns.create') }}" class="modern-btn modern-btn-primary">
                     <i class="fas fa-plus"></i>
-                    Add New Subcategory
+                    Add New Campaign
                 </a>
             </div>
         </div>
 
-        <!-- Filters Section -->
-        <div class="filters-section">
-            <form method="GET" class="filters-form" id="filtersForm">
-                <div class="filter-group">
-                    <label for="search" class="filter-label">
-                        <i class="fas fa-search"></i>
-                        Search
-                    </label>
-                    <input type="text" name="search" id="search" value="{{ $search }}"
-                        placeholder="Search subcategories..." class="modern-filter-input">
-                </div>
+        <!-- Success/Error Messages -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle"></i>
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-                <div class="filter-group">
-                    <label for="category_id" class="filter-label">
-                        <i class="fas fa-folder"></i>
-                        Category
-                    </label>
-                    <select name="category_id" id="category_id" class="modern-filter-select">
-                        <option value="">All Categories</option>
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ $category_id == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="status" class="filter-label">
-                        <i class="fas fa-toggle-on"></i>
-                        Status
-                    </label>
-                    <select name="status" id="status" class="modern-filter-select">
-                        <option value="">All Status</option>
-                        <option value="active" {{ $status == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ $status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                </div>
-
-                <div class="filter-actions">
-                    <button type="submit" class="modern-btn modern-btn-secondary">
-                        <i class="fas fa-filter"></i>
-                        Filter
-                    </button>
-                    <a href="{{ route('services.subcategories.index') }}" class="modern-btn modern-btn-outline">
-                        <i class="fas fa-times"></i>
-                        Clear
-                    </a>
-                </div>
-            </form>
-        </div>
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         <!-- Table Section -->
         <div class="table-section">
             <div class="table-header">
                 <h3 class="table-title">
                     <i class="fas fa-list"></i>
-                    Subcategories List
+                    Campaigns List
                 </h3>
                 <div class="table-info">
-                    <span class="record-count">{{ $subcategories->total() }} subcategories found</span>
+                    <span class="record-count">{{ $campaigns->total() }} campaigns found</span>
                 </div>
             </div>
 
@@ -534,16 +413,16 @@
                                 ID
                             </th>
                             <th class="th-name">
-                                <i class="fas fa-folder-open"></i>
-                                Subcategory Name
-                            </th>
-                            <th class="th-category">
-                                <i class="fas fa-folder"></i>
-                                Category
+                                <i class="fas fa-heading"></i>
+                                Title
                             </th>
                             <th class="th-description">
-                                <i class="fas fa-align-left"></i>
+                                <i class="fas fa-file-alt"></i>
                                 Description
+                            </th>
+                            <th class="th-image">
+                                <i class="fas fa-image"></i>
+                                Image
                             </th>
                             <th class="th-status">
                                 <i class="fas fa-toggle-on"></i>
@@ -560,56 +439,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($subcategories as $subcategory)
+                        @forelse($campaigns as $campaign)
                             <tr class="table-row">
-                                <td class="td-id">{{ $subcategory->id }}</td>
+                                <td class="td-id">{{ $campaign->id }}</td>
                                 <td class="td-name">
-                                    <div class="name-cell">
-                                        @if ($subcategory->image)
-                                            <img src="{{ asset('Subcategory_images/' . $subcategory->image) }}"
-                                                alt="{{ $subcategory->name }}" class="subcategory-image">
-                                        @else
-                                            <div class="subcategory-placeholder">
-                                                <i class="fas fa-folder-open"></i>
-                                            </div>
-                                        @endif
-                                        <span class="subcategory-name">{{ $subcategory->name }}</span>
-                                    </div>
-                                </td>
-                                <td class="td-category">
-                                    <span class="category-text">{{ $subcategory->category->name }}</span>
+                                    <span class="campaign-title">{{ $campaign->title }}</span>
                                 </td>
                                 <td class="td-description">
-                                    <span
-                                        class="description-text">{{ Str::limit($subcategory->description ?: 'No description', 50) }}</span>
+                                    <span class="description-text">{{ Str::limit($campaign->description, 50) }}</span>
+                                </td>
+                                <td class="td-image">
+                                    @if ($campaign->image)
+                                        <img src="{{ asset('campaign_images/' . $campaign->image) }}"
+                                            alt="{{ $campaign->title }}" class="campaign-image">
+                                    @else
+                                        <div class="campaign-placeholder">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="td-status">
-                                    <span class="status-badge status-{{ $subcategory->status }}">
+                                    <span class="status-badge status-{{ $campaign->status }}">
                                         <i
-                                            class="fas fa-{{ $subcategory->status == 'active' ? 'check-circle' : 'times-circle' }}"></i>
-                                        {{ ucfirst($subcategory->status) }}
+                                            class="fas fa-{{ $campaign->status == 'active' ? 'check-circle' : 'times-circle' }}"></i>
+                                        {{ ucfirst($campaign->status) }}
                                     </span>
                                 </td>
                                 <td class="td-date">
-                                    <span class="date-text">{{ $subcategory->created_at->format('M d, Y') }}</span>
-                                    <span class="time-text">{{ $subcategory->created_at->format('H:i') }}</span>
+                                    <span class="date-text">{{ $campaign->created_at->format('M d, Y') }}</span>
+                                    <span class="time-text">{{ $campaign->created_at->format('H:i') }}</span>
                                 </td>
                                 <td class="td-actions">
                                     <div class="action-buttons">
-                                        <a href="{{ route('services.subcategories.edit', $subcategory) }}"
-                                            class="action-btn action-edit" title="Edit Subcategory">
+                                        <a href="{{ route('contentManagement.campaigns.show', $campaign) }}"
+                                            class="action-btn action-view" title="View Campaign">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('contentManagement.campaigns.edit', $campaign) }}"
+                                            class="action-btn action-edit" title="Edit Campaign">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="button" class="action-btn action-delete"
-                                            onclick="confirmDelete({{ $subcategory->id }}, '{{ $subcategory->name }}')"
-                                            title="Delete Subcategory">
+                                            onclick="confirmDelete({{ $campaign->id }}, '{{ addslashes($campaign->title) }}')"
+                                            title="Delete Campaign">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
 
                                     <!-- Hidden Delete Form -->
-                                    <form id="deleteForm{{ $subcategory->id }}" method="POST"
-                                        action="{{ route('services.subcategories.destroy', $subcategory) }}"
+                                    <form id="deleteForm{{ $campaign->id }}" method="POST"
+                                        action="{{ route('contentManagement.campaigns.destroy', $campaign) }}"
                                         style="display: none;">
                                         @csrf
                                         @method('DELETE')
@@ -620,13 +499,13 @@
                             <tr class="empty-row">
                                 <td colspan="7" class="empty-cell">
                                     <div class="empty-state">
-                                        <i class="fas fa-folder-open"></i>
-                                        <h3>No Subcategories Found</h3>
-                                        <p>No subcategories match your current filters.</p>
-                                        <a href="{{ route('services.subcategories.create') }}"
+                                        <i class="fas fa-bullhorn"></i>
+                                        <h3>No Campaigns Found</h3>
+                                        <p>No campaigns have been created yet.</p>
+                                        <a href="{{ route('contentManagement.campaigns.create') }}"
                                             class="modern-btn modern-btn-primary">
                                             <i class="fas fa-plus"></i>
-                                            Create First Subcategory
+                                            Create First Campaign
                                         </a>
                                     </div>
                                 </td>
@@ -637,46 +516,32 @@
             </div>
 
             <!-- Pagination -->
-            @if ($subcategories->hasPages())
+            @if ($campaigns->hasPages())
                 <div class="pagination-section">
-                    {{ $subcategories->appends(request()->query())->links() }}
+                    {{ $campaigns->appends(request()->query())->links() }}
                 </div>
             @endif
         </div>
     </div>
 
 
+
     <script>
-        function confirmDelete(subcategoryId, subcategoryName) {
-            if (confirm(
-                    `Are you sure you want to delete the subcategory "${subcategoryName}"? This action cannot be undone.`
-                    )) {
-                document.getElementById('deleteForm' + subcategoryId).submit();
+        function confirmDelete(campaignId, campaignTitle) {
+            if (confirm(`Are you sure you want to delete the campaign "${campaignTitle}"? This action cannot be undone.`)) {
+                document.getElementById('deleteForm' + campaignId).submit();
             }
         }
 
-        // Auto-submit filters on change
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('search');
-            const categorySelect = document.getElementById('category_id');
-            const statusSelect = document.getElementById('status');
-
-            let searchTimeout;
-
-            searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    document.getElementById('filtersForm').submit();
-                }, 500);
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.classList.add('fade');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 150);
             });
-
-            categorySelect.addEventListener('change', function() {
-                document.getElementById('filtersForm').submit();
-            });
-
-            statusSelect.addEventListener('change', function() {
-                document.getElementById('filtersForm').submit();
-            });
-        });
+        }, 5000);
     </script>
 @endsection

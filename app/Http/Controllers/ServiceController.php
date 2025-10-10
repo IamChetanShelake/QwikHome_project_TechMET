@@ -250,7 +250,8 @@ class ServiceController extends Controller
 
     public function servicesStore(Request $request)
     {
-        $validated = $request->validate([
+        // Build dynamic validation rules based on enabled subscriptions
+        $validationRules = [
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
@@ -271,7 +272,20 @@ class ServiceController extends Controller
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
-        ]);
+        ];
+
+        // Make subscription prices required if the corresponding checkboxes are enabled
+        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
+            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
+            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
+            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
+        }
+
+        $validated = $request->validate($validationRules);
 
         // Handle main service image
         if ($request->hasFile('image')) {
@@ -353,7 +367,8 @@ class ServiceController extends Controller
 
     public function servicesUpdate(Request $request, Service $service)
     {
-        $validated = $request->validate([
+        // Build dynamic validation rules based on enabled subscriptions
+        $validationRules = [
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
@@ -374,7 +389,20 @@ class ServiceController extends Controller
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
-        ]);
+        ];
+
+        // Make subscription prices required if the corresponding checkboxes are enabled
+        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
+            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
+            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
+            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
+        }
+
+        $validated = $request->validate($validationRules);
 
         // Handle main service image
         if ($request->hasFile('image')) {
@@ -442,6 +470,24 @@ class ServiceController extends Controller
         }
 
         return redirect()->route('services.services.index')->with('success', 'Service updated successfully.');
+    }
+
+    public function toggleField(Service $service, string $field)
+    {
+        // Validate the field
+        if (!in_array($field, ['qwikpick', 'beauty_and_easy'])) {
+            return response()->json(['success' => false, 'message' => 'Invalid field'], 400);
+        }
+
+        // Toggle the field value
+        $service->$field = !$service->$field;
+        $service->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst(str_replace('_', ' ', $field)) . ' status updated',
+            'value' => $service->$field
+        ]);
     }
 
     public function servicesDestroy(Service $service)

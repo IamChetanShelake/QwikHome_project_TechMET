@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Booking;
+use App\Models\ServiceReview;
+use App\Models\ServiceProviderReview;
+use App\Models\Service;
+use App\Models\Feedback;
 
 class User extends Authenticatable
 {
@@ -36,8 +41,17 @@ class User extends Authenticatable
         'payment_type',
         'fixed_rate_amount',
         'commission_rate',
-        'revenue_share_ratio'
+        'revenue_share_ratio',
+        'average_rating'
     ];
+
+    protected $appends = ['image_url'];
+
+    // Accessor to get full image URL
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('user_images/' . $this->image) : null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -102,7 +116,7 @@ class User extends Authenticatable
     // Many-to-many relationship with services
     public function services()
     {
-        return $this->belongsToMany(Service::class,'user_services')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'user_services')->withTimestamps();
     }
 
     // Feedback relationships
@@ -120,5 +134,21 @@ class User extends Authenticatable
     public function getAverageEmployeeRatingAttribute()
     {
         return $this->employeeFeedbacks()->avg('rating_employee');
+    }
+
+    // Reviews relationships
+    public function serviceReviews()
+    {
+        return $this->hasMany(ServiceReview::class);
+    }
+
+    public function serviceProviderReviewsGiven()
+    {
+        return $this->hasMany(ServiceProviderReview::class, 'reviewer_id');
+    }
+
+    public function serviceProviderReviewsReceived()
+    {
+        return $this->hasMany(ServiceProviderReview::class, 'service_provider_id');
     }
 }

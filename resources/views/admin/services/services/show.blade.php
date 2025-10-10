@@ -505,6 +505,10 @@
                         <span class="detail-value">{{ $service->duration ?? 'Not specified' }}</span>
                     </div>
                     <div class="detail-row">
+                        <span class="detail-label">Average Rating:</span>
+                        <span class="detail-value">{{ number_format($service->average_rating ?? 0, 1) }}/5</span>
+                    </div>
+                    <div class="detail-row">
                         <span class="detail-label">Created:</span>
                         <span class="detail-value">{{ $service->created_at->format('M d, Y') }}</span>
                     </div>

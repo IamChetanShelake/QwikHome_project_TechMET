@@ -4,6 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\ServiceRequirement;
+use App\Models\Process;
+use App\Models\User;
+use App\Models\Feedback;
+use App\Models\ServiceReview;
 
 class Service extends Model
 {
@@ -11,6 +18,13 @@ class Service extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['image_url'];
+
+    // Accessor to get full image URL
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('Service_images/' . $this->image) : null;
+    }
 
     protected $casts = [
         'whats_include' => 'array',
@@ -19,6 +33,8 @@ class Service extends Model
         'price_monthly' => 'decimal:2',
         'price_yearly' => 'decimal:2',
         'is_arabic' => 'boolean',
+        'qwikpick' => 'boolean',
+        'beauty_and_easy' => 'boolean',
     ];
 
     public function category()
@@ -53,9 +69,15 @@ class Service extends Model
         return $this->hasMany(Feedback::class);
     }
 
+    // Reviews relationships
+    public function serviceReviews()
+    {
+        return $this->hasMany(ServiceReview::class);
+    }
+
     // Average rating calculation
     public function getAverageRatingAttribute()
     {
-        return $this->feedbacks()->avg('rating_service');
+        return $this->serviceReviews()->avg('rating') ?? 0;
     }
 }
