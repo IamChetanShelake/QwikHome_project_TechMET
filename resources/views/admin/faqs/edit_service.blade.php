@@ -6,26 +6,44 @@
     <div class="form-header-section">
         <div class="form-header-content">
             <div class="form-icon-wrapper">
-                <i class="fas fa-question-circle"></i>
+                <i class="fas fa-edit"></i>
             </div>
             <div class="form-header-text">
-                <h1 class="form-title">Create FAQ</h1>
-                <p class="form-subtitle">Add a new frequently asked question to help your customers</p>
+                <h1 class="form-title">Edit Service FAQs</h1>
+                <p class="form-subtitle">Manage all FAQs for service: <strong>{{ $service->name }}</strong></p>
             </div>
         </div>
         <div class="form-header-actions">
-            <a href="{{ route('faq') }}" class="modern-btn modern-btn-secondary">
+            <a href="{{ route('faqs.service.view', $service->id) }}" class="modern-btn modern-btn-secondary">
                 <i class="fas fa-arrow-left"></i>
-                Back to FAQs
+                Back to View
             </a>
         </div>
     </div>
 
     <!-- Form Card -->
     <div class="modern-form-card">
-        <form method="POST" action="{{ route('faq.store') }}" id="faqForm">
+        <!-- Debug Information (remove this after fixing) -->
+        <!-- @if(config('app.debug'))
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 20px; border-radius: 8px;">
+                <strong>Debug Info:</strong><br>
+                Service ID: {{ $service->id ?? 'null' }}<br>
+                Service Name: {{ $service->name ?? 'null' }}<br>
+                Category ID: {{ $service->category_id ?? 'null' }}<br>
+                Subcategory ID: {{ $service->subcategory_id ?? 'null' }}<br>
+                Category Loaded: {{ $service->relationLoaded('category') ? 'Yes' : 'No' }}<br>
+                Subcategory Loaded: {{ $service->relationLoaded('subcategory') ? 'Yes' : 'No' }}<br>
+                Category Name: {{ $service->category->name ?? 'null' }}<br>
+                Subcategory Name: {{ $service->subcategory->name ?? 'null' }}<br>
+                FAQs Count: {{ $faqs->count() }}
+            </div>
+        @endif -->
+        
+        <form method="POST" action="{{ route('faqs.service.update', $service->id) }}" id="faqsServiceForm">
             @csrf
-            
+            @method('PUT')
+
+            <!-- Service Selection Grid -->
             <div class="form-grid">
                 <!-- Category Dropdown -->
                 <div class="form-group-modern">
@@ -37,7 +55,9 @@
                         <select class="modern-select" id="category_id" name="category_id" required>
                             <option value="">Select a Category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}"
+                                    {{ isset($currentCategory) && $currentCategory->id == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}</option>
                             @endforeach
                         </select>
                         <i class="fas fa-folder input-icon"></i>
@@ -50,7 +70,7 @@
                     @enderror
                     <div class="field-hint">
                         <i class="fas fa-info-circle"></i>
-                        Select the main category for this FAQ
+                        Select the main category for these FAQs
                     </div>
                 </div>
 
@@ -63,6 +83,14 @@
                     <div class="input-wrapper">
                         <select class="modern-select" id="subcategory_id" name="subcategory_id" required>
                             <option value="">Select a Subcategory</option>
+                            @if (isset($currentCategory) && isset($currentSubcategory))
+                                @foreach ($currentCategory->subcategories as $subcategory)
+                                    <option value="{{ $subcategory->id }}"
+                                        {{ $currentSubcategory->id == $subcategory->id ? 'selected' : '' }}>
+                                        {{ $subcategory->name }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                         <i class="fas fa-folder-open input-icon"></i>
                     </div>
@@ -87,6 +115,14 @@
                     <div class="input-wrapper">
                         <select class="modern-select" id="service_id" name="service_id" required>
                             <option value="">Select a Service</option>
+                            @if (isset($currentCategory) && isset($currentSubcategory) && isset($currentService))
+                                @foreach ($currentSubcategory->services as $serviceOption)
+                                    <option value="{{ $serviceOption->id }}"
+                                        {{ $currentService->id == $serviceOption->id ? 'selected' : '' }}>
+                                        {{ $serviceOption->name }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                         <i class="fas fa-concierge-bell input-icon"></i>
                     </div>
@@ -98,96 +134,89 @@
                     @enderror
                     <div class="field-hint">
                         <i class="fas fa-info-circle"></i>
-                        Select the specific service for this FAQ
+                        Select the target service for these FAQs
                     </div>
                 </div>
 
-                <!-- Status Dropdown -->
+                <!-- Current FAQ Count (Read-only) -->
                 <div class="form-group-modern">
-                    <label for="status" class="modern-label">
-                        <i class="fas fa-toggle-on text-cyan"></i>
-                        Status
-                    </label>
-                    <div class="input-wrapper">
-                        <select class="modern-select" id="status" name="status" required>
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
-                        <i class="fas fa-toggle-on input-icon"></i>
-                    </div>
-                    @error('status')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Set FAQ visibility status
-                    </div>
-                </div>
-
-                <!-- Q&A Repeater (Full Width) -->
-                <div class="form-group-modern full-width">
                     <label class="modern-label">
                         <i class="fas fa-list-ul text-cyan"></i>
-                        Questions & Answers
+                        Total FAQs
                     </label>
-                    <div id="qa-container">
-                        <div class="qa-item" data-index="1">
+                    <div class="input-wrapper">
+                        <div class="modern-input-display">{{ $faqs->count() }}</div>
+                        <i class="fas fa-list-ul input-icon"></i>
+                    </div>
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Current number of FAQs being edited
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q&A Repeater -->
+            <div class="form-group-modern full-width">
+                <label class="modern-label">
+                    <i class="fas fa-list-ul text-cyan"></i>
+                    Questions & Answers
+                </label>
+                <div id="qa-container">
+                    @foreach ($faqs as $i => $faq)
+                        <div class="qa-item" data-index="{{ $i + 1 }}">
                             <div class="qa-header">
-                                <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A #1</span>
-                                <button type="button" class="modern-btn modern-btn-secondary remove-qa" disabled>
+                                <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A #{{ $i + 1 }}</span>
+                                <button type="button" class="modern-btn modern-btn-secondary remove-qa" data-faq-id="{{ $faq->id }}">
                                     <i class="fas fa-trash-alt"></i>
                                     Remove
                                 </button>
                             </div>
                             <div class="qa-body">
-                                <!-- Question -->
+                                <input type="hidden" name="faq_ids[]" value="{{ $faq->id }}">
                                 <div class="form-group-modern">
-                                    <label class="modern-label">
-                                        <i class="fas fa-question text-cyan"></i>
-                                        Question
-                                    </label>
+                                    <label class="modern-label"><i class="fas fa-question text-cyan"></i> Question</label>
                                     <div class="input-wrapper">
-                                        <input type="text" class="modern-input" name="questions[]" placeholder="Enter the frequently asked question" required>
+                                        <input type="text" class="modern-input" name="questions[]" value="{{ $faq->question }}" required>
                                         <i class="fas fa-question input-icon"></i>
                                     </div>
                                 </div>
-
-                                <!-- Answer -->
                                 <div class="form-group-modern">
-                                    <label class="modern-label">
-                                        <i class="fas fa-comment-dots text-cyan"></i>
-                                        Answer
-                                    </label>
+                                    <label class="modern-label"><i class="fas fa-comment-dots text-cyan"></i> Answer</label>
                                     <div class="input-wrapper">
-                                        <textarea class="modern-textarea summernote" name="answers[]" placeholder="Provide a detailed answer to the question" required></textarea>
+                                        <textarea class="modern-textarea summernote" name="answers[]" required>{{ $faq->answer }}</textarea>
                                         <i class="fas fa-comment-dots input-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group-modern">
+                                    <label class="modern-label"><i class="fas fa-toggle-on text-cyan"></i> Status</label>
+                                    <div class="input-wrapper">
+                                        <select class="modern-select" name="statuses[]">
+                                            <option value="1" {{ $faq->status == 1 ? 'selected' : '' }}>Active</option>
+                                            <option value="0" {{ $faq->status == 0 ? 'selected' : '' }}>Inactive</option>
+                                        </select>
+                                        <i class="fas fa-toggle-on input-icon"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
-            <!-- Form Actions -->
+            <div id="remove-ids-container"></div>
+
+            <!-- Actions -->
             <div class="form-actions">
                 <button type="button" class="modern-btn modern-btn-secondary" id="addQaBtn">
                     <i class="fas fa-plus-circle"></i>
                     Add Q&A
                 </button>
                 <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
-                    <i class="fas fa-plus"></i>
-                    <span class="btn-text">Create FAQ(s)</span>
+                    <i class="fas fa-save"></i>
+                    <span class="btn-text">Save FAQs</span>
                     <div class="btn-loader" style="display: none;">
                         <i class="fas fa-spinner fa-spin"></i>
                     </div>
-                </button>
-                <button type="reset" class="modern-btn modern-btn-secondary">
-                    <i class="fas fa-undo"></i>
-                    Reset Form
                 </button>
             </div>
         </form>
@@ -195,7 +224,7 @@
 </div>
 
 <style>
-    /* Modern FAQ Form Styling */
+    /* Modern FAQ Edit Styling - Inherits from existing forms */
     .modern-form-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -298,6 +327,18 @@
         backdrop-filter: blur(10px);
     }
 
+    .modern-input-display {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+        min-height: 20px;
+    }
+
     .modern-select {
         appearance: none;
         cursor: pointer;
@@ -307,82 +348,9 @@
         background-size: 16px;
     }
 
-    .modern-select option {
-        background-color: #2d2d2d;
-        color: #ffffff;
-        padding: 10px 15px;
-        border: none;
-    }
-
-    .modern-select option:hover,
-    .modern-select option:focus,
-    .modern-select option:checked {
-        background-color: #404040;
-        color: #00d4ff;
-    }
-
     .modern-textarea {
         min-height: 120px;
         resize: vertical;
-    }
-
-    /* Summernote Editor Styling */
-    .note-editor .note-editing-area .note-editable {
-        color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.05) !important;
-    }
-
-    .note-editing-area .note-editable {
-        color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border: 2px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px !important;
-        padding: 16px 20px 16px 50px !important;
-    }
-
-    .note-editing-area .note-editable:focus {
-        border-color: #00d4ff !important;
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2) !important;
-        transform: translateY(-2px) !important;
-    }
-
-    .note-editor {
-        color: #ffffff !important;
-    }
-
-    .note-editor .note-toolbar {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 2px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px 12px 0 0 !important;
-        border-bottom: none !important;
-    }
-
-    .note-editor .note-toolbar .btn {
-        color: #ffffff !important;
-        background: transparent !important;
-        border: none !important;
-    }
-
-    .note-editor .note-toolbar .btn:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: #00d4ff !important;
-    }
-
-    .note-editor .note-toolbar .btn.active {
-        background: rgba(0, 212, 255, 0.2) !important;
-        color: #ffffff !important;
-    }
-
-    .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
-        outline: none;
-        border-color: #00d4ff;
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        transform: translateY(-2px);
-    }
-
-    .modern-input::placeholder, .modern-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
     }
 
     .input-icon {
@@ -393,38 +361,6 @@
         color: rgba(255, 255, 255, 0.5);
         font-size: 14px;
         pointer-events: none;
-        transition: all 0.3s ease;
-    }
-
-    .input-wrapper:focus-within .input-icon {
-        color: #00d4ff;
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    .error-message {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: #ff4757;
-        font-size: 12px;
-        margin-top: 6px;
-        animation: slideInUp 0.3s ease;
-    }
-
-    .field-hint {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 11px;
-        margin-top: 4px;
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 15px;
-        justify-content: flex-start;
-        flex-wrap: wrap;
     }
 
     /* Q&A Repeater */
@@ -454,6 +390,13 @@
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .modern-btn {
@@ -510,6 +453,26 @@
         transform: none !important;
     }
 
+    /* Error Messages and Field Hints */
+    .error-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #ff4757;
+        font-size: 12px;
+        margin-top: 6px;
+        animation: slideInUp 0.3s ease;
+    }
+
+    .field-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
     @keyframes slideInUp {
         from {
             opacity: 0;
@@ -521,63 +484,53 @@
         }
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .form-header-section,
-        .modern-form-card {
-            padding: 20px;
-        }
+    /* Focus states for form elements */
+    .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+        outline: none;
+        border-color: #00d4ff;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        transform: translateY(-2px);
+    }
 
-        .form-header-content {
-            flex-direction: column;
-            text-align: center;
-        }
+    .modern-input::placeholder, .modern-textarea::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
 
-        .form-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
+    .input-wrapper:focus-within .input-icon {
+        color: #00d4ff;
+        transform: translateY(-50%) scale(1.1);
+    }
 
-        .form-actions {
-            justify-content: center;
-        }
+    /* Select dropdown styling */
+    .modern-select option {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        padding: 10px 15px;
+        border: none;
+    }
 
-        .modern-btn {
-            flex: 1;
-            justify-content: center;
-            min-width: 140px;
-        }
+    .modern-select option:hover,
+    .modern-select option:focus,
+    .modern-select option:checked {
+        background-color: #404040;
+        color: #00d4ff;
     }
 </style>
 
 <script>
-    $(document).ready(function() {
-        // Form submission with loading state
-        $('#faqForm').on('submit', function() {
+    $(document).ready(function(){
+        // Store initial selections for reset functionality
+        var initialCategoryId = "{{ isset($currentCategory) ? $currentCategory->id : '' }}";
+        var initialSubcategoryId = "{{ isset($currentSubcategory) ? $currentSubcategory->id : '' }}";
+        var initialServiceId = "{{ isset($currentService) ? $currentService->id : '' }}";
+
+        // Submit button loading
+        $('#faqsServiceForm').on('submit', function(){
             const submitBtn = $('#submitBtn');
-            const btnText = submitBtn.find('.btn-text');
-            const btnLoader = submitBtn.find('.btn-loader');
-            
             submitBtn.prop('disabled', true);
-            btnText.hide();
-            btnLoader.show();
-        });
-
-        // Input animations
-        $('.modern-input, .modern-select, .modern-textarea').on('focus', function() {
-            $(this).parent().addClass('focused');
-        }).on('blur', function() {
-            $(this).parent().removeClass('focused');
-        });
-
-        // Reset form functionality
-        $('button[type="reset"]').on('click', function(e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to reset all fields?')) {
-                $('#faqForm')[0].reset();
-                $('#subcategory_id').html('<option value="">Select a Subcategory</option>');
-                $('#service_id').html('<option value="">Select a Service</option>');
-            }
+            submitBtn.find('.btn-text').hide();
+            submitBtn.find('.btn-loader').show();
         });
 
         // When category changes
@@ -586,9 +539,12 @@
             var subcategorySelect = $('#subcategory_id');
             var serviceSelect = $('#service_id');
 
-            // Clear subcategory and service dropdowns
-            subcategorySelect.html('<option value="">Select a Subcategory</option>');
-            serviceSelect.html('<option value="">Select a Service</option>');
+            // Only reset if user actually changed the category
+            if (categoryId !== initialCategoryId) {
+                // Clear subcategory and service dropdowns
+                subcategorySelect.html('<option value="">Select a Subcategory</option>');
+                serviceSelect.html('<option value="">Select a Service</option>');
+            }
 
             if (categoryId) {
                 // Fetch subcategories for selected category
@@ -599,6 +555,10 @@
                                 subcategorySelect.append('<option value="' + subcategory
                                     .id + '">' + subcategory.name + '</option>');
                             });
+                            // If this category has pre-selected subcategory, select it
+                            if (categoryId === initialCategoryId && initialSubcategoryId) {
+                                subcategorySelect.val(initialSubcategoryId).trigger('change');
+                            }
                         }
                     })
                     .fail(function() {
@@ -613,8 +573,10 @@
             var subcategoryId = $(this).val();
             var serviceSelect = $('#service_id');
 
-            // Clear service dropdown
-            serviceSelect.html('<option value="">Select a Service</option>');
+            // Only reset if user actually changed the subcategory
+            if (subcategoryId !== initialSubcategoryId) {
+                serviceSelect.html('<option value="">Select a Service</option>');
+            }
 
             if (categoryId && subcategoryId) {
                 // Fetch services for selected category and subcategory
@@ -625,6 +587,10 @@
                                 serviceSelect.append('<option value="' + service.id + '">' +
                                     service.name + '</option>');
                             });
+                            // If this subcategory has pre-selected service, select it
+                            if (subcategoryId === initialSubcategoryId && initialServiceId) {
+                                serviceSelect.val(initialServiceId);
+                            }
                         } else {
                             serviceSelect.html('<option value="">No services available</option>');
                         }
@@ -635,27 +601,30 @@
             }
         });
 
-        // Q&A Repeater Logic
+        // Initialize: if we have a pre-selected category, trigger the change event to load subcategories
+        if (initialCategoryId) {
+            $('#category_id').trigger('change');
+        }
+
+        // Summernote init helper
         function initSummernoteIfAvailable(el) {
             if ($.fn.summernote && !$(el).data('summernote')) {
                 $(el).summernote({ height: 120 });
             }
         }
+        $('#qa-container textarea.summernote').each(function(){ initSummernoteIfAvailable(this); });
 
         function refreshQaTitles() {
-            $('#qa-container .qa-item').each(function(index) {
-                $(this).attr('data-index', index + 1);
-                $(this).find('.qa-title').html('<i class="fas fa-hashtag"></i> Q&A #' + (index + 1));
+            $('#qa-container .qa-item').each(function(index){
+                $(this).attr('data-index', index+1);
+                $(this).find('.qa-title').html('<i class="fas fa-hashtag"></i> Q&A #' + (index+1));
             });
-            // Enable remove only if more than 1
-            var count = $('#qa-container .qa-item').length;
-            $('#qa-container .remove-qa').prop('disabled', count <= 1);
         }
 
         function addQaItem() {
             var $item = $('<div class="qa-item" data-index="0">\
                 <div class="qa-header">\
-                    <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
++                   <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
                     <button type="button" class="modern-btn modern-btn-secondary remove-qa">\
                         <i class="fas fa-trash-alt"></i> Remove\
                     </button>\
@@ -675,6 +644,16 @@
                             <i class=\"fas fa-comment-dots input-icon\"></i>\
                         </div>\
                     </div>\
+                    <div class="form-group-modern">\
+                        <label class="modern-label"><i class=\"fas fa-toggle-on text-cyan\"></i> Status</label>\
+                        <div class=\"input-wrapper\">\
+                            <select class=\"modern-select\" name=\"statuses[]\">\
+                                <option value=\"1\" selected>Active</option>\
+                                <option value=\"0\">Inactive</option>\
+                            </select>\
+                            <i class=\"fas fa-toggle-on input-icon\"></i>\
+                        </div>\
+                    </div>\
                 </div>\
             </div>');
             $('#qa-container').append($item);
@@ -682,39 +661,19 @@
             refreshQaTitles();
         }
 
-        // Initialize existing summernote(s)
-        $('#qa-container textarea.summernote').each(function(){ initSummernoteIfAvailable(this); });
+        // Add new item
+        $('#addQaBtn').on('click', function(){ addQaItem(); });
 
-        // Add
-        $('#addQaBtn').on('click', function() {
-            addQaItem();
-        });
-
-        // Remove
-        $('#qa-container').on('click', '.remove-qa', function() {
-            if ($('#qa-container .qa-item').length > 1) {
-                $(this).closest('.qa-item').remove();
-                refreshQaTitles();
+        // Remove item
+        $('#qa-container').on('click', '.remove-qa', function(){
+            var $item = $(this).closest('.qa-item');
+            var existingId = $(this).data('faq-id');
+            if (existingId) {
+                // Track for deletion
+                $('#remove-ids-container').append('<input type="hidden" name="remove_ids[]" value="'+ existingId +'">');
             }
-        });
-
-        // Reset: keep only first item
-        $('button[type="reset"]').on('click', function() {
-            setTimeout(function(){
-                var $items = $('#qa-container .qa-item');
-                if ($items.length > 1) {
-                    $items.slice(1).remove();
-                }
-                $('#qa-container input[name="questions[]"]').val('');
-                $('#qa-container textarea[name="answers[]"]').each(function(){
-                    if ($.fn.summernote && $(this).data('summernote')) {
-                        $(this).summernote('code', '');
-                    } else {
-                        $(this).val('');
-                    }
-                });
-                refreshQaTitles();
-            }, 0);
+            $item.remove();
+            refreshQaTitles();
         });
     });
 </script>

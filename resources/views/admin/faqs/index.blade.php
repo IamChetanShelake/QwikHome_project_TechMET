@@ -123,43 +123,31 @@
                             <tr>
                                 <th>Sr.</th>
                                 <th>Service</th>
-                                <th>Question</th>
-                                <th>Answer</th>
-                                <th>Status</th>
+                                <th>Category</th>
+                                <th>Subcategory</th>
+                                <th>Total FAQs</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach ($faqs as $faq)
+                            @foreach ($services as $service)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $faq->service->name ?? 'N/A' }}</td>
-                                    <td>{{ Str::limit($faq->question, 50) }}</td>
-                                    <td>{{ Str::limit($faq->answer, 100) }}</td>
-                                    <td>
-                                        @if ($faq->status == 1)
-                                            <span class="status-badge completed"> Active </span>
-                                        @else
-                                            <span class="status-badge pending"> Inactive </span>
-                                        @endif
-                                    </td>
+                                    <td>{{ $service->name }}</td>
+                                    <td>{{ $service->category->name ?? 'N/A' }}</td>
+                                    <td>{{ $service->subcategory->name ?? 'N/A' }}</td>
+                                    <td>{{ $service->faq_count }}</td>
                                     <td>
                                         <div class="td-content">
                                             <div class="action-buttons">
-                                                <a href="{{ route('faq.view', $faq->id) }}"
-                                                    class="action-btn action-view" title="View Details">
+                                                <a href="{{ route('faqs.service.view', $service->id) }}"
+                                                    class="action-btn action-view" title="View All FAQs for Service">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('faq.edit', $faq->id) }}"
-                                                    class="action-btn action-edit" title="Edit FAQ">
+                                                <a href="{{ route('faqs.service.edit', $service->id) }}"
+                                                    class="action-btn action-edit" title="Edit FAQs for Service">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="action-btn action-delete"
-                                                    title="Delete FAQ"
-                                                    onclick="deleteFAQ({{ $faq->id }}, '{{ Str::limit($faq->question, 20) }}')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
                                             </div>
                                         </div>
                                     </td>

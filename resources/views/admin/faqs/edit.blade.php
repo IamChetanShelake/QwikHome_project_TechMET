@@ -146,58 +146,60 @@
                     </div>
                 </div>
 
-                <!-- Question Input (Full Width) -->
+                <!-- Q&A Repeater (Full Width) -->
                 <div class="form-group-modern full-width">
-                    <label for="question" class="modern-label">
-                        <i class="fas fa-question text-cyan"></i>
-                        Question
+                    <label class="modern-label">
+                        <i class="fas fa-list-ul text-cyan"></i>
+                        Questions & Answers
                     </label>
-                    <div class="input-wrapper">
-                        <input type="text" class="modern-input" id="question" name="question" 
-                               value="{{ $faq->question }}" placeholder="Enter the frequently asked question" required>
-                        <i class="fas fa-question input-icon"></i>
-                    </div>
-                    @error('question')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Write a clear and concise question that customers frequently ask
-                    </div>
-                </div>
+                    <div id="qa-container">
+                        <div class="qa-item" data-index="1">
+                            <div class="qa-header">
+                                <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A #1</span>
+                                <button type="button" class="modern-btn modern-btn-secondary remove-qa" disabled>
+                                    <i class="fas fa-trash-alt"></i>
+                                    Remove
+                                </button>
+                            </div>
+                            <div class="qa-body">
+                                <!-- Question -->
+                                <div class="form-group-modern">
+                                    <label class="modern-label">
+                                        <i class="fas fa-question text-cyan"></i>
+                                        Question
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="modern-input" name="questions[]" value="{{ $faq->question }}" data-initial-question="{{ $faq->question }}" placeholder="Enter the frequently asked question" required>
+                                        <i class="fas fa-question input-icon"></i>
+                                    </div>
+                                </div>
 
-                <!-- Answer Textarea (Full Width) -->
-                <div class="form-group-modern full-width">
-                    <label for="answer" class="modern-label">
-                        <i class="fas fa-comment-dots text-cyan"></i>
-                        Answer
-                    </label>
-                    <div class="input-wrapper">
-                        <textarea class="modern-textarea summernote" id="answer" name="answer" 
-                                  placeholder="Provide a detailed answer to the question" required>{{ $faq->answer }}</textarea>
-                        <i class="fas fa-comment-dots input-icon"></i>
-                    </div>
-                    @error('answer')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
+                                <!-- Answer -->
+                                <div class="form-group-modern">
+                                    <label class="modern-label">
+                                        <i class="fas fa-comment-dots text-cyan"></i>
+                                        Answer
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <textarea class="modern-textarea summernote" name="answers[]" data-initial-answer="{{ $faq->answer }}" placeholder="Provide a detailed answer to the question" required>{{ $faq->answer }}</textarea>
+                                        <i class="fas fa-comment-dots input-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Provide a comprehensive answer that addresses the question completely
                     </div>
                 </div>
             </div>
 
             <!-- Form Actions -->
             <div class="form-actions">
+                <button type="button" class="modern-btn modern-btn-secondary" id="addQaBtn">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Q&A
+                </button>
                 <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
                     <i class="fas fa-save"></i>
-                    <span class="btn-text">Update FAQ</span>
+                    <span class="btn-text">Update FAQ(s)</span>
                     <div class="btn-loader" style="display: none;">
                         <i class="fas fa-spinner fa-spin"></i>
                     </div>
@@ -527,6 +529,35 @@
         flex-wrap: wrap;
     }
 
+    /* Q&A Repeater */
+    #qa-container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .qa-item {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .qa-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .qa-title {
+        color: #ffffff;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
     .modern-btn {
         display: flex;
         align-items: center;
@@ -648,6 +679,22 @@
                 $('#faqEditForm')[0].reset();
                 $('#subcategory_id').html('<option value="">Select a Subcategory</option>');
                 $('#service_id').html('<option value="">Select a Service</option>');
+                // Reset Q&A repeater: keep first item and restore initial values
+                var $items = $('#qa-container .qa-item');
+                if ($items.length > 1) {
+                    $items.slice(1).remove();
+                }
+                var $first = $('#qa-container .qa-item').first();
+                var initQ = $first.find('input[name="questions[]"]').data('initial-question') || '';
+                var initA = $first.find('textarea[name="answers[]"]').data('initial-answer') || '';
+                $first.find('input[name="questions[]"]').val(initQ);
+                var $ans = $first.find('textarea[name="answers[]"]').first();
+                if ($.fn.summernote && $ans.data('summernote')) {
+                    $ans.summernote('code', initA);
+                } else {
+                    $ans.val(initA);
+                }
+                refreshQaTitles();
                 // Trigger category change to re-populate with original values if needed
                 $('#category_id').trigger('change');
             }
@@ -725,6 +772,66 @@
         if (initialCategoryId) {
             $('#category_id').trigger('change');
         }
+
+        // Q&A Repeater Logic
+        function initSummernoteIfAvailable(el) {
+            if ($.fn.summernote && !$(el).data('summernote')) {
+                $(el).summernote({ height: 120 });
+            }
+        }
+
+        function refreshQaTitles() {
+            $('#qa-container .qa-item').each(function(index) {
+                $(this).attr('data-index', index + 1);
+                $(this).find('.qa-title').html('<i class="fas fa-hashtag"></i> Q&A #' + (index + 1));
+            });
+            var count = $('#qa-container .qa-item').length;
+            $('#qa-container .remove-qa').prop('disabled', count <= 1);
+        }
+
+        function addQaItem() {
+            var $item = $('<div class="qa-item" data-index="0">\
+                <div class="qa-header">\
+                    <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
+                    <button type="button" class="modern-btn modern-btn-secondary remove-qa">\
+                        <i class="fas fa-trash-alt"></i> Remove\
+                    </button>\
+                </div>\
+                <div class="qa-body">\
+                    <div class="form-group-modern">\
+                        <label class="modern-label"><i class=\"fas fa-question text-cyan\"></i> Question</label>\
+                        <div class=\"input-wrapper\">\
+                            <input type=\"text\" class=\"modern-input\" name=\"questions[]\" placeholder=\"Enter the frequently asked question\" required>\
+                            <i class=\"fas fa-question input-icon\"></i>\
+                        </div>\
+                    </div>\
+                    <div class="form-group-modern">\
+                        <label class="modern-label"><i class=\"fas fa-comment-dots text-cyan\"></i> Answer</label>\
+                        <div class=\"input-wrapper\">\
+                            <textarea class=\"modern-textarea summernote\" name=\"answers[]\" placeholder=\"Provide a detailed answer to the question\" required></textarea>\
+                            <i class=\"fas fa-comment-dots input-icon\"></i>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>');
+            $('#qa-container').append($item);
+            initSummernoteIfAvailable($item.find('textarea.summernote'));
+            refreshQaTitles();
+        }
+
+        // Initialize summernote for prefilled first item
+        $('#qa-container textarea.summernote').each(function(){ initSummernoteIfAvailable(this); });
+
+        // Add new item
+        $('#addQaBtn').on('click', function() { addQaItem(); });
+
+        // Remove item
+        $('#qa-container').on('click', '.remove-qa', function() {
+            if ($('#qa-container .qa-item').length > 1) {
+                $(this).closest('.qa-item').remove();
+                refreshQaTitles();
+            }
+        });
     });
 </script>
 @endsection

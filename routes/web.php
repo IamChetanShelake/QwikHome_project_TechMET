@@ -184,6 +184,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/faq-view/{id}', [faqController::class, 'view'])->name('faq.view');
     Route::delete('/faq-delete/{id}', [faqController::class, 'delete'])->name('faq.delete');
 
+    // FAQ grouped by Service
+    Route::get('/faqs/service/{serviceId}', [faqController::class, 'viewByService'])->name('faqs.service.view');
+    Route::get('/faqs/service/{serviceId}/edit', [faqController::class, 'editByService'])->name('faqs.service.edit');
+    Route::put('/faqs/service/{serviceId}', [faqController::class, 'updateByService'])->name('faqs.service.update');
+
     //Coupons management-------------
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
