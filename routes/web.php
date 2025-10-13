@@ -19,6 +19,10 @@ use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\ContentManagement\BannerController;
 use App\Http\Controllers\Admin\ContentManagement\OfferController;
 use App\Http\Controllers\Admin\ContentManagement\CampaignController;
+use App\Http\Controllers\Admin\ContentManagement\DisclaimerController;
+use App\Http\Controllers\Admin\ContentManagement\PrivacyPolicyController;
+use App\Http\Controllers\Admin\ContentManagement\RefundPolicyController;
+use App\Http\Controllers\Admin\ContentManagement\TermsConditionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,8 +34,7 @@ Route::get('/admin/login', function () {
 })->name('admin.login');
 
 Route::middleware(['auth', isAdmin::class])->group(function () {
-    // Include admin-specific routes
-    require __DIR__ . '/admin.php';
+
 
     // Add more admin routes here that require authentication
     Route::get('/admin', function () {
@@ -126,6 +129,49 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
             'update' => 'campaigns.update',
             'destroy' => 'campaigns.destroy',
         ]);
+
+        // Policy management routes
+        Route::resource('disclaimers', DisclaimerController::class)->names([
+            'index' => 'disclaimers.index',
+            'create' => 'disclaimers.create',
+            'store' => 'disclaimers.store',
+            'show' => 'disclaimers.show',
+            'edit' => 'disclaimers.edit',
+            'update' => 'disclaimers.update',
+            'destroy' => 'disclaimers.destroy',
+        ]);
+
+        Route::resource('privacy-policies', PrivacyPolicyController::class)->names([
+            'index' => 'privacy-policies.index',
+            'create' => 'privacy-policies.create',
+            'store' => 'privacy-policies.store',
+            'show' => 'privacy-policies.show',
+            'edit' => 'privacy-policies.edit',
+            'update' => 'privacy-policies.update',
+            'destroy' => 'privacy-policies.destroy',
+        ]);
+
+        Route::resource('refund-policies', RefundPolicyController::class)->names([
+            'index' => 'refund-policies.index',
+            'create' => 'refund-policies.create',
+            'store' => 'refund-policies.store',
+            'show' => 'refund-policies.show',
+            'edit' => 'refund-policies.edit',
+            'update' => 'refund-policies.update',
+            'destroy' => 'refund-policies.destroy',
+        ]);
+
+        Route::resource('terms-conditions', TermsConditionController::class)->names([
+            'index' => 'terms-conditions.index',
+            'create' => 'terms-conditions.create',
+            'store' => 'terms-conditions.store',
+            'show' => 'terms-conditions.show',
+            'edit' => 'terms-conditions.edit',
+            'update' => 'terms-conditions.update',
+            'destroy' => 'terms-conditions.destroy',
+        ]);
+
+
     });
 
     //FAQ management-------------

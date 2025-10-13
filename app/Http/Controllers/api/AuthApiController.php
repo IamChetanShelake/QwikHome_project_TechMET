@@ -12,7 +12,7 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthApiController extends Controller
 {
-  public function signup(Request $request)
+    public function signup(Request $request)
     {
         try {
             // Validate input data
@@ -37,7 +37,7 @@ class AuthApiController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                 'password' => null,
+                'password' => null,
                 'role' => 'user',
                 'active' => 0
             ]);
@@ -46,7 +46,7 @@ class AuthApiController extends Controller
                 'success' => true,
                 'status_code' => 201,
                 'message' => 'User registered successfully',
-                'otp' => '123456',
+                'otp' => '1234',
                 'user' => $user,
             ], 201);
         } catch (\Exception $e) {
@@ -85,11 +85,8 @@ class AuthApiController extends Controller
             }
 
             // Check if user exists and OTP is correct
-            // User can login with either email or phone
-            $loginField = $request->has('phone') ?? 'phone';
-            $loginValue = $request->input($loginField);
 
-            $user = User::where($loginField, $loginValue)->first();
+            $user = User::where('phone', $request->phone)->first();
 
             if (!$user) {
                 return response()->json([
@@ -99,7 +96,7 @@ class AuthApiController extends Controller
                 ], 401);
             }
 
-            Auth::login($user);
+
 
             // Check if user is active
             if ($user->active == 1) {
@@ -107,6 +104,13 @@ class AuthApiController extends Controller
                     'success' => false,
                     'status_code' => 403,
                     'message' => 'Account is deactivated'
+                ], 403);
+            }
+            if ($user->is_deleted == 1) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 403,
+                    'message' => 'Account is deleted'
                 ], 403);
             }
 
@@ -121,7 +125,7 @@ class AuthApiController extends Controller
                 'status_code' => 200,
                 'message' => 'Login successful',
                 'data' => [
-                    'otp' => 654321,
+                    'otp' => 6543,
                     'user' => $user,
                     'token' => $token
                 ]
@@ -139,7 +143,7 @@ class AuthApiController extends Controller
     public function logout(Request $request)
     {
         try {
-            $userID = $request->userid;
+            $userID = $request->user;
             $user = User::find($userID);
             if (!$user) {
                 return response()->json([
@@ -149,7 +153,7 @@ class AuthApiController extends Controller
                 ], 404);
             }
             // Delete the current access token
-            $request->user()->currentAccessToken()->delete();
+            $user->tokens()->delete();
 
             return response()->json([
                 'success' => true,
@@ -171,7 +175,7 @@ class AuthApiController extends Controller
         try {
             // Validate userid
             $validator = Validator::make($request->all(), [
-                'userid' => 'required|exists:users,id',
+                'user' => 'required|exists:users,id',
             ]);
 
             if ($validator->fails()) {
@@ -183,7 +187,7 @@ class AuthApiController extends Controller
                 ], 422);
             }
 
-            $user = User::find($request->userid);
+            $user = User::find($request->user);
 
             // Mark account as deleted
             $user->update([
@@ -192,7 +196,7 @@ class AuthApiController extends Controller
             ]);
 
             // Optional: Delete current access token so they can't use it anymore
-            $user->currentAccessToken()->delete();
+            $user->tokens()->delete();
 
             return response()->json([
                 'success' => true,

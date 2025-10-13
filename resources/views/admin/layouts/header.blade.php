@@ -1273,11 +1273,7 @@
                             </form>
                         </span>
 
-                        {{-- <div class="dropdown-menu">
-                        <a href="#profile" class="dropdown-item">Profile</a>
-                        <a href="#settings" class="dropdown-item">Settings</a>
 
-                    </div> --}}
                     </div>
                 </div>
             </div>
