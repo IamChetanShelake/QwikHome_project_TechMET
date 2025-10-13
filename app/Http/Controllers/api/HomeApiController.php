@@ -5,11 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Campaign;
-use App\Models\Category;
 use App\Models\Offer;
 use App\Models\Service;
-use App\Models\Subcategory;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeApiController extends Controller
@@ -17,63 +14,72 @@ class HomeApiController extends Controller
     public function index(Request $request)
     {
         try {
-            // User address (authenticated user)
-            $userAddress = null;
-            $user = User::find($request->userid);
-            if ($user) {
-                $userAddress = $user->address;
-            }
+            // Get all services and format as items with name and image
+            $services = Service::all()->map(function ($service) {
+                return [
+                    'name' => $service->name,
+                    'image' => $service->image
+                ];
+            });
 
-            // Search functionality
-            $searchQuery = $request->query('search');
-            $categories = Category::when($searchQuery, function ($query) use ($searchQuery) {
-                return $query->where('name', 'like', '%' . $searchQuery . '%')
-                    ->orWhere('description', 'like', '%' . $searchQuery . '%');
-            })->get();
+            // Get services where qwikpick == 1
+            $qwikpickServices = Service::where('qwikpick', 1)->get()->map(function ($service) {
+                return [
+                    'name' => $service->name,
+                    'image' => $service->image
+                ];
+            });
 
-            $subcategories = Subcategory::when($searchQuery, function ($query) use ($searchQuery) {
-                return $query->where('name', 'like', '%' . $searchQuery . '%')
-                    ->orWhere('description', 'like', '%' . $searchQuery . '%');
-            })->get();
+            // Get active offers and active campaigns, combine into one items array
+            $offers = Offer::where('status', 'active')->get()->map(function ($offer) {
+                return [
+                    'name' => $offer->title,
+                    'image' => $offer->image
+                ];
+            });
 
-            $services = Service::when($searchQuery, function ($query) use ($searchQuery) {
-                return $query->where('name', 'like', '%' . $searchQuery . '%')
-                    ->orWhere('description', 'like', '%' . $searchQuery . '%')
-                    ->orWhere('short_description', 'like', '%' . $searchQuery . '%');
-            })->get();
+            $campaigns = Campaign::where('status', 'active')->get()->map(function ($campaign) {
+                return [
+                    'name' => $campaign->title,
+                    'image' => $campaign->image
+                ];
+            });
 
-            // Banners (active)
-            $banners = Banner::where('status', 'active')->get();
+            $offersAndCampaigns = $offers->concat($campaigns);
 
-            // Qwikpick and Beauty & Easy services
-            $qwikpickBeautyEasyServices = Service::where('qwikpick', 1)
-                ->where('beauty_and_easy', 1)
-                ->get();
+            // Get services where beauty_and_easy == 1
+            $beautyAndEasyServices = Service::where('beauty_and_easy', 1)->get()->map(function ($service) {
+                return [
+                    'name' => $service->name,
+                    'image' => $service->image
+                ];
+            });
 
-            // Offers (active)
-            $offers = Offer::where('status', 'active')->get();
-
-            // Campaigns (active)
-            $campaigns = Campaign::where('status', 'active')->get();
+            $sections = [
+                [
+                    'title' => 'everything we offer',
+                    'items' => $services
+                ],
+                [
+                    'title' => 'qwikpicks',
+                    'items' => $qwikpickServices
+                ],
+                [
+                    'title' => 'offers and campaigns',
+                    'items' => $offersAndCampaigns
+                ],
+                [
+                    'title' => 'beauty and easy',
+                    'items' => $beautyAndEasyServices
+                ]
+            ];
 
             return response()->json([
                 'success' => true,
                 'status_code' => 200,
                 'message' => 'Data retrieved successfully',
                 'data' => [
-                    'user_address' => $userAddress,
-                    'search_results' => [
-                        'categories' => $categories,
-                        'subcategories' => $subcategories,
-                        'services' => $services,
-                    ],
-                    'banners' => $banners,
-                    'categories' => $categories,
-                    'subcategories' => $subcategories,
-                    'services' => $services,
-                    'qwikpick_beauty_easy_services' => $qwikpickBeautyEasyServices,
-                    'offers' => $offers,
-                    'campaigns' => $campaigns,
+                    'sections' => $sections
                 ]
             ], 200);
         } catch (\Exception $e) {
@@ -92,7 +98,7 @@ class HomeApiController extends Controller
             // Banners (active or all?)
 
             $banners = Banner::where('status', 'active')->get();
-            
+
 
             return response()->json([
                 'success' => true,

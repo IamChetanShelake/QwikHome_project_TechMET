@@ -9,6 +9,7 @@ use App\Models\Subcategory;
 use App\Models\ServiceRequirement;
 use App\Models\Process;
 use App\Models\User;
+use App\Models\Faq;
 use App\Models\Feedback;
 use App\Models\ServiceReview;
 
@@ -107,5 +108,10 @@ class Service extends Model
     public function getAverageRatingAttribute()
     {
         return $this->serviceReviews()->avg('rating') ?? 0;
+    }
+
+    public function faq()
+    {
+        return $this->hasMany(Faq::class);
     }
 }

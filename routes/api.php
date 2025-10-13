@@ -5,10 +5,13 @@ use App\Http\Controllers\api\AuthApiController;
 use App\Http\Controllers\api\ProfileApiController;
 use App\Http\Controllers\api\ReviewApiController;
 use App\Http\Controllers\api\ServiceApiController;
+use App\Http\Controllers\api\PolicyApiController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\HomeApiController;
+
+
 
 Route::get('/test', function (Request $request) {
     return response()->json([
@@ -26,6 +29,7 @@ Route::post('/delete-account', [AuthApiController::class, 'deleteAccount']);
 
 // profile routes-------------------
 Route::post('/update-profile', [ProfileApiController::class, 'updateProfile']);
+Route::post('/get-profile', [ProfileApiController::class, 'getProfile']);
 
 //home-----------------------
 Route::get('/home', [HomeApiController::class, 'index']);
@@ -42,6 +46,12 @@ Route::get('/everything-we-offer', [ServiceApiController::class, 'everythingWeOf
 
 //subcategoryServices-----------------------
 Route::post('/servicesOfSubcategory', [ServiceApiController::class, 'subcategoryServices']);
+
+//service view apis-----------------------
+Route::post('/view-service', [ServiceApiController::class, 'viewService']);
+Route::post('/qwikpick-service', [ServiceApiController::class, 'qwikpickService']);
+Route::post('/beauty-easy-service', [ServiceApiController::class, 'beautyAndEasyService']);
+Route::post('/view-offer', [ServiceApiController::class, 'viewOffer']);
 
 // Address API routes
 Route::post('/addresses', [AddressApiController::class, 'index']); // Get all addresses
@@ -77,3 +87,9 @@ Route::get('/services/{serviceId}/feedbacks', [FeedbackController::class, 'servi
 Route::get('/employees/{employeeId}/feedbacks', [FeedbackController::class, 'employeeFeedbacks']);
 Route::get('/services/{serviceId}/rating', [FeedbackController::class, 'serviceRating']);
 Route::get('/employees/{employeeId}/rating', [FeedbackController::class, 'employeeRating']);
+
+// Policy API routes
+Route::get('/disclaimer', [PolicyApiController::class, 'getDisclaimer']);
+Route::get('/privacy-policy', [PolicyApiController::class, 'getPrivacyPolicy']);
+Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
+Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);
