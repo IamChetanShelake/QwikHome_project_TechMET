@@ -666,6 +666,110 @@
             }
         }
 
+        /* Materials Section Styling */
+        .materials-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .materials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .material-item {
+            background: rgba(0, 212, 255, 0.02);
+            border: 2px solid rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .material-item:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .material-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: rgba(0, 212, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+        }
+
+        .material-title {
+            font-weight: 600;
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        .material-content {
+            padding: 20px;
+        }
+
+        .material-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .material-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .material-name,
+        .material-description {
+            grid-column: 1 / -1;
+        }
+
+        .material-applicable,
+        .material-price,
+        .material-image {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Responsive Materials Styling */
+        @media (max-width: 1024px) {
+            .material-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .material-name,
+            .material-description,
+            .material-applicable,
+            .material-price,
+            .material-image {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .materials-section {
+                padding: 15px;
+            }
+
+            .material-content {
+                padding: 15px;
+            }
+
+            .material-header {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
 
@@ -1176,19 +1280,6 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group-modern frequency-material">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-tools text-cyan"></i>
-                                                                    With Material
-                                                                </label>
-                                                                <div class="checkbox-wrapper">
-                                                                    <input type="checkbox" class="modern-checkbox"
-                                                                        name="weekly_frequencies[{{ $index }}][with_material]"
-                                                                        value="1"
-                                                                        {{ $frequency['with_material'] ?? 0 ? 'checked' : '' }}>
-                                                                    <label class="checkbox-text">Material included (+100 Rs)</label>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1245,18 +1336,6 @@
                                                                         name="weekly_frequencies[0][price_per_time]"
                                                                         step="0.01" min="0" placeholder="0.00">
                                                                     <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-material">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-tools text-cyan"></i>
-                                                                    With Material
-                                                                </label>
-                                                                <div class="checkbox-wrapper">
-                                                                    <input type="checkbox" class="modern-checkbox"
-                                                                        name="weekly_frequencies[0][with_material]"
-                                                                        value="1">
-                                                                    <label class="checkbox-text">Material included (+100 Rs)</label>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -1328,19 +1407,6 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group-modern frequency-material">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-tools text-cyan"></i>
-                                                                    With Material
-                                                                </label>
-                                                                <div class="checkbox-wrapper">
-                                                                    <input type="checkbox" class="modern-checkbox"
-                                                                        name="monthly_frequencies[{{ $index }}][with_material]"
-                                                                        value="1"
-                                                                        {{ $frequency['with_material'] ?? 0 ? 'checked' : '' }}>
-                                                                    <label class="checkbox-text">Material included</label>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1380,18 +1446,6 @@
                                                                     name="monthly_frequencies[0][price_per_time]"
                                                                     step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group-modern frequency-material">
-                                                            <label class="modern-label">
-                                                                <i class="fas fa-tools text-cyan"></i>
-                                                                With Material
-                                                            </label>
-                                                            <div class="checkbox-wrapper">
-                                                                <input type="checkbox" class="modern-checkbox"
-                                                                    name="monthly_frequencies[0][with_material]"
-                                                                    value="1">
-                                                                <label class="checkbox-text">Material included</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1463,19 +1517,6 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group-modern frequency-material">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-tools text-cyan"></i>
-                                                                    With Material
-                                                                </label>
-                                                                <div class="checkbox-wrapper">
-                                                                    <input type="checkbox" class="modern-checkbox"
-                                                                        name="yearly_frequencies[{{ $index }}][with_material]"
-                                                                        value="1"
-                                                                        {{ $frequency['with_material'] ?? 0 ? 'checked' : '' }}>
-                                                                    <label class="checkbox-text">Material included</label>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1515,18 +1556,6 @@
                                                                     name="yearly_frequencies[0][price_per_time]"
                                                                     step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group-modern frequency-material">
-                                                            <label class="modern-label">
-                                                                <i class="fas fa-tools text-cyan"></i>
-                                                                With Material
-                                                            </label>
-                                                            <div class="checkbox-wrapper">
-                                                                <input type="checkbox" class="modern-checkbox"
-                                                                    name="yearly_frequencies[0][with_material]"
-                                                                    value="1">
-                                                                <label class="checkbox-text">Material included</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1596,6 +1625,210 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add With Material Section -->
+                    <div class="full-width-section">
+                        <div class="materials-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-tools text-cyan"></i>
+                                Add With Material Section
+                            </h3>
+                            
+                            <div class="materials-container">
+                                <div id="materials_container">
+                                    @if (old('materials'))
+                                        @foreach (old('materials') as $index => $material)
+                                            <div class="material-item">
+                                                <div class="material-header">
+                                                    <span class="material-title">Material {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-material">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                <div class="material-content">
+                                                    <div class="material-row">
+                                                        <div class="form-group-modern material-name">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-box text-cyan"></i>
+                                                                Material Name
+                                                                <span class="required-badge">Required</span>
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="text" class="modern-input"
+                                                                    name="materials[{{ $index }}][material_name]"
+                                                                    value="{{ $material['material_name'] ?? '' }}"
+                                                                    placeholder="Enter material name" required>
+                                                                <i class="fas fa-box input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group-modern material-description">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Material Description
+                                                                <span class="optional-badge">Optional</span>
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea"
+                                                                    name="materials[{{ $index }}][material_description]"
+                                                                    placeholder="Describe the material">{{ $material['material_description'] ?? '' }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="material-row">
+                                                        <div class="form-group-modern material-applicable">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-link text-cyan"></i>
+                                                                Set for Which Price
+                                                                <span class="required-badge">Required</span>
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="materials[{{ $index }}][applicable_to]" required>
+                                                                    <option value="">Select Pricing Option</option>
+                                                                    <option value="onetime" {{ ($material['applicable_to'] ?? '') == 'onetime' ? 'selected' : '' }}>One Time Service</option>
+                                                                    <option value="weekly" {{ ($material['applicable_to'] ?? '') == 'weekly' ? 'selected' : '' }}>Weekly Subscription</option>
+                                                                    <option value="monthly" {{ ($material['applicable_to'] ?? '') == 'monthly' ? 'selected' : '' }}>Monthly Subscription</option>
+                                                                    <option value="yearly" {{ ($material['applicable_to'] ?? '') == 'yearly' ? 'selected' : '' }}>Yearly Subscription</option>
+                                                                    <option value="all" {{ ($material['applicable_to'] ?? '') == 'all' ? 'selected' : '' }}>All Service Subscriptions</option>
+                                                                </select>
+                                                                <i class="fas fa-link input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group-modern material-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Material Price
+                                                                <span class="required-badge">Required</span>
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="materials[{{ $index }}][material_price]"
+                                                                    value="{{ $material['material_price'] ?? '' }}"
+                                                                    step="0.01" min="0" placeholder="0.00" required>
+                                                                <span class="input-suffix">AED</span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="form-group-modern material-image">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-image text-cyan"></i>
+                                                                Material Image
+                                                                <span class="optional-badge">Optional</span>
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="file" class="modern-input file-input"
+                                                                    name="materials[{{ $index }}][material_image]"
+                                                                    accept="image/*">
+                                                                <i class="fas fa-image input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="material-item">
+                                            <div class="material-header">
+                                                <span class="material-title">Material 1</span>
+                                            </div>
+                                            <div class="material-content">
+                                                <div class="material-row">
+                                                    <div class="form-group-modern material-name">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-box text-cyan"></i>
+                                                            Material Name
+                                                            <span class="required-badge">Required</span>
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="text" class="modern-input"
+                                                                name="materials[0][material_name]"
+                                                                placeholder="Enter material name" required>
+                                                            <i class="fas fa-box input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group-modern material-description">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-align-left text-cyan"></i>
+                                                            Material Description
+                                                            <span class="optional-badge">Optional</span>
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <textarea class="modern-textarea"
+                                                                name="materials[0][material_description]"
+                                                                placeholder="Describe the material"></textarea>
+                                                            <i class="fas fa-align-left input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="material-row">
+                                                    <div class="form-group-modern material-applicable">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-link text-cyan"></i>
+                                                            Set for Which Price
+                                                            <span class="required-badge">Required</span>
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select"
+                                                                name="materials[0][applicable_to]" required>
+                                                                <option value="">Select Pricing Option</option>
+                                                                <option value="onetime">One Time Service</option>
+                                                                <option value="weekly">Weekly Subscription</option>
+                                                                <option value="monthly">Monthly Subscription</option>
+                                                                <option value="yearly">Yearly Subscription</option>
+                                                                <option value="all">All Service Subscriptions</option>
+                                                            </select>
+                                                            <i class="fas fa-link input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group-modern material-price">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-money-bill text-cyan"></i>
+                                                            Material Price
+                                                            <span class="required-badge">Required</span>
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="number" class="modern-input"
+                                                                name="materials[0][material_price]"
+                                                                step="0.01" min="0" placeholder="0.00" required>
+                                                            <span class="input-suffix">AED</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group-modern material-image">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-image text-cyan"></i>
+                                                            Material Image
+                                                            <span class="optional-badge">Optional</span>
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="file" class="modern-input file-input"
+                                                                name="materials[0][material_image]"
+                                                                accept="image/*">
+                                                            <i class="fas fa-image input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                <button type="button" id="add_material" class="modern-btn modern-btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                    Add More With Material
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1889,17 +2122,6 @@
                                     <span class="input-suffix">AED</span>
                                 </div>
                             </div>
-                            <div class="form-group-modern frequency-material">
-                                <label class="modern-label">
-                                    <i class="fas fa-tools text-cyan"></i>
-                                    With Material
-                                </label>
-                                <div class="checkbox-wrapper">
-                                    <input type="checkbox" class="modern-checkbox"
-                                        name="${type}_frequencies[${currentCount}][with_material]" value="1">
-                                    <label class="checkbox-text">Material included</label>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1933,6 +2155,139 @@
             // Remove frequency option
             $(document).on('click', '.remove-frequency', function() {
                 $(this).closest('.frequency-item').remove();
+            });
+
+            // Materials functionality
+            // Initialize from DOM to ensure accurate count even without old() data
+            let materialIndex = $('#materials_container .material-item').length;
+            console.log('Initial material index (from DOM):', materialIndex);
+            
+            $('#add_material').on('click', function(e) {
+                e.preventDefault();
+                const container = $('#materials_container');
+                const currentIndex = materialIndex++;
+                console.log('Adding material at index:', currentIndex);
+                const newItem = $(`
+                <div class="material-item">
+                    <div class="material-header">
+                        <span class="material-title">Material ${currentIndex + 1}</span>
+                        <button type="button" class="modern-btn-remove remove-material">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="material-content">
+                        <div class="material-row">
+                            <div class="form-group-modern material-name">
+                                <label class="modern-label">
+                                    <i class="fas fa-box text-cyan"></i>
+                                    Material Name
+                                    <span class="required-badge">Required</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text" class="modern-input"
+                                        name="materials[${currentIndex}][material_name]"
+                                        placeholder="Enter material name" required>
+                                    <i class="fas fa-box input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-modern material-description">
+                                <label class="modern-label">
+                                    <i class="fas fa-align-left text-cyan"></i>
+                                    Material Description
+                                    <span class="optional-badge">Optional</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <textarea class="modern-textarea"
+                                        name="materials[${currentIndex}][material_description]"
+                                        placeholder="Describe the material"></textarea>
+                                    <i class="fas fa-align-left input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="material-row">
+                            <div class="form-group-modern material-applicable">
+                                <label class="modern-label">
+                                    <i class="fas fa-link text-cyan"></i>
+                                    Set for Which Price
+                                    <span class="required-badge">Required</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <select class="modern-select"
+                                        name="materials[${currentIndex}][applicable_to]" required>
+                                        <option value="">Select Pricing Option</option>
+                                        <option value="onetime">One Time Service</option>
+                                        <option value="weekly">Weekly Subscription</option>
+                                        <option value="monthly">Monthly Subscription</option>
+                                        <option value="yearly">Yearly Subscription</option>
+                                        <option value="all">All Service Subscriptions</option>
+                                    </select>
+                                    <i class="fas fa-link input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-modern material-price">
+                                <label class="modern-label">
+                                    <i class="fas fa-money-bill text-cyan"></i>
+                                    Material Price
+                                    <span class="required-badge">Required</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="modern-input"
+                                        name="materials[${currentIndex}][material_price]"
+                                        step="0.01" min="0" placeholder="0.00" required>
+                                    <span class="input-suffix">AED</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group-modern material-image">
+                                <label class="modern-label">
+                                    <i class="fas fa-image text-cyan"></i>
+                                    Material Image
+                                    <span class="optional-badge">Optional</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="file" class="modern-input file-input"
+                                        name="materials[${currentIndex}][material_image]"
+                                        accept="image/*">
+                                    <i class="fas fa-image input-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+                container.append(newItem);
+            });
+
+            $(document).on('click', '.remove-material', function() {
+                $(this).closest('.material-item').remove();
+            });
+
+            // Reindex materials and debug form submission
+            $('form').on('submit', function(e) {
+                // Reindex sequentially to ensure PHP parses all items
+                $('#materials_container .material-item').each(function(i) {
+                    $(this)
+                        .find('input[name^="materials["], select[name^="materials["], textarea[name^="materials["]')
+                        .each(function() {
+                            const name = $(this).attr('name');
+                            const newName = name.replace(/materials\[\d+\]/, 'materials[' + i + ']');
+                            $(this).attr('name', newName);
+                        });
+                });
+
+                const materials = [];
+                $('[name^="materials["]').each(function() {
+                    const name = $(this).attr('name');
+                    const value = $(this).val();
+                    if (value) {
+                        materials.push({ name: name, value: value });
+                    }
+                });
+                console.log('Form submitting with materials:', materials);
+                console.log('Total material items:', $('.material-item').length);
             });
 
             // Check and show inputs if old data exists

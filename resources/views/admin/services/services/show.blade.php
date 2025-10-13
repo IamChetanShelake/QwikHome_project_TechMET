@@ -415,6 +415,92 @@
             color: #ffffff;
         }
 
+        /* Materials Section */
+        .materials-section {
+            margin-top: 40px;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .material-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .material-image {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .material-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .material-content {
+            padding: 20px;
+        }
+
+        .material-title {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .material-description {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .material-price,
+        .material-applicable {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .material-price i {
+            color: #00d4ff;
+        }
+
+        .material-applicable i {
+            color: #ffc107;
+        }
+
+        .material-price span,
+        .material-applicable span {
+            font-weight: 500;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .service-view-container {
@@ -662,6 +748,43 @@
                             @endif
                             <div class="requirement-content">
                                 <h4 class="requirement-title">{{ $requirement->title }}</h4>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <!-- Materials Section -->
+        @if ($service->materials && $service->materials->count() > 0)
+            <div class="materials-section">
+                <div class="section-header">
+                    <i class="fas fa-tools"></i>
+                    <h3>Available Materials</h3>
+                </div>
+                <div class="materials-grid">
+                    @foreach ($service->materials as $material)
+                        <div class="material-card">
+                            @if ($material->material_image)
+                                <div class="material-image">
+                                    <img src="{{ $material->image_url }}" alt="{{ $material->material_name }}">
+                                </div>
+                            @endif
+                            <div class="material-content">
+                                <h4 class="material-title">{{ $material->material_name }}</h4>
+                                @if ($material->material_description)
+                                    <p class="material-description">{{ $material->material_description }}</p>
+                                @endif
+                                <div class="material-meta">
+                                    <div class="material-price">
+                                        <i class="fas fa-money-bill"></i>
+                                        <span>{{ number_format($material->material_price, 2) }} AED</span>
+                                    </div>
+                                    <div class="material-applicable">
+                                        <i class="fas fa-link"></i>
+                                        <span>{{ $material->applicable_to_label }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endforeach

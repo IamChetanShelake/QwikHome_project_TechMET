@@ -608,7 +608,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <img src="{{ asset('images/qwikhom_logo.png') }}" alt="QwikHome" class="logo-image">
+                <img src="{{ asset('images/logo.jpg') }}" alt="QwikHome" class="logo-image">
             </div>
             <button class="sidebar-toggle" id="sidebarToggle">
                 <i class="fas fa-bars"></i>

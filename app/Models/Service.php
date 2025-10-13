@@ -75,6 +75,12 @@ class Service extends Model
         return $this->hasMany(ServiceReview::class);
     }
 
+    // Materials relationship
+    public function materials()
+    {
+        return $this->hasMany(ServiceMaterial::class);
+    }
+
     // Average rating calculation
     public function getAverageRatingAttribute()
     {

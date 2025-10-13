@@ -7,6 +7,7 @@ use App\Models\Subcategory;
 use App\Models\Service;
 use App\Models\ServiceRequirement;
 use App\Models\Process;
+use App\Models\ServiceMaterial;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -272,6 +273,12 @@ class ServiceController extends Controller
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
+            'materials' => 'nullable|array',
+            'materials.*.material_name' => 'required|string|max:255',
+            'materials.*.material_description' => 'nullable|string',
+            'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
+            'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
+            'materials.*.material_image' => 'nullable|image|mimes:jpeg,png,jpg',
         ];
 
         // Make subscription prices required if the corresponding checkboxes are enabled
@@ -297,9 +304,10 @@ class ServiceController extends Controller
 
         $validated['image'] = $imageName;
 
-        // Remove requirements and processes from validated as they are handled separately
+        // Remove requirements, processes and materials from validated as they are handled separately
         unset($validated['requirements']);
         unset($validated['processes']);
+        unset($validated['materials']);
 
         // Encode whats_include as JSON
         $validated['whats_include'] = $request->whats_include;
@@ -346,6 +354,47 @@ class ServiceController extends Controller
             }
         }
 
+        // Handle materials
+        if ($request->has('materials') && is_array($request->materials)) {
+            // Debug: Log the materials data
+            \Log::info('CREATE - Materials data received:', [
+                'count' => count($request->materials),
+                'data' => $request->materials
+            ]);
+
+            foreach ($request->materials as $index => $materialData) {
+                // Skip empty materials
+                if (empty($materialData['material_name'])) {
+                    \Log::info('CREATE - Skipping empty material at index: ' . $index);
+                    continue;
+                }
+
+                $materialImage = '';
+                $fileKey = "materials.{$index}.material_image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    // Use uniqid to prevent filename collisions
+                    $materialImage = time() . '_' . uniqid() . '_material_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move('Material_images', $materialImage);
+                }
+
+                $createdMaterial = ServiceMaterial::create([
+                    'service_id' => $service->id,
+                    'material_name' => $materialData['material_name'],
+                    'material_description' => $materialData['material_description'] ?? null,
+                    'applicable_to' => $materialData['applicable_to'],
+                    'material_price' => $materialData['material_price'],
+                    'material_image' => $materialImage,
+                ]);
+
+                \Log::info('CREATE - Material created successfully:', [
+                    'id' => $createdMaterial->id,
+                    'name' => $createdMaterial->material_name,
+                    'index' => $index
+                ]);
+            }
+        }
+
         return redirect()->route('services.services.index')->with('success', 'Service created successfully.');
     }
 
@@ -353,13 +402,13 @@ class ServiceController extends Controller
     {
         $service->load(['category', 'subcategory', 'processes' => function ($query) {
             $query->orderBy('order');
-        }, 'requirements']);
+        }, 'requirements', 'materials']);
         return view('admin.services.services.show', compact('service'));
     }
 
     public function servicesEdit(Service $service)
     {
-        $service->load('processes', 'requirements');
+        $service->load('processes', 'requirements', 'materials');
         $categories = Category::where('status', 'active')->get();
         $subcategories = Subcategory::where('status', 'active')->get();
         return view('admin.services.services.edit', compact('service', 'categories', 'subcategories'));
@@ -389,6 +438,12 @@ class ServiceController extends Controller
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
+            'materials' => 'nullable|array',
+            'materials.*.material_name' => 'required|string|max:255',
+            'materials.*.material_description' => 'nullable|string',
+            'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
+            'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
+            'materials.*.material_image' => 'nullable|image|mimes:jpeg,png,jpg',
         ];
 
         // Make subscription prices required if the corresponding checkboxes are enabled
@@ -416,9 +471,10 @@ class ServiceController extends Controller
             $validated['image'] = $imageName;
         }
 
-        // Remove requirements and processes from validated
+        // Remove requirements, processes and materials from validated
         unset($validated['requirements']);
         unset($validated['processes']);
+        unset($validated['materials']);
 
         // Handle whats_include
         $validated['whats_include'] = $request->whats_include;
@@ -465,6 +521,49 @@ class ServiceController extends Controller
                     'description' => $processData['description'],
                     'image' => $processImage,
                     'order' => $index,
+                ]);
+            }
+        }
+
+        // Handle materials: delete old and create new
+        $service->materials()->delete();
+
+        if ($request->has('materials') && is_array($request->materials)) {
+            // Debug: Log the materials data
+            \Log::info('Materials data received:', [
+                'count' => count($request->materials),
+                'data' => $request->materials
+            ]);
+
+            foreach ($request->materials as $index => $materialData) {
+                // Skip empty materials
+                if (empty($materialData['material_name'])) {
+                    \Log::info('Skipping empty material at index: ' . $index);
+                    continue;
+                }
+
+                $materialImage = '';
+                $fileKey = "materials.{$index}.material_image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    // Use microtime to prevent filename collisions
+                    $materialImage = time() . '_' . uniqid() . '_material_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move('Material_images', $materialImage);
+                }
+
+                $createdMaterial = ServiceMaterial::create([
+                    'service_id' => $service->id,
+                    'material_name' => $materialData['material_name'],
+                    'material_description' => $materialData['material_description'] ?? null,
+                    'applicable_to' => $materialData['applicable_to'],
+                    'material_price' => $materialData['material_price'],
+                    'material_image' => $materialImage,
+                ]);
+
+                \Log::info('Material created successfully:', [
+                    'id' => $createdMaterial->id,
+                    'name' => $createdMaterial->material_name,
+                    'index' => $index
                 ]);
             }
         }
