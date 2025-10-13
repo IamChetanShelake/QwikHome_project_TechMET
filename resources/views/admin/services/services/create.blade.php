@@ -770,6 +770,30 @@
             }
         }
 
+        /* Fix nice-select plugin conflicts */
+        .nice-select {
+            display: none !important;
+        }
+        
+        .nice-select + .modern-select {
+            display: none !important;
+        }
+        
+        .modern-select {
+            display: block !important;
+            appearance: auto !important;
+        }
+        
+        /* Hide nice-select dropdown lists */
+        .nice-select .list {
+            display: none !important;
+        }
+        
+        /* Ensure original selects are visible */
+        select.modern-select {
+            display: block !important;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
 
@@ -832,6 +856,18 @@
             <form method="POST" action="{{ route('services.services.store') }}" id="serviceForm"
                 enctype="multipart/form-data">
                 @csrf
+                
+                <!-- General Error Display -->
+                @if ($errors->any())
+                    <div class="alert alert-danger" style="background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ff4757;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Validation Errors:</h4>
+                        <ul style="margin: 10px 0 0 20px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <div class="form-grid">
                     <!-- Category Dropdown -->
@@ -1881,6 +1917,11 @@
 
 
     <script>
+        // Prevent nice-select from initializing on admin pages
+        if (typeof $.fn.niceSelect !== 'undefined') {
+            $.fn.niceSelect = function() { return this; };
+        }
+        
         $(document).ready(function() {
             // Form submission with loading state
             $('#serviceForm').on('submit', function() {
@@ -2157,18 +2198,20 @@
                 $(this).closest('.frequency-item').remove();
             });
 
-            // Materials functionality
-            // Initialize from DOM to ensure accurate count even without old() data
-            let materialIndex = $('#materials_container .material-item').length;
+            // Materials functionality - using vanilla JS like edit form
+            let materialIndex = document.querySelectorAll('#materials_container .material-item').length;
             console.log('Initial material index (from DOM):', materialIndex);
             
-            $('#add_material').on('click', function(e) {
+            document.getElementById('add_material')?.addEventListener('click', function(e) {
                 e.preventDefault();
-                const container = $('#materials_container');
+                const container = document.getElementById('materials_container');
                 const currentIndex = materialIndex++;
-                console.log('Adding material at index:', currentIndex);
-                const newItem = $(`
-                <div class="material-item">
+                console.log('=== ADDING MATERIAL ===');
+                console.log('Current material index:', currentIndex);
+                console.log('Materials in container before add:', container.querySelectorAll('.material-item').length);
+                const newMaterial = document.createElement('div');
+                newMaterial.className = 'material-item';
+                newMaterial.innerHTML = `
                     <div class="material-header">
                         <span class="material-title">Material ${currentIndex + 1}</span>
                         <button type="button" class="modern-btn-remove remove-material">
@@ -2256,38 +2299,67 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            `);
-                container.append(newItem);
+                `;
+                container.appendChild(newMaterial);
+                console.log('Material added. Total materials now:', container.querySelectorAll('.material-item').length);
+                console.log('New material field names:');
+                newMaterial.querySelectorAll('input, select, textarea').forEach(field => {
+                    console.log('  ' + field.getAttribute('name'));
+                });
+                console.log('=== END ADDING MATERIAL ===');
             });
 
-            $(document).on('click', '.remove-material', function() {
-                $(this).closest('.material-item').remove();
+            // Remove material functionality
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-material')) {
+                    e.preventDefault();
+                    e.target.closest('.material-item').remove();
+                }
             });
 
-            // Reindex materials and debug form submission
+            // Form submission with material data handling
             $('form').on('submit', function(e) {
-                // Reindex sequentially to ensure PHP parses all items
+                // Check for validation errors first
+                let hasErrors = false;
+                const requiredFields = $('input[required], select[required], textarea[required]');
+                requiredFields.each(function() {
+                    if (!$(this).val()) {
+                        hasErrors = true;
+                    }
+                });
+                
+                if (hasErrors) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields before submitting.');
+                    return false;
+                }
+                
+                // Reindex materials sequentially to ensure PHP parses all items
                 $('#materials_container .material-item').each(function(i) {
                     $(this)
                         .find('input[name^="materials["], select[name^="materials["], textarea[name^="materials["]')
                         .each(function() {
-                            const name = $(this).attr('name');
-                            const newName = name.replace(/materials\[\d+\]/, 'materials[' + i + ']');
+                            const oldName = $(this).attr('name');
+                            const newName = oldName.replace(/materials\[\d+\]/, 'materials[' + i + ']');
                             $(this).attr('name', newName);
                         });
                 });
 
-                const materials = [];
-                $('[name^="materials["]').each(function() {
-                    const name = $(this).attr('name');
-                    const value = $(this).val();
-                    if (value) {
-                        materials.push({ name: name, value: value });
-                    }
-                });
-                console.log('Form submitting with materials:', materials);
-                console.log('Total material items:', $('.material-item').length);
+                // Handle materials that might be outside the form (workaround)
+                const formElement = this;
+                const allMaterialInputs = document.querySelectorAll('[name^="materials["]');
+                const formMaterialInputs = formElement.querySelectorAll('[name^="materials["]');
+                
+                // If material inputs are outside form, create hidden inputs inside form
+                if (formMaterialInputs.length === 0 && allMaterialInputs.length > 0) {
+                    allMaterialInputs.forEach(input => {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = input.name;
+                        hiddenInput.value = input.value;
+                        formElement.appendChild(hiddenInput);
+                    });
+                }
             });
 
             // Check and show inputs if old data exists

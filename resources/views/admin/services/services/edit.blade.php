@@ -1916,6 +1916,30 @@
             cursor: pointer;
         }
 
+        /* Fix nice-select plugin conflicts */
+        .nice-select {
+            display: none !important;
+        }
+        
+        .nice-select + .modern-select {
+            display: none !important;
+        }
+        
+        .modern-select {
+            display: block !important;
+            appearance: auto !important;
+        }
+        
+        /* Hide nice-select dropdown lists */
+        .nice-select .list {
+            display: none !important;
+        }
+        
+        /* Ensure original selects are visible */
+        select.modern-select {
+            display: block !important;
+        }
+        
         /* Responsive Design */
         @media (max-width: 1024px) {
             .pricing-row,
@@ -1990,6 +2014,11 @@
     </style>
 
     <script>
+        // Prevent nice-select from initializing on admin pages
+        if (typeof $.fn.niceSelect !== 'undefined') {
+            $.fn.niceSelect = function() { return this; };
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // File upload preview
             const fileInput = document.getElementById('image');

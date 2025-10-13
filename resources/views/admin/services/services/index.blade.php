@@ -475,6 +475,30 @@
             background-color: #22c55e;
         }
 
+        /* Fix nice-select plugin conflicts */
+        .nice-select {
+            display: none !important;
+        }
+        
+        .nice-select + .modern-select {
+            display: none !important;
+        }
+        
+        .modern-select {
+            display: block !important;
+            appearance: auto !important;
+        }
+        
+        /* Hide nice-select dropdown lists */
+        .nice-select .list {
+            display: none !important;
+        }
+        
+        /* Ensure original selects are visible */
+        select.modern-select {
+            display: block !important;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .index-header-section {
@@ -794,14 +818,19 @@
                 document.getElementById('deleteForm' + serviceId).submit();
             }
         }
-
-        // Auto-submit filters on change
+    </script>
+    <script>
+        // Prevent nice-select from initializing on admin pages
+        if (typeof $.fn.niceSelect !== 'undefined') {
+            $.fn.niceSelect = function() { return this; };
+        }
+        
+        // Auto-hide success alert
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search');
             const categorySelect = document.getElementById('category_id');
             const subcategorySelect = document.getElementById('subcategory_id');
             const statusSelect = document.getElementById('status');
-
             let searchTimeout;
 
             searchInput.addEventListener('input', function() {

@@ -28,6 +28,18 @@
     <script src="{{ asset('website/assets/vendor/popper/popper.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Immediately disable nice-select when jQuery loads
+        (function($) {
+            $.fn.niceSelect = function() { 
+                console.log('niceSelect disabled for admin panel');
+                return this; 
+            };
+        })(jQuery);
+        
+        // Additional protection
+        window.adminPanelMode = true;
+    </script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <style>
         /* Modern Service Management Dropdown Styling */
