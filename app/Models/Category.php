@@ -11,6 +11,14 @@ class Category extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['image_url'];
+
+    // Accessor to get full image URL
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('Category_images/' . $this->image) : null;
+    }
+
     public function subcategories()
     {
         return $this->hasMany(Subcategory::class);

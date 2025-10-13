@@ -7,6 +7,7 @@ use App\Models\Subcategory;
 use App\Models\Service;
 use App\Models\ServiceRequirement;
 use App\Models\Process;
+use App\Models\ServiceMaterial;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -44,7 +45,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -72,7 +73,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -145,7 +146,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -175,7 +176,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -250,7 +251,8 @@ class ServiceController extends Controller
 
     public function servicesStore(Request $request)
     {
-        $validated = $request->validate([
+        // Build dynamic validation rules based on enabled subscriptions
+        $validationRules = [
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
@@ -265,13 +267,32 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
-        ]);
+            'materials' => 'nullable|array',
+            'materials.*.material_name' => 'required|string|max:255',
+            'materials.*.material_description' => 'nullable|string',
+            'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
+            'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
+            'materials.*.material_image' => 'nullable|file',
+        ];
+
+        // Make subscription prices required if the corresponding checkboxes are enabled
+        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
+            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
+            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
+            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
+        }
+
+        $validated = $request->validate($validationRules);
 
         // Handle main service image
         if ($request->hasFile('image')) {
@@ -283,9 +304,10 @@ class ServiceController extends Controller
 
         $validated['image'] = $imageName;
 
-        // Remove requirements and processes from validated as they are handled separately
+        // Remove requirements, processes and materials from validated as they are handled separately
         unset($validated['requirements']);
         unset($validated['processes']);
+        unset($validated['materials']);
 
         // Encode whats_include as JSON
         $validated['whats_include'] = $request->whats_include;
@@ -332,6 +354,47 @@ class ServiceController extends Controller
             }
         }
 
+        // Handle materials
+        if ($request->has('materials') && is_array($request->materials)) {
+            // Debug: Log the materials data
+            \Log::info('CREATE - Materials data received:', [
+                'count' => count($request->materials),
+                'data' => $request->materials
+            ]);
+
+            foreach ($request->materials as $index => $materialData) {
+                // Skip empty materials
+                if (empty($materialData['material_name'])) {
+                    \Log::info('CREATE - Skipping empty material at index: ' . $index);
+                    continue;
+                }
+
+                $materialImage = '';
+                $fileKey = "materials.{$index}.material_image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    // Use uniqid to prevent filename collisions
+                    $materialImage = time() . '_' . uniqid() . '_material_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move('Material_images', $materialImage);
+                }
+
+                $createdMaterial = ServiceMaterial::create([
+                    'service_id' => $service->id,
+                    'material_name' => $materialData['material_name'],
+                    'material_description' => $materialData['material_description'] ?? null,
+                    'applicable_to' => $materialData['applicable_to'],
+                    'material_price' => $materialData['material_price'],
+                    'material_image' => $materialImage,
+                ]);
+
+                \Log::info('CREATE - Material created successfully:', [
+                    'id' => $createdMaterial->id,
+                    'name' => $createdMaterial->material_name,
+                    'index' => $index
+                ]);
+            }
+        }
+
         return redirect()->route('services.services.index')->with('success', 'Service created successfully.');
     }
 
@@ -339,13 +402,13 @@ class ServiceController extends Controller
     {
         $service->load(['category', 'subcategory', 'processes' => function ($query) {
             $query->orderBy('order');
-        }, 'requirements']);
+        }, 'requirements', 'materials']);
         return view('admin.services.services.show', compact('service'));
     }
 
     public function servicesEdit(Service $service)
     {
-        $service->load('processes', 'requirements');
+        $service->load('processes', 'requirements', 'materials');
         $categories = Category::where('status', 'active')->get();
         $subcategories = Subcategory::where('status', 'active')->get();
         return view('admin.services.services.edit', compact('service', 'categories', 'subcategories'));
@@ -353,7 +416,8 @@ class ServiceController extends Controller
 
     public function servicesUpdate(Request $request, Service $service)
     {
-        $validated = $request->validate([
+        // Build dynamic validation rules based on enabled subscriptions
+        $validationRules = [
             'category_id' => 'required|exists:categories,id|numeric',
             'subcategory_id' => 'nullable|exists:subcategories,id|numeric',
             'name' => 'required|string|max:255',
@@ -368,13 +432,32 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
-        ]);
+            'materials' => 'nullable|array',
+            'materials.*.material_name' => 'required|string|max:255',
+            'materials.*.material_description' => 'nullable|string',
+            'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
+            'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
+            'materials.*.material_image' => 'nullable|file',
+        ];
+
+        // Make subscription prices required if the corresponding checkboxes are enabled
+        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
+            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
+            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
+        }
+        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
+            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
+        }
+
+        $validated = $request->validate($validationRules);
 
         // Handle main service image
         if ($request->hasFile('image')) {
@@ -388,9 +471,10 @@ class ServiceController extends Controller
             $validated['image'] = $imageName;
         }
 
-        // Remove requirements and processes from validated
+        // Remove requirements, processes and materials from validated
         unset($validated['requirements']);
         unset($validated['processes']);
+        unset($validated['materials']);
 
         // Handle whats_include
         $validated['whats_include'] = $request->whats_include;
@@ -441,7 +525,68 @@ class ServiceController extends Controller
             }
         }
 
+        // Handle materials: delete old and create new
+        $service->materials()->delete();
+
+        if ($request->has('materials') && is_array($request->materials)) {
+            // Debug: Log the materials data
+            \Log::info('Materials data received:', [
+                'count' => count($request->materials),
+                'data' => $request->materials
+            ]);
+
+            foreach ($request->materials as $index => $materialData) {
+                // Skip empty materials
+                if (empty($materialData['material_name'])) {
+                    \Log::info('Skipping empty material at index: ' . $index);
+                    continue;
+                }
+
+                $materialImage = '';
+                $fileKey = "materials.{$index}.material_image";
+                if ($request->hasFile($fileKey)) {
+                    $file = $request->file($fileKey);
+                    // Use microtime to prevent filename collisions
+                    $materialImage = time() . '_' . uniqid() . '_material_' . $index . '_' . $file->getClientOriginalName();
+                    $file->move('Material_images', $materialImage);
+                }
+
+                $createdMaterial = ServiceMaterial::create([
+                    'service_id' => $service->id,
+                    'material_name' => $materialData['material_name'],
+                    'material_description' => $materialData['material_description'] ?? null,
+                    'applicable_to' => $materialData['applicable_to'],
+                    'material_price' => $materialData['material_price'],
+                    'material_image' => $materialImage,
+                ]);
+
+                \Log::info('Material created successfully:', [
+                    'id' => $createdMaterial->id,
+                    'name' => $createdMaterial->material_name,
+                    'index' => $index
+                ]);
+            }
+        }
+
         return redirect()->route('services.services.index')->with('success', 'Service updated successfully.');
+    }
+
+    public function toggleField(Service $service, string $field)
+    {
+        // Validate the field
+        if (!in_array($field, ['qwikpick', 'beauty_and_easy'])) {
+            return response()->json(['success' => false, 'message' => 'Invalid field'], 400);
+        }
+
+        // Toggle the field value
+        $service->$field = !$service->$field;
+        $service->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => ucfirst(str_replace('_', ' ', $field)) . ' status updated',
+            'value' => $service->$field
+        ]);
     }
 
     public function servicesDestroy(Service $service)

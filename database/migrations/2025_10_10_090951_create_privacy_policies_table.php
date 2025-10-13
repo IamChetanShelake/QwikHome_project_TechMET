@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('faqs', function (Blueprint $table) {
-            $table->unsignedBigInteger('service_id')->nullable()->after('id');
-            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
+        Schema::create('privacy_policies', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->nullable();
+            $table->text('content');
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('faqs', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('privacy_policies');
     }
 };

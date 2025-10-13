@@ -28,6 +28,18 @@
     <script src="{{ asset('website/assets/vendor/popper/popper.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Immediately disable nice-select when jQuery loads
+        (function($) {
+            $.fn.niceSelect = function() { 
+                console.log('niceSelect disabled for admin panel');
+                return this; 
+            };
+        })(jQuery);
+        
+        // Additional protection
+        window.adminPanelMode = true;
+    </script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <style>
         /* Modern Service Management Dropdown Styling */
@@ -373,9 +385,232 @@
         }
 
         /* Protection against Service Management JS interference */
-        .nav-item.nav-employees, .nav-item.nav-bookings {
+        .nav-item.nav-employees,
+        .nav-item.nav-bookings {
             position: relative;
             z-index: 10;
+        }
+
+        /* Content Management Dropdown Styling */
+        .content-dropdown-menu {
+            display: none;
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            min-width: 220px;
+            z-index: 1000;
+            margin-top: 8px;
+            overflow: hidden;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        /* Similar styling for content dropdown as service dropdown */
+        .content-menu {
+            position: relative;
+        }
+
+        .content-menu-trigger {
+            padding: 12px 15px;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .content-menu-trigger:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+        }
+
+        .content-menu-trigger i.fas.fa-edit {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            margin-right: 12px;
+        }
+
+        .content-menu-trigger:hover i.fas.fa-edit {
+            color: #00d4ff;
+        }
+
+        .content-menu-trigger span {
+            flex-grow: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .content-dropdown-menu .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .content-dropdown-menu .dropdown-item:hover,
+        .content-dropdown-menu .dropdown-item.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateX(4px);
+        }
+
+        .content-dropdown-menu .dropdown-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .content-dropdown-menu .dropdown-item:hover i,
+        .content-dropdown-menu .dropdown-item.active i {
+            color: #00d4ff;
+            transform: scale(1.1);
+        }
+
+        .content-dropdown-menu .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-dropdown-menu .dropdown-item span {
+            transition: all 0.3s ease;
+        }
+
+        /* Collapsed Sidebar Content Management */
+        .sidebar.collapsed .content-menu-trigger {
+            justify-content: center !important;
+            padding: 12px 5px !important;
+            min-height: 45px !important;
+            display: flex !important;
+            align-items: center !important;
+            position: relative !important;
+            width: 100% !important;
+            max-width: 80px !important;
+        }
+
+        .sidebar.collapsed .content-menu-trigger span,
+        .sidebar.collapsed .content-menu-trigger .fa-caret-down {
+            display: none !important;
+            opacity: 0 !important;
+        }
+
+        .sidebar.collapsed .content-menu-trigger i.fas.fa-edit {
+            margin-right: 0 !important;
+            font-size: 18px !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            width: 20px !important;
+            height: 20px !important;
+            text-align: center !important;
+            display: inline-block !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+        .sidebar.collapsed .content-dropdown-menu {
+            display: none !important;
+        }
+
+        /* Content Management Flyout Menu for Collapsed Sidebar */
+        .sidebar.collapsed .content-flyout-menu {
+            display: block !important;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            min-width: 200px;
+            z-index: 1002;
+            margin-left: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .sidebar.collapsed .content-flyout-menu.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateX(5px);
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item i {
+            width: 16px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item:hover i {
+            color: #00d4ff;
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item.active {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .sidebar.collapsed .content-flyout-menu .flyout-item.active i {
+            color: #00d4ff;
+        }
+
+        /* Tooltip for collapsed content menu */
+        .sidebar.collapsed .content-menu-trigger:hover::after {
+            content: "Content Management";
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1001;
+            margin-left: 10px;
+            opacity: 0;
+            animation: fadeInTooltip 0.3s ease forwards;
+        }
+
+        .sidebar.collapsed .content-menu .content-flyout-menu.show~.content-menu-trigger:hover::after {
+            display: none;
         }
     </style>
 </head>
@@ -385,7 +620,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <img src="{{ asset('images/qwikhom_logo.png') }}" alt="QwikHome" class="logo-image">
+                <img src="{{ asset('images/logo.jpg') }}" alt="QwikHome" class="logo-image">
             </div>
             <button class="sidebar-toggle" id="sidebarToggle">
                 <i class="fas fa-bars"></i>
@@ -394,13 +629,15 @@
 
         <nav class="sidebar-nav">
             <ul>
-                @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'vendor')
                     <li class="nav-item {{ request()->is('admin') ? 'active' : '' }} ">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link" data-section="dashboard">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
+                @endif
+                @if (auth()->user()->role == 'admin')
                     <li class="nav-item {{ request()->is('customers*') ? 'active' : '' }} ">
                         <a href="{{ route('customers') }}" class="nav-link">
                             <i class="fas fa-users"></i>
@@ -409,11 +646,12 @@
                     </li>
                 @endif
 
-                <li class="nav-item {{ (
-                    str_contains(request()->url(), '/services') ||
+                <li
+                    class="nav-item {{ str_contains(request()->url(), '/services') ||
                     str_contains(request()->url(), '/categories') ||
                     str_contains(request()->url(), '/subcategories')
-                ) ? 'active' : '' }}">
+                        ? 'active'
+                        : '' }}">
                     <div class="service-menu">
                         <a href="javascript:void(0)" class="nav-link service-menu-trigger">
                             <i class="fas fa-cogs"></i>
@@ -421,31 +659,37 @@
                             <i class="fas fa-caret-down ml-1"></i>
                         </a>
                         <div class="service-dropdown-menu" style="display: none;">
-                            <a href="{{ route('services.categories.index') }}" class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.categories.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
 
-                            <a href="{{ route('services.subcategories.index') }}" class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.subcategories.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.services.index') }}"
+                                class="dropdown-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
                         </div>
                         <!-- Flyout menu for collapsed sidebar -->
                         <div class="service-flyout-menu">
-                            <a href="{{ route('services.categories.index') }}" class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.categories.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.categories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder"></i>
                                 <span>Categories</span>
                             </a>
-                            <a href="{{ route('services.subcategories.index') }}" class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.subcategories.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.subcategories.*') ? 'active' : '' }}">
                                 <i class="fas fa-folder-open"></i>
                                 <span>Sub-Category</span>
                             </a>
-                            <a href="{{ route('services.services.index') }}" class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
+                            <a href="{{ route('services.services.index') }}"
+                                class="flyout-item {{ request()->routeIs('services.services.*') ? 'active' : '' }}">
                                 <i class="fas fa-concierge-bell"></i>
                                 <span>Services</span>
                             </a>
@@ -461,11 +705,11 @@
                             const path = window.location.pathname;
                             const href = window.location.href;
                             return path.includes('/services') ||
-                                   path.includes('/categories') ||
-                                   path.includes('/subcategories') ||
-                                   href.includes('services.categories') ||
-                                   href.includes('services.subcategories') ||
-                                   href.includes('services.services');
+                                path.includes('/categories') ||
+                                path.includes('/subcategories') ||
+                                href.includes('services.categories') ||
+                                href.includes('services.subcategories') ||
+                                href.includes('services.services');
                         }
 
                         // Check if on service management page and show dropdown
@@ -480,7 +724,7 @@
                             // Check for services routes (more specific patterns)
                             if (currentPath.includes('/services') &&
                                 (currentRoute.includes('services.services') ||
-                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
+                                    (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-dropdown-menu a[href*="services.services"]').addClass('active');
                             }
                             // Check for categories routes
@@ -488,7 +732,8 @@
                                 $('.service-dropdown-menu a[href*="services.categories"]').addClass('active');
                             }
                             // Check for subcategories routes
-                            else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-dropdown-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -546,11 +791,12 @@
                             // Add active class based on current route
                             if (currentPath.includes('/services') &&
                                 (currentRoute.includes('services.services') ||
-                                 (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
+                                    (!currentPath.includes('/categories') && !currentPath.includes('/subcategories')))) {
                                 $('.service-flyout-menu a[href*="services.services"]').addClass('active');
                             } else if (currentPath.includes('/categories') || currentRoute.includes('services.categories')) {
                                 $('.service-flyout-menu a[href*="services.categories"]').addClass('active');
-                            } else if (currentPath.includes('/subcategories') || currentRoute.includes('services.subcategories')) {
+                            } else if (currentPath.includes('/subcategories') || currentRoute.includes(
+                                    'services.subcategories')) {
                                 $('.service-flyout-menu a[href*="services.subcategories"]').addClass('active');
                             }
                         }
@@ -612,14 +858,16 @@
                         });
 
                         // Specific protection for Employees and Bookings nav items
-                        $(document).on('click', '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]', function(e) {
-                            const $navItem = $(this).closest('.nav-item');
-                            // Ensure active state is applied immediately and protected
-                            setTimeout(function() {
-                                $('.nav-item').removeClass('active');
-                                $navItem.addClass('active');
-                            }, 10);
-                        });
+                        $(document).on('click',
+                            '.nav-employees a, .nav-bookings a, a[href*="serviceProviders"], a[href*="vendor/bookings"]',
+                            function(e) {
+                                const $navItem = $(this).closest('.nav-item');
+                                // Ensure active state is applied immediately and protected
+                                setTimeout(function() {
+                                    $('.nav-item').removeClass('active');
+                                    $navItem.addClass('active');
+                                }, 10);
+                            });
 
                         // Protect against Service Management JS interference
                         $(document).on('DOMSubtreeModified', '.nav-employees, .nav-bookings', function() {
@@ -720,6 +968,165 @@
                     });
                 </script>
 
+                <!-- Content Management Menu JavaScript -->
+                <script>
+                    $(document).ready(function() {
+                        function isContentManagementPage() {
+                            const path = window.location.pathname;
+                            return path.includes('/content-management') ||
+                                path.includes('admin.contentManagement');
+                        }
+
+                        // Check if on content management page and show dropdown
+                        if (isContentManagementPage()) {
+                            $(".content-dropdown-menu").show();
+                            $(".content-menu-trigger").find(".fa-caret-down").addClass("rotate");
+
+                            // Highlight active section based on current route
+                            const currentPath = window.location.pathname;
+                            const currentRoute = window.location.href;
+
+                            // Check for banners routes
+                            if (currentPath.includes('/banners') || currentRoute.includes('contentManagement.banners')) {
+                                $('.content-dropdown-menu a[href*="contentManagement.banners"]').addClass('active');
+                            }
+                            // Check for offers routes
+                            else if (currentPath.includes('/offers') || currentRoute.includes('contentManagement.offers')) {
+                                $('.content-dropdown-menu a[href*="contentManagement.offers"]').addClass('active');
+                            }
+                            // Check for campaigns routes
+                            else if (currentPath.includes('/campaigns') || currentRoute.includes(
+                                    'contentManagement.campaigns')) {
+                                $('.content-dropdown-menu a[href*="contentManagement.campaigns"]').addClass('active');
+                            }
+                        }
+
+                        $(".content-menu-trigger").on("click", function(e) {
+                            e.preventDefault();
+
+                            // Handle collapsed sidebar - show flyout menu
+                            if ($('.sidebar').hasClass('collapsed')) {
+                                const $flyout = $(this).parent().find(".content-flyout-menu");
+
+                                // Close any other open flyouts first
+                                $('.content-flyout-menu').not($flyout).removeClass('show');
+                                $('.service-flyout-menu').removeClass('show'); // Close service flyout too
+
+                                // Toggle current flyout
+                                $flyout.toggleClass('show');
+
+                                return false;
+                            }
+
+                            const $dropdown = $(this).next(".content-dropdown-menu");
+                            const $arrow = $(this).find(".fa-caret-down");
+
+                            // Close other dropdowns first
+                            $('.service-dropdown-menu').hide();
+                            $('.service-menu-trigger .fa-caret-down').removeClass('rotate');
+
+                            $dropdown.slideToggle(200);
+                            $arrow.toggleClass("rotate");
+                        });
+
+                        // Handle sidebar collapse behavior for content menu
+                        function handleContentMenuCollapse() {
+                            if ($('.sidebar').hasClass('collapsed')) {
+                                // Hide dropdown and reset arrow when collapsed
+                                $('.content-dropdown-menu').hide();
+                                $('.content-menu-trigger .fa-caret-down').removeClass('rotate');
+                                // Also hide any open flyout menus
+                                $('.content-flyout-menu').removeClass('show');
+                            } else {
+                                // Show dropdown if on content management page when expanded
+                                if (isContentManagementPage()) {
+                                    $('.content-dropdown-menu').show();
+                                    $('.content-menu-trigger .fa-caret-down').addClass('rotate');
+                                }
+                                // Hide flyout menu when expanded
+                                $('.content-flyout-menu').removeClass('show');
+                            }
+                        }
+
+                        // Handle flyout menu active states
+                        function updateContentFlyoutActiveStates() {
+                            const currentPath = window.location.pathname;
+                            const currentRoute = window.location.href;
+
+                            // Remove all active classes first
+                            $('.content-flyout-menu .flyout-item').removeClass('active');
+
+                            // Add active class based on current route
+                            if (currentPath.includes('/banners') || currentRoute.includes('contentManagement.banners')) {
+                                $('.content-flyout-menu a[href*="contentManagement.banners"]').addClass('active');
+                            } else if (currentPath.includes('/offers') || currentRoute.includes('contentManagement.offers')) {
+                                $('.content-flyout-menu a[href*="contentManagement.offers"]').addClass('active');
+                            } else if (currentPath.includes('/campaigns') || currentRoute.includes(
+                                    'contentManagement.campaigns')) {
+                                $('.content-flyout-menu a[href*="contentManagement.campaigns"]').addClass('active');
+                            }
+                        }
+
+                        // Initialize flyout active states
+                        updateContentFlyoutActiveStates();
+
+                        // Close flyout menu when clicking outside
+                        $(document).on('click', function(e) {
+                            if (!$(e.target).closest('.content-menu').length) {
+                                $('.content-flyout-menu').removeClass('show');
+                            }
+                        });
+
+                        // Prevent flyout from closing when clicking inside it
+                        $(document).on('click', '.content-flyout-menu', function(e) {
+                            e.stopPropagation();
+                        });
+
+                        // Watch for sidebar collapse changes - only for content menu
+                        const observer = new MutationObserver(function(mutations) {
+                            mutations.forEach(function(mutation) {
+                                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                                    const target = mutation.target;
+                                    if (target.classList.contains('sidebar')) {
+                                        handleContentMenuCollapse();
+                                        // Also handle service menu collapse
+                                        // (existing service menu collapse function call would go here)
+                                    }
+                                }
+                            });
+                        });
+
+                        // Start observing sidebar for class changes
+                        const sidebar = document.querySelector('.sidebar');
+                        if (sidebar) {
+                            observer.observe(sidebar, {
+                                attributes: true,
+                                attributeFilter: ['class']
+                            });
+                        }
+
+                        // Handle content menu active states
+                        $(document).ready(function() {
+                            // Store original active states before any JS manipulation
+                            $('.nav-item').each(function() {
+                                const $navItem = $(this);
+                                if ($navItem.hasClass('active')) {
+                                    $navItem.attr('data-original-active', 'true');
+                                }
+                            });
+
+                            // Re-apply active states after content menu JS runs
+                            setTimeout(function() {
+                                $('.nav-item[data-original-active="true"]').each(function() {
+                                    const $navItem = $(this);
+                                    // Ensure active state is maintained and not overridden
+                                    $navItem.addClass('active');
+                                });
+                            }, 200);
+                        });
+                    });
+                </script>
+
                 @if (auth()->user()->role == 'admin')
                     <li class="nav-item {{ request()->is('vendor/bookings*') ? 'active' : '' }}">
                         <a href="{{ route('vendor.bookings.index') }}" class="nav-link">
@@ -777,11 +1184,33 @@
                             <span>Feedbacks</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-edit"></i>
-                            <span>Content Management</span>
-                        </a>
+                    <li class="nav-item {{ str_contains(request()->url(), '/content-management') ? 'active' : '' }}">
+                        <div class="content-menu">
+                            <a href="javascript:void(0)" class="nav-link content-menu-trigger">
+                                <i class="fas fa-edit"></i>
+                                <span>Content Management</span>
+                                <i class="fas fa-caret-down ml-1"></i>
+                            </a>
+                            <div class="content-dropdown-menu" style="display: none;">
+                                <a href="{{ route('contentManagement.banners.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.banners.*') ? 'active' : '' }}">
+                                    <i class="fas fa-images"></i>
+                                    <span>Banners</span>
+                                </a>
+
+                                <a href="{{ route('contentManagement.offers.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">
+                                    <i class="fas fa-percent"></i>
+                                    <span>Offers</span>
+                                </a>
+                                <a href="{{ route('contentManagement.campaigns.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">
+                                    <i class="fas fa-bullhorn"></i>
+                                    <span>Campaigns</span>
+                                </a>
+                            </div>
+
+                        </div>
                     </li>
                     {{-- <li class="nav-item">
                         <a href="#" class="nav-link">
@@ -856,11 +1285,7 @@
                             </form>
                         </span>
 
-                        {{-- <div class="dropdown-menu">
-                        <a href="#profile" class="dropdown-item">Profile</a>
-                        <a href="#settings" class="dropdown-item">Settings</a>
 
-                    </div> --}}
                     </div>
                 </div>
             </div>

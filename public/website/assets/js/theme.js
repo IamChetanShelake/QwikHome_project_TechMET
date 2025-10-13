@@ -159,7 +159,7 @@
 
     //===== Nice select js
 
-    if ($('select').length){
+    if ($('select').length && !window.adminPanelMode){
         $('select').niceSelect();
     }
 

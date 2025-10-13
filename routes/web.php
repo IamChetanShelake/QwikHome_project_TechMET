@@ -16,7 +16,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Middleware\isAdmin;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\FeedbackController;
-
+use App\Http\Controllers\Admin\ContentManagement\BannerController;
+use App\Http\Controllers\Admin\ContentManagement\OfferController;
+use App\Http\Controllers\Admin\ContentManagement\CampaignController;
+use App\Http\Controllers\Admin\ContentManagement\DisclaimerController;
+use App\Http\Controllers\Admin\ContentManagement\PrivacyPolicyController;
+use App\Http\Controllers\Admin\ContentManagement\RefundPolicyController;
+use App\Http\Controllers\Admin\ContentManagement\TermsConditionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +34,8 @@ Route::get('/admin/login', function () {
 })->name('admin.login');
 
 Route::middleware(['auth', isAdmin::class])->group(function () {
+
+
     // Add more admin routes here that require authentication
     Route::get('/admin', function () {
         $stats = [
@@ -74,6 +82,7 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::get('', [ServiceController::class, 'servicesIndex'])->name('services.services.index');
         Route::get('create', [ServiceController::class, 'servicesCreate'])->name('services.services.create');
         Route::post('', [ServiceController::class, 'servicesStore'])->name('services.services.store');
+        Route::post('{service}/toggle/{field}', [ServiceController::class, 'toggleField'])->name('services.services.toggle');
         Route::get('{service}', [ServiceController::class, 'servicesShow'])->name('services.services.show');
         Route::get('{service}/edit', [ServiceController::class, 'servicesEdit'])->name('services.services.edit');
         Route::put('{service}', [ServiceController::class, 'servicesUpdate'])->name('services.services.update');
@@ -86,6 +95,85 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         ->name('customers.toggle-block');
     Route::get('/admin/search-users', [CustomerController::class, 'search']);
 
+    // Content Management routes grouped under /admin/content-management
+    Route::prefix('content-management')->name('contentManagement.')->group(function () {
+        // Banners management
+        Route::resource('banners', BannerController::class)->names([
+            'index' => 'banners.index',
+            'create' => 'banners.create',
+            'store' => 'banners.store',
+            'show' => 'banners.show',
+            'edit' => 'banners.edit',
+            'update' => 'banners.update',
+            'destroy' => 'banners.destroy',
+        ]);
+
+        // Offers management
+        Route::resource('offers', OfferController::class)->names([
+            'index' => 'offers.index',
+            'create' => 'offers.create',
+            'store' => 'offers.store',
+            'show' => 'offers.show',
+            'edit' => 'offers.edit',
+            'update' => 'offers.update',
+            'destroy' => 'offers.destroy',
+        ]);
+
+        // Campaigns management
+        Route::resource('campaigns', CampaignController::class)->names([
+            'index' => 'campaigns.index',
+            'create' => 'campaigns.create',
+            'store' => 'campaigns.store',
+            'show' => 'campaigns.show',
+            'edit' => 'campaigns.edit',
+            'update' => 'campaigns.update',
+            'destroy' => 'campaigns.destroy',
+        ]);
+
+        // Policy management routes
+        Route::resource('disclaimers', DisclaimerController::class)->names([
+            'index' => 'disclaimers.index',
+            'create' => 'disclaimers.create',
+            'store' => 'disclaimers.store',
+            'show' => 'disclaimers.show',
+            'edit' => 'disclaimers.edit',
+            'update' => 'disclaimers.update',
+            'destroy' => 'disclaimers.destroy',
+        ]);
+
+        Route::resource('privacy-policies', PrivacyPolicyController::class)->names([
+            'index' => 'privacy-policies.index',
+            'create' => 'privacy-policies.create',
+            'store' => 'privacy-policies.store',
+            'show' => 'privacy-policies.show',
+            'edit' => 'privacy-policies.edit',
+            'update' => 'privacy-policies.update',
+            'destroy' => 'privacy-policies.destroy',
+        ]);
+
+        Route::resource('refund-policies', RefundPolicyController::class)->names([
+            'index' => 'refund-policies.index',
+            'create' => 'refund-policies.create',
+            'store' => 'refund-policies.store',
+            'show' => 'refund-policies.show',
+            'edit' => 'refund-policies.edit',
+            'update' => 'refund-policies.update',
+            'destroy' => 'refund-policies.destroy',
+        ]);
+
+        Route::resource('terms-conditions', TermsConditionController::class)->names([
+            'index' => 'terms-conditions.index',
+            'create' => 'terms-conditions.create',
+            'store' => 'terms-conditions.store',
+            'show' => 'terms-conditions.show',
+            'edit' => 'terms-conditions.edit',
+            'update' => 'terms-conditions.update',
+            'destroy' => 'terms-conditions.destroy',
+        ]);
+
+
+    });
+
     //FAQ management-------------
     Route::get('/faqs', [faqController::class, 'index'])->name('faq');
     Route::get('/faq-create', [faqController::class, 'create'])->name('faq.create');
@@ -94,6 +182,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::put('/faq-update/{id}', [faqController::class, 'update'])->name('faq.update');
     Route::get('/faq-view/{id}', [faqController::class, 'view'])->name('faq.view');
     Route::delete('/faq-delete/{id}', [faqController::class, 'delete'])->name('faq.delete');
+
+    // FAQ grouped by Service
+    Route::get('/faqs/service/{serviceId}', [faqController::class, 'viewByService'])->name('faqs.service.view');
+    Route::get('/faqs/service/{serviceId}/edit', [faqController::class, 'editByService'])->name('faqs.service.edit');
+    Route::put('/faqs/service/{serviceId}', [faqController::class, 'updateByService'])->name('faqs.service.update');
 
     //Coupons management-------------
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');

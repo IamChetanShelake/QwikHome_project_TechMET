@@ -4,6 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\ServiceRequirement;
+use App\Models\Process;
+use App\Models\User;
+use App\Models\Faq;
+use App\Models\Feedback;
+use App\Models\ServiceReview;
 
 class Service extends Model
 {
@@ -11,6 +19,13 @@ class Service extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['image_url'];
+
+    // Accessor to get full image URL
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('Service_images/' . $this->image) : null;
+    }
 
     protected $casts = [
         'whats_include' => 'array',
@@ -19,6 +34,8 @@ class Service extends Model
         'price_monthly' => 'decimal:2',
         'price_yearly' => 'decimal:2',
         'is_arabic' => 'boolean',
+        'qwikpick' => 'boolean',
+        'beauty_and_easy' => 'boolean',
     ];
 
     public function category()
@@ -53,9 +70,48 @@ class Service extends Model
         return $this->hasMany(Feedback::class);
     }
 
+    // Reviews relationships
+    public function serviceReviews()
+    {
+        return $this->hasMany(ServiceReview::class);
+    }
+
+    // Materials relationship
+    public function materials()
+    {
+        return $this->hasMany(ServiceMaterial::class);
+    }
+    
+    // Frequency options relationship
+    public function frequencyOptions()
+    {
+        return $this->hasMany(ServiceFrequencyOption::class);
+    }
+    
+    // Get frequency options by type
+    public function weeklyOptions()
+    {
+        return $this->frequencyOptions()->ofType('weekly');
+    }
+    
+    public function monthlyOptions()
+    {
+        return $this->frequencyOptions()->ofType('monthly');
+    }
+    
+    public function yearlyOptions()
+    {
+        return $this->frequencyOptions()->ofType('yearly');
+    }
+
     // Average rating calculation
     public function getAverageRatingAttribute()
     {
-        return $this->feedbacks()->avg('rating_service');
+        return $this->serviceReviews()->avg('rating') ?? 0;
+    }
+
+    public function faq()
+    {
+        return $this->hasMany(Faq::class);
     }
 }

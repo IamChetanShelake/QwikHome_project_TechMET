@@ -1,316 +1,6 @@
 @extends('admin.layouts.masterlayout')
 
 @section('content')
-    <div class="content-area">
-        <div class="modern-list-container">
-            <!-- Header Section -->
-            <div class="analytics-header-section">
-                <div class="list-header-content">
-                    <div class="list-title-group">
-                        <div class="list-icon-wrapper">
-                            <i class="fas fa-chart-bar list-main-icon"></i>
-                        </div>
-                        <div class="list-title-text">
-                            <h2 class="list-title">Reports & Analytics</h2>
-                            <p class="list-subtitle">Comprehensive insights into your business performance</p>
-                        </div>
-                    </div>
-                    <div class="filter-section">
-                        <form method="GET" action="{{ route('admin.analytics.index') }}" class="filter-form">
-                            <div class="filter-row">
-                                <div class="filter-group">
-                                    <label for="start_date">Start Date</label>
-                                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}"
-                                        class="filter-input">
-                                </div>
-                                <div class="filter-group">
-                                    <label for="end_date">End Date</label>
-                                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}"
-                                        class="filter-input">
-                                </div>
-                                <div class="filter-group">
-                                    <label for="service_id">Service</label>
-                                    <select id="service_id" name="service_id" class="filter-select">
-                                        <option value="">All Services</option>
-                                        @foreach ($services as $service)
-                                            <option value="{{ $service->id }}"
-                                                {{ $serviceId == $service->id ? 'selected' : '' }}>
-                                                {{ $service->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <label for="provider_id">Provider</label>
-                                    <select id="provider_id" name="provider_id" class="filter-select">
-                                        <option value="">All Providers</option>
-                                        @foreach ($providers as $provider)
-                                            <option value="{{ $provider->id }}"
-                                                {{ $providerId == $provider->id ? 'selected' : '' }}>
-                                                {{ $provider->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <button type="submit" class="modern-btn modern-btn-primary filter-btn">
-                                        <i class="fas fa-filter"></i>
-                                        <span>Apply Filters</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="summary-cards-grid">
-            <div class="summary-card">
-                <div class="card-icon">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="card-content">
-                    <h3>{{ number_format($analytics['total_bookings']) }}</h3>
-                    <p>Total Bookings</p>
-                    <div class="card-trend">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>This Period</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-card revenue-card">
-                <div class="card-icon">
-                    {{-- <i class="fas fa-dollar-sign"></i> --}}
-                    <b>AED</b>
-                </div>
-                <div class="card-content">
-                    <h3>{{ number_format($analytics['total_revenue'], 2) }}</h3>
-                    <p>Total Revenue</p>
-                    <div class="card-trend positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>Growth</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="card-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="card-content">
-                    <h3>{{ number_format($analytics['completed_bookings']) }}</h3>
-                    <p>Completed Bookings</p>
-                    <div class="card-trend">
-                        <span>{{ $analytics['total_bookings'] > 0 ? round(($analytics['completed_bookings'] / $analytics['total_bookings']) * 100) : 0 }}%
-                            Rate</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="card-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="card-content">
-                    <h3>{{ number_format($analytics['pending_bookings']) }}</h3>
-                    <p>Pending Bookings</p>
-                    <div class="card-trend">
-                        <span>Awaiting Action</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <div class="chart-row">
-                <!-- Revenue Trend Chart -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h4><i class="fas fa-chart-line"></i> Revenue Trend</h4>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="revenueTrendChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-
-                <!-- Daily Bookings Chart -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h4><i class="fas fa-calendar-alt"></i> Daily Bookings</h4>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="dailyBookingsChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Distribution Chart -->
-            <div class="chart-row single">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h4><i class="fas fa-pie-chart"></i> Booking Status Distribution</h4>
-                    </div>
-                    <div class="chart-body">
-                        <canvas id="statusChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tables Section -->
-        <div class="tables-section">
-            <div class="table-row">
-                <!-- Top Providers -->
-                <div class="table-card">
-                    <div class="table-header">
-                        <h4><i class="fas fa-star"></i> Top Performing Providers</h4>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="analytics-table">
-                            <thead>
-                                <tr>
-                                    <th>Provider</th>
-                                    <th>Total Bookings</th>
-                                    <th>Revenue</th>
-                                    <th>Completed</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($analytics['top_providers'] as $provider)
-                                    <tr>
-                                        <td>
-                                            <div class="provider-info">
-                                                <strong>{{ $provider['name'] }}</strong>
-                                                <small>{{ $provider['email'] }}</small>
-                                            </div>
-                                        </td>
-                                        <td>{{ $provider['total_bookings'] }}</td>
-                                        <td>₹{{ number_format($provider['total_revenue'], 2) }}</td>
-                                        <td>{{ $provider['completed_bookings'] }}</td>
-                                        <td>
-                                            <div class="rating">
-                                                <i class="fas fa-star"></i>
-                                                {{ number_format($provider['rating'], 1) }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="empty-row">No provider data available</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Popular Services -->
-                <div class="table-card">
-                    <div class="table-header">
-                        <h4><i class="fas fa-fire"></i> Popular Services</h4>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="analytics-table">
-                            <thead>
-                                <tr>
-                                    <th>Service</th>
-                                    <th>Category</th>
-                                    <th>Bookings</th>
-                                    <th>Revenue</th>
-                                    <th>Avg Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($analytics['popular_services'] as $service)
-                                    <tr>
-                                        <td>
-                                            <strong>{{ $service['name'] }}</strong>
-                                        </td>
-                                        <td>{{ $service['category'] }}</td>
-                                        <td>{{ $service['total_bookings'] }}</td>
-                                        <td>₹{{ number_format($service['total_revenue'], 2) }}</td>
-                                        <td>₹{{ number_format($service['average_price'], 2) }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="empty-row">No service data available</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detailed Bookings Table -->
-        <div class="detailed-table-section">
-            <div class="table-card">
-                <div class="table-header">
-                    <h4><i class="fas fa-list"></i> Detailed Bookings Report</h4>
-                    <p class="table-subtitle">Showing {{ $bookings->count() }} bookings for the selected period</p>
-                </div>
-                <div class="table-wrapper">
-                    <table class="detailed-table">
-                        <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>Customer</th>
-                                <th>Service</th>
-                                <th>Provider</th>
-                                <th>Date</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($bookings as $booking)
-                                <tr>
-                                    <td>
-                                        <span class="booking-ref">{{ $booking->booking_reference }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="customer-info">
-                                            <strong>{{ $booking->customer->name ?? 'N/A' }}</strong>
-                                            <small>{{ $booking->customer->email ?? '' }}</small>
-                                        </div>
-                                    </td>
-                                    <td>{{ $booking->service->name ?? 'N/A' }}</td>
-                                    <td>{{ $booking->serviceProvider->name ?? 'N/A' }}</td>
-                                    <td>{{ $booking->scheduled_date->format('d/m/Y') }}</td>
-                                    <td>₹{{ number_format($booking->price, 2) }}</td>
-                                    <td>
-                                        <span class="status-badge status-{{ strtolower($booking->status) }}">
-                                            {{ ucfirst($booking->status) }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="empty-row">
-                                        <div class="empty-state">
-                                            <i class="fas fa-calendar-times"></i>
-                                            <h5>No Bookings Found</h5>
-                                            <p>No bookings match the selected filters for this period.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
         /* Analytics Styles */
         .analytics-header-section {
@@ -720,6 +410,316 @@
             }
         }
     </style>
+    <div class="content-area">
+        <div class="modern-list-container">
+            <!-- Header Section -->
+            <div class="analytics-header-section">
+                <div class="list-header-content">
+                    <div class="list-title-group">
+                        <div class="list-icon-wrapper">
+                            <i class="fas fa-chart-bar list-main-icon"></i>
+                        </div>
+                        <div class="list-title-text">
+                            <h2 class="list-title">Reports & Analytics</h2>
+                            <p class="list-subtitle">Comprehensive insights into your business performance</p>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <form method="GET" action="{{ route('admin.analytics.index') }}" class="filter-form">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="start_date">Start Date</label>
+                                    <input type="date" id="start_date" name="start_date" value="{{ $startDate }}"
+                                        class="filter-input">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="end_date">End Date</label>
+                                    <input type="date" id="end_date" name="end_date" value="{{ $endDate }}"
+                                        class="filter-input">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="service_id">Service</label>
+                                    <select id="service_id" name="service_id" class="filter-select">
+                                        <option value="">All Services</option>
+                                        @foreach ($services as $service)
+                                            <option value="{{ $service->id }}"
+                                                {{ $serviceId == $service->id ? 'selected' : '' }}>
+                                                {{ $service->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="provider_id">Provider</label>
+                                    <select id="provider_id" name="provider_id" class="filter-select">
+                                        <option value="">All Providers</option>
+                                        @foreach ($providers as $provider)
+                                            <option value="{{ $provider->id }}"
+                                                {{ $providerId == $provider->id ? 'selected' : '' }}>
+                                                {{ $provider->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <button type="submit" class="modern-btn modern-btn-primary filter-btn">
+                                        <i class="fas fa-filter"></i>
+                                        <span>Apply Filters</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards-grid">
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="card-content">
+                    <h3>{{ number_format($analytics['total_bookings']) }}</h3>
+                    <p>Total Bookings</p>
+                    <div class="card-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>This Period</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card revenue-card">
+                <div class="card-icon">
+                    {{-- <i class="fas fa-dollar-sign"></i> --}}
+                    <b>AED</b>
+                </div>
+                <div class="card-content">
+                    <h3>{{ number_format($analytics['total_revenue'], 2) }}</h3>
+                    <p>Total Revenue</p>
+                    <div class="card-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Growth</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="card-content">
+                    <h3>{{ number_format($analytics['completed_bookings']) }}</h3>
+                    <p>Completed Bookings</p>
+                    <div class="card-trend">
+                        <span>{{ $analytics['total_bookings'] > 0 ? round(($analytics['completed_bookings'] / $analytics['total_bookings']) * 100) : 0 }}%
+                            Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="card-content">
+                    <h3>{{ number_format($analytics['pending_bookings']) }}</h3>
+                    <p>Pending Bookings</p>
+                    <div class="card-trend">
+                        <span>Awaiting Action</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-row">
+                <!-- Revenue Trend Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-chart-line"></i> Revenue Trend</h4>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="revenueTrendChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Daily Bookings Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-calendar-alt"></i> Daily Bookings</h4>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="dailyBookingsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Distribution Chart -->
+            <div class="chart-row single">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fas fa-pie-chart"></i> Booking Status Distribution</h4>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="statusChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="tables-section">
+            <div class="table-row">
+                <!-- Top Providers -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h4><i class="fas fa-star"></i> Top Performing Providers</h4>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Provider</th>
+                                    <th>Total Bookings</th>
+                                    <th>Revenue</th>
+                                    <th>Completed</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($analytics['top_providers'] as $provider)
+                                    <tr>
+                                        <td>
+                                            <div class="provider-info">
+                                                <strong>{{ $provider['name'] }}</strong>
+                                                <small>{{ $provider['email'] }}</small>
+                                            </div>
+                                        </td>
+                                        <td>{{ $provider['total_bookings'] }}</td>
+                                        <td>₹{{ number_format($provider['total_revenue'], 2) }}</td>
+                                        <td>{{ $provider['completed_bookings'] }}</td>
+                                        <td>
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                {{ number_format($provider['rating'], 1) }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="empty-row">No provider data available</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Popular Services -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h4><i class="fas fa-fire"></i> Popular Services</h4>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Category</th>
+                                    <th>Bookings</th>
+                                    <th>Revenue</th>
+                                    <th>Avg Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($analytics['popular_services'] as $service)
+                                    <tr>
+                                        <td>
+                                            <strong>{{ $service['name'] }}</strong>
+                                        </td>
+                                        <td>{{ $service['category'] }}</td>
+                                        <td>{{ $service['total_bookings'] }}</td>
+                                        <td>₹{{ number_format($service['total_revenue'], 2) }}</td>
+                                        <td>₹{{ number_format($service['average_price'], 2) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="empty-row">No service data available</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Bookings Table -->
+        <div class="detailed-table-section">
+            <div class="table-card">
+                <div class="table-header">
+                    <h4><i class="fas fa-list"></i> Detailed Bookings Report</h4>
+                    <p class="table-subtitle">Showing {{ $bookings->count() }} bookings for the selected period</p>
+                </div>
+                <div class="table-wrapper">
+                    <table class="detailed-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Provider</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($bookings as $booking)
+                                <tr>
+                                    <td>
+                                        <span class="booking-ref">{{ $booking->booking_reference }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="customer-info">
+                                            <strong>{{ $booking->customer->name ?? 'N/A' }}</strong>
+                                            <small>{{ $booking->customer->email ?? '' }}</small>
+                                        </div>
+                                    </td>
+                                    <td>{{ $booking->service->name ?? 'N/A' }}</td>
+                                    <td>{{ $booking->serviceProvider->name ?? 'N/A' }}</td>
+                                    <td>{{ $booking->scheduled_date->format('d/m/Y') }}</td>
+                                    <td>₹{{ number_format($booking->price, 2) }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ strtolower($booking->status) }}">
+                                            {{ ucfirst($booking->status) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="empty-row">
+                                        <div class="empty-state">
+                                            <i class="fas fa-calendar-times"></i>
+                                            <h5>No Bookings Found</h5>
+                                            <p>No bookings match the selected filters for this period.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
