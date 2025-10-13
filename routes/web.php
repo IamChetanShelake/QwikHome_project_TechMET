@@ -192,6 +192,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
+    
+    // AJAX routes for coupons (must come before parameterized routes)
+    Route::get('/coupons/get-subcategories/{categoryId}', [CouponController::class, 'getSubcategories'])->name('coupons.get-subcategories');
+    Route::get('/coupons/get-services/{categoryId}/{subcategoryId?}', [CouponController::class, 'getServices'])->name('coupons.get-services');
+    
     Route::get('/coupons/{id}', [CouponController::class, 'view'])->name('coupons.view');
     Route::get('/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
     Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');

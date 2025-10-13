@@ -14,5 +14,6 @@ class Coupon extends Model
         'used_count' => 'integer',
         'usage_limit' => 'integer',
         'status' => 'boolean',
+        'service_ids' => 'array',
     ];
 }
