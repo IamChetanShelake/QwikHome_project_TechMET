@@ -185,6 +185,88 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Services Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-tools"></i>
+                                <h3>Services Offered</h3>
+                            </div>
+
+                            <!-- Service Filters -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-filter"></i>
+                                        Filter by Category
+                                    </label>
+                                    <select id="category_filter" class="modern-filter-select" onchange="filterServices()">
+                                        <option value="">All Categories</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-filter"></i>
+                                        Filter by Subcategory
+                                    </label>
+                                    <select id="subcategory_filter" class="modern-filter-select" onchange="filterServices()">
+                                        <option value="">All Subcategories</option>
+                                        @foreach($subcategories as $subcategory)
+                                            <option value="{{ $subcategory->id }}" data-category="{{ $subcategory->category_id }}">{{ $subcategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label class="form-label">
+                                        <i class="fas fa-check-square"></i>
+                                        Select Services
+                                    </label>
+                                    <div class="services-grid" id="services-container">
+                                        @if($services->count() > 0)
+                                            @foreach($services as $service)
+                                                <div class="service-item" data-category="{{ $service->category_id }}" data-subcategory="{{ $service->subcategory_id }}">
+                                                    <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="service-checkbox"
+                                                           {{ in_array($service->id, old('services', $serviceProvider->services->pluck('id')->toArray())) ? 'checked' : '' }}>
+                                                    <label for="service_{{ $service->id }}" class="service-label">
+                                                        <span class="service-icon">
+                                                            @if($service->image)
+                                                                <img src="{{ asset('Service_images/'.$service->image) }}" alt="{{ $service->name }}" class="service-image">
+                                                            @else
+                                                                <i class="fas fa-tools"></i>
+                                                            @endif
+                                                        </span>
+                                                        <div class="service-details">
+                                                            <span class="service-name">{{ $service->name }}</span>
+                                                            <span class="service-category">{{ optional($service->category)->name }} @if($service->subcategory) > {{ $service->subcategory->name }}@endif</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="no-services">No services available</p>
+                                        @endif
+                                    </div>
+                                    @error('services')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    @error('services.*')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Form Actions -->
@@ -637,6 +719,124 @@
                 justify-content: center;
             }
         }
+
+        /* Services Grid Styles */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .service-item {
+            position: relative;
+        }
+
+        .service-item.hidden {
+            display: none;
+        }
+
+        .service-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .service-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #ffffff;
+        }
+
+        .service-label:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .service-checkbox:checked + .service-label {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #ffffff;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .service-name {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .service-category {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.2;
+        }
+
+        .modern-filter-select {
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .modern-filter-select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .modern-filter-select option {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            padding: 10px 15px;
+        }
+
+        .no-services {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+            padding: 20px;
+            margin: 0;
+        }
     </style>
 
     <script>
@@ -675,6 +875,67 @@
             document.getElementById('image').value = '';
             document.getElementById('imagePreview').style.display = 'none';
             document.querySelector('.file-input-display span').textContent = 'Choose new image...';
+        }
+
+        // Filter services by category and subcategory
+        function filterServices() {
+            const categoryFilter = document.getElementById('category_filter').value;
+            const subcategoryFilter = document.getElementById('subcategory_filter').value;
+            const serviceItems = document.querySelectorAll('.service-item');
+            
+            // Update subcategory options based on selected category
+            updateSubcategoryOptions(categoryFilter);
+            
+            serviceItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                const itemSubcategory = item.getAttribute('data-subcategory');
+                
+                let showItem = true;
+                
+                // Filter by category
+                if (categoryFilter && itemCategory !== categoryFilter) {
+                    showItem = false;
+                }
+                
+                // Filter by subcategory
+                if (subcategoryFilter && itemSubcategory !== subcategoryFilter) {
+                    showItem = false;
+                }
+                
+                if (showItem) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                    // Uncheck hidden services
+                    const checkbox = item.querySelector('.service-checkbox');
+                    if (checkbox.checked) {
+                        checkbox.checked = false;
+                    }
+                }
+            });
+        }
+        
+        // Update subcategory dropdown based on selected category
+        function updateSubcategoryOptions(selectedCategoryId) {
+            const subcategorySelect = document.getElementById('subcategory_filter');
+            const options = subcategorySelect.querySelectorAll('option');
+            
+            options.forEach(option => {
+                if (option.value === '') {
+                    option.style.display = 'block'; // Always show "All Subcategories"
+                } else {
+                    const optionCategory = option.getAttribute('data-category');
+                    if (!selectedCategoryId || optionCategory === selectedCategoryId) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                        // Reset subcategory filter if current selection is hidden
+                        if (option.selected) {
+                            subcategorySelect.value = '';
+                        }
+                    }
+                }
+            });
         }
     </script>
 @endsection

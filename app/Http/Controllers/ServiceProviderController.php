@@ -22,8 +22,10 @@ class ServiceProviderController extends Controller
      */
     public function create()
     {
-        $services = \App\Models\Service::all();
-        return view('vendor.serviceProviders.create', compact('services'));
+        $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
+        $categories = \App\Models\Category::where('status', 'active')->get();
+        $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
+        return view('vendor.serviceProviders.create', compact('services', 'categories', 'subcategories'));
     }
 
     /**
@@ -81,8 +83,11 @@ class ServiceProviderController extends Controller
      */
     public function edit(string $id)
     {
-        $serviceProvider = User::findOrFail($id);
-        return view('vendor.serviceProviders.edit', compact('serviceProvider'));
+        $serviceProvider = User::where('role', 'serviceprovider')->with('services')->findOrFail($id);
+        $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
+        $categories = \App\Models\Category::where('status', 'active')->get();
+        $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
+        return view('vendor.serviceProviders.edit', compact('serviceProvider', 'services', 'categories', 'subcategories'));
     }
 
     /**
@@ -97,6 +102,8 @@ class ServiceProviderController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:3048',
+            'services' => 'array',
+            'services.*' => 'exists:services,id',
         ]);
 
         $serviceProvider = User::findOrFail($id);
@@ -123,6 +130,13 @@ class ServiceProviderController extends Controller
         }
 
         $serviceProvider->update($data);
+
+        // Update services
+        if ($request->has('services') && is_array($request->services)) {
+            $serviceProvider->services()->sync($request->services);
+        } else {
+            $serviceProvider->services()->detach();
+        }
 
         return redirect()->route('serviceProviders.index')->with('success', 'Service Provider updated successfully.');
     }

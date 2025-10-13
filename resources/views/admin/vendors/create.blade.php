@@ -187,21 +187,58 @@
                                 <h3>Services Offered</h3>
                             </div>
 
+                            <!-- Service Filters -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-filter"></i>
+                                        Filter by Category
+                                    </label>
+                                    <select id="category_filter" class="modern-filter-select" onchange="filterServices()">
+                                        <option value="">All Categories</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-filter"></i>
+                                        Filter by Subcategory
+                                    </label>
+                                    <select id="subcategory_filter" class="modern-filter-select" onchange="filterServices()">
+                                        <option value="">All Subcategories</option>
+                                        @foreach($subcategories as $subcategory)
+                                            <option value="{{ $subcategory->id }}" data-category="{{ $subcategory->category_id }}">{{ $subcategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="form-row">
                                 <div class="form-group full-width">
                                     <label class="form-label">
                                         <i class="fas fa-check-square"></i>
                                         Select Services
                                     </label>
-                                    <div class="services-grid">
+                                    <div class="services-grid" id="services-container">
                                         @if($services->count() > 0)
                                             @foreach($services as $service)
-                                                <div class="service-item">
+                                                <div class="service-item" data-category="{{ $service->category_id }}" data-subcategory="{{ $service->subcategory_id }}">
                                                     <input type="checkbox" name="services[]" value="{{ $service->id }}" id="service_{{ $service->id }}" class="service-checkbox"
                                                            {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="toggleServicePayment({{ $service->id }})">
                                                     <label for="service_{{ $service->id }}" class="service-label">
-                                                        <span class="service-icon"><i class="fas fa-wrench"></i></span>
-                                                        <span class="service-name">{{ $service->name }}</span>
+                                                        <span class="service-icon">
+                                                            @if($service->image)
+                                                                <img src="{{ asset('Service_images/'.$service->image) }}" alt="{{ $service->name }}" class="service-image">
+                                                            @else
+                                                                <i class="fas fa-tools"></i>
+                                                            @endif
+                                                        </span>
+                                                        <div class="service-details">
+                                                            <span class="service-name">{{ $service->name }}</span>
+                                                            <span class="service-category">{{ optional($service->category)->name }} @if($service->subcategory) > {{ $service->subcategory->name }}@endif</span>
+                                                        </div>
                                                     </label>
                                                 </div>
                                             @endforeach
@@ -939,52 +976,112 @@
         /* Services Grid Styles */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
             margin-top: 15px;
         }
 
         .service-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            position: relative;
+        }
+
+        .service-item.hidden {
+            display: none;
         }
 
         .service-checkbox {
-            display: none;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
         }
 
         .service-label {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
+            gap: 12px;
+            padding: 16px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
+            color: #ffffff;
         }
 
         .service-label:hover {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .service-checkbox:checked + .service-label {
             background: rgba(0, 212, 255, 0.1);
             border-color: #00d4ff;
+            color: #00d4ff;
         }
 
         .service-icon {
-            color: #00d4ff;
-            font-size: 16px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #ffffff;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
         }
 
         .service-name {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .service-category {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.2;
+        }
+
+        .modern-filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             color: #ffffff;
-            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .modern-filter-select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .modern-filter-select option {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            padding: 10px 15px;
         }
 
         .no-services {
@@ -1205,6 +1302,68 @@
             } else if (selectedValue === 'revenue_share') {
                 paymentSection.querySelector('.revenue-share-field').style.display = 'flex';
             }
+        }
+
+        // Filter services by category and subcategory
+        function filterServices() {
+            const categoryFilter = document.getElementById('category_filter').value;
+            const subcategoryFilter = document.getElementById('subcategory_filter').value;
+            const serviceItems = document.querySelectorAll('.service-item');
+            
+            // Update subcategory options based on selected category
+            updateSubcategoryOptions(categoryFilter);
+            
+            serviceItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                const itemSubcategory = item.getAttribute('data-subcategory');
+                
+                let showItem = true;
+                
+                // Filter by category
+                if (categoryFilter && itemCategory !== categoryFilter) {
+                    showItem = false;
+                }
+                
+                // Filter by subcategory
+                if (subcategoryFilter && itemSubcategory !== subcategoryFilter) {
+                    showItem = false;
+                }
+                
+                if (showItem) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                    // Uncheck hidden services
+                    const checkbox = item.querySelector('.service-checkbox');
+                    if (checkbox.checked) {
+                        checkbox.checked = false;
+                        toggleServicePayment(checkbox.value);
+                    }
+                }
+            });
+        }
+        
+        // Update subcategory dropdown based on selected category
+        function updateSubcategoryOptions(selectedCategoryId) {
+            const subcategorySelect = document.getElementById('subcategory_filter');
+            const options = subcategorySelect.querySelectorAll('option');
+            
+            options.forEach(option => {
+                if (option.value === '') {
+                    option.style.display = 'block'; // Always show "All Subcategories"
+                } else {
+                    const optionCategory = option.getAttribute('data-category');
+                    if (!selectedCategoryId || optionCategory === selectedCategoryId) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                        // Reset subcategory filter if current selection is hidden
+                        if (option.selected) {
+                            subcategorySelect.value = '';
+                        }
+                    }
+                }
+            });
         }
     </script>
 @endsection

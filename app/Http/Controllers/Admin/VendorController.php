@@ -23,8 +23,10 @@ class VendorController extends Controller
      */
     public function create()
     {
-        $services = \App\Models\Service::all();
-        return view('admin.vendors.create', compact('services'));
+        $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
+        $categories = \App\Models\Category::where('status', 'active')->get();
+        $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
+        return view('admin.vendors.create', compact('services', 'categories', 'subcategories'));
     }
 
     /**
@@ -161,9 +163,11 @@ class VendorController extends Controller
      */
     public function edit(string $id)
     {
-        $vendor = User::where('role', 'vendor')->findOrFail($id);
-        $services = \App\Models\Service::all();
-        return view('admin.vendors.edit', compact('vendor', 'services'));
+        $vendor = User::where('role', 'vendor')->with('services')->findOrFail($id);
+        $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
+        $categories = \App\Models\Category::where('status', 'active')->get();
+        $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
+        return view('admin.vendors.edit', compact('vendor', 'services', 'categories', 'subcategories'));
     }
 
     /**
