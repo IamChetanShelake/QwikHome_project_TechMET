@@ -351,7 +351,7 @@
                             <span class="optional-badge">Optional</span>
                         </label>
                         <div class="input-wrapper">
-                            <input type="file" class="modern-input file-input" name="image" id="image" accept="image/*">
+                            <input type="file" class="modern-input file-input" name="image" id="image" accept="*">
                             <i class="fas fa-image input-icon"></i>
                         </div>
                         @if ($service->image)
@@ -615,7 +615,7 @@
                                                         </label>
                                                         <div class="input-wrapper">
                                                             <input type="file" class="modern-input file-input"
-                                                                name="requirements[{{ $index }}][image]" accept="image/*">
+                                                                name="requirements[{{ $index }}][image]" accept="*">
                                                             <i class="fas fa-image input-icon"></i>
                                                         </div>
                                                         @if ($requirement->image)
@@ -658,7 +658,7 @@
                                                     </label>
                                                     <div class="input-wrapper">
                                                         <input type="file" class="modern-input file-input"
-                                                            name="requirements[0][image]" accept="image/*">
+                                                            name="requirements[0][image]" accept="*">
                                                         <i class="fas fa-image input-icon"></i>
                                                     </div>
                                                 </div>
@@ -723,7 +723,7 @@
                                                         </label>
                                                         <div class="input-wrapper">
                                                             <input type="file" class="modern-input file-input"
-                                                                name="processes[{{ $index }}][image]" accept="image/*">
+                                                                name="processes[{{ $index }}][image]" accept="*">
                                                             <i class="fas fa-image input-icon"></i>
                                                         </div>
                                                         @if ($process->image)
@@ -782,7 +782,7 @@
                                                     </label>
                                                     <div class="input-wrapper">
                                                         <input type="file" class="modern-input file-input"
-                                                            name="processes[0][image]" accept="image/*">
+                                                            name="processes[0][image]" accept="*">
                                                         <i class="fas fa-image input-icon"></i>
                                                     </div>
                                                 </div>
@@ -922,7 +922,7 @@
                                                         <div class="input-wrapper">
                                                             <input type="file" class="modern-input file-input"
                                                                 name="materials[{{ $index }}][material_image]"
-                                                                accept="image/*">
+                                                                accept="*">
                                                             <i class="fas fa-image input-icon"></i>
                                                         </div>
                                                         <small class="field-hint">
@@ -1014,7 +1014,7 @@
                                                     <div class="input-wrapper">
                                                         <input type="file" class="modern-input file-input"
                                                             name="materials[0][material_image]"
-                                                            accept="image/*">
+                                                            accept="*">
                                                         <i class="fas fa-image input-icon"></i>
                                                     </div>
                                                 </div>
@@ -2172,7 +2172,7 @@
                                 <div class="input-wrapper">
                                     <input type="file" class="modern-input file-input"
                                         name="materials[${currentIndex}][material_image]"
-                                        accept="image/*">
+                                        accept="*">
                                     <i class="fas fa-image input-icon"></i>
                                 </div>
                             </div>
@@ -2254,7 +2254,7 @@
                                 </label>
                                 <div class="input-wrapper">
                                     <input type="file" class="modern-input file-input"
-                                        name="requirements[${currentIndex}][image]" accept="image/*">
+                                        name="requirements[${currentIndex}][image]" accept="*">
                                     <i class="fas fa-image input-icon"></i>
                                 </div>
                             </div>
@@ -2312,7 +2312,7 @@
                                 </label>
                                 <div class="input-wrapper">
                                     <input type="file" class="modern-input file-input"
-                                        name="processes[${currentIndex}][image]" accept="image/*">
+                                        name="processes[${currentIndex}][image]" accept="*">
                                     <i class="fas fa-image input-icon"></i>
                                 </div>
                             </div>

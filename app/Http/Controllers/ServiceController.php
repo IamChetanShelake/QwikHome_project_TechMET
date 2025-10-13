@@ -45,7 +45,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -73,7 +73,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -146,7 +146,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -176,7 +176,7 @@ class ServiceController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
         ]);
 
         if ($request->hasFile('image')) {
@@ -267,7 +267,7 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -278,7 +278,7 @@ class ServiceController extends Controller
             'materials.*.material_description' => 'nullable|string',
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
-            'materials.*.material_image' => 'nullable|image|mimes:jpeg,png,jpg',
+            'materials.*.material_image' => 'nullable|file',
         ];
 
         // Make subscription prices required if the corresponding checkboxes are enabled
@@ -432,7 +432,7 @@ class ServiceController extends Controller
             'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -443,7 +443,7 @@ class ServiceController extends Controller
             'materials.*.material_description' => 'nullable|string',
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
-            'materials.*.material_image' => 'nullable|image|mimes:jpeg,png,jpg',
+            'materials.*.material_image' => 'nullable|file',
         ];
 
         // Make subscription prices required if the corresponding checkboxes are enabled
