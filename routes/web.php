@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\ContentManagement\DisclaimerController;
 use App\Http\Controllers\Admin\ContentManagement\PrivacyPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\RefundPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\TermsConditionController;
+use App\Http\Controllers\Admin\PushNotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -249,6 +250,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     //Feedback management-------------
     Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('feedback.index');
     Route::get('/feedback/search', [\App\Http\Controllers\Admin\FeedbackController::class, 'search'])->name('feedback.search');
+
+    // Push Notifications management-------------
+    Route::resource('push-notifications', PushNotificationController::class);
 });
 
 Auth::routes();

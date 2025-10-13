@@ -6,27 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('processes', function (Blueprint $table) {
+        Schema::create('push_notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
+            $table->enum('audience', ['vendor', 'serviceprovider', 'user', 'all']);
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->integer('order')->default(0);
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('processes');
+        Schema::dropIfExists('push_notifications');
     }
 };

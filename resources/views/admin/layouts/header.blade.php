@@ -1160,8 +1160,8 @@
                             <span>Promo Codes</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ request()->is('push-notifications*') ? 'active' : '' }}">
+                        <a href="{{ route('push-notifications.index') }}" class="nav-link">
                             <i class="fas fa-bell"></i>
                             <span>Push Notifications</span>
                         </a>
