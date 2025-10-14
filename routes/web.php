@@ -24,15 +24,12 @@ use App\Http\Controllers\Admin\ContentManagement\DisclaimerController;
 use App\Http\Controllers\Admin\ContentManagement\PrivacyPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\RefundPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\TermsConditionController;
-<<<<<<< HEAD
 use App\Http\Controllers\Admin\PushNotificationController;
-=======
 use App\Models\Disclaimer;
 use App\Models\PrivacyPolicy;
 use App\Models\TermsCondition;
 use App\Models\RefundPolicy;
 use App\Models\ServiceOffer;
->>>>>>> mayur
 
 Route::get('/', function () {
     return view('welcome');
