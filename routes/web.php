@@ -8,6 +8,7 @@ use App\Http\Controllers\PromocodeController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ServiceProviderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ServiceOffersController;
 use App\Http\Controllers\Vendor\BookingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -23,10 +24,36 @@ use App\Http\Controllers\Admin\ContentManagement\DisclaimerController;
 use App\Http\Controllers\Admin\ContentManagement\PrivacyPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\RefundPolicyController;
 use App\Http\Controllers\Admin\ContentManagement\TermsConditionController;
+use App\Models\Disclaimer;
+use App\Models\PrivacyPolicy;
+use App\Models\TermsCondition;
+use App\Models\RefundPolicy;
+use App\Models\ServiceOffer;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Policy routes
+Route::get('/disclaimer', function () {
+    $disclaimers = Disclaimer::all();
+    return view('pages.disclaimer');
+})->name('disclaimer');
+
+Route::get('/privacy-policy', function () {
+    $privacyPolicies = PrivacyPolicy::all();
+    return view('pages.privacy-policy', compact('privacyPolicies'));
+})->name('privacy.policy');
+
+Route::get('/terms-conditions', function () {
+    $termsConditions = TermsCondition::all();
+    return view('pages.terms-conditions', compact('termsConditions'));
+})->name('terms-conditions');
+
+Route::get('/refund-policy', function () {
+    $refundPolicies = RefundPolicy::all();
+    return view('pages.refund-policy', compact('refundPolicies'));
+})->name('refund.policy');
 
 // Admin Panel Routes
 Route::get('/admin/login', function () {
@@ -87,6 +114,14 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::get('{service}/edit', [ServiceController::class, 'servicesEdit'])->name('services.services.edit');
         Route::put('{service}', [ServiceController::class, 'servicesUpdate'])->name('services.services.update');
         Route::delete('{service}', [ServiceController::class, 'servicesDestroy'])->name('services.services.destroy');
+
+        // Service Offers
+        Route::resource('offers', \App\Http\Controllers\Admin\ServiceOffersController::class)->parameters(['offers' => 'serviceOffer'])->except(['create', 'show']);
+        Route::get('offers/create/{service}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'create'])->name('services.offers.create');
+        Route::get('services-offers', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'index'])->name('services.offers.index');
+        Route::post('offers/store', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'store'])->name('services.offers.store');
+        Route::get('offers/{serviceOffer}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'show'])->name('services.offers.show');
+        Route::get('offers/{serviceOffer}/edit', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'edit'])->name('services.offers.edit');
     });
 
     //service management old-------------
@@ -139,6 +174,8 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
             'edit' => 'disclaimers.edit',
             'update' => 'disclaimers.update',
             'destroy' => 'disclaimers.destroy',
+
+            'disclaimers' => 'disclaimers',
         ]);
 
         Route::resource('privacy-policies', PrivacyPolicyController::class)->names([
@@ -149,6 +186,8 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
             'edit' => 'privacy-policies.edit',
             'update' => 'privacy-policies.update',
             'destroy' => 'privacy-policies.destroy',
+
+            'privacyPolicy' => 'privacyPolicy',
         ]);
 
         Route::resource('refund-policies', RefundPolicyController::class)->names([
@@ -159,6 +198,8 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
             'edit' => 'refund-policies.edit',
             'update' => 'refund-policies.update',
             'destroy' => 'refund-policies.destroy',
+
+            'refundPolicy' => 'refundPolicy',
         ]);
 
         Route::resource('terms-conditions', TermsConditionController::class)->names([
@@ -169,9 +210,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
             'edit' => 'terms-conditions.edit',
             'update' => 'terms-conditions.update',
             'destroy' => 'terms-conditions.destroy',
+
+            'terms_and_conditions' => 'terms_and_conditions',
         ]);
-
-
     });
 
     //FAQ management-------------

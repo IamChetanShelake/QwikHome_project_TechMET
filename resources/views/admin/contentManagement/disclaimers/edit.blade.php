@@ -241,7 +241,7 @@
                 </div>
             </div>
             <div class="header-actions">
-                <a href="{{ route('contentManagement.disclaimers-policies.index') }}" class="modern-btn modern-btn-secondary">
+                <a href="{{ route('contentManagement.disclaimers.index') }}" class="modern-btn modern-btn-secondary">
                     <i class="fas fa-arrow-left"></i>
                     Back to List
                 </a>
@@ -270,7 +270,7 @@
 
         <!-- Form Container -->
         <div class="form-container">
-            <form method="POST" action="{{ route('contentManagement.disclaimers-policies.update', $disclaimer) }}">
+            <form method="POST" action="{{ route('contentManagement.disclaimers.update', $disclaimer) }}">
                 @csrf
                 @method('PUT')
 
@@ -279,7 +279,8 @@
                         <i class="fas fa-heading" style="margin-right: 8px;"></i>
                         Title
                     </label>
-                    <input type="text" class="form-input" name="title" placeholder="Enter disclaimer title (optional)" value="{{ old('title', $disclaimer->title) }}">
+                    <input type="text" class="form-input" name="title" placeholder="Enter disclaimer title (optional)"
+                        value="{{ old('title', $disclaimer->title) }}">
                 </div>
 
                 <div class="form-group">
@@ -297,11 +298,13 @@
                     </label>
                     <div class="status-radio-group">
                         <div class="radio-option">
-                            <input type="radio" id="status_active" name="status" value="active" class="radio-input" {{ old('status', $disclaimer->status) == 'active' ? 'checked' : '' }}>
+                            <input type="radio" id="status_active" name="status" value="active" class="radio-input"
+                                {{ old('status', $disclaimer->status) == 'active' ? 'checked' : '' }}>
                             <label for="status_active" class="radio-label">Active</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="status_inactive" name="status" value="inactive" class="radio-input" {{ old('status', $disclaimer->status) == 'inactive' ? 'checked' : '' }}>
+                            <input type="radio" id="status_inactive" name="status" value="inactive" class="radio-input"
+                                {{ old('status', $disclaimer->status) == 'inactive' ? 'checked' : '' }}>
                             <label for="status_inactive" class="radio-label">Inactive</label>
                         </div>
                     </div>
@@ -310,11 +313,13 @@
                 <!-- Form Actions -->
                 <div class="form-actions">
                     <div>
-                        <a href="{{ route('contentManagement.disclaimers-policies.index') }}" class="modern-btn modern-btn-secondary">
+                        <a href="{{ route('contentManagement.disclaimers.index') }}"
+                            class="modern-btn modern-btn-secondary">
                             <i class="fas fa-times"></i>
                             Cancel
                         </a>
-                        <button type="submit" form="deleteForm" class="modern-btn modern-btn-danger" style="margin-left: 10px;">
+                        <button type="submit" form="deleteForm" class="modern-btn modern-btn-danger"
+                            style="margin-left: 10px;">
                             <i class="fas fa-trash"></i>
                             Delete
                         </button>
@@ -326,7 +331,8 @@
                 </div>
 
                 <!-- Hidden Delete Form -->
-                <form id="deleteForm" method="POST" action="{{ route('contentManagement.disclaimers-policies.destroy', $disclaimer) }}" style="display: none;">
+                <form id="deleteForm" method="POST"
+                    action="{{ route('contentManagement.disclaimers.destroy', $disclaimer) }}" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>

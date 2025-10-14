@@ -64,4 +64,10 @@ class PrivacyPolicyController extends Controller
         return redirect()->route('contentManagement.privacy-policies.index')
             ->with('success', 'Privacy Policy deleted successfully.');
     }
+
+    public function privacyPolicy()
+    {
+        $privacyPolicies = PrivacyPolicy::all();
+        return view('pages.privacy-policy', compact('privacyPolicy'));
+    }
 }

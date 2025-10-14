@@ -64,4 +64,10 @@ class RefundPolicyController extends Controller
         return redirect()->route('contentManagement.refund-policies.index')
             ->with('success', 'Refund Policy deleted successfully.');
     }
+
+    public function refundPolicy()
+    {
+        $refundPolicies = RefundPolicy::all();
+        return view('pages.refund-policy', compact('refundPolicy'));
+    }
 }

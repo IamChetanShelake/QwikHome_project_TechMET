@@ -479,26 +479,26 @@
         .nice-select {
             display: none !important;
         }
-        
-        .nice-select + .modern-select {
+
+        .nice-select+.modern-select {
             display: none !important;
         }
-        
+
         .modern-select {
             display: block !important;
             appearance: auto !important;
         }
-        
+
         /* Hide nice-select dropdown lists */
         .nice-select .list {
             display: none !important;
         }
-        
+
         /* Ensure original selects are visible */
         select.modern-select {
             display: block !important;
         }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .index-header-section {
@@ -749,7 +749,8 @@
                                     </label>
                                 </td>
                                 <td class="td-rating">
-                                    <span class="rating-text">{{ number_format($service->average_rating ?? 0, 1) }}/5</span>
+                                    <span
+                                        class="rating-text">{{ number_format($service->average_rating ?? 0, 1) }}/5</span>
                                 </td>
                                 <td class="td-date">
                                     <span class="date-text">{{ $service->created_at->format('M d, Y') }}</span>
@@ -764,6 +765,11 @@
                                         <a href="{{ route('services.services.edit', $service) }}"
                                             class="action-btn action-edit" title="Edit Service">
                                             <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{{ route('services.offers.create', $service) }}" class="action-btn"
+                                            style="background: rgba(138, 43, 226, 0.2); color: #8a2be2;"
+                                            title="Add Offer">
+                                            <i class="fas fa-percent"></i>
                                         </a>
                                         <button type="button" class="action-btn action-delete"
                                             onclick="confirmDelete({{ $service->id }}, '{{ $service->name }}')"
@@ -822,9 +828,11 @@
     <script>
         // Prevent nice-select from initializing on admin pages
         if (typeof $.fn.niceSelect !== 'undefined') {
-            $.fn.niceSelect = function() { return this; };
+            $.fn.niceSelect = function() {
+                return this;
+            };
         }
-        
+
         // Auto-hide success alert
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search');
