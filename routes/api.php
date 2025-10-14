@@ -99,7 +99,7 @@ Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
 Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);
 
 // Wishlist API routes
-Route::post('/wishlist', [WishlistApiController::class, 'store']); // Add to wishlist
+Route::post('/wishlist-store', [WishlistApiController::class, 'store']); // Add to wishlist
 Route::get('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
-Route::delete('/wishlist/{id}', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
+Route::delete('/wishlist/delete', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
 Route::post('/wishlist/remove-item', [WishlistApiController::class, 'removeItem']); // Remove specific service/offer from wishlist
