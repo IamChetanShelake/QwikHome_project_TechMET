@@ -64,4 +64,10 @@ class DisclaimerController extends Controller
         return redirect()->route('contentManagement.disclaimers.index')
             ->with('success', 'Disclaimer deleted successfully.');
     }
+
+    public function disclaimers()
+    {
+        $disclaimers = Disclaimer::all();
+        return view('pages.disclaimer', compact('disclaimers'));
+    }
 }

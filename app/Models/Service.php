@@ -81,6 +81,18 @@ class Service extends Model
     {
         return $this->hasMany(ServiceMaterial::class);
     }
+
+    // Offers relationship
+    public function offers()
+    {
+        return $this->hasMany(ServiceOffer::class);
+    }
+
+    // Active offers
+    public function activeOffers()
+    {
+        return $this->hasMany(ServiceOffer::class)->active();
+    }
     
     // Frequency options relationship
     public function frequencyOptions()

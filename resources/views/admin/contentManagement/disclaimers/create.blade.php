@@ -227,8 +227,7 @@
                 </div>
             </div>
             <div class="header-actions">
-                <a href="{{ route('contentManagement.disclaimers-policies.index') }}"
-                    class="modern-btn modern-btn-secondary">
+                <a href="{{ route('contentManagement.disclaimers.index') }}" class="modern-btn modern-btn-secondary">
                     <i class="fas fa-arrow-left"></i>
                     Back to List
                 </a>
@@ -257,7 +256,7 @@
 
         <!-- Form Container -->
         <div class="form-container">
-            <form method="POST" action="{{ route('contentManagement.disclaimers-policies.store') }}">
+            <form method="POST" action="{{ route('contentManagement.disclaimers.store') }}">
                 @csrf
 
                 <div class="form-group">
@@ -298,8 +297,7 @@
 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <a href="{{ route('contentManagement.disclaimers-policies.index') }}"
-                        class="modern-btn modern-btn-secondary">
+                    <a href="{{ route('contentManagement.disclaimers.index') }}" class="modern-btn modern-btn-secondary">
                         <i class="fas fa-times"></i>
                         Cancel
                     </a>

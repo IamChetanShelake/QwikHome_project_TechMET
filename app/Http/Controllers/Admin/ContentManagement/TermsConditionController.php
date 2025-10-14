@@ -64,4 +64,10 @@ class TermsConditionController extends Controller
         return redirect()->route('contentManagement.terms-conditions.index')
             ->with('success', 'Terms and Conditions deleted successfully.');
     }
+
+    public function terms_and_conditions()
+    {
+        $termsConditions = TermsCondition::all();
+        return view('pages.terms-conditions', compact('termsConditions'));
+    }
 }

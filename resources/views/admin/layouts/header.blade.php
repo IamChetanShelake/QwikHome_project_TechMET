@@ -28,18 +28,6 @@
     <script src="{{ asset('website/assets/vendor/popper/popper.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Immediately disable nice-select when jQuery loads
-        (function($) {
-            $.fn.niceSelect = function() { 
-                console.log('niceSelect disabled for admin panel');
-                return this; 
-            };
-        })(jQuery);
-        
-        // Additional protection
-        window.adminPanelMode = true;
-    </script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <style>
         /* Modern Service Management Dropdown Styling */
@@ -620,7 +608,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <img src="{{ asset('images/logo.jpg') }}" alt="QwikHome" class="logo-image">
+                <img src="{{ asset('images/qwikhom_logo.png') }}" alt="QwikHome" class="logo-image">
             </div>
             <button class="sidebar-toggle" id="sidebarToggle">
                 <i class="fas fa-bars"></i>
@@ -1184,40 +1172,111 @@
                             <span>Feedbacks</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ str_contains(request()->url(), '/content-management') ? 'active' : '' }}">
-                        <div class="content-menu">
-                            <a href="javascript:void(0)" class="nav-link content-menu-trigger">
-                                <i class="fas fa-edit"></i>
-                                <span>Content Management</span>
+                    <li>
+                        <a href="{{ route('contentManagement.banners.index') }}"
+                            class="dropdown-item {{ request()->routeIs('admin.contentManagement.banners.*') ? 'active' : '' }}">
+                            <i class="fas fa-images"></i>
+                            <span>Banners</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('offers.index') }}"
+                            class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">
+                            <i class="fas fa-percent"></i>
+                            <span>Offers</span>
+                        </a>
+                    </li>
+
+                    <li>
+
+
+                        <!--<a href="{{ route('contentManagement.campaigns.index') }}"-->
+                        <!--    class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">-->
+                        <!--    <i class="fas fa-bullhorn"></i>-->
+                        <!--    <span>Campaigns</span>-->
+                        <!--</a>-->
+                    </li>
+                    <!--<li class="nav-item {{ str_contains(request()->url(), '/content-management') ? 'active' : '' }}">-->
+                    <!--    <div class="content-menu">-->
+                    <!--        <a href="javascript:void(0)" class="nav-link content-menu-trigger">-->
+                    <!--            <i class="fas fa-edit"></i>-->
+                    <!--            <span>Content Management</span>-->
+                    <!--            <i class="fas fa-caret-down ml-1"></i>-->
+                    <!--        </a>-->
+                    <!--        <div class="content-dropdown-menu" style="display: none;">-->
+                    <!--            <a href="{{ route('contentManagement.banners.index') }}"-->
+                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.banners.*') ? 'active' : '' }}">-->
+                    <!--                <i class="fas fa-images"></i>-->
+                    <!--                <span>Banners</span>-->
+                    <!--            </a>-->
+
+                    <!--            <a href="{{ route('contentManagement.offers.index') }}"-->
+                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">-->
+                    <!--                <i class="fas fa-percent"></i>-->
+                    <!--                <span>Offers</span>-->
+                    <!--            </a>-->
+                    <!--            <a href="{{ route('contentManagement.campaigns.index') }}"-->
+                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">-->
+                    <!--                <i class="fas fa-bullhorn"></i>-->
+                    <!--                <span>Campaigns</span>-->
+                    <!--            </a>-->
+                    <!--        </div>-->
+
+                    <!--    </div>-->
+                    <!--</li>-->
+                    <li
+                        class="nav-item {{ str_contains(request()->url(), '/content-management/') && (request()->is('*disclaimers*') || request()->is('*privacy-policies*') || request()->is('*terms-conditions*') || request()->is('*refund-policies*')) ? 'active' : '' }}">
+                        <div class="pages-menu">
+                            <a href="javascript:void(0)" class="nav-link pages-menu-trigger">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Pages</span>
                                 <i class="fas fa-caret-down ml-1"></i>
                             </a>
-                            <div class="content-dropdown-menu" style="display: none;">
-                                <a href="{{ route('contentManagement.banners.index') }}"
-                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.banners.*') ? 'active' : '' }}">
-                                    <i class="fas fa-images"></i>
-                                    <span>Banners</span>
+                            <div class="pages-dropdown-menu" style="display: none;">
+                                <a href="{{ route('contentManagement.disclaimers.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('contentManagement.disclaimers.*') ? 'active' : '' }}">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>Disclaimers</span>
                                 </a>
-
-                                <a href="{{ route('contentManagement.offers.index') }}"
-                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">
-                                    <i class="fas fa-percent"></i>
-                                    <span>Offers</span>
+                                <a href="{{ route('contentManagement.terms-conditions.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('contentManagement.terms-conditions.*') ? 'active' : '' }}">
+                                    <i class="fas fa-gavel"></i>
+                                    <span>Terms & Conditions</span>
                                 </a>
-                                <a href="{{ route('contentManagement.campaigns.index') }}"
-                                    class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">
-                                    <i class="fas fa-bullhorn"></i>
-                                    <span>Campaigns</span>
+                                <a href="{{ route('contentManagement.privacy-policies.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('contentManagement.privacy-policies.*') ? 'active' : '' }}">
+                                    <i class="fas fa-user-shield"></i>
+                                    <span>Privacy Policy</span>
+                                </a>
+                                <a href="{{ route('contentManagement.refund-policies.index') }}"
+                                    class="dropdown-item {{ request()->routeIs('contentManagement.refund-policies.*') ? 'active' : '' }}">
+                                    <i class="fas fa-undo"></i>
+                                    <span>Refund Policy</span>
                                 </a>
                             </div>
-
+                            <!-- Flyout menu for collapsed sidebar -->
+                            {{-- <div class="pages-flyout-menu">
+                                <a href="{{ route('contentManagement.disclaimers.index') }}" class="flyout-item">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>Disclaimers</span>
+                                </a>
+                                <a href="{{ route('contentManagement.terms-conditions.index') }}"
+                                    class="flyout-item">
+                                    <i class="fas fa-gavel"></i>
+                                    <span>Terms & Conditions</span>
+                                </a>
+                                <a href="{{ route('contentManagement.privacy-policies.index') }}"
+                                    class="flyout-item">
+                                    <i class="fas fa-user-shield"></i>
+                                    <span>Privacy Policy</span>
+                                </a>
+                                <a href="{{ route('contentManagement.refund-policies.index') }}" class="flyout-item">
+                                    <i class="fas fa-undo"></i>
+                                    <span>Refund Policy</span>
+                                </a>
+                            </div> --}}
                         </div>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-user-plus"></i>
-                            <span>Lead Management</span>
-                        </a>
-                    </li> --}}
                     <li class="nav-item {{ request()->is('faqs*') ? 'active' : '' }}">
                         <a href="{{ route('faq') }}" class="nav-link">
                             <i class="fas fa-question-circle"></i>
@@ -1285,8 +1344,229 @@
                             </form>
                         </span>
 
+                        {{-- <div class="dropdown-menu">
+                        <a href="#profile" class="dropdown-item">Profile</a>
+                        <a href="#settings" class="dropdown-item">Settings</a>
 
+                    </div> --}}
                     </div>
                 </div>
             </div>
         </header>
+        <!-- Content Management Menu JavaScript -->
+        <script>
+            $(document).ready(function() {
+                // Pages Menu Initialization
+                function isPagesSection() {
+                    const path = window.location.pathname;
+                    return path.includes('/content-management/') &&
+                        (path.includes('/disclaimers') ||
+                            path.includes('/terms-conditions') ||
+                            path.includes('/privacy-policies') ||
+                            path.includes('/refund-policies'));
+                }
+
+                // Initialize Pages dropdown if on a pages section
+                if (isPagesSection()) {
+                    $(".pages-dropdown-menu").show();
+                    $(".pages-menu-trigger").find(".fa-caret-down").addClass("rotate");
+                }
+
+                // Pages menu click handler
+                $(".pages-menu-trigger").on("click", function(e) {
+                    e.preventDefault();
+
+                    // Handle collapsed sidebar - show flyout menu
+                    if ($('.sidebar').hasClass('collapsed')) {
+                        const $flyout = $(this).parent().find(".pages-flyout-menu");
+
+                        // Close any other open flyouts first
+                        $('.pages-flyout-menu').not($flyout).removeClass('show');
+                        $('.content-flyout-menu').removeClass('show');
+                        $('.service-flyout-menu').removeClass('show');
+
+                        // Toggle current flyout
+                        $flyout.toggleClass('show');
+                        return false;
+                    }
+
+                    const $dropdown = $(this).next(".pages-dropdown-menu");
+                    const $arrow = $(this).find(".fa-caret-down");
+
+                    // Close other dropdowns first
+                    $('.content-dropdown-menu').hide();
+                    $('.service-dropdown-menu').hide();
+                    $('.content-menu-trigger .fa-caret-down').removeClass('rotate');
+                    $('.service-menu-trigger .fa-caret-down').removeClass('rotate');
+
+                    $dropdown.slideToggle(200);
+                    $arrow.toggleClass("rotate");
+                });
+
+                function isContentManagementPage() {
+                    const path = window.location.pathname;
+                    return path.includes('/content-management') ||
+                        path.includes('admin.contentManagement');
+                }
+
+                // Check if on content management page and show dropdown
+                if (isContentManagementPage()) {
+                    $(".content-dropdown-menu").show();
+                    $(".content-menu-trigger").find(".fa-caret-down").addClass("rotate");
+
+                    // Highlight active section based on current route
+                    const currentPath = window.location.pathname;
+                    const currentRoute = window.location.href;
+
+                    // Check for banners routes
+                    if (currentPath.includes('/banners') || currentRoute.includes('contentManagement.banners')) {
+                        $('.content-dropdown-menu a[href*="contentManagement.banners"]').addClass('active');
+                    }
+                    // Check for offers routes
+                    else if (currentPath.includes('/offers') || currentRoute.includes('contentManagement.offers')) {
+                        $('.content-dropdown-menu a[href*="contentManagement.offers"]').addClass('active');
+                    }
+                    // Check for campaigns routes
+                    else if (currentPath.includes('/campaigns') || currentRoute.includes(
+                            'contentManagement.campaigns')) {
+                        $('.content-dropdown-menu a[href*="contentManagement.campaigns"]').addClass('active');
+                    }
+                }
+
+                $(".content-menu-trigger").on("click", function(e) {
+                    e.preventDefault();
+
+                    // Handle collapsed sidebar - show flyout menu
+                    if ($('.sidebar').hasClass('collapsed')) {
+                        const $flyout = $(this).parent().find(".content-flyout-menu");
+
+                        // Close any other open flyouts first
+                        $('.content-flyout-menu').not($flyout).removeClass('show');
+                        $('.service-flyout-menu').removeClass('show'); // Close service flyout too
+
+                        // Toggle current flyout
+                        $flyout.toggleClass('show');
+
+                        return false;
+                    }
+
+                    const $dropdown = $(this).next(".content-dropdown-menu");
+                    const $arrow = $(this).find(".fa-caret-down");
+
+                    // Close other dropdowns first
+                    $('.service-dropdown-menu').hide();
+                    $('.service-menu-trigger .fa-caret-down').removeClass('rotate');
+
+                    $dropdown.slideToggle(200);
+                    $arrow.toggleClass("rotate");
+                });
+
+                // Handle sidebar collapse behavior for content menu
+                function handleContentMenuCollapse() {
+                    if ($('.sidebar').hasClass('collapsed')) {
+                        // Hide dropdown and reset arrow when collapsed
+                        $('.content-dropdown-menu').hide();
+                        $('.content-menu-trigger .fa-caret-down').removeClass('rotate');
+                        // Also hide any open flyout menus
+                        $('.content-flyout-menu').removeClass('show');
+                    } else {
+                        // Show dropdown if on content management page when expanded
+                        if (isContentManagementPage()) {
+                            $('.content-dropdown-menu').show();
+                            $('.content-menu-trigger .fa-caret-down').addClass('rotate');
+                        }
+                        // Hide flyout menu when expanded
+                        $('.content-flyout-menu').removeClass('show');
+                    }
+                }
+
+                // Handle flyout menu active states
+                function updateContentFlyoutActiveStates() {
+                    const currentPath = window.location.pathname;
+                    const currentRoute = window.location.href;
+
+                    // Remove all active classes first
+                    $('.content-flyout-menu .flyout-item').removeClass('active');
+
+                    // Add active class based on current route
+                    if (currentPath.includes('/banners') || currentRoute.includes('contentManagement.banners')) {
+                        $('.content-flyout-menu a[href*="contentManagement.banners"]').addClass('active');
+                    } else if (currentPath.includes('/offers') || currentRoute.includes('contentManagement.offers')) {
+                        $('.content-flyout-menu a[href*="contentManagement.offers"]').addClass('active');
+                    } else if (currentPath.includes('/campaigns') || currentRoute.includes(
+                            'contentManagement.campaigns')) {
+                        $('.content-flyout-menu a[href*="contentManagement.campaigns"]').addClass('active');
+                    }
+
+                    // Pages Menu Active States
+                    $('.pages-flyout-menu .flyout-item').removeClass('active');
+                    if (currentPath.includes('/disclaimers')) {
+                        $('.pages-flyout-menu a[href*="disclaimers"]').addClass('active');
+                    } else if (currentPath.includes('/terms-conditions')) {
+                        $('.pages-flyout-menu a[href*="terms-conditions"]').addClass('active');
+                    } else if (currentPath.includes('/privacy-policies')) {
+                        $('.pages-flyout-menu a[href*="privacy-policies"]').addClass('active');
+                    } else if (currentPath.includes('/refund-policies')) {
+                        $('.pages-flyout-menu a[href*="refund-policies"]').addClass('active');
+                    }
+                }
+
+                // Initialize flyout active states
+                updateContentFlyoutActiveStates();
+
+                // Close flyout menu when clicking outside
+                $(document).on('click', function(e) {
+                    if (!$(e.target).closest('.content-menu').length) {
+                        $('.content-flyout-menu').removeClass('show');
+                    }
+                });
+
+                // Prevent flyout from closing when clicking inside it
+                $(document).on('click', '.content-flyout-menu', function(e) {
+                    e.stopPropagation();
+                });
+
+                // Watch for sidebar collapse changes - only for content menu
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const target = mutation.target;
+                            if (target.classList.contains('sidebar')) {
+                                handleContentMenuCollapse();
+                                // Also handle service menu collapse
+                                // (existing service menu collapse function call would go here)
+                            }
+                        }
+                    });
+                });
+
+                // Start observing sidebar for class changes
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) {
+                    observer.observe(sidebar, {
+                        attributes: true,
+                        attributeFilter: ['class']
+                    });
+                }
+
+                // Handle content menu active states
+                $(document).ready(function() {
+                    // Store original active states before any JS manipulation
+                    $('.nav-item').each(function() {
+                        const $navItem = $(this);
+                        if ($navItem.hasClass('active')) {
+                            $navItem.attr('data-original-active', 'true');
+                        }
+                    });
+
+                    // Re-apply active states after content menu JS runs
+                    setTimeout(function() {
+                        $('.nav-item[data-original-active="true"]').each(function() {
+                            const $navItem = $(this);
+                            // Ensure active state is maintained and not overridden
+                            $navItem.addClass('active');
+                        });
+                    }, 200);
+                });
+            });
+        </script>
