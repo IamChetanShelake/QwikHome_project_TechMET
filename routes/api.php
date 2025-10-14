@@ -6,6 +6,7 @@ use App\Http\Controllers\api\ProfileApiController;
 use App\Http\Controllers\api\ReviewApiController;
 use App\Http\Controllers\api\ServiceApiController;
 use App\Http\Controllers\api\PolicyApiController;
+use App\Http\Controllers\api\UserApiController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -91,5 +92,7 @@ Route::get('/employees/{employeeId}/rating', [FeedbackController::class, 'employ
 // Policy API routes
 Route::get('/disclaimer', [PolicyApiController::class, 'getDisclaimer']);
 Route::get('/privacy-policy', [PolicyApiController::class, 'getPrivacyPolicy']);
+// FCM Token Update API route
+Route::post('/update-fcm-token', [UserApiController::class, 'updateFcmToken']);
 Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
 Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);

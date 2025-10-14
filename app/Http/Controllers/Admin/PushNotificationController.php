@@ -159,6 +159,7 @@ class PushNotificationController extends Controller
         $query->chunkById(500, function ($users) use ($notification) {
             foreach ($users as $user) {
                 $user->notify(new SystemPushNotification($notification));
+                (new \App\Notifications\SystemPushNotification($notification))->sendFirebase($user);
             }
         });
     }

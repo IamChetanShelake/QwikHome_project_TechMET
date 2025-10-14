@@ -278,3 +278,44 @@ Route::get('/clean-cache', function () {
     $exitCode = Artisan::call('optimize');
     return '<h1>Cache facade value cleared</h1>';
 });
+
+Route::get('/test-firebase-push', function() {
+    try {
+        \Log::info('Test Firebase Route: Starting test push notification');
+
+        $firebase = new \App\Services\FirebaseService();
+
+        $title = "QwikHom 🔔";
+        $body = "Test notification from Laravel to Flutter device!";
+        $token = "c8drvS6FRCC3rM-P_amBXB:APA91bG7A6HTb_X_P9kGQKtjC_jVR-3fk6m4vZF16MTd6fsn7t2ipzLUQ610Pbe230h-dfFzFO0b0k16brPkTGmfDSTe5lA2B_foli-Px0vzu-YQhjn2v4Y";
+
+        \Log::info('Test Firebase Route: Sending notification', [
+            'title' => $title,
+            'body' => $body,
+            'token_prefix' => substr($token, 0, 20) . '...'
+        ]);
+
+        $result = $firebase->sendPush($token, $title, $body);
+
+        \Log::info('Test Firebase Route: Notification sent successfully', [
+            'result' => $result
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notification sent successfully!',
+            'data' => $result
+        ]);
+
+    } catch (\Exception $e) {
+        \Log::error('Test Firebase Route: Failed to send notification', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to send notification: ' . $e->getMessage()
+        ], 500);
+    }
+});

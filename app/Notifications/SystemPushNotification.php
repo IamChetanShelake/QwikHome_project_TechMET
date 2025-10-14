@@ -2,35 +2,43 @@
 
 namespace App\Notifications;
 
-use App\Models\PushNotification as PushNotificationModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use App\Services\FirebaseService;
 
 class SystemPushNotification extends Notification
 {
     use Queueable;
 
-    public PushNotificationModel $push;
+    public $notification;
 
-    public function __construct(PushNotificationModel $push)
+    public function __construct($notification)
     {
-        $this->push = $push;
+        $this->notification = $notification;
     }
 
-    public function via($notifiable): array
+    public function via($notifiable)
     {
-        // Database channel for in-app notifications
         return ['database'];
     }
 
-    public function toDatabase($notifiable): array
+    public function toArray($notifiable)
     {
         return [
-            'title' => $this->push->title,
-            'description' => $this->push->description,
-            'image' => $this->push->image ? asset('Notification_images/' . $this->push->image) : null,
-            'audience' => $this->push->audience,
-            'notification_id' => $this->push->id,
+            'title' => $this->notification->title,
+            'description' => $this->notification->description,
         ];
+    }
+
+    public function sendFirebase($notifiable)
+    {
+        if ($notifiable->fcm_token) {
+            $firebase = new FirebaseService();
+            $firebase->sendPush(
+                $notifiable->fcm_token,
+                $this->notification->title,
+                $this->notification->description
+            );
+        }
     }
 }
