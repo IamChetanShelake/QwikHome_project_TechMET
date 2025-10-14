@@ -43,7 +43,8 @@
                 <div class="search-wrapper">
                     <div class="search-input-group">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..." class="search-input">
+                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..."
+                            class="search-input">
                     </div>
                 </div>
             </div>
@@ -438,7 +439,8 @@
         }
 
         .user-avatar-small {
-            height: 50px;
+            height: 60px;
+            width: 60px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(0, 212, 255, 0.3);
@@ -596,6 +598,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

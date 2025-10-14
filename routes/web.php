@@ -34,12 +34,11 @@ use App\Models\ServiceOffer;
 Route::get('/', function () {
     return view('welcome');
 });
-
 // Policy routes
 Route::get('/disclaimer', function () {
     $disclaimers = Disclaimer::all();
-    return view('pages.disclaimer');
-})->name('disclaimer');
+    return view('pages.disclaimer', compact('disclaimers'));
+})->name('disclaimers');
 
 Route::get('/privacy-policy', function () {
     $privacyPolicies = PrivacyPolicy::all();
@@ -49,7 +48,7 @@ Route::get('/privacy-policy', function () {
 Route::get('/terms-conditions', function () {
     $termsConditions = TermsCondition::all();
     return view('pages.terms-conditions', compact('termsConditions'));
-})->name('terms-conditions');
+})->name('terms.conditions');
 
 Route::get('/refund-policy', function () {
     $refundPolicies = RefundPolicy::all();
@@ -234,11 +233,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
-    
+
     // AJAX routes for coupons (must come before parameterized routes)
     Route::get('/coupons/get-subcategories/{categoryId}', [CouponController::class, 'getSubcategories'])->name('coupons.get-subcategories');
     Route::get('/coupons/get-services/{categoryId}/{subcategoryId?}', [CouponController::class, 'getServices'])->name('coupons.get-services');
-    
+
     Route::get('/coupons/{id}', [CouponController::class, 'view'])->name('coupons.view');
     Route::get('/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
     Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');
@@ -325,7 +324,7 @@ Route::get('/clean-cache', function () {
     return '<h1>Cache facade value cleared</h1>';
 });
 
-Route::get('/test-firebase-push', function() {
+Route::get('/test-firebase-push', function () {
     try {
         \Log::info('Test Firebase Route: Starting test push notification');
 
@@ -352,7 +351,6 @@ Route::get('/test-firebase-push', function() {
             'message' => 'Notification sent successfully!',
             'data' => $result
         ]);
-
     } catch (\Exception $e) {
         \Log::error('Test Firebase Route: Failed to send notification', [
             'error' => $e->getMessage(),

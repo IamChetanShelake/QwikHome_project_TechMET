@@ -751,16 +751,16 @@
                             <h3 class="fs-20 mt-4">PAGES</h3>
                             <ul class="links-list clearfix" style="list-style: none; padding-left: 0; margin: 0;">
                                 <li>
-                                    <a href="{{ route('disclaimer') }}">Disclaimer</a>
+                                    <a href="{{ route('disclaimers') }}">Disclaimer</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('privacy-policy') }}">Privacy Policy</a>
+                                    <a href="{{ route('privacy.policy') }}">Privacy Policy</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('terms-conditions') }}">Terms and Conditions</a>
+                                    <a href="{{ route('terms.conditions') }}">Terms and Conditions</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('refund-policy') }}">Refund Policy</a>
+                                    <a href="{{ route('refund.policy') }}">Refund Policy</a>
                                 </li>
                             </ul>
                         </div>
