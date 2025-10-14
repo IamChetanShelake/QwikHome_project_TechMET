@@ -16,7 +16,7 @@ class Promocode extends Model
 
     protected $casts = [
         'discount' => 'decimal:2',
-        'for_active_subscription' => 'boolean',
+        'for_active_subscription' => 'integer',
         'is_used' => 'boolean',
         'expiry_date' => 'datetime',
     ];
