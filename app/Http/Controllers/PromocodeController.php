@@ -31,12 +31,13 @@ class PromocodeController extends Controller
             'code' => 'required|string|max:50|regex:/^[A-Za-z0-9]+$/|unique:promocodes,code',
             'discount' => 'required|numeric|min:0',
             'expiry_date' => 'nullable|date|after:today',
+            'for_active_subscription' => 'required|in:0,1',
         ]);
 
         Promocode::create([
             'code' => $request->code,
             'discount' => $request->discount,
-            'for_active_subscription' => true, // promocodes are only for active subscription users
+            'for_active_subscription' => $request->for_active_subscription,
             'expiry_date' => $request->expiry_date,
             'is_used' => false, // always start as not used
         ]);
@@ -56,13 +57,14 @@ class PromocodeController extends Controller
             'code' => ['required', 'string', 'max:50', 'regex:/^[A-Za-z0-9]+$/', Rule::unique('promocodes')->ignore($id)],
             'discount' => 'required|numeric|min:0',
             'expiry_date' => 'nullable|date',
+            'for_active_subscription' => 'required|in:0,1',
         ]);
 
         $promocode = Promocode::findOrFail($id);
         $promocode->update([
             'code' => $request->code,
             'discount' => $request->discount,
-            'for_active_subscription' => true, // promocodes are only for active subscription users
+            'for_active_subscription' => $request->for_active_subscription,
             'expiry_date' => $request->expiry_date,
         ]);
 

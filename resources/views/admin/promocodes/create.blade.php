@@ -110,6 +110,38 @@
                                 Leave empty for no expiration date
                             </div>
                         </div>
+
+                        <!-- For Active Subscription Toggle -->
+                        <div class="form-group-modern full-width">
+                            <label for="for_active_subscription" class="modern-label">
+                                <i class="fas fa-user-check label-icon"></i>
+                                For Active Subscription
+                            </label>
+                            <div class="toggle-wrapper">
+                                <input type="hidden" name="for_active_subscription" id="for_active_subscription_hidden" value="0">
+                                <div class="toggle-switch" id="toggleSwitch">
+                                    <div class="toggle-option" data-value="0">
+                                        <i class="fas fa-times"></i>
+                                        <span>No</span>
+                                    </div>
+                                    <div class="toggle-option active" data-value="1">
+                                        <i class="fas fa-check"></i>
+                                        <span>Yes</span>
+                                    </div>
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            @error('for_active_subscription')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Enable this if the promocode is only for users with active subscriptions
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Form Actions -->
@@ -324,6 +356,77 @@
             margin-top: 6px;
         }
 
+        /* Toggle Switch Styles */
+        .toggle-wrapper {
+            margin-top: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-option {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 2;
+            cursor: pointer;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .toggle-option i {
+            font-size: 14px;
+        }
+
+        .toggle-option.active {
+            color: #ffffff;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+            z-index: 1;
+        }
+
+        .toggle-switch.no-selected .toggle-slider {
+            left: 4px;
+        }
+
+        .toggle-switch.yes-selected .toggle-slider {
+            left: calc(50% + 0px);
+        }
+
+        .toggle-option:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-option.active:hover {
+            color: #ffffff;
+        }
+
         .form-actions {
             display: flex;
             gap: 15px;
@@ -471,6 +574,37 @@
                 }
             });
 
+            // Toggle Switch Functionality
+            const toggleSwitch = document.getElementById('toggleSwitch');
+            const hiddenInput = document.getElementById('for_active_subscription_hidden');
+            const toggleOptions = toggleSwitch.querySelectorAll('.toggle-option');
+
+            // Set initial state (default to Yes/1)
+            toggleSwitch.classList.add('yes-selected');
+            hiddenInput.value = '1';
+
+            toggleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    
+                    // Update hidden input
+                    hiddenInput.value = value;
+                    
+                    // Update active states
+                    toggleOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update slider position
+                    if (value === '0') {
+                        toggleSwitch.classList.remove('yes-selected');
+                        toggleSwitch.classList.add('no-selected');
+                    } else {
+                        toggleSwitch.classList.remove('no-selected');
+                        toggleSwitch.classList.add('yes-selected');
+                    }
+                });
+            });
+
             // Form submission with loading state
             form.addEventListener('submit', function() {
                 submitBtn.disabled = true;
@@ -485,6 +619,17 @@
             document.querySelectorAll('.modern-input.error').forEach(input => {
                 input.classList.remove('error');
             });
+            
+            // Reset toggle to default (Yes/1)
+            const toggleSwitch = document.getElementById('toggleSwitch');
+            const hiddenInput = document.getElementById('for_active_subscription_hidden');
+            const toggleOptions = toggleSwitch.querySelectorAll('.toggle-option');
+            
+            hiddenInput.value = '1';
+            toggleOptions.forEach(opt => opt.classList.remove('active'));
+            toggleOptions[1].classList.add('active'); // Second option is "Yes"
+            toggleSwitch.classList.remove('no-selected');
+            toggleSwitch.classList.add('yes-selected');
         }
     </script>
 @endsection

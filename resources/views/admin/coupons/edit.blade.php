@@ -179,6 +179,154 @@
                             </div>
                         </div>
 
+                        <!-- Service Applicability Section -->
+                        <div class="form-group-modern full-width">
+                            <label class="modern-label">
+                                <i class="fas fa-cogs label-icon"></i>
+                                Service Applicability
+                            </label>
+                            <div class="service-selection-container">
+                                <!-- Applicability Type -->
+                                <div class="applicability-options">
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" id="all_services" name="applicable_to" value="all_services" 
+                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'all_services' ? 'checked' : '' }}>
+                                            <label for="all_services" class="radio-label">
+                                                <div class="radio-icon">
+                                                    <i class="fas fa-globe"></i>
+                                                </div>
+                                                <div class="radio-content">
+                                                    <div class="radio-title">All Services</div>
+                                                    <div class="radio-desc">Apply to all available services</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" id="specific_services" name="applicable_to" value="specific_services"
+                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'checked' : '' }}>
+                                            <label for="specific_services" class="radio-label">
+                                                <div class="radio-icon">
+                                                    <i class="fas fa-list-check"></i>
+                                                </div>
+                                                <div class="radio-content">
+                                                    <div class="radio-title">Specific Services</div>
+                                                    <div class="radio-desc">Choose specific services</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Selection (Hidden by default) -->
+                                <div id="service-selection-panel" class="service-selection-panel" 
+                                    style="display: {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'block' : 'none' }};">
+                                    <div class="selection-grid">
+                                        <!-- Category Filter -->
+                                        <div class="form-group-modern">
+                                            <label for="category_filter" class="modern-label">
+                                                <i class="fas fa-folder label-icon"></i>
+                                                Filter by Category
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <div class="input-icon">
+                                                    <i class="fas fa-filter"></i>
+                                                </div>
+                                                <select class="modern-select" id="category_filter" name="category_filter">
+                                                    <option value="">All Categories</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}" 
+                                                            {{ isset($defaultCategoryId) && $defaultCategoryId == $category->id ? 'selected' : '' }}>
+                                                            {{ $category->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="select-arrow">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </div>
+                                                <div class="input-border"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Subcategory Filter -->
+                                        <div class="form-group-modern">
+                                            <label for="subcategory_filter" class="modern-label">
+                                                <i class="fas fa-folder-open label-icon"></i>
+                                                Filter by Subcategory
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <div class="input-icon">
+                                                    <i class="fas fa-filter"></i>
+                                                </div>
+                                                <select class="modern-select" id="subcategory_filter" name="subcategory_filter" 
+                                                    {{ isset($defaultCategoryId) && $defaultCategoryId ? '' : 'disabled' }}>
+                                                    <option value="">All Subcategories</option>
+                                                    @if(isset($subcategories) && $subcategories->count() > 0)
+                                                        @foreach ($subcategories as $subcategory)
+                                                            <option value="{{ $subcategory->id }}"
+                                                                {{ isset($defaultSubcategoryId) && $defaultSubcategoryId == $subcategory->id ? 'selected' : '' }}>
+                                                                {{ $subcategory->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    @else
+                                                        <option value="">No subcategories available</option>
+                                                    @endif
+                                                </select>
+                                                <div class="select-arrow">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </div>
+                                                <div class="input-border"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Services List -->
+                                    <div class="services-container">
+                                        <div class="services-header">
+                                            <h4>Select Services</h4>
+                                            <div class="bulk-actions">
+                                                <button type="button" class="btn-link" id="select-all-services">Select All</button>
+                                                <button type="button" class="btn-link" id="deselect-all-services">Deselect All</button>
+                                            </div>
+                                        </div>
+                                        <div class="services-grid" id="services-grid">
+                                            @foreach ($services as $service)
+                                                <div class="service-item" data-category="{{ $service->category_id }}" data-subcategory="{{ $service->subcategory_id }}">
+                                                    <input type="checkbox" id="service_{{ $service->id }}" name="service_ids[]" value="{{ $service->id }}" class="service-checkbox"
+                                                        {{ in_array($service->id, old('service_ids', $selectedServiceIds ?? [])) ? 'checked' : '' }}>
+                                                    <label for="service_{{ $service->id }}" class="service-label">
+                                                        <div class="service-info">
+                                                            <div class="service-name">{{ $service->name }}</div>
+                                                            <div class="service-meta">{{ $service->category->name ?? 'No Category' }} > {{ $service->subcategory->name ?? 'No Subcategory' }}</div>
+                                                        </div>
+                                                        <div class="service-check">
+                                                            <i class="fas fa-check"></i>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @error('applicable_to')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            @error('service_ids')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Choose whether this coupon applies to all services or specific ones
+                            </div>
+                        </div>
+
                         <!-- Description Field -->
                         <div class="form-group-modern full-width">
                             <label for="description" class="modern-label">
@@ -562,6 +710,232 @@
             }
         }
 
+        /* Service Selection Styles */
+        .service-selection-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .applicability-options {
+            margin-bottom: 20px;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-label:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .radio-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d4ff;
+            font-size: 18px;
+        }
+
+        .radio-content {
+            flex: 1;
+        }
+
+        .radio-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .radio-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        .service-selection-panel {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .services-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .services-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .services-header h4 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: #00d4ff;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .btn-link:hover {
+            color: #ffffff;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .services-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .services-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .services-grid::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.5);
+            border-radius: 3px;
+        }
+
+        .service-item {
+            position: relative;
+        }
+
+        .service-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .service-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .service-label:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .service-item input[type="checkbox"]:checked + .service-label {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-name {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .service-meta {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+        }
+
+        .service-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .service-item input[type="checkbox"]:checked + .service-label .service-check {
+            background: #00d4ff;
+            border-color: #00d4ff;
+            color: #ffffff;
+        }
+
+        .service-check i {
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-item input[type="checkbox"]:checked + .service-label .service-check i {
+            opacity: 1;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .modern-form-container {
@@ -590,6 +964,18 @@
             .modern-btn {
                 flex: 1;
                 justify-content: center;
+            }
+
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+
+            .selection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -624,6 +1010,151 @@
                 submitBtn.querySelector('span').style.display = 'none';
                 submitBtn.querySelector('.btn-loader').style.display = 'block';
             });
+
+            // Service Selection Functionality
+            const allServicesRadio = document.getElementById('all_services');
+            const specificServicesRadio = document.getElementById('specific_services');
+            const serviceSelectionPanel = document.getElementById('service-selection-panel');
+            const categoryFilter = document.getElementById('category_filter');
+            const subcategoryFilter = document.getElementById('subcategory_filter');
+            const servicesGrid = document.getElementById('services-grid');
+            const selectAllBtn = document.getElementById('select-all-services');
+            const deselectAllBtn = document.getElementById('deselect-all-services');
+
+            // Store initial values for edit form
+            const initialCategoryId = "{{ $defaultCategoryId ?? '' }}";
+            const initialSubcategoryId = "{{ $defaultSubcategoryId ?? '' }}";
+
+            // Toggle service selection panel
+            function toggleServiceSelection() {
+                if (specificServicesRadio.checked) {
+                    serviceSelectionPanel.style.display = 'block';
+                } else {
+                    serviceSelectionPanel.style.display = 'none';
+                    // Uncheck all services when switching to "All Services"
+                    document.querySelectorAll('.service-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                }
+            }
+
+            allServicesRadio.addEventListener('change', toggleServiceSelection);
+            specificServicesRadio.addEventListener('change', toggleServiceSelection);
+
+            // Category filter functionality
+            categoryFilter.addEventListener('change', function() {
+                const categoryId = this.value;
+                
+                // Only reset if user actually changed the category (not initial load)
+                if (categoryId !== initialCategoryId) {
+                    // Reset subcategory filter
+                    subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>';
+                    subcategoryFilter.disabled = !categoryId;
+                } else {
+                    subcategoryFilter.disabled = !categoryId;
+                }
+
+                if (categoryId) {
+                    // Show loading state only if not initial load
+                    if (categoryId !== initialCategoryId) {
+                        subcategoryFilter.innerHTML = '<option value="">Loading subcategories...</option>';
+                    }
+                    
+                    // Fetch subcategories
+                    fetch(`{{ url('/coupons/get-subcategories') }}/${categoryId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Only rebuild dropdown if not initial load or if no subcategories exist
+                            if (categoryId !== initialCategoryId || subcategoryFilter.children.length <= 1) {
+                                subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>';
+                                if (data && data.length > 0) {
+                                    data.forEach(subcategory => {
+                                        const option = document.createElement('option');
+                                        option.value = subcategory.id;
+                                        option.textContent = subcategory.name;
+                                        // Pre-select if this is the initial subcategory
+                                        if (subcategory.id == initialSubcategoryId && categoryId === initialCategoryId) {
+                                            option.selected = true;
+                                        }
+                                        subcategoryFilter.appendChild(option);
+                                    });
+                                } else {
+                                    subcategoryFilter.innerHTML = '<option value="">No subcategories found</option>';
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching subcategories:', error);
+                            subcategoryFilter.innerHTML = '<option value="">Error loading subcategories</option>';
+                            alert('Failed to load subcategories. Please try again.');
+                        });
+                }
+
+                filterServices();
+            });
+
+            // Subcategory filter functionality
+            subcategoryFilter.addEventListener('change', filterServices);
+
+            // Filter services based on category and subcategory
+            function filterServices() {
+                const categoryId = categoryFilter.value;
+                const subcategoryId = subcategoryFilter.value;
+                const serviceItems = document.querySelectorAll('.service-item');
+
+                serviceItems.forEach(item => {
+                    const itemCategory = item.dataset.category;
+                    const itemSubcategory = item.dataset.subcategory;
+                    
+                    let show = true;
+                    
+                    if (categoryId && itemCategory !== categoryId) {
+                        show = false;
+                    }
+                    
+                    if (subcategoryId && itemSubcategory !== subcategoryId) {
+                        show = false;
+                    }
+                    
+                    item.style.display = show ? 'block' : 'none';
+                });
+            }
+
+            // Select/Deselect all visible services
+            selectAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.service-item:not([style*="display: none"]) .service-checkbox').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+            });
+
+            deselectAllBtn.addEventListener('click', function() {
+                document.querySelectorAll('.service-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            });
+
+            // Form validation for service selection
+            form.addEventListener('submit', function(e) {
+                if (specificServicesRadio.checked) {
+                    const selectedServices = document.querySelectorAll('.service-checkbox:checked');
+                    if (selectedServices.length === 0) {
+                        e.preventDefault();
+                        alert('Please select at least one service or choose "All Services" option.');
+                        return false;
+                    }
+                }
+            });
+
+            // Initialize filters on page load if we have pre-selected values
+            if (initialCategoryId) {
+                // Trigger filtering to show only relevant services
+                filterServices();
+            }
         });
 
         function resetForm() {
