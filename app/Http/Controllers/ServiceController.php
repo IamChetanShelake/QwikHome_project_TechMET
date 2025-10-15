@@ -260,14 +260,10 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'whats_include' => 'nullable|array',
             'whats_include.*' => 'nullable|string|max:255',
-            'price_onetime' => 'required|numeric|min:0|max:999999.99',
-            'price_weekly' => 'nullable|numeric|min:0|max:999999.99',
-            'price_monthly' => 'nullable|numeric|min:0|max:999999.99',
-            'price_yearly' => 'nullable|numeric|min:0|max:999999.99',
-            'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|file',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -279,40 +275,60 @@ class ServiceController extends Controller
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
             'materials.*.material_image' => 'nullable|file',
+            // Frequency options validation
+            'onetime_frequencies' => 'nullable|array',
+            'onetime_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'onetime_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'onetime_frequencies.*.description' => 'nullable|string',
+            'weekly_frequencies' => 'nullable|array',
+            'weekly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:7',
+            'weekly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'weekly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'weekly_frequencies.*.description' => 'nullable|string',
+            'monthly_frequencies' => 'nullable|array',
+            'monthly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:30',
+            'monthly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'monthly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'monthly_frequencies.*.description' => 'nullable|string',
+            'yearly_frequencies' => 'nullable|array',
+            'yearly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:12',
+            'yearly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'yearly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'yearly_frequencies.*.description' => 'nullable|string',
         ];
-
-        // Make subscription prices required if the corresponding checkboxes are enabled
-        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
-            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
-        }
-        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
-            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
-        }
-        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
-            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
-        }
 
         $validated = $request->validate($validationRules);
 
-        // Handle main service image
-        if ($request->hasFile('image')) {
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->move('Service_images', $imageName);
-        } else {
-            $imageName = '';
+        // Handle multiple service images
+        $imageNames = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $imageName = time() . '_' . $index . '_' . $image->getClientOriginalName();
+                $image->move('Service_images', $imageName);
+                $imageNames[] = $imageName;
+            }
         }
 
-        $validated['image'] = $imageName;
+        // Store all images as array in media column (model will cast to JSON)
+        $validated['media'] = !empty($imageNames) ? $imageNames : null;
 
-        // Remove requirements, processes and materials from validated as they are handled separately
+        // Remove requirements, processes, materials, and frequencies from validated as they are handled separately
         unset($validated['requirements']);
         unset($validated['processes']);
         unset($validated['materials']);
+        unset($validated['images']);
+        unset($validated['onetime_frequencies']);
+        unset($validated['weekly_frequencies']);
+        unset($validated['monthly_frequencies']);
+        unset($validated['yearly_frequencies']);
 
         // Encode whats_include as JSON
         $validated['whats_include'] = $request->whats_include;
 
         $service = Service::create($validated);
+
+        // Handle frequency options - store in ServiceFrequencyOption table
+        $this->storeFrequencyOptions($service, $request);
 
         // Handle requirements
         if ($request->has('requirements') && is_array($request->requirements)) {
@@ -398,6 +414,73 @@ class ServiceController extends Controller
         return redirect()->route('services.services.index')->with('success', 'Service created successfully.');
     }
 
+    private function storeFrequencyOptions($service, $request)
+    {
+        // Store one-time frequency options
+        if ($request->has('onetime_frequencies') && is_array($request->onetime_frequencies)) {
+            foreach ($request->onetime_frequencies as $frequency) {
+                if (!empty($frequency['price_per_time']) || !empty($frequency['duration'])) {
+                    \App\Models\ServiceFrequencyOption::create([
+                        'service_id' => $service->id,
+                        'frequency_type' => 'onetime',
+                        'no_of_times' => 1,
+                        'duration' => $frequency['duration'] ?? null,
+                        'price_per_time' => $frequency['price_per_time'] ?? null,
+                        'description' => $frequency['description'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        // Store weekly frequency options
+        if ($request->has('weekly_frequencies') && is_array($request->weekly_frequencies)) {
+            foreach ($request->weekly_frequencies as $frequency) {
+                if (!empty($frequency['price_per_time'])) {
+                    \App\Models\ServiceFrequencyOption::create([
+                        'service_id' => $service->id,
+                        'frequency_type' => 'weekly',
+                        'no_of_times' => $frequency['no_of_times'] ?? 1,
+                        'duration' => $frequency['duration'] ?? null,
+                        'price_per_time' => $frequency['price_per_time'] ?? null,
+                        'description' => $frequency['description'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        // Store monthly frequency options
+        if ($request->has('monthly_frequencies') && is_array($request->monthly_frequencies)) {
+            foreach ($request->monthly_frequencies as $frequency) {
+                if (!empty($frequency['price_per_time'])) {
+                    \App\Models\ServiceFrequencyOption::create([
+                        'service_id' => $service->id,
+                        'frequency_type' => 'monthly',
+                        'no_of_times' => $frequency['no_of_times'] ?? 1,
+                        'duration' => $frequency['duration'] ?? null,
+                        'price_per_time' => $frequency['price_per_time'] ?? null,
+                        'description' => $frequency['description'] ?? null,
+                    ]);
+                }
+            }
+        }
+
+        // Store yearly frequency options
+        if ($request->has('yearly_frequencies') && is_array($request->yearly_frequencies)) {
+            foreach ($request->yearly_frequencies as $frequency) {
+                if (!empty($frequency['price_per_time'])) {
+                    \App\Models\ServiceFrequencyOption::create([
+                        'service_id' => $service->id,
+                        'frequency_type' => 'yearly',
+                        'no_of_times' => $frequency['no_of_times'] ?? 1,
+                        'duration' => $frequency['duration'] ?? null,
+                        'price_per_time' => $frequency['price_per_time'] ?? null,
+                        'description' => $frequency['description'] ?? null,
+                    ]);
+                }
+            }
+        }
+    }
+
     public function servicesShow(Service $service)
     {
         $service->load(['category', 'subcategory', 'processes' => function ($query) {
@@ -408,7 +491,7 @@ class ServiceController extends Controller
 
     public function servicesEdit(Service $service)
     {
-        $service->load('processes', 'requirements', 'materials');
+        $service->load('processes', 'requirements', 'materials', 'frequencyOptions');
         $categories = Category::where('status', 'active')->get();
         $subcategories = Subcategory::where('status', 'active')->get();
         return view('admin.services.services.edit', compact('service', 'categories', 'subcategories'));
@@ -425,14 +508,10 @@ class ServiceController extends Controller
             'description' => 'nullable|string',
             'whats_include' => 'nullable|array',
             'whats_include.*' => 'nullable|string|max:255',
-            'price_onetime' => 'required|numeric|min:0|max:999999.99',
-            'price_weekly' => 'nullable|numeric|min:0|max:999999.99',
-            'price_monthly' => 'nullable|numeric|min:0|max:999999.99',
-            'price_yearly' => 'nullable|numeric|min:0|max:999999.99',
-            'duration' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
-            'image' => 'nullable|file',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|file',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -444,42 +523,74 @@ class ServiceController extends Controller
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
             'materials.*.material_image' => 'nullable|file',
+            // Frequency options validation
+            'onetime_frequencies' => 'nullable|array',
+            'onetime_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'onetime_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'onetime_frequencies.*.description' => 'nullable|string',
+            'weekly_frequencies' => 'nullable|array',
+            'weekly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:7',
+            'weekly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'weekly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'weekly_frequencies.*.description' => 'nullable|string',
+            'monthly_frequencies' => 'nullable|array',
+            'monthly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:30',
+            'monthly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'monthly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'monthly_frequencies.*.description' => 'nullable|string',
+            'yearly_frequencies' => 'nullable|array',
+            'yearly_frequencies.*.no_of_times' => 'nullable|integer|min:1|max:12',
+            'yearly_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
+            'yearly_frequencies.*.price_per_time' => 'nullable|numeric|min:0|max:999999.99',
+            'yearly_frequencies.*.description' => 'nullable|string',
         ];
-
-        // Make subscription prices required if the corresponding checkboxes are enabled
-        if ($request->has('enable_weekly') && $request->enable_weekly == 'on') {
-            $validationRules['price_weekly'] = 'required|numeric|min:0|max:999999.99';
-        }
-        if ($request->has('enable_monthly') && $request->enable_monthly == 'on') {
-            $validationRules['price_monthly'] = 'required|numeric|min:0|max:999999.99';
-        }
-        if ($request->has('enable_yearly') && $request->enable_yearly == 'on') {
-            $validationRules['price_yearly'] = 'required|numeric|min:0|max:999999.99';
-        }
 
         $validated = $request->validate($validationRules);
 
-        // Handle main service image
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            $oldfile = public_path('Service_images/' . $service->image);
-            if ($service->image && file_exists($oldfile)) {
-                unlink($oldfile);
+        // Handle multiple service images
+        if ($request->hasFile('images')) {
+            $imageNames = [];
+            foreach ($request->file('images') as $index => $image) {
+                $imageName = time() . '_' . $index . '_' . $image->getClientOriginalName();
+                $image->move('Service_images', $imageName);
+                $imageNames[] = $imageName;
             }
-            $imageName = time() . '_' . $request->image->getClientOriginalName();
-            $request->image->move('Service_images', $imageName);
-            $validated['image'] = $imageName;
+            // Update media with all uploaded images
+            if (!empty($imageNames)) {
+                // Delete old images if exists
+                if ($service->media) {
+                    $oldImages = is_array($service->media) ? $service->media : json_decode($service->media, true);
+                    if (is_array($oldImages)) {
+                        foreach ($oldImages as $oldImage) {
+                            $oldfile = public_path('Service_images/' . $oldImage);
+                            if (file_exists($oldfile)) {
+                                unlink($oldfile);
+                            }
+                        }
+                    }
+                }
+                $validated['media'] = $imageNames;
+            }
         }
 
-        // Remove requirements, processes and materials from validated
+        // Remove requirements, processes, materials, and frequencies from validated
         unset($validated['requirements']);
         unset($validated['processes']);
         unset($validated['materials']);
+        unset($validated['images']);
+        unset($validated['onetime_frequencies']);
+        unset($validated['weekly_frequencies']);
+        unset($validated['monthly_frequencies']);
+        unset($validated['yearly_frequencies']);
 
         // Handle whats_include
         $validated['whats_include'] = $request->whats_include;
 
         $service->update($validated);
+
+        // Handle frequency options - delete old and create new
+        $service->frequencyOptions()->delete();
+        $this->storeFrequencyOptions($service, $request);
 
         // Handle requirements: delete old and create new, preserving existing images
         $service->requirements()->delete();

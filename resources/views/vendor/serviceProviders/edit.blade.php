@@ -104,6 +104,36 @@
                             </div>
                         </div>
 
+                        <!-- Vendor Assignment Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-building"></i>
+                                <h3>Vendor Assignment</h3>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="vendor_id" class="form-label">
+                                        <i class="fas fa-user-tie"></i>
+                                        Assign to Vendor
+                                    </label>
+                                    <select id="vendor_id" name="vendor_id" class="form-input">
+                                        <option value="">Assign to Admin (Default)</option>
+                                        @foreach($vendors as $vendor)
+                                            <option value="{{ $vendor->id }}" {{ old('vendor_id', $serviceProvider->vendor_id) == $vendor->id ? 'selected' : '' }}>
+                                                {{ $vendor->name }} ({{ $vendor->email }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('vendor_id')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+
                         <!-- Contact Information Section -->
                         <div class="form-section">
                             <div class="section-header">
@@ -882,26 +912,26 @@
             const categoryFilter = document.getElementById('category_filter').value;
             const subcategoryFilter = document.getElementById('subcategory_filter').value;
             const serviceItems = document.querySelectorAll('.service-item');
-            
+
             // Update subcategory options based on selected category
             updateSubcategoryOptions(categoryFilter);
-            
+
             serviceItems.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
                 const itemSubcategory = item.getAttribute('data-subcategory');
-                
+
                 let showItem = true;
-                
+
                 // Filter by category
                 if (categoryFilter && itemCategory !== categoryFilter) {
                     showItem = false;
                 }
-                
+
                 // Filter by subcategory
                 if (subcategoryFilter && itemSubcategory !== subcategoryFilter) {
                     showItem = false;
                 }
-                
+
                 if (showItem) {
                     item.classList.remove('hidden');
                 } else {
@@ -914,12 +944,12 @@
                 }
             });
         }
-        
+
         // Update subcategory dropdown based on selected category
         function updateSubcategoryOptions(selectedCategoryId) {
             const subcategorySelect = document.getElementById('subcategory_filter');
             const options = subcategorySelect.querySelectorAll('option');
-            
+
             options.forEach(option => {
                 if (option.value === '') {
                     option.style.display = 'block'; // Always show "All Subcategories"

@@ -87,6 +87,12 @@
                                 </th>
                                 <th>
                                     <div class="th-content">
+                                        <i class="fas fa-building"></i>
+                                        <span>Vendor</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
                                         <i class="fas fa-map-marker-alt"></i>
                                         <span>Address</span>
                                     </div>
@@ -143,6 +149,18 @@
                                             <div class="phone-number">
                                                 <i class="fas fa-phone"></i>
                                                 <span>{{ $serviceProvider->phone ?? 'Not provided' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="vendor-info">
+                                                @if($serviceProvider->vendor)
+                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
+                                                @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
@@ -479,6 +497,27 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .vendor-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .vendor-name {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .vendor-email {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+        }
+
+        .admin-assigned {
+            color: rgba(255, 25, 255, 0.7);
+            font-style: italic;
         }
 
         .joined-date {
