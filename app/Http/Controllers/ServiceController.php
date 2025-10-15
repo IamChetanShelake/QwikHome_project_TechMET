@@ -274,7 +274,7 @@ class ServiceController extends Controller
             'materials.*.material_description' => 'nullable|string',
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
-            'materials.*.material_image' => 'nullable|file',
+            'materials.*.material_image' => 'nullable|image',
             // Frequency options validation
             'onetime_frequencies' => 'nullable|array',
             'onetime_frequencies.*.duration' => 'nullable|integer|min:1|max:10',
@@ -485,7 +485,7 @@ class ServiceController extends Controller
     {
         $service->load(['category', 'subcategory', 'processes' => function ($query) {
             $query->orderBy('order');
-        }, 'requirements', 'materials']);
+        }, 'requirements', 'materials', 'frequencyOptions']);
         return view('admin.services.services.show', compact('service'));
     }
 
