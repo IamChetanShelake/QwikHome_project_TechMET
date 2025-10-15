@@ -13,7 +13,7 @@ class ServiceProviderController extends Controller
      */
     public function index()
     {
-        $serviceProviders = User::where('role', 'serviceprovider')->get();
+        $serviceProviders = User::where('role', 'serviceprovider')->with('vendor')->get();
         return view('vendor.serviceProviders.index', compact('serviceProviders'));
     }
 
@@ -25,7 +25,8 @@ class ServiceProviderController extends Controller
         $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
         $categories = \App\Models\Category::where('status', 'active')->get();
         $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
-        return view('vendor.serviceProviders.create', compact('services', 'categories', 'subcategories'));
+        $vendors = \App\Models\User::where('role', 'vendor')->get();
+        return view('vendor.serviceProviders.create', compact('services', 'categories', 'subcategories', 'vendors'));
     }
 
     /**
@@ -40,6 +41,7 @@ class ServiceProviderController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:3048',
+            'vendor_id' => 'nullable|exists:users,id',
             'services' => 'array',
             'services.*' => 'exists:services,id',
         ]);
@@ -51,6 +53,9 @@ class ServiceProviderController extends Controller
             $imageName = '';
         }
 
+        // Determine vendor_id - if not provided, it will be null (belonging to admin)
+        $vendorId = $request->filled('vendor_id') ? $request->vendor_id : null;
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -59,6 +64,7 @@ class ServiceProviderController extends Controller
             'address' => $request->address,
             'image' => $imageName,
             'role' => 'serviceprovider',
+            'vendor_id' => $vendorId,
         ]);
 
         // Attach selected services
@@ -83,11 +89,12 @@ class ServiceProviderController extends Controller
      */
     public function edit(string $id)
     {
-        $serviceProvider = User::where('role', 'serviceprovider')->with('services')->findOrFail($id);
+        $serviceProvider = User::where('role', 'serviceprovider')->with('services', 'vendor')->findOrFail($id);
         $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
         $categories = \App\Models\Category::where('status', 'active')->get();
         $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
-        return view('vendor.serviceProviders.edit', compact('serviceProvider', 'services', 'categories', 'subcategories'));
+        $vendors = \App\Models\User::where('role', 'vendor')->get();
+        return view('vendor.serviceProviders.edit', compact('serviceProvider', 'services', 'categories', 'subcategories', 'vendors'));
     }
 
     /**
@@ -101,6 +108,7 @@ class ServiceProviderController extends Controller
             'password' => 'nullable|string|min:8',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
+            'vendor_id' => 'nullable|exists:users,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:3048',
             'services' => 'array',
             'services.*' => 'exists:services,id',
@@ -112,6 +120,7 @@ class ServiceProviderController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
+            'vendor_id' => $request->filled('vendor_id') ? $request->vendor_id : null,
         ];
 
         if ($request->filled('password')) {
@@ -172,6 +181,7 @@ class ServiceProviderController extends Controller
         } else {
             // Search by name, email, or phone
             $users = User::where('role', 'serviceprovider')
+                ->with('vendor')
                 ->where(function ($q) use ($query) {
                     $q->where('name', 'like', "%{$query}%")
                       ->orWhere('email', 'like', "%{$query}%")
