@@ -93,33 +93,33 @@ class Service extends Model
     {
         return $this->hasMany(ServiceOffer::class)->active();
     }
-    
+
     // Frequency options relationship
     public function frequencyOptions()
     {
         return $this->hasMany(ServiceFrequencyOption::class);
     }
-    
+
     // Get frequency options by type
     public function weeklyOptions()
     {
         return $this->frequencyOptions()->ofType('weekly');
     }
-    
+
     public function monthlyOptions()
     {
         return $this->frequencyOptions()->ofType('monthly');
     }
-    
+
     public function yearlyOptions()
     {
         return $this->frequencyOptions()->ofType('yearly');
     }
 
     // Average rating calculation
-    public function getAverageRatingAttribute()
+    public function getAverageRatingAttribute($value)
     {
-        return $this->serviceReviews()->avg('rating') ?? 0;
+        return (float) $value;
     }
 
     public function faq()

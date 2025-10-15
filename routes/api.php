@@ -60,6 +60,8 @@ Route::post('/addresses', [AddressApiController::class, 'index']); // Get all ad
 Route::post('/addresses-store', [AddressApiController::class, 'store']); // Add new address
 Route::post('/addresses-edit', [AddressApiController::class, 'update']); // Edit address
 Route::post('/addresses-delete', [AddressApiController::class, 'destroy']); // Remove address
+Route::post('/addressesToDefault', [AddressApiController::class, 'setAsDefault']); // Set address as default
+
 
 // Reviews API routes (public for viewing reviews)
 Route::get('/services/{serviceId}/reviews', [ReviewApiController::class, 'indexServiceReviews']);
@@ -100,6 +102,6 @@ Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions
 
 // Wishlist API routes
 Route::post('/wishlist-store', [WishlistApiController::class, 'store']); // Add to wishlist
-Route::get('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
-Route::delete('/wishlist/delete', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
+Route::post('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
+Route::post('/wishlist-delete', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
 Route::post('/wishlist/remove-item', [WishlistApiController::class, 'removeItem']); // Remove specific service/offer from wishlist

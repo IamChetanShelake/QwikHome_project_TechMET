@@ -310,6 +310,11 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
+Route::get('/clear', function () {
+
+    $exitCode = Artisan::call('optimize:clear');
+    return '<h1>all Cache cleared</h1>';
+});
 Route::get('/clean-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('route:cache');

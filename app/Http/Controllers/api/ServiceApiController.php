@@ -176,6 +176,29 @@ class ServiceApiController extends Controller
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
 
+            // Restructure prices into array
+            $priceFields = [
+                'price_onetime',
+                'price_onetime_description',
+                'duration_onetime',
+                'price_weekly',
+                'price_weekly_description',
+                'price_monthly',
+                'price_monthly_description',
+                'price_yearly',
+                'price_yearly_description'
+            ];
+            $serviceData['prices'] = [];
+            foreach ($priceFields as $field) {
+                $serviceData['prices'][$field] = $serviceData[$field] ?? null;
+                unset($serviceData[$field]);
+            }
+
+            // Modify requirements if exactly 3 items
+            if (isset($serviceData['requirements']) && is_array($serviceData['requirements']) && count($serviceData['requirements']) === 3) {
+                $serviceData['requirements'] = [[], [], []];
+            }
+
             return response()->json([
                 'success' => true,
                 'status_code' => 200,

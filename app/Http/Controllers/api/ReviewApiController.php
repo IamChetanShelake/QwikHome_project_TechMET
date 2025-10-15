@@ -83,9 +83,13 @@ class ReviewApiController extends Controller
                 $message = 'Service review added successfully';
             }
 
-            // Update average rating for service
+            // Update average rating and total reviews for service
             $averageRating = $service->serviceReviews()->avg('rating');
-            $service->update(['average_rating' => $averageRating ?? 0]);
+            $totalReviews = $service->serviceReviews()->count();
+            $service->update([
+                'average_rating' => $averageRating ?? 0,
+                'total_reviews' => $totalReviews
+            ]);
 
             return response()->json([
                 'success' => true,

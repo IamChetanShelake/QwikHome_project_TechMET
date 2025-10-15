@@ -665,7 +665,7 @@
                                 Subcategory
                             </th>
                             <th class="th-price">
-                                <i class="fas fa-dollar-sign"></i>
+                                {{-- <i class="fas fa-dollar-sign"></i> --}}
                                 Price
                             </th>
                             <th class="th-status">

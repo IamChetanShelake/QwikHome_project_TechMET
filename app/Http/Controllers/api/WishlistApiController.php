@@ -18,30 +18,19 @@ class WishlistApiController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
+                'user' => 'required|exists:users,id',
             ]);
 
             $wishlists = Wishlist::with(['service', 'offer'])
-                ->where('user_id', $request->user_id)
+                ->where('user_id', $request->user)
                 ->get();
 
             $wishlistData = $wishlists->map(function ($wishlist) {
                 return [
-                    'id' => $wishlist->id,
-                    'user_id' => $wishlist->user_id,
-                    'service' => $wishlist->service ? [
-                        'id' => $wishlist->service->id,
-                        'name' => $wishlist->service->name,
-                        'image' => $wishlist->service->images ? asset('uploads/Service_images/' . $wishlist->service->images) : null,
-                        'price' => $wishlist->service->price,
-                    ] : null,
-                    'offer' => $wishlist->offer ? [
-                        'id' => $wishlist->offer->id,
-                        'title' => $wishlist->offer->title,
-                        'image' => $wishlist->offer->image ? asset('uploads/offer_images/' . $wishlist->offer->image) : null,
-                        'discount' => $wishlist->offer->discount_percentage,
-                    ] : null,
-                    'added_at' => $wishlist->created_at,
+                    'wishlist' => $wishlist,
+                    'service' => $wishlist->service,
+                    'offer' => $wishlist->offer,
+
                 ];
             });
 
@@ -50,18 +39,16 @@ class WishlistApiController extends Controller
                 'message' => 'Wishlist retrieved successfully',
                 'data' => $wishlistData
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
-
         } catch (\Exception $e) {
             Log::error('Get Wishlist Failed', [
                 'error' => $e->getMessage(),
-                'user_id' => $request->input('user_id'),
+                'user_id' => $request->input('user'),
                 'trace' => $e->getTraceAsString()
             ]);
 
@@ -79,13 +66,13 @@ class WishlistApiController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'service_id' => 'nullable|exists:services,id',
-                'offer_id' => 'nullable|exists:offers,id',
+                'user' => 'required|exists:users,id',
+                'service' => 'nullable|exists:services,id',
+                'offer' => 'nullable|exists:offers,id',
             ]);
 
             // Ensure either service_id or offer_id is provided
-            if (!$request->service_id && !$request->offer_id) {
+            if (!$request->service && !$request->offer) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Either service_id or offer_id must be provided'
@@ -93,13 +80,13 @@ class WishlistApiController extends Controller
             }
 
             // Check if already in wishlist
-            $existingWishlist = Wishlist::where('user_id', $request->user_id)
+            $existingWishlist = Wishlist::where('user_id', $request->user)
                 ->where(function ($query) use ($request) {
-                    if ($request->service_id) {
-                        $query->where('service_id', $request->service_id);
+                    if ($request->service) {
+                        $query->where('service_id', $request->service);
                     }
                     if ($request->offer_id) {
-                        $query->where('offer_id', $request->offer_id);
+                        $query->where('offer_id', $request->offer);
                     }
                 })
                 ->first();
@@ -112,15 +99,15 @@ class WishlistApiController extends Controller
             }
 
             $wishlist = Wishlist::create([
-                'user_id' => $request->user_id,
-                'service_id' => $request->service_id,
-                'offer_id' => $request->offer_id,
+                'user_id' => $request->user,
+                'service_id' => $request->service,
+                'offer_id' => $request->offer,
             ]);
 
             Log::info('Item added to wishlist', [
-                'user_id' => $request->user_id,
-                'service_id' => $request->service_id,
-                'offer_id' => $request->offer_id,
+                'user_id' => $request->user,
+                'service_id' => $request->service,
+                'offer_id' => $request->offer,
             ]);
 
             return response()->json([
@@ -131,20 +118,18 @@ class WishlistApiController extends Controller
                     'added_at' => $wishlist->created_at
                 ]
             ], 201);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
-
         } catch (\Exception $e) {
             Log::error('Add to Wishlist Failed', [
                 'error' => $e->getMessage(),
-                'user_id' => $request->input('user_id'),
-                'service_id' => $request->input('service_id'),
-                'offer_id' => $request->input('offer_id'),
+                'user_id' => $request->input('user'),
+                'service_id' => $request->input('service'),
+                'offer_id' => $request->input('offer'),
                 'trace' => $e->getTraceAsString()
             ]);
 
@@ -158,10 +143,20 @@ class WishlistApiController extends Controller
     /**
      * Remove item from wishlist
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         try {
-            $wishlist = Wishlist::find($id);
+            $request->validate([
+                'user' => 'required|exists:users,id',
+                'wishlist_id' => 'required|exists:wishlists,id',
+            ]);
+
+            $userid = $request->user;
+            $id = $request->wishlist_id;
+            $wishlist = Wishlist::where('user_id', $userid)
+                ->where('id', $id)
+                ->first();
+
 
             if (!$wishlist) {
                 return response()->json([
@@ -170,9 +165,9 @@ class WishlistApiController extends Controller
                 ], 404);
             }
 
-            $userId = $wishlist->user_id;
-            $serviceId = $wishlist->service_id;
-            $offerId = $wishlist->offer_id;
+            $userId = $wishlist->user;
+            $serviceId = $wishlist->service;
+            $offerId = $wishlist->offer;
 
             $wishlist->delete();
 
@@ -186,7 +181,6 @@ class WishlistApiController extends Controller
                 'success' => true,
                 'message' => 'Item removed from wishlist successfully'
             ]);
-
         } catch (\Exception $e) {
             Log::error('Remove from Wishlist Failed', [
                 'error' => $e->getMessage(),
@@ -208,25 +202,25 @@ class WishlistApiController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'service_id' => 'nullable|exists:services,id',
-                'offer_id' => 'nullable|exists:offers,id',
+                'user' => 'required|exists:users,id',
+                'service' => 'nullable|exists:services,id',
+                'offer' => 'nullable|exists:offers,id',
             ]);
 
-            if (!$request->service_id && !$request->offer_id) {
+            if (!$request->service && !$request->offer) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Either service_id or offer_id must be provided'
                 ], 422);
             }
 
-            $wishlist = Wishlist::where('user_id', $request->user_id)
+            $wishlist = Wishlist::where('user_id', $request->user)
                 ->where(function ($query) use ($request) {
-                    if ($request->service_id) {
-                        $query->where('service_id', $request->service_id);
+                    if ($request->service) {
+                        $query->where('service_id', $request->service);
                     }
-                    if ($request->offer_id) {
-                        $query->where('offer_id', $request->offer_id);
+                    if ($request->offer) {
+                        $query->where('offer_id', $request->offer);
                     }
                 })
                 ->first();
@@ -241,29 +235,27 @@ class WishlistApiController extends Controller
             $wishlist->delete();
 
             Log::info('Item removed from wishlist', [
-                'user_id' => $request->user_id,
-                'service_id' => $request->service_id,
-                'offer_id' => $request->offer_id,
+                'user_id' => $request->user,
+                'service_id' => $request->service,
+                'offer_id' => $request->offer,
             ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Item removed from wishlist successfully'
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
-
         } catch (\Exception $e) {
             Log::error('Remove Item from Wishlist Failed', [
                 'error' => $e->getMessage(),
-                'user_id' => $request->input('user_id'),
-                'service_id' => $request->input('service_id'),
-                'offer_id' => $request->input('offer_id'),
+                'user_id' => $request->input('user'),
+                'service_id' => $request->input('service'),
+                'offer_id' => $request->input('offer'),
                 'trace' => $e->getTraceAsString()
             ]);
 
