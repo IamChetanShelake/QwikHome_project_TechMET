@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\ServiceFrequencyOption;
 use App\Models\ServiceRequirement;
 use App\Models\Process;
 use App\Models\User;
+use App\Models\Wishlist;
 use App\Models\Faq;
 use App\Models\Feedback;
 use App\Models\ServiceReview;
@@ -39,7 +41,7 @@ class Service extends Model
         if ($this->media) {
             $mediaArray = is_array($this->media) ? $this->media : json_decode($this->media, true);
             if (is_array($mediaArray)) {
-                return array_map(function($image) {
+                return array_map(function ($image) {
                     return asset('Service_images/' . $image);
                 }, $mediaArray);
             }
@@ -84,6 +86,11 @@ class Service extends Model
     {
         return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
     }
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'service_id');
+    }
+
 
     // Feedback relationships
     public function feedbacks()
@@ -146,5 +153,10 @@ class Service extends Model
     public function faq()
     {
         return $this->hasMany(Faq::class);
+    }
+
+    public function subscriptionPlans()
+    {
+        return $this->hasMany(ServiceFrequencyOption::class, 'service_id');
     }
 }

@@ -44,7 +44,8 @@ Route::get('/categories', [ServiceApiController::class, 'categories']);
 Route::post('/services', [ServiceApiController::class, 'services']);
 
 //everythingWeOffer-----------------------
-Route::get('/everything-we-offer', [ServiceApiController::class, 'everythingWeOffer']);
+Route::get('/everythingWeOffer', [ServiceApiController::class, 'everythingWeOffer']);
+
 
 //subcategoryServices-----------------------
 Route::post('/servicesOfSubcategory', [ServiceApiController::class, 'subcategoryServices']);

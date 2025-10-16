@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Campaign;
 use App\Models\Offer;
+use App\Models\ServiceOffer;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -15,45 +16,45 @@ class HomeApiController extends Controller
     {
         try {
             // Get all services and format as items with name and image
-            $services = Service::all()->map(function ($service) {
-                return [
-                    'name' => $service->name,
-                    'image' => $service->image
+
+            $services =
+                [
+                    'items' => Service::all(),
                 ];
-            });
+
 
             // Get services where qwikpick == 1
-            $qwikpickServices = Service::where('qwikpick', 1)->get()->map(function ($service) {
-                return [
-                    'name' => $service->name,
-                    'image' => $service->image
+            $qwikpickServices =
+                [
+                    'items' => Service::where('qwikpick', 1)->get()
+
                 ];
-            });
+
 
             // Get active offers and active campaigns, combine into one items array
-            $offers = Offer::where('status', 'active')->get()->map(function ($offer) {
-                return [
-                    'name' => $offer->title,
-                    'image' => $offer->image
-                ];
-            });
+            $offers =
+                [
 
-            $campaigns = Campaign::where('status', 'active')->get()->map(function ($campaign) {
-                return [
-                    'name' => $campaign->title,
-                    'image' => $campaign->image
+                    'items' => ServiceOffer::where('status', 'active')->get()
                 ];
-            });
 
-            $offersAndCampaigns = $offers->concat($campaigns);
+
+            $campaigns =
+                [
+                    'items' => Campaign::where('status', 'active')->get()
+
+                ];
+
+
+            // $offersAndCampaigns = $offers->concat($campaigns);
 
             // Get services where beauty_and_easy == 1
-            $beautyAndEasyServices = Service::where('beauty_and_easy', 1)->get()->map(function ($service) {
-                return [
-                    'name' => $service->name,
-                    'image' => $service->image
+            $beautyAndEasyServices =
+                [
+                    'items' => Service::where('beauty_and_easy', 1)->get()
+
                 ];
-            });
+
 
             $sections = [
                 [
@@ -66,7 +67,11 @@ class HomeApiController extends Controller
                 ],
                 [
                     'title' => 'offers and campaigns',
-                    'items' => $offersAndCampaigns
+                    'items' => $offersAndCampaigns = [
+                        'offers' => $offers,
+                        'campaigns' => $campaigns,
+                    ]
+
                 ],
                 [
                     'title' => 'beauty and easy',

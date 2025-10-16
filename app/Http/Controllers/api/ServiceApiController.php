@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Service;
+
 use App\Models\Offer;
 use Illuminate\Http\Request;
 
@@ -221,6 +222,7 @@ class ServiceApiController extends Controller
     {
         try {
             $serviceId = $request->input('service');
+            $userId = $request->input('user');
 
             if (!$serviceId) {
                 return response()->json([
@@ -230,7 +232,9 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq'])->where('id', $serviceId)->where('qwikpick', 1)->first();
+            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq', 'wishlists' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])->where('id', $serviceId)->where('qwikpick', 1)->first();
 
             if (!$service) {
                 return response()->json([
@@ -250,8 +254,13 @@ class ServiceApiController extends Controller
             }
 
             // Create custom service data with restructured FAQ
+            // $serviceData = $service->toArray();
+            // $serviceData['faq'] = $faq;
+            // Add wishlist status
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
 
             return response()->json([
                 'success' => true,
@@ -273,6 +282,7 @@ class ServiceApiController extends Controller
     {
         try {
             $serviceId = $request->input('service');
+            $userId = $request->input('user');
 
             if (!$serviceId) {
                 return response()->json([
@@ -282,7 +292,9 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq'])->where('id', $serviceId)->where('beauty_and_easy', 1)->first();
+            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq', 'wishlists' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])->where('id', $serviceId)->where('beauty_and_easy', 1)->first();
 
             if (!$service) {
                 return response()->json([
@@ -302,8 +314,11 @@ class ServiceApiController extends Controller
             }
 
             // Create custom service data with restructured FAQ
+            // Add wishlist status
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
 
             return response()->json([
                 'success' => true,

@@ -263,7 +263,7 @@ class ServiceController extends Controller
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|file',
+            'images.*' => 'nullable',
             'requirements' => 'nullable|array',
             'requirements.*.title' => 'required|string|max:255',
             'processes' => 'nullable|array',
@@ -274,7 +274,7 @@ class ServiceController extends Controller
             'materials.*.material_description' => 'nullable|string',
             'materials.*.applicable_to' => 'required|in:onetime,weekly,monthly,yearly,all',
             'materials.*.material_price' => 'required|numeric|min:0|max:999999.99',
-            'materials.*.material_image' => 'nullable|image',
+            'materials.*.material_image' => 'nullable',
             // Frequency options validation
             'onetime_frequencies' => 'nullable|array',
             'onetime_frequencies.*.duration' => 'nullable|integer|min:1|max:10',

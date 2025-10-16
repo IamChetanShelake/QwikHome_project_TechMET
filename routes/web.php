@@ -31,6 +31,58 @@ use App\Models\TermsCondition;
 use App\Models\RefundPolicy;
 use App\Models\ServiceOffer;
 
+
+//live time od Dubai 
+Route::get('/time', function () {
+    return "
+    <html>
+        <head>
+            <title>Live Dubai Time</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    text-align: center;
+                    margin-top: 20%;
+                    background: #0a0a0a;
+                    color: #00ffcc;
+                }
+                h1 {
+                    font-size: 2rem;
+                }
+                #time {
+                    font-size: 3rem;
+                    font-weight: bold;
+                    letter-spacing: 2px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Live Dubai Time</h1>
+            <div id='time'></div>
+
+            <script>
+                function updateTime() {
+                    const now = new Date();
+                    // Convert to Dubai timezone
+                    const dubaiTime = now.toLocaleString('en-US', { 
+                        timeZone: 'Asia/Dubai', 
+                        hour12: true 
+                    });
+
+                    // Get current milliseconds (simulating micro/nano part)
+                    const ms = now.getMilliseconds().toString().padStart(3, '0');
+
+                    // Combine time + milliseconds
+                    document.getElementById('time').textContent = dubaiTime + '.' + ms;
+                }
+
+                // Update every 10 milliseconds
+                setInterval(updateTime, 10);
+                updateTime();
+            </script>
+        </body>
+    </html>";
+});
 Route::get('/', function () {
     return view('welcome');
 });
