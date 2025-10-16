@@ -87,10 +87,11 @@
                                 </th>
                                 <th>
                                     <div class="th-content">
-                                        <i class="fas fa-building"></i>
+                                        <i class="fas fa-user"></i>
                                         <span>Vendor</span>
                                     </div>
                                 </th>
+
                                 <th>
                                     <div class="th-content">
                                         <i class="fas fa-map-marker-alt"></i>
@@ -155,13 +156,25 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="vendor-info">
-                                                @if($serviceProvider->vendor)
-                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
-                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
+                                                @if(auth()->user()->role === 'vendor')
+
+                                                @if($serviceProvider->vendor->id == auth()->user()->id )
+                                                    {{-- <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small> --}}
+                                                     <span class="admin-assigned">vendor (Default)</span>
                                                 @else
                                                     <span class="admin-assigned">Admin (Default)</span>
                                                 @endif
                                             </div>
+                                            @elseif(auth()->user()->role === 'admin')
+                                                @if($serviceProvider->vendor)
+                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
+                                                    @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                    @endif
+
+                                            @endif
                                         </div>
                                     </td>
                                     <td>

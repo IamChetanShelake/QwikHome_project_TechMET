@@ -12,27 +12,27 @@ class ServiceOffersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $search = $request->get('search');
-        // $service_id = $request->get('service_id');
-        // $status = $request->get('status');
+        $search = $request->get('search');
+        $service_id = $request->get('service_id');
+        $status = $request->get('status');
 
-        // $query = ServiceOffer::with('service');
+        $query = ServiceOffer::with('service');
 
-        // if ($search) {
-        //     $query->where('name', 'like', '%' . $search . '%');
-        // }
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
 
-        // if ($service_id) {
-        //     $query->where('service_id', $service_id);
-        // }
+        if ($service_id) {
+            $query->where('service_id', $service_id);
+        }
 
-        // if ($status) {
-        //     $query->where('status', $status);
-        // }
+        if ($status) {
+            $query->where('status', $status);
+        }
 
-        // $serviceOffers = $query->paginate(15);
+        $serviceOffers = $query->paginate(15);
         $services = Service::where('status', 'active')->get();
 
         return view('admin.services.offers.index', compact('serviceOffers', 'services', 'search', 'service_id', 'status'));
@@ -109,7 +109,7 @@ class ServiceOffersController extends Controller
 
         $serviceOffer->update($request->all());
 
-        return redirect()->route('services.services.offers.index')->with('success', 'Service offer updated successfully.');
+        return redirect()->route('offers.index')->with('success', 'Service offer updated successfully.');
     }
 
     /**
@@ -119,6 +119,6 @@ class ServiceOffersController extends Controller
     {
         $serviceOffer->delete();
 
-        return redirect()->route('services.services.offers.index')->with('success', 'Service offer deleted successfully.');
+        return redirect()->route('offers.index')->with('success', 'Service offer deleted successfully.');
     }
 }

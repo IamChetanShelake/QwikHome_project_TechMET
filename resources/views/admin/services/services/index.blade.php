@@ -766,11 +766,20 @@
                                             class="action-btn action-edit" title="Edit Service">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('services.offers.create', $service) }}" class="action-btn"
-                                            style="background: rgba(138, 43, 226, 0.2); color: #8a2be2;"
-                                            title="Add Offer">
-                                            <i class="fas fa-percent"></i>
-                                        </a>
+                                        @if($service->offers->count() > 0)
+                                            <button class="action-btn"
+                                                style="background: rgba(138, 43, 226, 0.1); color: #8a2be2; cursor: not-allowed;"
+                                                title="Offer already created"
+                                                disabled>
+                                                <i class="fas fa-percent"></i>
+                                            </button>
+                                        @else
+                                            <a href="{{ route('offers.create', $service) }}" class="action-btn"
+                                                style="background: rgba(138, 43, 226, 0.2); color: #8a2be2;"
+                                                title="Add Offer">
+                                                <i class="fas fa-percent"></i>
+                                            </a>
+                                        @endif
                                         <button type="button" class="action-btn action-delete"
                                             onclick="confirmDelete({{ $service->id }}, '{{ $service->name }}')"
                                             title="Delete Service">

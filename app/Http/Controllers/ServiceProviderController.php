@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ServiceProviderController extends Controller
@@ -13,7 +14,17 @@ class ServiceProviderController extends Controller
      */
     public function index()
     {
-        $serviceProviders = User::where('role', 'serviceprovider')->with('vendor')->get();
+        $query = User::where('role', 'serviceprovider')->with('vendor');
+
+        // If the authenticated user is a vendor, only show their service providers
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user && $user->role === 'vendor') {
+                $query->where('vendor_id', $user->id);
+            }
+        }
+
+        $serviceProviders = $query->get();
         return view('vendor.serviceProviders.index', compact('serviceProviders'));
     }
 
@@ -25,8 +36,24 @@ class ServiceProviderController extends Controller
         $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
         $categories = \App\Models\Category::where('status', 'active')->get();
         $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
-        $vendors = \App\Models\User::where('role', 'vendor')->get();
-        return view('vendor.serviceProviders.create', compact('services', 'categories', 'subcategories', 'vendors'));
+
+        // If the authenticated user is a vendor, only show that vendor in the list (or none for admin)
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user && $user->role === 'vendor') {
+                // For vendor, only show their own ID as an option (or no vendors for selection)
+                $vendors = collect([$user]); // Pass only the logged-in vendor
+            } else {
+                // For admin, show all vendors
+                $vendors = \App\Models\User::where('role', 'vendor')->get();
+            }
+        } else {
+            $vendors = \App\Models\User::where('role', 'vendor')->get();
+        }
+
+        $authUser = Auth::user();
+
+        return view('vendor.serviceProviders.create', compact('services', 'categories', 'subcategories', 'vendors', 'authUser'));
     }
 
     /**
@@ -53,8 +80,14 @@ class ServiceProviderController extends Controller
             $imageName = '';
         }
 
-        // Determine vendor_id - if not provided, it will be null (belonging to admin)
-        $vendorId = $request->filled('vendor_id') ? $request->vendor_id : null;
+        // Determine vendor_id - if logged in user is vendor, only allow assigning to themselves
+        if (Auth::check() && Auth::user()->role === 'vendor') {
+            // If logged in user is vendor, force vendor_id to their own ID
+            $vendorId = Auth::user()->id;
+        } else {
+            // For admin or other roles, use the provided vendor_id or null
+            $vendorId = $request->filled('vendor_id') ? $request->vendor_id : null;
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -81,6 +114,15 @@ class ServiceProviderController extends Controller
     public function show(string $id)
     {
         $serviceProvider = User::findOrFail($id);
+
+        // Check if the logged-in user is a vendor and if so, ensure they can only view their own service providers
+        if (Auth::check() && Auth::user()->role === 'vendor') {
+            // If logged in user is vendor, only allow viewing if the service provider belongs to them
+            if ($serviceProvider->vendor_id !== Auth::user()->id) {
+                abort(403, 'You can only view service providers that belong to your vendor account.');
+            }
+        }
+
         return view('vendor.serviceProviders.view', compact('serviceProvider'));
     }
 
@@ -93,8 +135,23 @@ class ServiceProviderController extends Controller
         $services = \App\Models\Service::with(['category', 'subcategory'])->where('status', 'active')->get();
         $categories = \App\Models\Category::where('status', 'active')->get();
         $subcategories = \App\Models\Subcategory::where('status', 'active')->get();
-        $vendors = \App\Models\User::where('role', 'vendor')->get();
-        return view('vendor.serviceProviders.edit', compact('serviceProvider', 'services', 'categories', 'subcategories', 'vendors'));
+
+        // If the authenticated user is a vendor, only show that vendor in the list (or none for admin)
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user && $user->role === 'vendor') {
+                // For vendor, only show their own ID as an option (or no vendors for selection)
+                $vendors = collect([$user]); // Pass only the logged-in vendor
+            } else {
+                // For admin, show all vendors
+                $vendors = \App\Models\User::where('role', 'vendor')->get();
+            }
+        } else {
+            $vendors = \App\Models\User::where('role', 'vendor')->get();
+        }
+
+        $authUser = Auth::user();
+        return view('vendor.serviceProviders.edit', compact('serviceProvider', 'services', 'categories', 'subcategories', 'vendors', 'authUser'));
     }
 
     /**
@@ -115,12 +172,26 @@ class ServiceProviderController extends Controller
         ]);
 
         $serviceProvider = User::findOrFail($id);
+
+        // Check if the logged-in user is a vendor and if so, ensure they can only update their own service providers
+        if (Auth::check() && Auth::user()->role === 'vendor') {
+            // If logged in user is vendor, only allow updating if the service provider belongs to them
+            if ($serviceProvider->vendor_id !== Auth::user()->id) {
+                abort(403, 'You can only update service providers that belong to your vendor account.');
+            }
+            // For vendor, force vendor_id to their own ID (can't reassign to other vendors)
+            $vendorId = Auth::user()->id;
+        } else {
+            // For admin or other roles, use the provided vendor_id or null
+            $vendorId = $request->filled('vendor_id') ? $request->vendor_id : null;
+        }
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'vendor_id' => $request->filled('vendor_id') ? $request->vendor_id : null,
+            'vendor_id' => $vendorId,
         ];
 
         if ($request->filled('password')) {
@@ -157,6 +228,14 @@ class ServiceProviderController extends Controller
     {
         $serviceProvider = User::findOrFail($id);
 
+        // Check if the logged-in user is a vendor and if so, ensure they can only delete their own service providers
+        if (Auth::check() && Auth::user()->role === 'vendor') {
+            // If logged in user is vendor, only allow deleting if the service provider belongs to them
+            if ($serviceProvider->vendor_id !== Auth::user()->id) {
+                abort(403, 'You can only delete service providers that belong to your vendor account.');
+            }
+        }
+
         // Delete the image file if exists
         $oldfile = public_path('user_images/' . $serviceProvider->image);
         if ($serviceProvider->image && file_exists($oldfile)) {
@@ -175,13 +254,22 @@ class ServiceProviderController extends Controller
     {
         $query = $request->get('query');
 
+        $userQuery = User::where('role', 'serviceprovider')->with('vendor');
+
+        // If the authenticated user is a vendor, only show their service providers
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user && $user->role === 'vendor') {
+                $userQuery->where('vendor_id', $user->id);
+            }
+        }
+
         if (empty($query)) {
-            // Return all service providers when no query
-            $users = User::where('role', 'serviceprovider')->get();
+            // Return service providers based on user role when no query
+            $users = $userQuery->get();
         } else {
             // Search by name, email, or phone
-            $users = User::where('role', 'serviceprovider')
-                ->with('vendor')
+            $users = $userQuery
                 ->where(function ($q) use ($query) {
                     $q->where('name', 'like', "%{$query}%")
                       ->orWhere('email', 'like', "%{$query}%")

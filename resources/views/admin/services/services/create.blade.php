@@ -910,9 +910,9 @@
                         </label>
                         <div class="input-wrapper">
                             <select class="modern-select" id="subcategory_id" name="subcategory_id">
-                                <option value="">None</option>
+                                <option value="">Select Subcategory</option>
                                 @foreach ($subcategories as $sub)
-                                    <option value="{{ $sub->id }}"
+                                    <option value="{{ $sub->id }}" data-category-id="{{ $sub->category_id }}"
                                         {{ old('subcategory_id') == $sub->id ? 'selected' : '' }}>
                                         {{ $sub->name }}
                                     </option>
@@ -985,7 +985,7 @@
                         <label class="modern-label">
                             <i class="fas fa-cogs text-cyan"></i>
                             Add Our Processes
-                            <span class="optional-badge">Optional</span>
+                            <span class="required-badge">Required</span>
                         </label>
                         <div class="processes-container">
                             <div id="processes_container">
@@ -1109,9 +1109,9 @@
                                                 placeholder="Enter what's included">
                                             <i class="fas fa-check input-icon"></i>
                                         </div>
-                                        <button type="button" class="modern-btn-remove remove-include">
+                                        <!-- <button type="button" class="modern-btn-remove remove-include">
                                             <i class="fas fa-times"></i>
-                                        </button>
+                                        </button> -->
                                     </div>
                                 @endif
                             </div>
@@ -1137,7 +1137,7 @@
                         <label class="modern-label">
                             <i class="fas fa-clipboard-list text-cyan"></i>
                             What We Need From You
-                            <span class="optional-badge">Optional</span>
+                            <span class="required-badge">Required</span>
                         </label>
                         <div class="requirements-container">
                             <div id="requirements_container">
@@ -2666,6 +2666,58 @@
                 $('#enable_yearly').prop('checked', true).trigger('change');
             @endif
             // One time is always visible by default (checkbox checked)
+
+            // Category-Subcategory filtering
+            const allSubcategoryOptions = $('#subcategory_id option').clone();
+            
+            function filterSubcategories() {
+                const selectedCategoryId = $('#category_id').val();
+                const currentSubcategoryId = $('#subcategory_id').val();
+                
+                // Clear subcategory dropdown
+                $('#subcategory_id').empty();
+                
+                if (selectedCategoryId) {
+                    // Filter and add subcategories for selected category
+                    let hasSubcategories = false;
+                    allSubcategoryOptions.each(function() {
+                        const option = $(this);
+                        if (option.val() !== '' && option.data('category-id') == selectedCategoryId) {
+                            $('#subcategory_id').append(option.clone());
+                            hasSubcategories = true;
+                        }
+                    });
+                    
+                    // Add "None" option only if there are subcategories
+                    if (hasSubcategories) {
+                        $('#subcategory_id').prepend('<option value="">None</option>');
+                    } else {
+                        $('#subcategory_id').append('<option value="">No subcategories available</option>');
+                    }
+                    
+                    // Restore previously selected subcategory if it belongs to this category
+                    if (currentSubcategoryId && hasSubcategories) {
+                        const matchingOption = allSubcategoryOptions.filter(function() {
+                            return $(this).val() == currentSubcategoryId && 
+                                   $(this).data('category-id') == selectedCategoryId;
+                        });
+                        if (matchingOption.length > 0) {
+                            $('#subcategory_id').val(currentSubcategoryId);
+                        }
+                    }
+                } else {
+                    // If no category selected, show all subcategories
+                    $('#subcategory_id').append(allSubcategoryOptions.clone());
+                }
+            }
+            
+            // Filter on page load
+            filterSubcategories();
+            
+            // Filter when category changes
+            $('#category_id').on('change', function() {
+                filterSubcategories();
+            });
         });
     </script>
 @endsection

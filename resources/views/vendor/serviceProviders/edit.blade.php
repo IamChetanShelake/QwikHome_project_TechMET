@@ -117,14 +117,26 @@
                                         <i class="fas fa-user-tie"></i>
                                         Assign to Vendor
                                     </label>
-                                    <select id="vendor_id" name="vendor_id" class="form-input">
-                                        <option value="">Assign to Admin (Default)</option>
-                                        @foreach($vendors as $vendor)
-                                            <option value="{{ $vendor->id }}" {{ old('vendor_id', $serviceProvider->vendor_id) == $vendor->id ? 'selected' : '' }}>
-                                                {{ $vendor->name }} ({{ $vendor->email }})
+                                    <select id="vendor_id" name="vendor_id" class="form-input"
+                                        {{ $authUser->role === 'vendor' ? 'disabled' : '' }}>
+                                        @if($authUser->role === 'vendor')
+                                            <!-- If logged in user is a vendor, auto-select their own vendor ID -->
+                                            <option value="{{ $authUser->id }}" selected>
+                                                {{ $authUser->name }} ({{ $authUser->email }}) - You
                                             </option>
-                                        @endforeach
+                                        @else
+                                            <option value="">Assign to Admin (Default)</option>
+                                            @foreach($vendors as $vendor)
+                                                <option value="{{ $vendor->id }}" {{ old('vendor_id', $serviceProvider->vendor_id) == $vendor->id ? 'selected' : '' }}>
+                                                    {{ $vendor->name }} ({{ $vendor->email }})
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
+                                    <!-- Hidden input to pass vendor_id when vendor is logged in -->
+                                    @if($authUser->role === 'vendor')
+                                        <input type="hidden" name="vendor_id" value="{{ $authUser->id }}">
+                                    @endif
                                     @error('vendor_id')
                                         <div class="error-message">
                                             <i class="fas fa-exclamation-circle"></i>

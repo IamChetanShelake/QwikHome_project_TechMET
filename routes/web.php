@@ -116,12 +116,23 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::delete('{service}', [ServiceController::class, 'servicesDestroy'])->name('services.services.destroy');
 
         // Service Offers
-        Route::resource('offers', \App\Http\Controllers\Admin\ServiceOffersController::class)->parameters(['offers' => 'serviceOffer'])->except(['create', 'show']);
-        Route::get('offers/create/{service}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'create'])->name('services.offers.create');
-        Route::get('services-offers', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'index'])->name('services.offers.index');
-        Route::post('offers/store', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'store'])->name('services.offers.store');
-        Route::get('offers/{serviceOffer}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'show'])->name('services.offers.show');
-        Route::get('offers/{serviceOffer}/edit', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'edit'])->name('services.offers.edit');
+        // Route::resource('offers', \App\Http\Controllers\Admin\ServiceOffersController::class)->parameters(['offers' => 'serviceOffer'])->except(['create', 'show'])->names([
+        //     'index' => 'services.offers.index',
+        //     'store' => 'services.offers.store',
+        //     'update' => 'services.offers.update',
+        //     'destroy' => 'services.offers.destroy',
+        //     'edit' => 'services.offers.edit'
+        // ]);
+        Route::get('offers/index', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'index'])->name('offers.index');
+
+        Route::get('offers/create/{service}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'create'])->name('offers.create');
+        // Route already defined by resource above
+        Route::post('offers/store', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'store'])->name('offers.store');
+        Route::get('offers/{serviceOffer}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'show'])->name('offers.show');
+        Route::get('offers/{serviceOffer}/edit', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'edit'])->name('offers.edit');
+        Route::put('offers/{serviceOffer}/update', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'update'])->name('offers.update');
+        Route::delete('offers/{serviceOffer}/delete', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'destroy'])->name('offers.destroy');
+
     });
 
     //service management old-------------
@@ -144,15 +155,15 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         ]);
 
         // Offers management
-        Route::resource('offers', OfferController::class)->names([
-            'index' => 'offers.index',
-            'create' => 'offers.create',
-            'store' => 'offers.store',
-            'show' => 'offers.show',
-            'edit' => 'offers.edit',
-            'update' => 'offers.update',
-            'destroy' => 'offers.destroy',
-        ]);
+        // Route::resource('offers', OfferController::class)->names([
+        //     'index' => 'offers.index',
+        //     'create' => 'offers.create',
+        //     'store' => 'offers.store',
+        //     'show' => 'offers.show',
+        //     'edit' => 'offers.edit',
+        //     'update' => 'offers.update',
+        //     'destroy' => 'offers.destroy',
+        // ]);
 
         // Campaigns management
         Route::resource('campaigns', CampaignController::class)->names([
