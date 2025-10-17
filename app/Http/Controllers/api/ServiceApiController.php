@@ -147,12 +147,39 @@ class ServiceApiController extends Controller
             }
 
             if ($type == 'qwikpick') {
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->where('qwikpick', 1)->find($serviceId);
+                $service = Service::with([
+                    'category',
+                    'subcategory',
+                    'requirements',
+                    'processes',
+                    'faq',
+                    'subscriptionPlans',
+                    'materials',
+                    'servicePersons'
+                ])->where('qwikpick', 1)->find($serviceId);
             } elseif ($type == 'beauty_and_easy') {
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->where('beauty_and_easy', 1)->find($serviceId);
+                $service = Service::with([
+                    'category',
+                    'subcategory',
+                    'requirements',
+                    'processes',
+                    'faq',
+                    'subscriptionPlans',
+                    'materials',
+                    'servicePersons'
+                ])->where('beauty_and_easy', 1)->find($serviceId);
             } elseif (!$type) {
 
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->find($serviceId);
+                $service = Service::with([
+                    'category',
+                    'subcategory',
+                    'requirements',
+                    'processes',
+                    'faq',
+                    'subscriptionPlans',
+                    'materials',
+                    'servicePersons'
+                ])->find($serviceId);
             }
 
 

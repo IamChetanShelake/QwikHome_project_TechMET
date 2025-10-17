@@ -155,6 +155,11 @@ class Service extends Model
         return $this->hasMany(Faq::class);
     }
 
+    public function servicePersons()
+    {
+        return $this->belongsToMany(User::class, 'user_services', 'service_id', 'user_id');
+    }
+
     public function subscriptionPlans()
     {
         return $this->hasMany(ServiceFrequencyOption::class, 'service_id');

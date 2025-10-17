@@ -201,7 +201,7 @@
         </div>
 
         <!-- Offer Form -->
-        <form action="{{ route('services.offers.store') }}" method="POST">
+        <form action="{{ route('offers.store') }}" method="POST">
             @csrf
 
             <!-- Basic Information -->

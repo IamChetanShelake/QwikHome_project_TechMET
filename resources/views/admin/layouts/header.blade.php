@@ -1181,7 +1181,7 @@
                     </li>
                     <li>
                         <a href="{{ route('offers.index') }}"
-                            class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">
+                            class="dropdown-item {{ request()->routeIs('offers.index') ? 'active' : '' }}">
                             <i class="fas fa-percent"></i>
                             <span>Offers</span>
                         </a>
@@ -1190,40 +1190,9 @@
                     <li>
 
 
-                        <!--<a href="{{ route('contentManagement.campaigns.index') }}"-->
-                        <!--    class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">-->
-                        <!--    <i class="fas fa-bullhorn"></i>-->
-                        <!--    <span>Campaigns</span>-->
-                        <!--</a>-->
+
                     </li>
-                    <!--<li class="nav-item {{ str_contains(request()->url(), '/content-management') ? 'active' : '' }}">-->
-                    <!--    <div class="content-menu">-->
-                    <!--        <a href="javascript:void(0)" class="nav-link content-menu-trigger">-->
-                    <!--            <i class="fas fa-edit"></i>-->
-                    <!--            <span>Content Management</span>-->
-                    <!--            <i class="fas fa-caret-down ml-1"></i>-->
-                    <!--        </a>-->
-                    <!--        <div class="content-dropdown-menu" style="display: none;">-->
-                    <!--            <a href="{{ route('contentManagement.banners.index') }}"-->
-                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.banners.*') ? 'active' : '' }}">-->
-                    <!--                <i class="fas fa-images"></i>-->
-                    <!--                <span>Banners</span>-->
-                    <!--            </a>-->
 
-                    <!--            <a href="{{ route('contentManagement.offers.index') }}"-->
-                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.offers.*') ? 'active' : '' }}">-->
-                    <!--                <i class="fas fa-percent"></i>-->
-                    <!--                <span>Offers</span>-->
-                    <!--            </a>-->
-                    <!--            <a href="{{ route('contentManagement.campaigns.index') }}"-->
-                    <!--                class="dropdown-item {{ request()->routeIs('admin.contentManagement.campaigns.*') ? 'active' : '' }}">-->
-                    <!--                <i class="fas fa-bullhorn"></i>-->
-                    <!--                <span>Campaigns</span>-->
-                    <!--            </a>-->
-                    <!--        </div>-->
-
-                    <!--    </div>-->
-                    <!--</li>-->
                     <li
                         class="nav-item {{ str_contains(request()->url(), '/content-management/') && (request()->is('*disclaimers*') || request()->is('*privacy-policies*') || request()->is('*terms-conditions*') || request()->is('*refund-policies*')) ? 'active' : '' }}">
                         <div class="pages-menu">

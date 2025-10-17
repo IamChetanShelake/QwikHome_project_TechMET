@@ -8,6 +8,7 @@ use App\Http\Controllers\api\ServiceApiController;
 use App\Http\Controllers\api\PolicyApiController;
 use App\Http\Controllers\api\UserApiController;
 use App\Http\Controllers\api\WishlistApiController;
+use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,9 @@ Route::get('/privacy-policy', [PolicyApiController::class, 'getPrivacyPolicy']);
 Route::post('/update-fcm-token', [UserApiController::class, 'updateFcmToken']);
 Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
 Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);
+
+// Cart API routes
+Route::post('/addToCart', [CartController::class, 'addToCart']);
 
 // Wishlist API routes
 Route::post('/wishlist-store', [WishlistApiController::class, 'store']); // Add to wishlist

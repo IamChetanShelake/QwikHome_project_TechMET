@@ -217,7 +217,7 @@ class ServiceController extends Controller
         $subcategory_id = $request->get('subcategory_id');
         $status = $request->get('status');
 
-        $query = Service::with(['category', 'subcategory']);
+        $query = Service::with(['category', 'subcategory', 'offers']);
 
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -263,10 +263,10 @@ class ServiceController extends Controller
             'status' => 'required|in:active,inactive',
             'is_arabic' => 'nullable|boolean',
             'images' => 'nullable|array',
-            'images.*' => 'nullable',
-            'requirements' => 'nullable|array',
+            'images.*' => 'nullable|file',
+            'requirements' => 'required|array|min:1',
             'requirements.*.title' => 'required|string|max:255',
-            'processes' => 'nullable|array',
+            'processes' => 'required|array|min:1',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
             'materials' => 'nullable|array',
@@ -512,9 +512,9 @@ class ServiceController extends Controller
             'is_arabic' => 'nullable|boolean',
             'images' => 'nullable|array',
             'images.*' => 'nullable|file',
-            'requirements' => 'nullable|array',
+            'requirements' => 'required|array|min:1',
             'requirements.*.title' => 'required|string|max:255',
-            'processes' => 'nullable|array',
+            'processes' => 'required|array|min:1',
             'processes.*.title' => 'required|string|max:255',
             'processes.*.description' => 'required|string',
             'materials' => 'nullable|array',

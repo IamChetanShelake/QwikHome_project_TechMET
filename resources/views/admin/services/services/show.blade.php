@@ -739,7 +739,7 @@
             </div>
 
             <!-- Pricing Information Card -->
-            <div class="detail-card">
+            {{-- <div class="detail-card">
                 <div class="card-header">
                     <!--<i class="fas fa-dollar-sign"></i>-->
                     <b>AED</b>
@@ -771,7 +771,7 @@
                         @endif
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Service Images Card (Multiple) -->
             @if ($service->media && is_array($service->media) && count($service->media) > 0)
@@ -837,11 +837,14 @@
                                         <div class="frequency-option-details">
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Duration:</span>
-                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->duration }}
+                                                    hour{{ $option->duration > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Price:</span>
-                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                                <span
+                                                    class="frequency-value price">{{ number_format($option->price_per_time, 2) }}
+                                                    AED</span>
                                             </div>
                                             @if ($option->description)
                                                 <div class="frequency-option-description">
@@ -869,15 +872,19 @@
                                         <div class="frequency-option-details">
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Times per Week:</span>
-                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }}
+                                                    time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Duration:</span>
-                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->duration }}
+                                                    hour{{ $option->duration > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Price per Service:</span>
-                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                                <span
+                                                    class="frequency-value price">{{ number_format($option->price_per_time, 2) }}
+                                                    AED</span>
                                             </div>
                                             @if ($option->description)
                                                 <div class="frequency-option-description">
@@ -905,15 +912,19 @@
                                         <div class="frequency-option-details">
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Times per Month:</span>
-                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }}
+                                                    time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Duration:</span>
-                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->duration }}
+                                                    hour{{ $option->duration > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Price per Service:</span>
-                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                                <span
+                                                    class="frequency-value price">{{ number_format($option->price_per_time, 2) }}
+                                                    AED</span>
                                             </div>
                                             @if ($option->description)
                                                 <div class="frequency-option-description">
@@ -941,15 +952,19 @@
                                         <div class="frequency-option-details">
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Times per Year:</span>
-                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }}
+                                                    time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Duration:</span>
-                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                                <span class="frequency-value">{{ $option->duration }}
+                                                    hour{{ $option->duration > 1 ? 's' : '' }}</span>
                                             </div>
                                             <div class="frequency-option-row">
                                                 <span class="frequency-label">Price per Service:</span>
-                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                                <span
+                                                    class="frequency-value price">{{ number_format($option->price_per_time, 2) }}
+                                                    AED</span>
                                             </div>
                                             @if ($option->description)
                                                 <div class="frequency-option-description">
