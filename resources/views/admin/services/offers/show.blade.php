@@ -516,72 +516,41 @@
         <div class="prices-section">
             <h3 class="prices-title">
                 <i class="fas fa-chart-line"></i>
-                Discounted Prices by Frequency
+                Discounted Prices by Frequency Options
             </h3>
 
-            <div class="price-comparison">
-                <div class="price-card">
-                    <div class="price-frequency">One Time</div>
-                    @if($serviceOffer->discounted_price_onetime)
-                        <div class="price-discounted">AED {{ number_format($serviceOffer->discounted_price_onetime, 2) }}</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_onetime, 2) }}</div>
-                        <div class="price-save">
-                            Save AED {{ number_format($serviceOffer->service->price_onetime - $serviceOffer->discounted_price_onetime, 2) }}
+            @if($frequencyOptions->count() > 0)
+                <div class="price-comparison">
+                    @foreach($frequencyOptions as $frequencyOption)
+                        @php
+                            $discountRecord = $serviceOffer->frequencyOptionDiscounts->firstWhere('frequency_option_id', $frequencyOption->id);
+                        @endphp
+                        <div class="price-card">
+                            <div class="price-frequency">{{ ucfirst($frequencyOption->frequency_type) }} ({{ $frequencyOption->no_of_times }} times)</div>
+                            @if($discountRecord)
+                                <div class="price-discounted">AED {{ number_format($discountRecord->discounted_price, 2) }}</div>
+                                <div class="price-original">AED {{ number_format($frequencyOption->price_per_time, 2) }}</div>
+                                <div class="price-save">
+                                    Save AED {{ number_format($frequencyOption->price_per_time - $discountRecord->discounted_price, 2) }}
+                                </div>
+                            @else
+                                <div class="no-price">Not discounted</div>
+                                <div class="price-original">AED {{ number_format($frequencyOption->price_per_time, 2) }}</div>
+                            @endif
+                            <div class="info-description" style="margin-top: 10px;">
+                                Duration: {{ $frequencyOption->duration }} days
+                                @if($frequencyOption->description)
+                                    <br>{{ $frequencyOption->description }}
+                                @endif
+                            </div>
                         </div>
-                    @else
-                        <div class="no-price">Not discounted</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_onetime, 2) }}</div>
-                    @endif
+                    @endforeach
                 </div>
-
-                @if($serviceOffer->service->price_weekly)
-                <div class="price-card">
-                    <div class="price-frequency">Weekly</div>
-                    @if($serviceOffer->discounted_price_weekly)
-                        <div class="price-discounted">AED {{ number_format($serviceOffer->discounted_price_weekly, 2) }}</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_weekly, 2) }}</div>
-                        <div class="price-save">
-                            Save AED {{ number_format($serviceOffer->service->price_weekly - $serviceOffer->discounted_price_weekly, 2) }}
-                        </div>
-                    @else
-                        <div class="no-price">Not discounted</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_weekly, 2) }}</div>
-                    @endif
+            @else
+                <div class="info-description">
+                    No frequency options available for this service.
                 </div>
-                @endif
-
-                @if($serviceOffer->service->price_monthly)
-                <div class="price-card">
-                    <div class="price-frequency">Monthly</div>
-                    @if($serviceOffer->discounted_price_monthly)
-                        <div class="price-discounted">AED {{ number_format($serviceOffer->discounted_price_monthly, 2) }}</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_monthly, 2) }}</div>
-                        <div class="price-save">
-                            Save AED {{ number_format($serviceOffer->service->price_monthly - $serviceOffer->discounted_price_monthly, 2) }}
-                        </div>
-                    @else
-                        <div class="no-price">Not discounted</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_monthly, 2) }}</div>
-                    @endif
-                </div>
-                @endif
-
-                @if($serviceOffer->service->price_yearly)
-                <div class="price-card">
-                    <div class="price-frequency">Yearly</div>
-                    @if($serviceOffer->discounted_price_yearly)
-                        <div class="price-discounted">AED {{ number_format($serviceOffer->discounted_price_yearly, 2) }}</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_yearly, 2) }}</div>
-                        <div class="price-save">
-                            Save AED {{ number_format($serviceOffer->service->price_yearly - $serviceOffer->discounted_price_yearly, 2) }}
-                        </div>
-                    @else
-                        <div class="no-price">Not discounted</div>
-                        <div class="price-original">AED {{ number_format($serviceOffer->service->price_yearly, 2) }}</div>
-                    @endif
-                </div>
-                @endif
-            </div>
+            @endif
         </div>
     </div>
 

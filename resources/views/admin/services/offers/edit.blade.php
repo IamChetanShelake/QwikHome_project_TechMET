@@ -200,6 +200,16 @@
         <p><strong>Current Price:</strong> AED {{ number_format($serviceOffer->service->price_onetime, 2) }}</p>
     </div>
 
+    <!-- Frequency Options Info -->
+    @if($frequencyOptions->count() > 0)
+    <div class="service-info">
+        <h4><i class="fas fa-clock"></i> Frequency Options</h4>
+        @foreach($frequencyOptions as $option)
+            <p><strong>{{ ucfirst($option->frequency_type) }}:</strong> AED {{ number_format($option->price_per_time, 2) }} per time</p>
+        @endforeach
+    </div>
+    @endif
+
     <!-- Edit Form -->
     <form action="{{ route('offers.update', $serviceOffer) }}" method="POST">
         @csrf
@@ -256,44 +266,36 @@
                     <i class="fas fa-dollar-sign"></i> Set Discounted Prices Under All Frequencies:
                 </p>
 
+                @php
+                    $frequencyTypes = ['onetime', 'weekly', 'monthly', 'yearly'];
+                    // Get existing discounts for this service offer
+                    $existingDiscounts = $serviceOffer->frequencyOptionDiscounts->keyBy('frequency_option_id');
+                @endphp
+
                 <div class="price-inputs">
-                    <div class="form-group">
-                        <label for="discounted_price_onetime" class="form-label">One Time Price</label>
-                        <input type="number" id="discounted_price_onetime" name="discounted_price_onetime"
-                               class="form-input" step="0.01" min="0"
-                               placeholder="{{ $serviceOffer->service->price_onetime }}"
-                               value="{{ old('discounted_price_onetime', $serviceOffer->discounted_price_onetime) }}">
-                    </div>
-
-                    @if($serviceOffer->service->price_weekly)
-                    <div class="form-group">
-                        <label for="discounted_price_weekly" class="form-label">Weekly Price</label>
-                        <input type="number" id="discounted_price_weekly" name="discounted_price_weekly"
-                               class="form-input" step="0.01" min="0"
-                               placeholder="{{ $serviceOffer->service->price_weekly }}"
-                               value="{{ old('discounted_price_weekly', $serviceOffer->discounted_price_weekly) }}">
-                    </div>
-                    @endif
-
-                    @if($serviceOffer->service->price_monthly)
-                    <div class="form-group">
-                        <label for="discounted_price_monthly" class="form-label">Monthly Price</label>
-                        <input type="number" id="discounted_price_monthly" name="discounted_price_monthly"
-                               class="form-input" step="0.01" min="0"
-                               placeholder="{{ $serviceOffer->service->price_monthly }}"
-                               value="{{ old('discounted_price_monthly', $serviceOffer->discounted_price_monthly) }}">
-                    </div>
-                    @endif
-
-                    @if($serviceOffer->service->price_yearly)
-                    <div class="form-group">
-                        <label for="discounted_price_yearly" class="form-label">Yearly Price</label>
-                        <input type="number" id="discounted_price_yearly" name="discounted_price_yearly"
-                               class="form-input" step="0.01" min="0"
-                               placeholder="{{ $serviceOffer->service->price_yearly }}"
-                               value="{{ old('discounted_price_yearly', $serviceOffer->discounted_price_yearly) }}">
-                    </div>
-                    @endif
+                    @foreach($frequencyTypes as $type)
+                        @foreach($frequencyOptions->where('frequency_type', $type) as $index => $option)
+                            @php
+                                $existingDiscount = $existingDiscounts->get($option->id);
+                            @endphp
+                            <div class="form-group">
+                                <label for="frequency_option_{{ $option->id }}" class="form-label">
+                                    {{ ucfirst($type) }} Option {{ $index + 1 }} ({{ $option->no_of_times }} times, AED {{ number_format($option->price_per_time, 2) }} per time)
+                                </label>
+                                <input type="number"
+                                       id="frequency_option_{{ $option->id }}"
+                                       name="frequency_option_{{ $option->id }}"
+                                       class="form-input calculate-discount"
+                                       step="0.01"
+                                       min="0"
+                                       placeholder="{{ $option->price_per_time }}"
+                                       data-original-price="{{ $option->price_per_time }}"
+                                       data-frequency-type="{{ $type }}"
+                                       data-frequency-id="{{ $option->id }}"
+                                       value="{{ old('frequency_option_' . $option->id, $existingDiscount ? $existingDiscount->discounted_price : '') }}">
+                            </div>
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -354,6 +356,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
     const startDateInput = document.getElementById('start_date');
     const endDateInput = document.getElementById('end_date');
+    const discountTypeInputs = document.querySelectorAll('input[name="discount_type"]');
+    const discountValueInput = document.getElementById('discount_value');
 
     // If no start date, set to today
     if (!startDateInput.value) {
@@ -379,6 +383,36 @@ document.addEventListener('DOMContentLoaded', function() {
             endDateInput.value = startDateInput.value;
         }
     });
+
+    // Discount calculation functionality
+    function calculateDiscountedPrices() {
+        const discountType = document.querySelector('input[name="discount_type"]:checked').value;
+        const discountValue = parseFloat(discountValueInput.value) || 0;
+        const priceInputs = document.querySelectorAll('.calculate-discount');
+
+        priceInputs.forEach(input => {
+            const originalPrice = parseFloat(input.dataset.originalPrice);
+            if (!originalPrice) return;
+
+            let discountedPrice;
+            if (discountType === 'percentage') {
+                discountedPrice = originalPrice * (1 - (discountValue / 100));
+            } else { // flat discount
+                discountedPrice = Math.max(0, originalPrice - discountValue);
+            }
+
+            // Update the field value regardless of whether it was manually entered
+            // This ensures all fields update when discount type/value changes
+            input.value = discountedPrice.toFixed(2);
+        });
+    }
+
+    // Add event listeners for discount type and value changes
+    discountTypeInputs.forEach(input => {
+        input.addEventListener('change', calculateDiscountedPrices);
+    });
+
+    discountValueInput.addEventListener('input', calculateDiscountedPrices);
 });
 </script>
 @endsection
