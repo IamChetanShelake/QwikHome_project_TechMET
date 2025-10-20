@@ -57,11 +57,11 @@
                                     </div>
                                 </th>
                                 <th>
-                                    <div class="th-content">
-                                        {{-- <i class="fas fa-dollar-sign"></i> --}}
-                                        <span>Discount</span>
-                                    </div>
-                                </th>
+                                     <div class="th-content">
+                                         <i class="fas fa-money-bill-wave"></i>
+                                         <span>Discount</span>
+                                     </div>
+                                 </th>
                                 <th>
                                     <div class="th-content">
                                         <i class="fas fa-chart-line"></i>
@@ -93,7 +93,7 @@
                                     <td>
                                         <div class="td-content">
                                             <div class="code-badge">
-                                                {{-- <i class="fas fa-hashtag"></i> --}}
+                                                <i class="fas fa-hashtag"></i>
                                                 <span>{{ $promocode->code }}</span>
                                             </div>
                                         </div>
@@ -242,11 +242,11 @@
 
         /* Header Styles */
         .list-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -283,25 +283,22 @@
         .list-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .list-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         /* Table Styles */
         .modern-table-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
             overflow: hidden;
         }
@@ -316,10 +313,10 @@
         }
 
         .modern-table th {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.95);
             padding: 20px 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .th-content {
@@ -328,7 +325,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .th-content i {
@@ -338,7 +335,7 @@
 
         .modern-table td {
             padding: 20px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .table-row {
@@ -346,7 +343,7 @@
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .td-content {
@@ -356,7 +353,7 @@
 
         /* Content Styles */
         .serial-number {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-weight: 500;
         }
 
@@ -381,7 +378,7 @@
         .discount-amount .amount {
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .discount-amount .currency {
@@ -416,7 +413,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .expiry-date i {
@@ -506,18 +503,18 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .empty-icon {
             font-size: 48px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(51, 65, 85, 0.3);
             margin-bottom: 20px;
         }
 
         .empty-state h3 {
             font-size: 20px;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 8px;
         }
 
@@ -538,7 +535,13 @@
             }
         }
 
-        /* Responsive Design */
+        /* Additional Responsive Enhancements */
+        @media (max-width: 1024px) {
+            .modern-list-container {
+                padding: 15px;
+            }
+        }
+
         @media (max-width: 768px) {
             .modern-list-container {
                 padding: 10px;
@@ -551,6 +554,11 @@
             .list-header-content {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 15px;
+            }
+
+            .list-title-group {
+                width: 100%;
             }
 
             .modern-table th,
@@ -566,6 +574,22 @@
             .action-buttons {
                 flex-direction: column;
                 gap: 4px;
+            }
+
+            .code-badge {
+                font-size: 13px;
+                padding: 5px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .code-badge {
+                font-size: 12px;
+                padding: 4px 6px;
+            }
+
+            .discount-amount .amount {
+                font-size: 14px;
             }
         }
     </style>

@@ -52,7 +52,7 @@
                         <!-- Discount Amount -->
                         <div class="info-item">
                             <div class="info-label">
-                                {{-- <i class="fas fa-dollar-sign"></i> --}}
+                                <i class="fas fa-money-bill-wave"></i>
                                 <span>Discount Amount</span>
                             </div>
                             <div class="info-value">
@@ -182,11 +182,11 @@
 
         /* Header Styles */
         .view-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -223,16 +223,13 @@
         .view-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .view-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
@@ -244,11 +241,11 @@
 
         /* Content Styles */
         .modern-view-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
             padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
         }
 
@@ -260,16 +257,18 @@
         }
 
         .info-item {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .info-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 1);
             transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         .info-label {
@@ -278,7 +277,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin-bottom: 12px;
         }
 
@@ -289,7 +288,7 @@
         .info-value {
             font-size: 16px;
             font-weight: 500;
-            color: #ffffff;
+            color: #334155;
         }
 
         /* Specific Content Styles */
@@ -309,18 +308,19 @@
         }
 
         .copy-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 6px;
             padding: 6px 8px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 212, 255, 0.1);
             color: #00d4ff;
+            border-color: #00d4ff;
         }
 
         .amount-display {
@@ -379,10 +379,11 @@
         }
 
         .info-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .section-title {
@@ -391,7 +392,7 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 20px;
         }
 
@@ -409,7 +410,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .info-row:last-child {
@@ -418,12 +419,12 @@
 
         .info-key {
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .info-val {
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .text-success {
@@ -465,17 +466,25 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
             transform: translateY(-1px);
         }
 
-        /* Responsive Design */
+        /* Additional Responsive Enhancements */
+        @media (max-width: 1024px) {
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             .modern-view-container {
                 padding: 10px;
@@ -489,6 +498,11 @@
             .view-header-content {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 15px;
+            }
+
+            .view-title-group {
+                width: 100%;
             }
 
             .view-actions {
@@ -504,6 +518,30 @@
             .info-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .code-display {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .copy-btn {
+                align-self: flex-end;
+            }
+
+            .amount-display {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
             }
         }
     </style>

@@ -300,11 +300,11 @@
 
         /* Header Styles */
         .list-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -341,24 +341,21 @@
         .list-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .list-subtitle {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         /* Search Section */
         .search-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             padding: 20px 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
         }
 
@@ -375,38 +372,38 @@
         .search-icon {
             position: absolute;
             left: 16px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
             font-size: 16px;
         }
 
         .search-input {
             width: 100%;
             padding: 14px 16px 14px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         /* Table Styles */
         .modern-table-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
             overflow: hidden;
         }
@@ -421,10 +418,10 @@
         }
 
         .modern-table th {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             padding: 20px 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .th-content {
@@ -432,7 +429,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .th-content i {
@@ -441,7 +438,7 @@
 
         .modern-table td {
             padding: 20px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .table-row {
@@ -449,7 +446,7 @@
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .td-content {
@@ -459,7 +456,7 @@
 
         /* Content Styles */
         .serial-number {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-weight: 500;
         }
 
@@ -486,7 +483,7 @@
         }
 
         .user-name {
-            color: #ffffff;
+            color: #334155;
             font-weight: 600;
         }
 
@@ -494,18 +491,18 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .phone-number {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .address-text {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -519,17 +516,17 @@
         }
 
         .vendor-name {
-            color: #ffffff;
+            color: #334155;
             font-weight: 500;
         }
 
         .vendor-email {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 11px;
         }
 
         .admin-assigned {
-            color: rgba(255, 25, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-style: italic;
         }
 
@@ -537,7 +534,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .joined-date i {
@@ -625,18 +622,18 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .empty-icon {
             font-size: 48px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(51, 65, 85, 0.3);
             margin-bottom: 20px;
         }
 
         .empty-state h3 {
             font-size: 20px;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 8px;
         }
 
