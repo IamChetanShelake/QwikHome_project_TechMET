@@ -39,7 +39,7 @@
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
-                                    {{-- <i class="fas fa-hashtag"></i> --}}
+                                    <i class="fas fa-hashtag"></i>
                                 </div>
                                 <input type="text" class="modern-input @error('code') error @enderror" id="code"
                                     name="code" value="{{ old('code', $coupon->code) }}"
@@ -64,7 +64,7 @@
                         <div class="form-group-modern">
                             <label for="discount_value" class="modern-label">
                                 <i class="fas fa-coins label-icon"></i>
-                                Discount Value
+                                Discount Percentage
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
@@ -190,7 +190,7 @@
                                 <div class="applicability-options">
                                     <div class="radio-group">
                                         <div class="radio-option">
-                                            <input type="radio" id="all_services" name="applicable_to" value="all_services" 
+                                            <input type="radio" id="all_services" name="applicable_to" value="all_services"
                                                 {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'all_services' ? 'checked' : '' }}>
                                             <label for="all_services" class="radio-label">
                                                 <div class="radio-icon">
@@ -219,7 +219,7 @@
                                 </div>
 
                                 <!-- Service Selection (Hidden by default) -->
-                                <div id="service-selection-panel" class="service-selection-panel" 
+                                <div id="service-selection-panel" class="service-selection-panel"
                                     style="display: {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'block' : 'none' }};">
                                     <div class="selection-grid">
                                         <!-- Category Filter -->
@@ -235,7 +235,7 @@
                                                 <select class="modern-select" id="category_filter" name="category_filter">
                                                     <option value="">All Categories</option>
                                                     @foreach ($categories as $category)
-                                                        <option value="{{ $category->id }}" 
+                                                        <option value="{{ $category->id }}"
                                                             {{ isset($defaultCategoryId) && $defaultCategoryId == $category->id ? 'selected' : '' }}>
                                                             {{ $category->name }}
                                                         </option>
@@ -258,7 +258,7 @@
                                                 <div class="input-icon">
                                                     <i class="fas fa-filter"></i>
                                                 </div>
-                                                <select class="modern-select" id="subcategory_filter" name="subcategory_filter" 
+                                                <select class="modern-select" id="subcategory_filter" name="subcategory_filter"
                                                     {{ isset($defaultCategoryId) && $defaultCategoryId ? '' : 'disabled' }}>
                                                     <option value="">All Subcategories</option>
                                                     @if(isset($subcategories) && $subcategories->count() > 0)
@@ -384,11 +384,11 @@
         }
 
         .form-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -425,26 +425,24 @@
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         .modern-form-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
+            padding: 40px;
+            overflow: hidden;
         }
 
         .form-grid {
@@ -464,7 +462,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 12px;
         }
 
@@ -491,13 +489,12 @@
         .modern-textarea {
             width: 100%;
             padding: 16px 20px 16px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
         }
 
         .modern-textarea {
@@ -530,9 +527,9 @@
         .modern-select:focus,
         .modern-textarea:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
             transform: translateY(-2px);
         }
 
@@ -545,7 +542,7 @@
 
         .modern-input::placeholder,
         .modern-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .input-icon {
@@ -553,8 +550,9 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 14px;
+            pointer-events: none;
             z-index: 2;
         }
 
@@ -578,7 +576,7 @@
             right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             pointer-events: none;
             font-size: 12px;
         }
@@ -613,7 +611,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 11px;
             margin-top: 6px;
         }
@@ -653,25 +651,27 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
             transform: translateY(-1px);
         }
 
         .modern-btn-outline {
             background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.3);
         }
 
         .btn-loader {
@@ -710,64 +710,57 @@
             }
         }
 
-        /* Service Selection Styles */
-        .service-selection-container {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .applicability-options {
-            margin-bottom: 20px;
-        }
-
+        /* Radio Group Styling */
         .radio-group {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .radio-option {
             position: relative;
         }
 
-        .radio-option input[type="radio"] {
-            display: none;
-        }
-
         .radio-label {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            gap: 12px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .radio-label:hover {
-            border-color: rgba(0, 212, 255, 0.3);
-            background: rgba(255, 255, 255, 0.08);
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
         }
 
-        .radio-option input[type="radio"]:checked + .radio-label {
+        input[type="radio"]:checked + .radio-label {
             border-color: #00d4ff;
             background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        input[type="radio"] {
+            display: none;
         }
 
         .radio-icon {
             width: 40px;
             height: 40px;
-            background: rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.1);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #00d4ff;
             font-size: 18px;
+            flex-shrink: 0;
         }
 
         .radio-content {
@@ -775,21 +768,25 @@
         }
 
         .radio-title {
-            color: #ffffff;
+            font-size: 16px;
             font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 4px;
+            color: #334155;
+            margin: 0 0 4px 0;
         }
 
         .radio-desc {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 12px;
+            font-size: 14px;
+            color: rgba(51, 65, 85, 0.7);
+            margin: 0;
         }
 
+        /* Service Selection Panel */
         .service-selection-panel {
             margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
         }
 
         .selection-grid {
@@ -800,71 +797,67 @@
         }
 
         .services-container {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            padding: 16px;
+            margin-top: 20px;
         }
 
         .services-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .services-header h4 {
-            color: #ffffff;
             margin: 0;
+            color: #334155;
             font-size: 16px;
             font-weight: 600;
         }
 
         .bulk-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn-link {
             background: none;
             border: none;
             color: #00d4ff;
-            font-size: 12px;
             cursor: pointer;
-            text-decoration: underline;
-            transition: color 0.3s ease;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
 
         .btn-link:hover {
-            color: #ffffff;
+            background: rgba(0, 212, 255, 0.1);
+            color: #0099cc;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             max-height: 300px;
             overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .services-grid::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .services-grid::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .services-grid::-webkit-scrollbar-thumb {
-            background: rgba(0, 212, 255, 0.5);
-            border-radius: 3px;
         }
 
         .service-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
+        }
+
+        .service-item:hover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
         }
 
         .service-item input[type="checkbox"] {
@@ -875,22 +868,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .service-label:hover {
-            border-color: rgba(0, 212, 255, 0.3);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .service-item input[type="checkbox"]:checked + .service-label {
-            border-color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
+            width: 100%;
         }
 
         .service-info {
@@ -898,21 +877,22 @@
         }
 
         .service-name {
-            color: #ffffff;
-            font-weight: 500;
-            font-size: 13px;
-            margin-bottom: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            margin: 0 0 4px 0;
         }
 
         .service-meta {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 11px;
+            font-size: 12px;
+            color: rgba(51, 65, 85, 0.6);
+            margin: 0;
         }
 
         .service-check {
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(0, 0, 0, 0.3);
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -936,7 +916,13 @@
             opacity: 1;
         }
 
-        /* Responsive Design */
+        /* Additional Responsive Enhancements */
+        @media (max-width: 1024px) {
+            .form-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             .modern-form-container {
                 padding: 10px;
@@ -950,6 +936,11 @@
             .form-header-content {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-title-group {
+                width: 100%;
             }
 
             .form-grid {
@@ -958,11 +949,12 @@
             }
 
             .form-actions {
-                justify-content: stretch;
+                flex-direction: column;
+                gap: 10px;
             }
 
             .modern-btn {
-                flex: 1;
+                width: 100%;
                 justify-content: center;
             }
 
@@ -975,7 +967,31 @@
             }
 
             .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .bulk-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .radio-label {
+                padding: 15px;
+            }
+
+            .service-item {
+                padding: 12px;
             }
         }
     </style>
@@ -1044,7 +1060,7 @@
             // Category filter functionality
             categoryFilter.addEventListener('change', function() {
                 const categoryId = this.value;
-                
+
                 // Only reset if user actually changed the category (not initial load)
                 if (categoryId !== initialCategoryId) {
                     // Reset subcategory filter
@@ -1059,7 +1075,7 @@
                     if (categoryId !== initialCategoryId) {
                         subcategoryFilter.innerHTML = '<option value="">Loading subcategories...</option>';
                     }
-                    
+
                     // Fetch subcategories
                     fetch(`{{ url('/coupons/get-subcategories') }}/${categoryId}`)
                         .then(response => {
@@ -1110,17 +1126,17 @@
                 serviceItems.forEach(item => {
                     const itemCategory = item.dataset.category;
                     const itemSubcategory = item.dataset.subcategory;
-                    
+
                     let show = true;
-                    
+
                     if (categoryId && itemCategory !== categoryId) {
                         show = false;
                     }
-                    
+
                     if (subcategoryId && itemSubcategory !== subcategoryId) {
                         show = false;
                     }
-                    
+
                     item.style.display = show ? 'block' : 'none';
                 });
             }

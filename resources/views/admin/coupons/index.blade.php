@@ -269,11 +269,11 @@
 
         /* Header Styles */
         .list-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -310,25 +310,22 @@
         .list-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .list-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         /* Table Styles */
         .modern-table-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
             overflow: hidden;
         }
@@ -343,10 +340,10 @@
         }
 
         .modern-table th {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             padding: 20px 16px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .th-content {
@@ -355,7 +352,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .th-content i {
@@ -373,7 +370,7 @@
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .td-content {
@@ -383,7 +380,7 @@
 
         /* Content Styles */
         .serial-number {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-weight: 500;
         }
 
@@ -400,7 +397,7 @@
         }
 
         .description-text {
-            color: rgba(255, 255, 255, 0.8);
+            color: black;
             font-size: 13px;
             max-width: 200px;
             overflow: hidden;
@@ -417,7 +414,7 @@
         .discount-value {
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #000;
         }
 
         .discount-type {
@@ -430,7 +427,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            color: black;
             font-size: 13px;
         }
 
@@ -447,12 +444,12 @@
         }
 
         .usage-count {
-            color: #ffffff;
+            color: #334155;
             font-weight: 600;
         }
 
         .usage-limit {
-            color: rgba(255, 255, 255, 0.6);
+            color: black;
         }
 
         .modern-status-badge {
@@ -570,7 +567,7 @@
 
         .empty-state h3 {
             font-size: 20px;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 8px;
         }
 
