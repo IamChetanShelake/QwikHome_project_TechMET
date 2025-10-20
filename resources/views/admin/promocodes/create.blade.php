@@ -37,7 +37,7 @@
                             </label>
                             <div class="input-wrapper">
                                 <div class="input-icon">
-                                    {{-- <i class="fas fa-hashtag"></i> --}}
+                                    <i class="fas fa-hashtag"></i>
                                 </div>
                                 <input type="text" class="modern-input @error('code') error @enderror" id="code"
                                     name="code" placeholder="Enter promocode (e.g. SAVE20, WELCOME50)"
@@ -59,7 +59,7 @@
                         <!-- Discount Amount Field -->
                         <div class="form-group-modern">
                             <label for="discount" class="modern-label">
-                                {{-- <i class="fas fa-dollar-sign label-icon"></i> --}}
+                                <i class="fas fa-money-bill-wave label-icon"></i>
                                 Discount Amount
                             </label>
                             <div class="input-wrapper">
@@ -172,11 +172,11 @@
         }
 
         .form-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
         }
 
@@ -213,25 +213,22 @@
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         .modern-form-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
             padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
         }
 
@@ -252,7 +249,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 12px;
         }
 
@@ -277,20 +274,19 @@
         .modern-input {
             width: 100%;
             padding: 16px 20px 16px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
         }
 
         .modern-input:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
             transform: translateY(-2px);
         }
 
@@ -300,7 +296,7 @@
         }
 
         .modern-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .input-icon {
@@ -308,8 +304,9 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 14px;
+            pointer-events: none;
             z-index: 2;
         }
 
@@ -351,7 +348,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 11px;
             margin-top: 6px;
         }
@@ -364,13 +361,14 @@
         .toggle-switch {
             position: relative;
             display: inline-flex;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 4px;
             gap: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .toggle-option {
@@ -380,7 +378,7 @@
             gap: 8px;
             padding: 12px 24px;
             border-radius: 10px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 14px;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -420,7 +418,7 @@
         }
 
         .toggle-option:hover {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .toggle-option.active:hover {
@@ -460,25 +458,27 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
             transform: translateY(-1px);
         }
 
         .modern-btn-outline {
             background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.3);
         }
 
         .btn-loader {
@@ -517,7 +517,13 @@
             }
         }
 
-        /* Responsive Design */
+        /* Additional Responsive Enhancements */
+        @media (max-width: 1024px) {
+            .form-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
             .modern-form-container {
                 padding: 10px;
@@ -531,6 +537,11 @@
             .form-header-content {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-title-group {
+                width: 100%;
             }
 
             .form-grid {
@@ -539,12 +550,26 @@
             }
 
             .form-actions {
-                justify-content: stretch;
+                flex-direction: column;
+                gap: 10px;
             }
 
             .modern-btn {
-                flex: 1;
+                width: 100%;
                 justify-content: center;
+            }
+
+            .toggle-option {
+                min-width: 80px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toggle-option {
+                min-width: 70px;
+                padding: 8px 12px;
+                font-size: 13px;
             }
         }
     </style>
@@ -586,14 +611,14 @@
             toggleOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     const value = this.getAttribute('data-value');
-                    
+
                     // Update hidden input
                     hiddenInput.value = value;
-                    
+
                     // Update active states
                     toggleOptions.forEach(opt => opt.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     // Update slider position
                     if (value === '0') {
                         toggleSwitch.classList.remove('yes-selected');
@@ -619,12 +644,12 @@
             document.querySelectorAll('.modern-input.error').forEach(input => {
                 input.classList.remove('error');
             });
-            
+
             // Reset toggle to default (Yes/1)
             const toggleSwitch = document.getElementById('toggleSwitch');
             const hiddenInput = document.getElementById('for_active_subscription_hidden');
             const toggleOptions = toggleSwitch.querySelectorAll('.toggle-option');
-            
+
             hiddenInput.value = '1';
             toggleOptions.forEach(opt => opt.classList.remove('active'));
             toggleOptions[1].classList.add('active'); // Second option is "Yes"

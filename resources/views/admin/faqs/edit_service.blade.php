@@ -38,7 +38,7 @@
                 FAQs Count: {{ $faqs->count() }}
             </div>
         @endif -->
-        
+
         <form method="POST" action="{{ route('faqs.service.update', $service->id) }}" id="faqsServiceForm">
             @csrf
             @method('PUT')
@@ -166,9 +166,9 @@
                         <div class="qa-item" data-index="{{ $i + 1 }}">
                             <div class="qa-header">
                                 <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A #{{ $i + 1 }}</span>
-                                <button type="button" class="modern-btn modern-btn-secondary remove-qa" data-faq-id="{{ $faq->id }}">
+                                <button type="button" class="modern-btn modern-btn-danger remove-qa" data-faq-id="{{ $faq->id }}" data-question="{{ $faq->question }}">
                                     <i class="fas fa-trash-alt"></i>
-                                    Remove
+                                    Delete
                                 </button>
                             </div>
                             <div class="qa-body">
@@ -224,7 +224,7 @@
 </div>
 
 <style>
-    /* Modern FAQ Edit Styling - Inherits from existing forms */
+    /* Modern FAQ Edit Styling - Same as Feedback Index */
     .modern-form-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -232,11 +232,11 @@
     }
 
     .form-header-section {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(10px);
         border-radius: 20px 20px 0 0;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -266,23 +266,22 @@
     .form-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #334155;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .form-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(51, 65, 85, 0.7);
         margin: 5px 0 0 0;
     }
 
     .modern-form-card {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(15px);
         border-radius: 0 0 20px 20px;
         padding: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-top: none;
     }
 
@@ -303,7 +302,7 @@
         gap: 8px;
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         margin-bottom: 8px;
     }
 
@@ -318,10 +317,10 @@
     .modern-input, .modern-select, .modern-textarea {
         width: 100%;
         padding: 16px 20px 16px 50px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
@@ -331,9 +330,9 @@
         width: 100%;
         padding: 16px 20px 16px 50px;
         background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(15, 14, 14, 0.1);
         border-radius: 12px;
-        color: #ffffff;
+        color: #040404;
         font-size: 14px;
         backdrop-filter: blur(10px);
         min-height: 20px;
@@ -342,7 +341,7 @@
     .modern-select {
         appearance: none;
         cursor: pointer;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 12px center;
         background-repeat: no-repeat;
         background-size: 16px;
@@ -353,12 +352,58 @@
         resize: vertical;
     }
 
+    /* Summernote Editor Styling - Light theme */
+    .note-editor .note-editing-area .note-editable {
+        color: #334155 !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .note-editing-area .note-editable {
+        color: #334155 !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
+        border-radius: 12px !important;
+        padding: 16px 20px 16px 50px !important;
+    }
+
+    .note-editing-area .note-editable:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    .note-editor {
+        color: #334155 !important;
+    }
+
+    .note-editor .note-toolbar {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
+        border-radius: 12px 12px 0 0 !important;
+        border-bottom: none !important;
+    }
+
+    .note-editor .note-toolbar .btn {
+        color: #334155 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .note-editor .note-toolbar .btn:hover {
+        background: rgba(0, 0, 0, 0.05) !important;
+        color: #3b82f6 !important;
+    }
+
+    .note-editor .note-toolbar .btn.active {
+        background: rgba(59, 130, 246, 0.2) !important;
+        color: #334155 !important;
+    }
+
     .input-icon {
         position: absolute;
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(51, 65, 85, 0.5);
         font-size: 14px;
         pointer-events: none;
     }
@@ -371,10 +416,10 @@
     }
 
     .qa-item {
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 16px;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.9);
     }
 
     .qa-header {
@@ -385,7 +430,7 @@
     }
 
     .qa-title {
-        color: #ffffff;
+        color: #334155;
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -400,43 +445,54 @@
     }
 
     .modern-btn {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 14px 28px;
+        padding: 12px 20px;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
         transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
     }
 
     .modern-btn-primary {
         background: linear-gradient(135deg, #00d4ff, #0099cc);
         color: white;
-        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
     }
 
     .modern-btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
         color: white;
     }
 
     .modern-btn-secondary {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.1);
+        color: #334155;
+        border: 2px solid rgba(0, 0, 0, 0.2);
     }
 
     .modern-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.15);
         border-color: #00d4ff;
         color: #00d4ff;
+        transform: translateY(-2px);
+    }
+
+    .modern-btn-danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+        border: 2px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .modern-btn-danger:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: #dc2626;
+        color: #dc2626;
         transform: translateY(-2px);
     }
 
@@ -487,19 +543,130 @@
     /* Focus states for form elements */
     .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
         outline: none;
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .modern-input::placeholder, .modern-textarea::placeholder {
+        color: rgba(51, 65, 85, 0.5);
+    }
+
+    .input-wrapper:focus-within .input-icon {
+        color: #3b82f6;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Error Messages and Field Hints */
+    .error-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #ff4757;
+        font-size: 12px;
+        margin-top: 6px;
+        animation: slideInUp 0.3s ease;
+    }
+
+    .field-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-header-section,
+        .modern-form-card {
+            padding: 20px;
+        }
+
+        .form-header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .form-actions {
+            justify-content: center;
+        }
+
+        .modern-btn {
+            flex: 1;
+            justify-content: center;
+            min-width: 140px;
+        }
+
+        .qa-header {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .modern-btn {
+            width: 100%;
+        }
+    }
+
+    /* Input animations */
+    .modern-input, .modern-select, .modern-textarea {
+        transition: all 0.3s ease;
+    }
+
+    .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+        outline: none;
         border-color: #00d4ff;
         background: rgba(255, 255, 255, 0.08);
         box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
         transform: translateY(-2px);
     }
 
-    .modern-input::placeholder, .modern-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+    /* Button loader */
+    .btn-loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 
-    .input-wrapper:focus-within .input-icon {
-        color: #00d4ff;
-        transform: translateY(-50%) scale(1.1);
+    .modern-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    /* Q&A Repeater Animation */
+    .qa-item {
+        animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* Select dropdown styling */
@@ -624,34 +791,34 @@
         function addQaItem() {
             var $item = $('<div class="qa-item" data-index="0">\
                 <div class="qa-header">\
-+                   <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
-                    <button type="button" class="modern-btn modern-btn-secondary remove-qa">\
-                        <i class="fas fa-trash-alt"></i> Remove\
+                    <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
+                    <button type="button" class="modern-btn modern-btn-danger remove-qa">\
+                        <i class="fas fa-trash-alt"></i> Delete\
                     </button>\
                 </div>\
                 <div class="qa-body">\
                     <div class="form-group-modern">\
-                        <label class="modern-label"><i class=\"fas fa-question text-cyan\"></i> Question</label>\
-                        <div class=\"input-wrapper\">\
-                            <input type=\"text\" class=\"modern-input\" name=\"questions[]\" placeholder=\"Enter the frequently asked question\" required>\
-                            <i class=\"fas fa-question input-icon\"></i>\
+                        <label class="modern-label"><i class="fas fa-question text-cyan"></i> Question</label>\
+                        <div class="input-wrapper">\
+                            <input type="text" class="modern-input" name="questions[]" placeholder="Enter the frequently asked question" required>\
+                            <i class="fas fa-question input-icon"></i>\
                         </div>\
                     </div>\
                     <div class="form-group-modern">\
-                        <label class="modern-label"><i class=\"fas fa-comment-dots text-cyan\"></i> Answer</label>\
-                        <div class=\"input-wrapper\">\
-                            <textarea class=\"modern-textarea summernote\" name=\"answers[]\" placeholder=\"Provide a detailed answer to the question\" required></textarea>\
-                            <i class=\"fas fa-comment-dots input-icon\"></i>\
+                        <label class="modern-label"><i class="fas fa-comment-dots text-cyan"></i> Answer</label>\
+                        <div class="input-wrapper">\
+                            <textarea class="modern-textarea summernote" name="answers[]" placeholder="Provide a detailed answer to the question" required></textarea>\
+                            <i class="fas fa-comment-dots input-icon"></i>\
                         </div>\
                     </div>\
                     <div class="form-group-modern">\
-                        <label class="modern-label"><i class=\"fas fa-toggle-on text-cyan\"></i> Status</label>\
-                        <div class=\"input-wrapper\">\
-                            <select class=\"modern-select\" name=\"statuses[]\">\
-                                <option value=\"1\" selected>Active</option>\
-                                <option value=\"0\">Inactive</option>\
+                        <label class="modern-label"><i class="fas fa-toggle-on text-cyan"></i> Status</label>\
+                        <div class="input-wrapper">\
+                            <select class="modern-select" name="statuses[]">\
+                                <option value="1" selected>Active</option>\
+                                <option value="0">Inactive</option>\
                             </select>\
-                            <i class=\"fas fa-toggle-on input-icon\"></i>\
+                            <i class="fas fa-toggle-on input-icon"></i>\
                         </div>\
                     </div>\
                 </div>\
@@ -666,14 +833,23 @@
 
         // Remove item
         $('#qa-container').on('click', '.remove-qa', function(){
-            var $item = $(this).closest('.qa-item');
-            var existingId = $(this).data('faq-id');
+            var $btn = $(this);
+            var $item = $btn.closest('.qa-item');
+            var existingId = $btn.data('faq-id');
+            var question = $btn.data('question');
+
             if (existingId) {
-                // Track for deletion
-                $('#remove-ids-container').append('<input type="hidden" name="remove_ids[]" value="'+ existingId +'">');
+                if (confirm('Are you sure you want to delete this FAQ?\n\nQuestion: "' + question + '"\n\nThis action cannot be undone.')) {
+                    // Track for deletion
+                    $('#remove-ids-container').append('<input type="hidden" name="remove_ids[]" value="'+ existingId +'">');
+                    $item.remove();
+                    refreshQaTitles();
+                }
+            } else {
+                // For newly added items without IDs, just remove
+                $item.remove();
+                refreshQaTitles();
             }
-            $item.remove();
-            refreshQaTitles();
         });
     });
 </script>

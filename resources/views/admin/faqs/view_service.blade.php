@@ -98,7 +98,7 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                         <div class="faq-content">
                             <div class="faq-question">
                                 <div class="question-label">
@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="question-text">{{ $faq->question }}</div>
                             </div>
-                            
+
                             <div class="faq-answer">
                                 <div class="answer-label">
                                     <i class="fas fa-comment-dots text-cyan"></i>
@@ -116,7 +116,7 @@
                                 <div class="answer-text">{!! $faq->answer !!}</div>
                             </div>
                         </div>
-                        
+
                         <div class="faq-meta">
                             <div class="meta-item">
                                 <i class="fas fa-calendar-plus"></i>
@@ -147,7 +147,7 @@
 </div>
 
 <style>
-    /* Modern FAQ View Styling */
+    /* Modern FAQ View Styling - Same as Feedback Index */
     .modern-form-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -155,11 +155,11 @@
     }
 
     .form-header-section {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(10px);
         border-radius: 20px 20px 0 0;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -189,23 +189,22 @@
     .form-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #334155;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .form-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(51, 65, 85, 0.7);
         margin: 5px 0 0 0;
     }
 
     .modern-form-card {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(15px);
         border-radius: 0 0 20px 20px;
         padding: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-top: none;
     }
 
@@ -226,7 +225,7 @@
         gap: 8px;
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         margin-bottom: 8px;
     }
 
@@ -241,10 +240,10 @@
     .modern-input-display {
         width: 100%;
         padding: 16px 20px 16px 50px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         backdrop-filter: blur(10px);
         min-height: 20px;
@@ -255,12 +254,12 @@
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(51, 65, 85, 0.5);
         font-size: 14px;
         pointer-events: none;
     }
 
-    /* FAQ Items Styling */
+    /* FAQ Items Styling - Same as Feedback Index */
     .faqs-list {
         display: flex;
         flex-direction: column;
@@ -268,18 +267,19 @@
     }
 
     .faq-item {
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-radius: 16px;
         padding: 24px;
         backdrop-filter: blur(10px);
         transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .faq-item:hover {
-        border-color: rgba(0, 212, 255, 0.3);
+        border-color: rgba(59, 130, 246, 0.3);
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.1);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.1);
     }
 
     .faq-item-header {
@@ -336,26 +336,26 @@
         gap: 8px;
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         margin-bottom: 8px;
     }
 
     .question-text {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         padding: 12px 16px;
-        color: #ffffff;
+        color: #334155;
         font-size: 16px;
         line-height: 1.5;
     }
 
     .answer-text {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         padding: 16px;
-        color: rgba(255, 255, 255, 0.9);
+        color: rgba(51, 65, 85, 0.9);
         line-height: 1.6;
         min-height: 60px;
     }
@@ -393,43 +393,41 @@
         margin-bottom: 10px;
     }
 
-    /* Button Styles */
+    /* Button Styles - Same as Feedback Index */
     .modern-btn {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 14px 28px;
+        padding: 12px 20px;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
         transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
     }
 
     .modern-btn-primary {
         background: linear-gradient(135deg, #00d4ff, #0099cc);
         color: white;
-        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
     }
 
     .modern-btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
         color: white;
     }
 
     .modern-btn-secondary {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.1);
+        color: #334155;
+        border: 2px solid rgba(0, 0, 0, 0.2);
     }
 
     .modern-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.15);
         border-color: #00d4ff;
         color: #00d4ff;
         transform: translateY(-2px);

@@ -239,6 +239,7 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/faqs/service/{serviceId}', [faqController::class, 'viewByService'])->name('faqs.service.view');
     Route::get('/faqs/service/{serviceId}/edit', [faqController::class, 'editByService'])->name('faqs.service.edit');
     Route::put('/faqs/service/{serviceId}', [faqController::class, 'updateByService'])->name('faqs.service.update');
+    Route::delete('/faqs/service/{serviceId}/delete-all', [faqController::class, 'deleteAllByService'])->name('faqs.service.delete-all');
 
     //Coupons management-------------
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
