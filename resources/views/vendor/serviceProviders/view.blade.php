@@ -10,11 +10,11 @@
         }
 
         .service-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -76,13 +76,13 @@
         .service-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0 0 5px 0;
         }
 
         .service-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 0 0 10px 0;
         }
 
@@ -150,8 +150,8 @@
 
         .modern-btn-secondary {
             background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
@@ -170,10 +170,9 @@
         }
 
         .detail-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -195,7 +194,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .card-content {
@@ -215,14 +214,15 @@
         }
 
         .detail-label {
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            color: rgba(51, 65, 85, 0.6);
+            margin-bottom: 5px;
         }
 
         .detail-value {
-            color: #ffffff;
-            text-align: right;
-            word-break: break-word;
+            font-size: 15px;
+            color: #334155;
+            font-weight: 500;
         }
 
         .address-value {
@@ -242,21 +242,20 @@
             border-radius: 10px;
         }
 
-        .no-image-container {
+        .no-image {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 10px;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 10px;
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
+            border: 2px dashed rgba(0, 0, 0, 0.2);
+            color: rgba(51, 65, 85, 0.6);
         }
 
-        .no-image-container i {
+        .no-image i {
             font-size: 24px;
             color: #00d4ff;
         }
