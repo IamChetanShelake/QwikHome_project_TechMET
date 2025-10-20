@@ -1,309 +1,206 @@
 @extends('admin.layouts.masterlayout')
 
+@section('title', 'Vendors')
+
 @section('content')
-    <div class="content-area">
-        <div class="modern-list-container">
-            <!-- Success Message -->
-            @if (session('success'))
-                <div class="modern-alert modern-alert-success" id="successAlert">
-                    <div class="alert-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Success!</strong>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                    <button class="alert-close" onclick="closeAlert()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            @endif
+    <div class="modern-index-container">
+        <!-- Alert System -->
+        <div id="alertContainer" class="alert-container"></div>
 
-            <!-- Error Message -->
-            @if (session('error'))
-                <div class="modern-alert modern-alert-error" id="errorAlert">
-                    <div class="alert-icon">
-                        <i class="fas fa-exclamation-circle"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Error!</strong>
-                        <span>{{ session('error') }}</span>
-                    </div>
-                    <button class="alert-close" onclick="closeAlert()">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <!-- Header Section -->
+        <div class="index-header-section">
+            <div class="header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-user-tie"></i>
                 </div>
-            @endif
+                <div class="header-text">
+                    <h1 class="header-title">Vendor Management</h1>
+                    <p class="header-subtitle">Manage vendor accounts and their access to the platform</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('admin.vendors.create') }}" class="modern-btn modern-btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add New Vendor
+                </a>
+            </div>
+        </div>
 
-            <!-- Header Section -->
-            <div class="list-header-section">
-                <div class="list-header-content">
-                    <div class="list-title-group">
-                        <div class="list-icon-wrapper">
-                            <i class="fas fa-user-tie list-main-icon"></i>
-                        </div>
-                        <div class="list-title-text">
-                            <h2 class="list-title">Vendor Management</h2>
-                            <p class="list-subtitle">Manage vendor accounts and their access to the platform</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('admin.vendors.create') }}" class="modern-btn modern-btn-primary">
-                        <i class="fas fa-plus"></i>
-                        <span>Add New Vendor</span>
-                    </a>
+        <!-- Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <h3 class="table-title">
+                    <i class="fas fa-list"></i>
+                    Vendors List
+                </h3>
+                <div class="table-info">
+                    <span class="record-count">{{ $vendors->count() }} vendors found</span>
                 </div>
             </div>
 
-            <!-- Table Section -->
-            <div class="modern-table-card">
-                <div class="table-wrapper">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-hashtag"></i>
-                                        <span>Sr.</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-image"></i>
-                                        <span>photo</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-user"></i>
-                                        <span>Name</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-envelope"></i>
-                                        <span>Email</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-phone"></i>
-                                        <span>Phone</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>Address</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Joined Date</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-cogs"></i>
-                                        <span>Actions</span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($vendors as $vendor)
-                                <tr class="table-row" data-id="{{ $vendor->id }}">
-                                    <td>
-                                        <div class="td-content">
-                                            <span class="serial-number">{{ $loop->iteration }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
+            <div class="modern-table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="th-id">
+                                <i class="fas fa-hashtag"></i>
+                                ID
+                            </th>
+                            <th class="th-image">
+                                <i class="fas fa-image"></i>
+                                Photo
+                            </th>
+                            <th class="th-name">
+                                <i class="fas fa-user"></i>
+                                Name
+                            </th>
+                            <th class="th-email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </th>
+                            <th class="th-phone">
+                                <i class="fas fa-phone"></i>
+                                Phone
+                            </th>
+                            <th class="th-address">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </th>
+                            <th class="th-date">
+                                <i class="fas fa-calendar"></i>
+                                Joined
+                            </th>
+                            <th class="th-actions">
+                                <i class="fas fa-cogs"></i>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($vendors as $vendor)
+                            <tr class="table-row">
+                                <td class="td-id">{{ $vendor->id }}</td>
+                                <td class="td-image">
+                                    <div class="name-cell">
                                         @if ($vendor->image)
                                             <img src="{{ asset('user_images/' . $vendor->image) }}"
-                                                alt="{{ $vendor->name }}" class="user-avatar-small">
+                                                alt="{{ $vendor->name }}" class="vendor-image">
                                         @else
-                                            <div class="user-avatar-small no-image">
+                                            <div class="vendor-placeholder">
                                                 <i class="fas fa-user"></i>
                                             </div>
                                         @endif
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="user-info">
+                                    </div>
+                                </td>
+                                <td class="td-name">
+                                    <span class="vendor-name">{{ $vendor->name }}</span>
+                                </td>
+                                <td class="td-email">
+                                    <span class="email-text">{{ $vendor->email }}</span>
+                                </td>
+                                <td class="td-phone">
+                                    <span class="phone-text">{{ $vendor->phone ?: 'Not provided' }}</span>
+                                </td>
+                                <td class="td-address">
+                                    <span class="address-text" title="{{ $vendor->address }}">
+                                        {{ Str::limit($vendor->address, 30) ?: 'Not provided' }}
+                                    </span>
+                                </td>
+                                <td class="td-date">
+                                    <span class="date-text">{{ $vendor->created_at->format('M d, Y') }}</span>
+                                    <span class="time-text">{{ $vendor->created_at->format('H:i') }}</span>
+                                </td>
+                                <td class="td-actions">
+                                    <div class="action-buttons">
+                                        <a href="{{ route('admin.vendors.show', $vendor->id) }}"
+                                            class="action-btn action-view" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}"
+                                            class="action-btn action-edit" title="Edit Vendor">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="action-btn action-delete"
+                                            onclick="confirmDelete({{ $vendor->id }}, '{{ $vendor->name }}')"
+                                            title="Delete Vendor">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
 
-                                                <span class="user-name">{{ $vendor->name }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="email-badge">
-                                                <i class="fas fa-envelope"></i>
-                                                <span>{{ $vendor->email }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="phone-number">
-                                                <i class="fas fa-phone"></i>
-                                                <span>{{ $vendor->phone ?: 'Not provided' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="address-text" title="{{ $vendor->address }}">
-                                                {{ Str::limit($vendor->address, 30) ?: 'Not provided' }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="joined-date">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>{{ $vendor->created_at->format('d/m/Y') }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="action-buttons">
-                                                <a href="{{ route('admin.vendors.show', $vendor->id) }}"
-                                                    class="action-btn action-view" title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('admin.vendors.edit', $vendor->id) }}"
-                                                    class="action-btn action-edit" title="Edit Vendor">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="action-btn action-delete"
-                                                    title="Delete Vendor"
-                                                    onclick="deleteVendor({{ $vendor->id }}, '{{ $vendor->name }}')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7">
-                                        <div class="empty-state">
-                                            <div class="empty-icon">
-                                                <i class="fas fa-user-tie"></i>
-                                            </div>
-                                            <h3>No Vendors Found</h3>
-                                            <p>Start by creating your first vendor account</p>
-                                            <a href="{{ route('admin.vendors.create') }}"
-                                                class="modern-btn modern-btn-primary">
-                                                <i class="fas fa-plus"></i>
-                                                <span>Add First Vendor</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                    <!-- Hidden Delete Form -->
+                                    <form id="deleteForm{{ $vendor->id }}" method="POST"
+                                        action="{{ route('admin.vendors.destroy', $vendor->id) }}"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="empty-row">
+                                <td colspan="8" class="empty-cell">
+                                    <div class="empty-state">
+                                        <i class="fas fa-user-tie"></i>
+                                        <h3>No Vendors Found</h3>
+                                        <p>Start by creating your first vendor account</p>
+                                        <a href="{{ route('admin.vendors.create') }}"
+                                            class="modern-btn modern-btn-primary">
+                                            <i class="fas fa-plus"></i>
+                                            Create First Vendor
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Pagination -->
+            @if ($vendors instanceof \Illuminate\Pagination\LengthAwarePaginator && $vendors->hasPages())
+                <div class="pagination-section">
+                    {{ $vendors->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
-    <!-- Delete Form (Hidden) -->
-    <form id="deleteForm" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-    </form>
-
     <style>
-        /* Modern List Styles */
-        .modern-list-container {
-            max-width: 1600px;
+        /* Modern Vendors Index Styling */
+        .modern-index-container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Alert Styles */
-        .modern-alert {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .index-header-section {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: slideInDown 0.3s ease;
-        }
-
-        .modern-alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.3);
-            color: #22c55e;
-        }
-
-        .modern-alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #ef4444;
-        }
-
-        .alert-icon {
-            font-size: 20px;
-        }
-
-        .alert-content {
-            flex: 1;
-        }
-
-        .alert-content strong {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .alert-close {
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .alert-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Header Styles */
-        .list-header-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px 20px 0 0;
+            border-radius: 20px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
-        }
-
-        .list-header-content {
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .list-title-group {
+        .header-content {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .list-icon-wrapper {
+        .header-icon-wrapper {
             width: 60px;
             height: 60px;
             background: linear-gradient(135deg, #00d4ff, #0099cc);
@@ -311,41 +208,57 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            color: white;
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .list-main-icon {
-            font-size: 24px;
-            color: white;
-        }
-
-        .list-title {
+        .header-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .list-subtitle {
-
-            color: rgba(255, 255, 255, 0.7);
+        .header-subtitle {
+            font-size: 14px;
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 
-        /* Table Styles */
-        .modern-table-card {
-            background: rgba(255, 255, 255, 0.08);
+        .table-section {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
-            border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
-        .table-wrapper {
+        .table-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #334155;
+            margin: 0;
+        }
+
+        .record-count {
+            color: rgba(51, 65, 85, 0.7);
+            font-size: 14px;
+        }
+
+        .modern-table-container {
             overflow-x: auto;
         }
 
@@ -355,180 +268,162 @@
         }
 
         .modern-table th {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .th-content {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
             font-weight: 600;
-            color: #ffffff;
+            color: #3b82f6;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+            font-size: 14px;
         }
 
-        .th-content i {
-            color: #00d4ff;
-
+        .modern-table th i {
+            margin-right: 8px;
         }
 
         .modern-table td {
-            padding: 20px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .table-row {
-            transition: all 0.3s ease;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #334155;
+            vertical-align: middle;
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.03);
         }
 
-        .td-content {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Content Styles */
-        .serial-number {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-
-        }
-
-        .user-info {
+        .name-cell {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .user-avatar-small {
-            height: 50px;
-            border-radius: 50%;
+        .vendor-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             object-fit: cover;
             border: 2px solid rgba(0, 212, 255, 0.3);
         }
 
-        .user-avatar-small.no-image {
+        .vendor-placeholder {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
-
+            color: rgba(0, 0, 0, 0.5);
         }
 
-        .user-name {
-            color: #ffffff;
-            font-weight: 600;
-
+        .vendor-name {
+            font-weight: 500;
+            font-size: 14px;
         }
 
-        .email-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
-
+        .email-text, .phone-text, .address-text {
+            color: rgba(51, 65, 85, 0.8);
+            font-size: 13px;
         }
 
-        .phone-number {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
-
+        .date-text {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
         }
 
-        .address-text {
-            color: rgba(255, 255, 255, 0.8);
-
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .time-text {
+            display: block;
+            font-size: 11px;
+            color: rgba(51, 65, 85, 0.6);
+            margin-top: 2px;
         }
 
-        .joined-date {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.8);
-
-        }
-
-        .joined-date i {
-            color: #00d4ff;
-
-        }
-
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 8px;
         }
 
         .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
             text-decoration: none;
         }
 
         .action-view {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.2);
             color: #3b82f6;
-            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .action-view:hover {
-            background: rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.3);
             transform: translateY(-2px);
+            color: #3b82f6;
         }
 
         .action-edit {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(245, 158, 11, 0.2);
             color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .action-edit:hover {
-            background: rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.3);
             transform: translateY(-2px);
+            color: #f59e0b;
         }
 
         .action-delete {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .action-delete:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.3);
             transform: translateY(-2px);
         }
 
-        /* Button Styles */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(51, 65, 85, 0.7);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: rgba(51, 65, 85, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
         .modern-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 14px 28px;
-            border-radius: 12px;
-
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             text-decoration: none;
-            border: none;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -536,111 +431,54 @@
         .modern-btn-primary {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
 
         .modern-btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+            color: white;
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            color: rgba(255, 255, 255, 0.3);
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            margin-bottom: 24px;
-        }
-
-        /* Animations */
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .pagination-section {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .modern-list-container {
-                padding: 10px;
-            }
-
-            .list-header-section {
-                padding: 20px;
-            }
-
-            .list-header-content {
+            .index-header-section {
                 flex-direction: column;
-                align-items: flex-start;
+                text-align: center;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .modern-table {
+                font-size: 12px;
             }
 
             .modern-table th,
             .modern-table td {
-                padding: 12px 8px;
+                padding: 10px 8px;
             }
 
-
-            .action-buttons {
+            .name-cell {
                 flex-direction: column;
-                gap: 4px;
-            }
-
-            .address-text {
-                max-width: 100px;
+                gap: 8px;
+                text-align: center;
             }
         }
     </style>
 
     <script>
-        // Auto-hide success alert
-        document.addEventListener('DOMContentLoaded', function() {
-            const successAlert = document.getElementById('successAlert');
-            if (successAlert) {
-                setTimeout(function() {
-                    successAlert.style.opacity = '0';
-                    setTimeout(function() {
-                        successAlert.remove();
-                    }, 300);
-                }, 3000);
-            }
-        });
-
-        function closeAlert() {
-            const alerts = document.querySelectorAll('.modern-alert');
-            alerts.forEach(alert => {
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.remove();
-                }, 300);
-            });
-        }
-
-        function deleteVendor(id, name) {
-            if (confirm(`Are you sure you want to delete the vendor "${name}"? This action cannot be undone.`)) {
-                const form = document.getElementById('deleteForm');
-                form.action = `/vendors/${id}`;
-                form.submit();
+        function confirmDelete(vendorId, vendorName) {
+            if (confirm(`Are you sure you want to delete the vendor "${vendorName}"? This action cannot be undone.`)) {
+                document.getElementById('deleteForm' + vendorId).submit();
             }
         }
     </script>
