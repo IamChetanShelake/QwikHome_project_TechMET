@@ -133,12 +133,13 @@ class VendorController extends Controller
                 }
             } else {
                 // Use individual payment terms for each service
-                foreach ($request->services as $index => $serviceId) {
+                foreach ($request->services as $serviceId) {
+                    $paymentType = $request->service_payment_type[$serviceId] ?? null;
                     $serviceData[$serviceId] = [
-                        'payment_type' => $request->service_payment_type[$index] ?? null,
-                        'fixed_rate_amount' => ($request->service_payment_type[$index] ?? null) === 'fixed_rate' ? ($request->fixed_rate_amount[$index] ?? null) : null,
-                        'commission_rate' => ($request->service_payment_type[$index] ?? null) === 'commission' ? ($request->commission_rate[$index] ?? null) : null,
-                        'revenue_share_ratio' => ($request->service_payment_type[$index] ?? null) === 'revenue_share' ? ($request->revenue_share_ratio[$index] ?? null) : null,
+                        'payment_type' => $paymentType,
+                        'fixed_rate_amount' => $paymentType === 'fixed_rate' ? ($request->fixed_rate_amount[$serviceId] ?? null) : null,
+                        'commission_rate' => $paymentType === 'commission' ? ($request->commission_rate[$serviceId] ?? null) : null,
+                        'revenue_share_ratio' => $paymentType === 'revenue_share' ? ($request->revenue_share_ratio[$serviceId] ?? null) : null,
                     ];
                 }
             }
@@ -154,7 +155,7 @@ class VendorController extends Controller
      */
     public function show(string $id)
     {
-        $vendor = User::where('role', 'vendor')->findOrFail($id);
+        $vendor = User::where('role', 'vendor')->with(['services.category'])->findOrFail($id);
         return view('admin.vendors.show', compact('vendor'));
     }
 
@@ -306,12 +307,13 @@ class VendorController extends Controller
                 }
             } else {
                 // Use individual payment terms for each service
-                foreach ($request->services as $index => $serviceId) {
+                foreach ($request->services as $serviceId) {
+                    $paymentType = $request->service_payment_type[$serviceId] ?? null;
                     $serviceData[$serviceId] = [
-                        'payment_type' => $request->service_payment_type[$index] ?? null,
-                        'fixed_rate_amount' => ($request->service_payment_type[$index] ?? null) === 'fixed_rate' ? ($request->fixed_rate_amount[$index] ?? null) : null,
-                        'commission_rate' => ($request->service_payment_type[$index] ?? null) === 'commission' ? ($request->commission_rate[$index] ?? null) : null,
-                        'revenue_share_ratio' => ($request->service_payment_type[$index] ?? null) === 'revenue_share' ? ($request->revenue_share_ratio[$index] ?? null) : null,
+                        'payment_type' => $paymentType,
+                        'fixed_rate_amount' => $paymentType === 'fixed_rate' ? ($request->fixed_rate_amount[$serviceId] ?? null) : null,
+                        'commission_rate' => $paymentType === 'commission' ? ($request->commission_rate[$serviceId] ?? null) : null,
+                        'revenue_share_ratio' => $paymentType === 'revenue_share' ? ($request->revenue_share_ratio[$serviceId] ?? null) : null,
                     ];
                 }
             }

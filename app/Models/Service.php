@@ -19,16 +19,37 @@ class Service extends Model
 
     protected $guarded = [];
 
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'media_urls'];
 
-    // Accessor to get full image URL
+    // Accessor to get full image URL (backward compatibility - returns first image)
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('Service_images/' . $this->image) : null;
+        if ($this->media) {
+            $mediaArray = is_array($this->media) ? $this->media : json_decode($this->media, true);
+            if (is_array($mediaArray) && !empty($mediaArray)) {
+                return asset('Service_images/' . $mediaArray[0]);
+            }
+        }
+        return null;
+    }
+
+    // Accessor to get all media URLs
+    public function getMediaUrlsAttribute()
+    {
+        if ($this->media) {
+            $mediaArray = is_array($this->media) ? $this->media : json_decode($this->media, true);
+            if (is_array($mediaArray)) {
+                return array_map(function($image) {
+                    return asset('Service_images/' . $image);
+                }, $mediaArray);
+            }
+        }
+        return [];
     }
 
     protected $casts = [
         'whats_include' => 'array',
+        'media' => 'array',
         'price_onetime' => 'decimal:2',
         'price_weekly' => 'decimal:2',
         'price_monthly' => 'decimal:2',
@@ -61,7 +82,9 @@ class Service extends Model
     // Many-to-many relationship with users (service providers and vendors)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_services')
+            ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
+            ->withTimestamps();
     }
 
     // Feedback relationships

@@ -1,32 +1,31 @@
 @extends('admin.layouts.masterlayout')
 
+@section('title', 'Vendor Details')
+
 @section('content')
-    <div class="content-area">
-        <div class="modern-view-container">
-            <!-- Header Section -->
-            <div class="view-header-section">
-                <div class="view-header-content">
-                    <div class="view-title-group">
-                        <div class="view-icon-wrapper">
-                            <i class="fas fa-user-tie view-main-icon"></i>
-                        </div>
-                        <div class="view-title-text">
-                            <h2 class="view-title">Vendor Details</h2>
-                            <p class="view-subtitle">Complete information about this vendor account</p>
-                        </div>
-                    </div>
-                    <div class="view-actions">
-                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="modern-btn modern-btn-primary">
-                            <i class="fas fa-edit"></i>
-                            <span>Edit Vendor</span>
-                        </a>
-                        <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
-                            <i class="fas fa-arrow-left"></i>
-                            <span>Back to List</span>
-                        </a>
-                    </div>
+    <div class="modern-view-container">
+        <!-- Header Section -->
+        <div class="view-header-section">
+            <div class="view-header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="header-title">Vendor Details</h1>
+                    <p class="header-subtitle">Complete information about this vendor account</p>
                 </div>
             </div>
+            <div class="header-actions">
+                <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="modern-btn modern-btn-primary">
+                    <i class="fas fa-edit"></i>
+                    Edit Vendor
+                </a>
+                <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to List
+                </a>
+            </div>
+        </div>
 
             <!-- Content Section -->
             <div class="modern-view-card">
@@ -228,71 +227,74 @@
                         </div>
                     </div>
 
-                    <!-- Payment Terms -->
+                    <!-- Services & Payment Terms -->
                     <div class="additional-info">
                         <div class="info-section">
                             <h3 class="section-title">
-                                <i class="fas fa-money-bill-wave"></i>
-                                Payment Terms
+                                <i class="fas fa-concierge-bell"></i>
+                                Services & Payment Terms
                             </h3>
                             <div class="section-content">
-                                <div class="info-row">
-                                    <span class="info-key">Payment Type:</span>
-                                    <span class="info-val">
-                                        @if($vendor->payment_type)
-                                            <span class="payment-type-badge {{ $vendor->payment_type }}">
-                                                <i class="fas fa-cash-register"></i>
-                                                {{ ucfirst(str_replace('_', ' ', $vendor->payment_type)) }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @if($vendor->payment_type == 'fixed_rate')
-                                <div class="info-row">
-                                    <span class="info-key">Fixed Rate Amount:</span>
-                                    <span class="info-val">
-                                        @if($vendor->fixed_rate_amount)
-                                            <span class="fixed-rate-value">
-                                                AED &nbsp;
-                                                {{ number_format($vendor->fixed_rate_amount, 2) }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @endif
-                                @if($vendor->payment_type == 'commission')
-                                <div class="info-row">
-                                    <span class="info-key">Commission Rate:</span>
-                                    <span class="info-val">
-                                        @if($vendor->commission_rate)
-                                            <span class="commission-rate-value">
-
-                                                {{ $vendor->commission_rate }}%
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @endif
-                                @if($vendor->payment_type == 'revenue_share')
-                                <div class="info-row">
-                                    <span class="info-key">Revenue Share Ratio:</span>
-                                    <span class="info-val">
-                                        @if($vendor->revenue_share_ratio)
-                                            <span class="revenue-share-value">
-                                                <i class="fas fa-chart-pie"></i>
-                                                {{ $vendor->revenue_share_ratio }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
+                                @if($vendor->services && $vendor->services->count() > 0)
+                                    <div class="services-list">
+                                        @foreach($vendor->services as $service)
+                                            <div class="service-payment-card">
+                                                <div class="service-header">
+                                                    <h4 class="service-name">
+                                                        <i class="fas fa-tools"></i>
+                                                        {{ $service->name }}
+                                                    </h4>
+                                                    @if($service->category)
+                                                        <span class="service-category-badge">{{ $service->category->name }}</span>
+                                                    @endif
+                                                </div>
+                                                <div class="payment-details">
+                                                    <div class="payment-row">
+                                                        <span class="payment-label">Payment Type:</span>
+                                                        <span class="payment-type-badge {{ $service->pivot->payment_type }}">
+                                                            <i class="fas fa-cash-register"></i>
+                                                            {{ ucfirst(str_replace('_', ' ', $service->pivot->payment_type ?? 'Not set')) }}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    @if($service->pivot->payment_type == 'fixed_rate' && $service->pivot->fixed_rate_amount)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Fixed Rate:</span>
+                                                            <span class="payment-value fixed-rate-value">
+                                                                <i class="fas fa-dollar-sign"></i>
+                                                                AED {{ number_format($service->pivot->fixed_rate_amount, 2) }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'commission' && $service->pivot->commission_rate)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Commission Rate:</span>
+                                                            <span class="payment-value commission-rate-value">
+                                                                <i class="fas fa-percent"></i>
+                                                                {{ $service->pivot->commission_rate }}%
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'revenue_share' && $service->pivot->revenue_share_ratio)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Revenue Share:</span>
+                                                            <span class="payment-value revenue-share-value">
+                                                                <i class="fas fa-chart-pie"></i>
+                                                                {{ $service->pivot->revenue_share_ratio }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="no-services">
+                                        <i class="fas fa-info-circle"></i>
+                                        <p>No services assigned to this vendor</p>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -315,11 +317,11 @@
             display: flex;
             align-items: center;
             gap: 25px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .vendor-avatar {
@@ -353,32 +355,25 @@
         }
 
         .vendor-name {
-            color: #ffffff;
+            color: #334155;
             font-size: 32px;
             font-weight: 700;
             margin: 0 0 5px 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .vendor-role {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-size: 16px;
             margin: 0;
         }
 
         /* Header Styles */
         .view-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border-radius: 20px 0 0;
+            border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
-        }
-
-        .view-header-content {
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -386,13 +381,13 @@
             gap: 20px;
         }
 
-        .view-title-group {
+        .view-header-content {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .view-icon-wrapper {
+        .header-icon-wrapper {
             width: 60px;
             height: 60px;
             background: linear-gradient(135deg, #00d4ff, #0099cc);
@@ -400,31 +395,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            color: white;
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .view-main-icon {
-            font-size: 24px;
-            color: white;
-        }
-
-        .view-title-text h2 {
+        .header-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .view-subtitle {
+        .header-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 
-        .view-actions {
+        .header-actions {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -432,11 +422,11 @@
 
         /* Content Styles */
         .modern-view-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
             padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
         }
 
@@ -448,15 +438,15 @@
         }
 
         .info-item {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         .info-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.04);
             transform: translateY(-2px);
         }
 
@@ -466,7 +456,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin-bottom: 12px;
         }
 
@@ -477,7 +467,7 @@
         .info-value {
             font-size: 16px;
             font-weight: 500;
-            color: #ffffff;
+            color: #334155;
         }
 
         .text-primary {
@@ -485,7 +475,7 @@
         }
 
         .text-muted {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
             font-style: italic;
         }
 
@@ -539,10 +529,10 @@
 
         /* Description Section */
         .description-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
@@ -556,7 +546,7 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
         }
 
@@ -565,7 +555,7 @@
         }
 
         .description-content p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             line-height: 1.6;
             margin: 0;
         }
@@ -576,10 +566,10 @@
         }
 
         .info-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .info-section:first-child {
@@ -596,7 +586,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .info-row:last-child {
@@ -605,12 +595,12 @@
 
         .info-key {
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .info-val {
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             text-align: right;
             max-width: 60%;
         }
@@ -657,6 +647,102 @@
             color: #00d4ff;
         }
 
+        /* Services List Styles */
+        .services-list {
+            display: grid;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .service-payment-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .service-payment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .service-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #334155;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .service-name i {
+            color: #00d4ff;
+        }
+
+        .service-category-badge {
+            padding: 4px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #00d4ff;
+        }
+
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .payment-label {
+            font-size: 13px;
+            color: rgba(51, 65, 85, 0.7);
+            font-weight: 500;
+        }
+
+        .payment-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .no-services {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(51, 65, 85, 0.6);
+        }
+
+        .no-services i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .no-services p {
+            margin: 0;
+            font-size: 14px;
+        }
+
         /* Button Styles */
         .modern-btn {
             display: flex;
@@ -684,14 +770,16 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            transform: translateY(-2px);
         }
 
         /* Responsive Design */

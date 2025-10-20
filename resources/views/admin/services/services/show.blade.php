@@ -501,6 +501,143 @@
             font-weight: 500;
         }
 
+        /* Service Images Grid */
+        .service-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .service-image-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .service-image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .service-image-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Frequency Options Section */
+        .frequency-options-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .frequency-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .frequency-type-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .frequency-type-header {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .frequency-type-header i {
+            color: #00d4ff;
+            font-size: 18px;
+        }
+
+        .frequency-type-header h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .frequency-options-list {
+            padding: 15px;
+        }
+
+        .frequency-option-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .frequency-option-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .frequency-option-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .frequency-option-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .frequency-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .frequency-value {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .frequency-value.price {
+            color: #00d4ff;
+            font-size: 16px;
+        }
+
+        .frequency-option-description {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid #00d4ff;
+            margin-top: 5px;
+        }
+
+        .frequency-option-description i {
+            color: #00d4ff;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .frequency-option-description span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .service-view-container {
@@ -636,8 +773,25 @@
                 </div>
             </div>
 
-            <!-- Service Image Card -->
-            @if ($service->image)
+            <!-- Service Images Card (Multiple) -->
+            @if ($service->media && is_array($service->media) && count($service->media) > 0)
+                <div class="detail-card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <i class="fas fa-images"></i>
+                        <h3>Service Images ({{ count($service->media) }})</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="service-images-grid">
+                            @foreach ($service->media as $image)
+                                <div class="service-image-item">
+                                    <img src="{{ asset('Service_images/' . $image) }}" alt="{{ $service->name }}"
+                                        class="service-image">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @elseif ($service->image)
                 <div class="detail-card">
                     <div class="card-header">
                         <i class="fas fa-image"></i>
@@ -653,6 +807,165 @@
             @endif
 
         </div>
+
+        <!-- Frequency Options Section -->
+        @if ($service->frequencyOptions && $service->frequencyOptions->count() > 0)
+            <div class="frequency-options-section">
+                <div class="section-header">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Subscription Options</h3>
+                </div>
+
+                @php
+                    $onetimeOptions = $service->frequencyOptions->where('frequency_type', 'onetime');
+                    $weeklyOptions = $service->frequencyOptions->where('frequency_type', 'weekly');
+                    $monthlyOptions = $service->frequencyOptions->where('frequency_type', 'monthly');
+                    $yearlyOptions = $service->frequencyOptions->where('frequency_type', 'yearly');
+                @endphp
+
+                <div class="frequency-types-grid">
+                    <!-- One-time Options -->
+                    @if ($onetimeOptions->count() > 0)
+                        <div class="frequency-type-card">
+                            <div class="frequency-type-header">
+                                <i class="fas fa-clock"></i>
+                                <h4>One-Time Service</h4>
+                            </div>
+                            <div class="frequency-options-list">
+                                @foreach ($onetimeOptions as $option)
+                                    <div class="frequency-option-item">
+                                        <div class="frequency-option-details">
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Duration:</span>
+                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Price:</span>
+                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                            </div>
+                                            @if ($option->description)
+                                                <div class="frequency-option-description">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span>{{ $option->description }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Weekly Options -->
+                    @if ($weeklyOptions->count() > 0)
+                        <div class="frequency-type-card">
+                            <div class="frequency-type-header">
+                                <i class="fas fa-calendar-week"></i>
+                                <h4>Weekly Subscription</h4>
+                            </div>
+                            <div class="frequency-options-list">
+                                @foreach ($weeklyOptions as $option)
+                                    <div class="frequency-option-item">
+                                        <div class="frequency-option-details">
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Times per Week:</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Duration:</span>
+                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Price per Service:</span>
+                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                            </div>
+                                            @if ($option->description)
+                                                <div class="frequency-option-description">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span>{{ $option->description }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Monthly Options -->
+                    @if ($monthlyOptions->count() > 0)
+                        <div class="frequency-type-card">
+                            <div class="frequency-type-header">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h4>Monthly Subscription</h4>
+                            </div>
+                            <div class="frequency-options-list">
+                                @foreach ($monthlyOptions as $option)
+                                    <div class="frequency-option-item">
+                                        <div class="frequency-option-details">
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Times per Month:</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Duration:</span>
+                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Price per Service:</span>
+                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                            </div>
+                                            @if ($option->description)
+                                                <div class="frequency-option-description">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span>{{ $option->description }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Yearly Options -->
+                    @if ($yearlyOptions->count() > 0)
+                        <div class="frequency-type-card">
+                            <div class="frequency-type-header">
+                                <i class="fas fa-calendar"></i>
+                                <h4>Yearly Subscription</h4>
+                            </div>
+                            <div class="frequency-options-list">
+                                @foreach ($yearlyOptions as $option)
+                                    <div class="frequency-option-item">
+                                        <div class="frequency-option-details">
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Times per Year:</span>
+                                                <span class="frequency-value">{{ $option->no_of_times }} time{{ $option->no_of_times > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Duration:</span>
+                                                <span class="frequency-value">{{ $option->duration }} hour{{ $option->duration > 1 ? 's' : '' }}</span>
+                                            </div>
+                                            <div class="frequency-option-row">
+                                                <span class="frequency-label">Price per Service:</span>
+                                                <span class="frequency-value price">{{ number_format($option->price_per_time, 2) }} AED</span>
+                                            </div>
+                                            @if ($option->description)
+                                                <div class="frequency-option-description">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <span>{{ $option->description }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         <!-- Descriptions Section -->
         <div class="descriptions-section">

@@ -1,5 +1,7 @@
 @extends('admin.layouts.masterlayout')
 
+@section('title', 'Edit Vendor')
+
 @section('content')
     @php
         // Check if all vendor services have the same payment terms for global mode
@@ -26,27 +28,28 @@
             });
         }
     @endphp
-    <div class="content-area">
-        <div class="form-container">
-            <!-- Header Section -->
-            <div class="form-header">
-                <div class="form-title-group">
-                    <div class="form-icon-wrapper">
-                        <i class="fas fa-user-edit form-main-icon"></i>
-                    </div>
-                    <div class="form-title-text">
-                        <h2 class="form-title">Edit Vendor</h2>
-                        <p class="form-subtitle">Update vendor account information and settings</p>
-                    </div>
-                </div>
-                <a href="{{ route('admin.vendors.index') }}" class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to Vendors</span>
-                </a>
+<div class="modern-form-container">
+    <!-- Form Header Section -->
+    <div class="form-header-section">
+        <div class="form-header-content">
+            <div class="form-icon-wrapper">
+                <i class="fas fa-user-edit"></i>
             </div>
+            <div class="form-header-text">
+                <h1 class="form-title">Edit Vendor</h1>
+                <p class="form-subtitle">Update vendor account information and settings</p>
+            </div>
+        </div>
+        <div class="form-header-actions">
+            <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Vendors
+            </a>
+        </div>
+    </div>
 
-            <!-- Form Section -->
-            <div class="form-card">
+    <!-- Form Card -->
+    <div class="modern-form-card">
                 <form action="{{ route('admin.vendors.update', $vendor->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -299,7 +302,7 @@
                             </div>
                         </div>
 
-                        <div class="form-row">
+                        <div >
                             <div class="form-group">
                                 <label for="vat_certificate_document" class="form-label">
                                     <i class="fas fa-file-invoice-dollar"></i>
@@ -578,13 +581,16 @@
                                                 <h4>{{ $service->name }}</h4>
                                             </div>
                                             <div class="service-payment-fields">
+                                                <!-- Hidden input to track service ID -->
+                                                <input type="hidden" name="service_ids[]" value="{{ $service->id }}" class="service-id-input">
+                                                
                                                 <div class="form-row">
                                                     <div class="form-group">
                                                         <label class="form-label">
                                                             <i class="fas fa-cash-register"></i>
                                                             Payment Type <span class="required">*</span>
                                                         </label>
-                                                        <select name="service_payment_type[]" class="modern-filter-select" onchange="togglePaymentFields(this)">
+                                                        <select name="service_payment_type[{{ $service->id }}]" class="modern-filter-select" onchange="togglePaymentFields(this)">
                                                             <option value="">Select Payment Type</option>
                                                             <option value="fixed_rate" {{ ($vendorService && $vendorService->pivot->payment_type == 'fixed_rate') ? 'selected' : '' }}>Fixed Rate</option>
                                                             <option value="commission" {{ ($vendorService && $vendorService->pivot->payment_type == 'commission') ? 'selected' : '' }}>Commission</option>
@@ -603,7 +609,7 @@
                                                             <i class="fas fa-dollar-sign"></i>
                                                             Fixed Rate Amount
                                                         </label>
-                                                        <input type="number" name="fixed_rate_amount[]" class="form-input" step="0.01" placeholder="Enter fixed rate amount" value="{{ $vendorService ? $vendorService->pivot->fixed_rate_amount : old('fixed_rate_amount') }}">
+                                                        <input type="number" name="fixed_rate_amount[{{ $service->id }}]" class="form-input" step="0.01" placeholder="Enter fixed rate amount" value="{{ $vendorService ? $vendorService->pivot->fixed_rate_amount : old('fixed_rate_amount') }}">
                                                         @error('fixed_rate_amount.*')
                                                             <div class="error-message">
                                                                 <i class="fas fa-exclamation-circle"></i>
@@ -619,7 +625,7 @@
                                                             <i class="fas fa-percent"></i>
                                                             Commission Rate (%)
                                                         </label>
-                                                        <input type="number" name="commission_rate[]" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate" value="{{ $vendorService ? $vendorService->pivot->commission_rate : old('commission_rate') }}">
+                                                        <input type="number" name="commission_rate[{{ $service->id }}]" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate" value="{{ $vendorService ? $vendorService->pivot->commission_rate : old('commission_rate') }}">
                                                         @error('commission_rate.*')
                                                             <div class="error-message">
                                                                 <i class="fas fa-exclamation-circle"></i>
@@ -633,7 +639,7 @@
                                                             <i class="fas fa-chart-pie"></i>
                                                             Revenue Share Ratio
                                                         </label>
-                                                        <input type="text" name="revenue_share_ratio[]" class="form-input" placeholder="e.g., 40:60" value="{{ $vendorService ? $vendorService->pivot->revenue_share_ratio : old('revenue_share_ratio') }}">
+                                                        <input type="text" name="revenue_share_ratio[{{ $service->id }}]" class="form-input" placeholder="e.g., 40:60" value="{{ $vendorService ? $vendorService->pivot->revenue_share_ratio : old('revenue_share_ratio') }}">
                                                         <div class="field-info">
                                                             <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
                                                         </div>
@@ -655,18 +661,23 @@
 
                     <!-- Form Actions -->
                     <div class="form-actions">
-                        <a href="{{ route('admin.vendors.index') }}" class="cancel-btn">
-                            <i class="fas fa-times"></i>
-                            <span>Cancel</span>
-                        </a>
-                        <a href="{{ route('admin.vendors.show', $vendor->id) }}" class="view-btn">
-                            <i class="fas fa-eye"></i>
-                            <span>View Details</span>
-                        </a>
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
                             <i class="fas fa-save"></i>
-                            <span>Update Vendor</span>
+                            <span class="btn-text">Update Vendor</span>
+                            <div class="btn-loader" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
                         </button>
+
+                        
+                        <a href="{{ route('admin.vendors.show', $vendor->id) }}" class="modern-btn modern-btn-secondary">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </a>
+                        <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
@@ -674,13 +685,12 @@
     </div>
 
     <style>
-
         .modern-filter-input, .modern-filter-select {
         padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-radius: 10px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         transition: all 0.3s ease;
     }
@@ -688,37 +698,36 @@
     .modern-filter-select {
         appearance: none;
         cursor: pointer;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 12px center;
         background-repeat: no-repeat;
         background-size: 16px;
     }
 
     .modern-filter-select option {
-        background-color: #2d2d2d;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #334155;
     }
 
     .modern-filter-input:focus, .modern-filter-select:focus {
         outline: none;
-        border-color: #00d4ff;
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
     }
-        .form-container {
-            max-width: 1200px;
+        /* Modern Vendor Form Styling */
+        .modern-form-container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Header Styles */
-        .form-header {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
+        .form-header-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -726,7 +735,7 @@
             gap: 20px;
         }
 
-        .form-title-group {
+        .form-header-content {
             display: flex;
             align-items: center;
             gap: 20px;
@@ -740,57 +749,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
-        }
-
-        .form-main-icon {
             font-size: 24px;
             color: white;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 
-        .back-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-2px);
-        }
-
-        /* Form Card */
-        .form-card {
-            background: rgba(255, 255, 255, 0.08);
+        .modern-form-card {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
             padding: 40px;
-            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: none;
         }
 
         .form-grid {
@@ -799,10 +783,10 @@
         }
 
         .form-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header {
@@ -811,7 +795,7 @@
             gap: 12px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header i {
@@ -820,15 +804,15 @@
         }
 
         .section-header h3 {
-            color: #ffffff;
+            color: #334155;
             font-size: 18px;
             font-weight: 600;
             margin: 0;
         }
 
         .form-row {
-            /* display: grid; */
-            /* grid-template-columns: 1fr 1fr; */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -850,9 +834,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
@@ -867,22 +851,24 @@
 
         .form-input, .form-textarea {
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .form-input:focus, .form-textarea:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
         }
 
         .form-input::placeholder, .form-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .form-textarea {
@@ -901,7 +887,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             cursor: pointer;
             padding: 4px;
             border-radius: 4px;
@@ -910,7 +896,7 @@
 
         .password-toggle:hover {
             color: #00d4ff;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
         }
 
         .file-input-wrapper {
@@ -931,17 +917,17 @@
             justify-content: center;
             gap: 10px;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .file-input-display:hover {
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.05);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .file-info {
@@ -949,11 +935,13 @@
         }
 
         .file-info small {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
+            color: rgba(51, 65, 85, 0.6);
+            font-size: 11px;
         }
 
         .field-info small {
+            color: rgba(51, 65, 85, 0.6);
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
         }
@@ -973,9 +961,9 @@
 
         /* Image Preview */
         .image-preview-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
@@ -987,7 +975,7 @@
         }
 
         .preview-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             margin: 0;
         }
@@ -1043,79 +1031,86 @@
         /* Form Actions */
         .form-actions {
             display: flex;
-            justify-content: space-between;
             gap: 15px;
-            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .cancel-btn, .view-btn, .submit-btn {
+        .modern-btn {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 14px 28px;
+            border: none;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
-            border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cancel-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .cancel-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .view-btn {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .view-btn:hover {
-            background: rgba(245, 158, 11, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .submit-btn {
+        .modern-btn-primary {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .submit-btn:hover {
+        .modern-btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+            color: white;
+        }
+
+        .modern-btn-secondary {
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .modern-btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .modern-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .form-container {
+            .modern-form-container {
                 padding: 10px;
             }
 
-            .form-header {
+            .form-header-section,
+            .modern-form-card {
                 padding: 20px;
-                flex-direction: column;
-                align-items: flex-start;
             }
 
-            .form-card {
-                padding: 20px;
+            .form-header-content {
+                flex-direction: column;
+                text-align: center;
             }
 
             .form-row {
-                /* grid-template-columns: 1fr; */
+                grid-template-columns: 1fr;
                 gap: 15px;
             }
 
@@ -1124,12 +1119,13 @@
             }
 
             .form-actions {
-                flex-direction: column;
+                justify-content: center;
             }
 
-            .cancel-btn, .view-btn, .submit-btn {
-                width: 100%;
+            .modern-btn {
+                flex: 1;
                 justify-content: center;
+                min-width: 140px;
             }
 
         .preview-actions {
@@ -1163,17 +1159,17 @@
             align-items: center;
             gap: 12px;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #ffffff;
+            color: #334155;
         }
 
         .service-label:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 212, 255, 0.5);
             transform: translateY(-2px);
         }
 
@@ -1219,7 +1215,7 @@
 
         .service-category {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             line-height: 1.2;
         }
 
@@ -1249,7 +1245,7 @@
 
         .no-services {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-style: italic;
             padding: 20px;
             margin: 0;
@@ -1269,8 +1265,8 @@
 
         /* Service Payment Terms Styles */
         .service-payment-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
@@ -1281,12 +1277,12 @@
         }
 
         .service-payment-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             font-weight: 600;
             margin: 0 0 15px 0;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .service-payment-fields {

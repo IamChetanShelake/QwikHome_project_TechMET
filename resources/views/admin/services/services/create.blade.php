@@ -10,11 +10,11 @@
         }
 
         .form-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -44,23 +44,23 @@
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 
         .modern-form-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
             padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
         }
 
@@ -81,7 +81,7 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin-bottom: 8px;
         }
 
@@ -118,10 +118,10 @@
         .modern-textarea {
             width: 100%;
             padding: 16px 20px 16px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -134,15 +134,15 @@
         .modern-select {
             appearance: none;
             cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
             background-position: right 12px center;
             background-repeat: no-repeat;
             background-size: 16px;
         }
 
         .modern-select option {
-            background-color: #2d2d2d;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #334155;
             padding: 10px 15px;
             border: none;
         }
@@ -163,15 +163,15 @@
         .modern-select:focus,
         .modern-textarea:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
             transform: translateY(-2px);
         }
 
         .modern-input::placeholder,
         .modern-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .input-icon {
@@ -179,7 +179,7 @@
             left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
             font-size: 14px;
             pointer-events: none;
             transition: all 0.3s ease;
@@ -195,7 +195,7 @@
             right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-size: 12px;
             font-weight: 500;
             pointer-events: none;
@@ -205,10 +205,10 @@
         .dynamic-list-container,
         .requirements-container,
         .processes-container {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .dynamic-item {
@@ -227,11 +227,11 @@
         }
 
         .requirement-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
@@ -243,11 +243,11 @@
         }
 
         .process-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
@@ -288,10 +288,10 @@
 
         /* Pricing Section */
         .pricing-section {
-            background: rgba(0, 212, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             padding: 25px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
 
@@ -743,7 +743,7 @@
             .material-row {
                 grid-template-columns: 1fr;
             }
-            
+
             .material-name,
             .material-description,
             .material-applicable,
@@ -774,26 +774,26 @@
         .nice-select {
             display: none !important;
         }
-        
+
         .nice-select + .modern-select {
             display: none !important;
         }
-        
+
         .modern-select {
             display: block !important;
             appearance: auto !important;
         }
-        
+
         /* Hide nice-select dropdown lists */
         .nice-select .list {
             display: none !important;
         }
-        
+
         /* Ensure original selects are visible */
         select.modern-select {
             display: block !important;
         }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
 
@@ -856,7 +856,7 @@
             <form method="POST" action="{{ route('services.services.store') }}" id="serviceForm"
                 enctype="multipart/form-data">
                 @csrf
-                
+
                 <!-- General Error Display -->
                 @if ($errors->any())
                     <div class="alert alert-danger" style="background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ff4757;">
@@ -910,9 +910,9 @@
                         </label>
                         <div class="input-wrapper">
                             <select class="modern-select" id="subcategory_id" name="subcategory_id">
-                                <option value="">None</option>
+                                <option value="">Select Subcategory</option>
                                 @foreach ($subcategories as $sub)
-                                    <option value="{{ $sub->id }}"
+                                    <option value="{{ $sub->id }}" data-category-id="{{ $sub->category_id }}"
                                         {{ old('subcategory_id') == $sub->id ? 'selected' : '' }}>
                                         {{ $sub->name }}
                                     </option>
@@ -985,7 +985,7 @@
                         <label class="modern-label">
                             <i class="fas fa-cogs text-cyan"></i>
                             Add Our Processes
-                            <span class="optional-badge">Optional</span>
+                            <span class="required-badge">Required</span>
                         </label>
                         <div class="processes-container">
                             <div id="processes_container">
@@ -1109,6 +1109,9 @@
                                                 placeholder="Enter what's included">
                                             <i class="fas fa-check input-icon"></i>
                                         </div>
+                                        <!-- <button type="button" class="modern-btn-remove remove-include">
+                                            <i class="fas fa-times"></i>
+                                        </button> -->
                                     </div>
                                 @endif
                             </div>
@@ -1134,7 +1137,7 @@
                         <label class="modern-label">
                             <i class="fas fa-clipboard-list text-cyan"></i>
                             What We Need From You
-                            <span class="optional-badge">Optional</span>
+                            <span class="required-badge">Required</span>
                         </label>
                         <div class="requirements-container">
                             <div id="requirements_container">
@@ -1194,7 +1197,7 @@
                         </div>
                     </div>
                 </div> <!-- Closing form-grid -->
-                
+
                 <!-- Pricing Section -->
                 <div class="full-width-section">
                     <div class="pricing-section">
@@ -1212,46 +1215,124 @@
                                 </div>
 
                                 <div class="frequency-options" id="onetime_options" style="display: block;">
-                                <div class="pricing-horizontal-layout">
-                                    <div class="form-group-modern pricing-input">
-                                        <label for="price_onetime" class="modern-label">
-                                            <i class="fas fa-money-bill text-cyan"></i>
-                                            Price
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <input type="number" class="modern-input" id="price_onetime"
-                                                name="price_onetime" value="{{ old('price_onetime') }}"
-                                                step="0.01" min="0" placeholder="0.00">
-                                            <span class="input-suffix">AED</span>
-                                        </div>
+                                    <div class="frequency-container" id="onetime_frequencies">
+                                        @if (old('onetime_frequencies'))
+                                            @foreach (old('onetime_frequencies') as $index => $frequency)
+                                                <div class="frequency-item">
+                                                    <div class="frequency-header">
+                                                        <span class="frequency-title">One Time Option {{ $index + 1 }}</span>
+                                                        @if ($index > 0)
+                                                            <button type="button" class="modern-btn-remove remove-frequency">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                    <div class="frequency-content">
+                                                        <div class="frequency-row">
+                                                            <div class="form-group-modern frequency-duration">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-clock text-cyan"></i>
+                                                                    Duration
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <select class="modern-select"
+                                                                        name="onetime_frequencies[{{ $index }}][duration]">
+                                                                        @for ($i = 1; $i <= 10; $i++)
+                                                                            <option value="{{ $i }}"
+                                                                                {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
+                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                            </option>
+                                                                        @endfor
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group-modern frequency-price">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-money-bill text-cyan"></i>
+                                                                    Price
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <input type="number" class="modern-input"
+                                                                        name="onetime_frequencies[{{ $index }}][price_per_time]"
+                                                                        value="{{ $frequency['price_per_time'] ?? '' }}"
+                                                                        step="0.01" min="0" placeholder="0.00">
+                                                                    <span class="input-suffix">AED</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                                    Description
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <textarea class="modern-textarea"
+                                                                        name="onetime_frequencies[{{ $index }}][description]"
+                                                                        placeholder="Describe this one time option">{{ $frequency['description'] ?? '' }}</textarea>
+                                                                    <i class="fas fa-align-left input-icon"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="frequency-item">
+                                                <div class="frequency-header">
+                                                    <span class="frequency-title">One Time Option 1</span>
+                                                </div>
+                                                <div class="frequency-content">
+                                                    <div class="frequency-row">
+                                                        <div class="form-group-modern frequency-duration">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="onetime_frequencies[0][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $i == 1 ? 'selected' : '' }}>
+                                                                            {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Price
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="onetime_frequencies[0][price_per_time]"
+                                                                    step="0.01" min="0" placeholder="0.00">
+                                                                <span class="input-suffix">AED</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea"
+                                                                    name="onetime_frequencies[0][description]"
+                                                                    placeholder="Describe this one time option"></textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
-                                    <div class="form-group-modern pricing-input">
-                                        <label for="duration_onetime" class="modern-label">
-                                            <i class="fas fa-clock text-cyan"></i>
-                                            Duration
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <input type="text" class="modern-input" id="duration_onetime"
-                                                name="duration_onetime" value="{{ old('duration_onetime') }}"
-                                                placeholder="e.g., 2-3 hours, 1 day">
-                                            <i class="fas fa-clock input-icon"></i>
-                                        </div>
-                                    </div>
-                                    <div class="form-group-modern pricing-description">
-                                        <label for="price_onetime_description" class="modern-label">
-                                            <i class="fas fa-align-left text-cyan"></i>
-                                            Description
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <textarea class="modern-textarea" id="price_onetime_description" name="price_onetime_description"
-                                                placeholder="Descibe the one time service">{{ old('price_onetime_description') }}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
 
+                                    <button type="button" id="add_onetime_frequency"
+                                        class="modern-btn modern-btn-outline">
+                                        <i class="fas fa-plus"></i> Add One Time Option
+                                    </button>
                                 </div>
                             </div>
 
@@ -1329,6 +1410,18 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                                    Description
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <textarea class="modern-textarea"
+                                                                        name="weekly_frequencies[{{ $index }}][description]"
+                                                                        placeholder="Describe this weekly option">{{ $frequency['description'] ?? '' }}</textarea>
+                                                                    <i class="fas fa-align-left input-icon"></i>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1387,26 +1480,24 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                                    Description
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <textarea class="modern-textarea"
+                                                                        name="weekly_frequencies[0][description]"
+                                                                        placeholder="Describe this weekly option"></textarea>
+                                                                    <i class="fas fa-align-left input-icon"></i>
+                                                                </div>
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
-                                    
-                                    <!-- Weekly Description -->
-                                    <div class="form-group-modern full-width">
-                                        <label for="price_weekly_description" class="modern-label">
-                                            <i class="fas fa-align-left text-cyan"></i>
-                                            Weekly Subscription Description
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <textarea class="modern-textarea" id="price_weekly_description" name="price_weekly_description"
-                                                placeholder="Describe the weekly subscription service">{{ old('price_weekly_description') }}</textarea>
-                                            <i class="fas fa-align-left input-icon"></i>
-                                        </div>
-                                    </div>
-                                    
+
                                     <button type="button" id="add_weekly_frequency"
                                         class="modern-btn modern-btn-outline">
                                         <i class="fas fa-plus"></i> Add Weekly Option
@@ -1488,6 +1579,18 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                                    Description
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <textarea class="modern-textarea"
+                                                                        name="monthly_frequencies[{{ $index }}][description]"
+                                                                        placeholder="Describe this monthly option">{{ $frequency['description'] ?? '' }}</textarea>
+                                                                    <i class="fas fa-align-left input-icon"></i>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1546,26 +1649,24 @@
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea"
+                                                                    name="monthly_frequencies[0][description]"
+                                                                    placeholder="Describe this monthly option"></textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
-                                    
-                                    <!-- Monthly Description -->
-                                    <div class="form-group-modern full-width">
-                                        <label for="price_monthly_description" class="modern-label">
-                                            <i class="fas fa-align-left text-cyan"></i>
-                                            Monthly Subscription Description
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <textarea class="modern-textarea" id="price_monthly_description" name="price_monthly_description"
-                                                placeholder="Describe the monthly subscription service">{{ old('price_monthly_description') }}</textarea>
-                                            <i class="fas fa-align-left input-icon"></i>
-                                        </div>
-                                    </div>
-                                    
+
                                     <button type="button" id="add_monthly_frequency"
                                         class="modern-btn modern-btn-outline">
                                         <i class="fas fa-plus"></i> Add Monthly Option
@@ -1647,6 +1748,18 @@
                                                                     <span class="input-suffix">AED</span>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                                <label class="modern-label">
+                                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                                    Description
+                                                                </label>
+                                                                <div class="input-wrapper">
+                                                                    <textarea class="modern-textarea"
+                                                                        name="yearly_frequencies[{{ $index }}][description]"
+                                                                        placeholder="Describe this yearly option">{{ $frequency['description'] ?? '' }}</textarea>
+                                                                    <i class="fas fa-align-left input-icon"></i>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1705,26 +1818,24 @@
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea"
+                                                                    name="yearly_frequencies[0][description]"
+                                                                    placeholder="Describe this yearly option"></textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
-                                    
-                                    <!-- Yearly Description -->
-                                    <div class="form-group-modern full-width">
-                                        <label for="price_yearly_description" class="modern-label">
-                                            <i class="fas fa-align-left text-cyan"></i>
-                                            Yearly Subscription Description
-                                            <span class="optional-badge">Optional</span>
-                                        </label>
-                                        <div class="input-wrapper">
-                                            <textarea class="modern-textarea" id="price_yearly_description" name="price_yearly_description"
-                                                placeholder="Describe the yearly subscription service">{{ old('price_yearly_description') }}</textarea>
-                                            <i class="fas fa-align-left input-icon"></i>
-                                        </div>
-                                    </div>
-                                    
+
                                     <button type="button" id="add_yearly_frequency"
                                         class="modern-btn modern-btn-outline">
                                         <i class="fas fa-plus"></i> Add Yearly Option
@@ -1798,7 +1909,7 @@
                                 <i class="fas fa-tools text-cyan"></i>
                                 Add With Material Section
                             </h3>
-                            
+
                             <div class="materials-container">
                                 <div id="materials_container">
                                     @if (old('materials'))
@@ -1828,7 +1939,7 @@
                                                                 <i class="fas fa-box input-icon"></i>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group-modern material-description">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-align-left text-cyan"></i>
@@ -1843,7 +1954,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="material-row">
                                                         <div class="form-group-modern material-applicable">
                                                             <label class="modern-label">
@@ -1864,7 +1975,7 @@
                                                                 <i class="fas fa-link input-icon"></i>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group-modern material-price">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-money-bill text-cyan"></i>
@@ -1879,7 +1990,7 @@
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group-modern material-image">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-image text-cyan"></i>
@@ -1917,7 +2028,7 @@
                                                             <i class="fas fa-box input-icon"></i>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group-modern material-description">
                                                         <label class="modern-label">
                                                             <i class="fas fa-align-left text-cyan"></i>
@@ -1932,7 +2043,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="material-row">
                                                     <div class="form-group-modern material-applicable">
                                                         <label class="modern-label">
@@ -1953,7 +2064,7 @@
                                                             <i class="fas fa-link input-icon"></i>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group-modern material-price">
                                                         <label class="modern-label">
                                                             <i class="fas fa-money-bill text-cyan"></i>
@@ -1967,7 +2078,7 @@
                                                             <span class="input-suffix">AED</span>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group-modern material-image">
                                                         <label class="modern-label">
                                                             <i class="fas fa-image text-cyan"></i>
@@ -1986,7 +2097,7 @@
                                         </div>
                                     @endif
                                 </div>
-                                
+
                                 <button type="button" id="add_material" class="modern-btn modern-btn-outline">
                                     <i class="fas fa-plus"></i>
                                     Add More With Material
@@ -1995,21 +2106,27 @@
                         </div>
                     </div>
 
-                    <!-- Additional Form Fields (Service Image and Actions) -->
+                    <!-- Additional Form Fields (Service Images and Actions) -->
                     <div class="form-grid">
-                        <!-- Service Image (Full Width) -->
+                        <!-- Service Images (Full Width) -->
                     <div class="form-group-modern full-width">
-                        <label for="image" class="modern-label">
-                            <i class="fas fa-image text-cyan"></i>
-                            Service Image
+                        <label for="images" class="modern-label">
+                            <i class="fas fa-images text-cyan"></i>
+                            Service Images
                             <span class="optional-badge">Optional</span>
                         </label>
                         <div class="input-wrapper">
-                            <input type="file" class="modern-input file-input" id="image" name="image"
-                                accept="*">
-                            <i class="fas fa-image input-icon"></i>
+                            <input type="file" class="modern-input file-input" id="images" name="images[]"
+                                accept="*" multiple>
+                            <i class="fas fa-images input-icon"></i>
                         </div>
-                        @error('image')
+                        @error('images')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                        @error('images.*')
                             <div class="error-message">
                                 <i class="fas fa-exclamation-circle"></i>
                                 {{ $message }}
@@ -2017,7 +2134,7 @@
                         @enderror
                         <div class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Upload any image file to represent this service (All formats and sizes accepted)
+                            Upload multiple image files to represent this service (All formats and sizes accepted, no limit)
                         </div>
                     </div>
 
@@ -2047,7 +2164,7 @@
         if (typeof $.fn.niceSelect !== 'undefined') {
             $.fn.niceSelect = function() { return this; };
         }
-        
+
         $(document).ready(function() {
             // Form submission with loading state
             $('#serviceForm').on('submit', function() {
@@ -2232,8 +2349,13 @@
                 // Build options based on type
                 let optionsHtml = '<option value="">Select times</option>';
                 let maxLimit;
+                let showTimesPerPeriod = true;
 
                 switch (type) {
+                    case 'onetime':
+                        maxLimit = 1;
+                        showTimesPerPeriod = false;
+                        break;
                     case 'weekly':
                         maxLimit = 7;
                         break;
@@ -2254,39 +2376,79 @@
                 }
 
                 const periodText = type === 'yearly' ? 'Year' : type.charAt(0).toUpperCase() + type.slice(1, -2);
+                const typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
+
+                // Build duration options
+                let durationOptionsHtml = '';
+                for (let i = 1; i <= 10; i++) {
+                    const selected = i === 1 ? 'selected' : '';
+                    const hourText = i === 1 ? 'hour' : 'hours';
+                    durationOptionsHtml += `<option value="${i}" ${selected}>${i} ${hourText}</option>`;
+                }
+
+                let timesPerPeriodHtml = '';
+                if (showTimesPerPeriod) {
+                    timesPerPeriodHtml = `
+                        <div class="form-group-modern frequency-no">
+                            <label class="modern-label">
+                                <i class="fas fa-hashtag text-cyan"></i>
+                                Times per ${periodText}
+                            </label>
+                            <div class="input-wrapper">
+                                <select class="modern-select frequency-no-select"
+                                    name="${type}_frequencies[${currentCount}][no_of_times]">
+                                    ${optionsHtml}
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                }
 
                 const frequencyItem = $(`
                 <div class="frequency-item">
                     <div class="frequency-header">
-                        <span class="frequency-title">${type.charAt(0).toUpperCase() + type.slice(1)} Option ${optionNumber}</span>
+                        <span class="frequency-title">${typeCapitalized} Option ${optionNumber}</span>
                         <button type="button" class="modern-btn-remove remove-frequency">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <div class="frequency-content">
                         <div class="frequency-row">
-                            <div class="form-group-modern frequency-no">
+                            ${timesPerPeriodHtml}
+                            <div class="form-group-modern frequency-duration">
                                 <label class="modern-label">
-                                    <i class="fas fa-hashtag text-cyan"></i>
-                                    Times per ${periodText}
+                                    <i class="fas fa-clock text-cyan"></i>
+                                    Duration
                                 </label>
                                 <div class="input-wrapper">
-                                    <select class="modern-select frequency-no-select"
-                                        name="${type}_frequencies[${currentCount}][no_of_times]">
-                                        ${optionsHtml}
+                                    <select class="modern-select"
+                                        name="${type}_frequencies[${currentCount}][duration]">
+                                        ${durationOptionsHtml}
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group-modern frequency-price">
                                 <label class="modern-label">
                                     <i class="fas fa-money-bill text-cyan"></i>
-                                    Price per Time
+                                    ${type === 'onetime' ? 'Price' : 'Price per Service'}
                                 </label>
                                 <div class="input-wrapper">
                                     <input type="number" class="modern-input"
                                         name="${type}_frequencies[${currentCount}][price_per_time]"
                                         step="0.01" min="0" placeholder="0.00">
                                     <span class="input-suffix">AED</span>
+                                </div>
+                            </div>
+                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                <label class="modern-label">
+                                    <i class="fas fa-align-left text-cyan"></i>
+                                    Description
+                                </label>
+                                <div class="input-wrapper">
+                                    <textarea class="modern-textarea"
+                                        name="${type}_frequencies[${currentCount}][description]"
+                                        placeholder="Describe this ${type} option"></textarea>
+                                    <i class="fas fa-align-left input-icon"></i>
                                 </div>
                             </div>
                         </div>
@@ -2304,6 +2466,11 @@
             togglePricingInput('enable_yearly', 'yearly_options');
 
             // Frequency management buttons
+            $('#add_onetime_frequency').on('click', function(e) {
+                e.preventDefault();
+                addFrequencyOption('onetime');
+            });
+
             $('#add_weekly_frequency').on('click', function(e) {
                 e.preventDefault();
                 addFrequencyOption('weekly');
@@ -2327,7 +2494,7 @@
             // Materials functionality - using vanilla JS like edit form
             let materialIndex = document.querySelectorAll('#materials_container .material-item').length;
             console.log('Initial material index (from DOM):', materialIndex);
-            
+
             document.getElementById('add_material')?.addEventListener('click', function(e) {
                 e.preventDefault();
                 const container = document.getElementById('materials_container');
@@ -2359,7 +2526,7 @@
                                     <i class="fas fa-box input-icon"></i>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group-modern material-description">
                                 <label class="modern-label">
                                     <i class="fas fa-align-left text-cyan"></i>
@@ -2374,7 +2541,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="material-row">
                             <div class="form-group-modern material-applicable">
                                 <label class="modern-label">
@@ -2395,7 +2562,7 @@
                                     <i class="fas fa-link input-icon"></i>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group-modern material-price">
                                 <label class="modern-label">
                                     <i class="fas fa-money-bill text-cyan"></i>
@@ -2409,7 +2576,7 @@
                                     <span class="input-suffix">AED</span>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group-modern material-image">
                                 <label class="modern-label">
                                     <i class="fas fa-image text-cyan"></i>
@@ -2453,13 +2620,13 @@
                         hasErrors = true;
                     }
                 });
-                
+
                 if (hasErrors) {
                     e.preventDefault();
                     alert('Please fill in all required fields before submitting.');
                     return false;
                 }
-                
+
                 // Reindex materials sequentially to ensure PHP parses all items
                 $('#materials_container .material-item').each(function(i) {
                     $(this)
@@ -2475,7 +2642,7 @@
                 const formElement = this;
                 const allMaterialInputs = document.querySelectorAll('[name^="materials["]');
                 const formMaterialInputs = formElement.querySelectorAll('[name^="materials["]');
-                
+
                 // If material inputs are outside form, create hidden inputs inside form
                 if (formMaterialInputs.length === 0 && allMaterialInputs.length > 0) {
                     allMaterialInputs.forEach(input => {
@@ -2489,16 +2656,68 @@
             });
 
             // Check and show inputs if old data exists
-            @if (old('price_weekly') || old('price_weekly_description'))
+            @if (old('weekly_frequencies'))
                 $('#enable_weekly').prop('checked', true).trigger('change');
             @endif
-            @if (old('price_monthly') || old('price_monthly_description'))
+            @if (old('monthly_frequencies'))
                 $('#enable_monthly').prop('checked', true).trigger('change');
             @endif
-            @if (old('price_yearly') || old('price_yearly_description'))
+            @if (old('yearly_frequencies'))
                 $('#enable_yearly').prop('checked', true).trigger('change');
             @endif
-            // One time price is always visible by default (checkbox checked)
+            // One time is always visible by default (checkbox checked)
+
+            // Category-Subcategory filtering
+            const allSubcategoryOptions = $('#subcategory_id option').clone();
+
+            function filterSubcategories() {
+                const selectedCategoryId = $('#category_id').val();
+                const currentSubcategoryId = $('#subcategory_id').val();
+
+                // Clear subcategory dropdown
+                $('#subcategory_id').empty();
+
+                if (selectedCategoryId) {
+                    // Filter and add subcategories for selected category
+                    let hasSubcategories = false;
+                    allSubcategoryOptions.each(function() {
+                        const option = $(this);
+                        if (option.val() !== '' && option.data('category-id') == selectedCategoryId) {
+                            $('#subcategory_id').append(option.clone());
+                            hasSubcategories = true;
+                        }
+                    });
+
+                    // Add "None" option only if there are subcategories
+                    if (hasSubcategories) {
+                        $('#subcategory_id').prepend('<option value="">None</option>');
+                    } else {
+                        $('#subcategory_id').append('<option value="">No subcategories available</option>');
+                    }
+
+                    // Restore previously selected subcategory if it belongs to this category
+                    if (currentSubcategoryId && hasSubcategories) {
+                        const matchingOption = allSubcategoryOptions.filter(function() {
+                            return $(this).val() == currentSubcategoryId &&
+                                   $(this).data('category-id') == selectedCategoryId;
+                        });
+                        if (matchingOption.length > 0) {
+                            $('#subcategory_id').val(currentSubcategoryId);
+                        }
+                    }
+                } else {
+                    // If no category selected, show all subcategories
+                    $('#subcategory_id').append(allSubcategoryOptions.clone());
+                }
+            }
+
+            // Filter on page load
+            filterSubcategories();
+
+            // Filter when category changes
+            $('#category_id').on('change', function() {
+                filterSubcategories();
+            });
         });
     </script>
 @endsection

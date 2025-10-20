@@ -34,12 +34,11 @@ use App\Models\ServiceOffer;
 Route::get('/', function () {
     return view('welcome');
 });
-
 // Policy routes
 Route::get('/disclaimer', function () {
     $disclaimers = Disclaimer::all();
-    return view('pages.disclaimer');
-})->name('disclaimer');
+    return view('pages.disclaimer', compact('disclaimers'));
+})->name('disclaimers');
 
 Route::get('/privacy-policy', function () {
     $privacyPolicies = PrivacyPolicy::all();
@@ -49,7 +48,7 @@ Route::get('/privacy-policy', function () {
 Route::get('/terms-conditions', function () {
     $termsConditions = TermsCondition::all();
     return view('pages.terms-conditions', compact('termsConditions'));
-})->name('terms-conditions');
+})->name('terms.conditions');
 
 Route::get('/refund-policy', function () {
     $refundPolicies = RefundPolicy::all();
@@ -117,12 +116,23 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::delete('{service}', [ServiceController::class, 'servicesDestroy'])->name('services.services.destroy');
 
         // Service Offers
-        Route::resource('offers', \App\Http\Controllers\Admin\ServiceOffersController::class)->parameters(['offers' => 'serviceOffer'])->except(['create', 'show']);
-        Route::get('offers/create/{service}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'create'])->name('services.offers.create');
-        Route::get('services-offers', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'index'])->name('services.offers.index');
-        Route::post('offers/store', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'store'])->name('services.offers.store');
-        Route::get('offers/{serviceOffer}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'show'])->name('services.offers.show');
-        Route::get('offers/{serviceOffer}/edit', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'edit'])->name('services.offers.edit');
+        // Route::resource('offers', \App\Http\Controllers\Admin\ServiceOffersController::class)->parameters(['offers' => 'serviceOffer'])->except(['create', 'show'])->names([
+        //     'index' => 'services.offers.index',
+        //     'store' => 'services.offers.store',
+        //     'update' => 'services.offers.update',
+        //     'destroy' => 'services.offers.destroy',
+        //     'edit' => 'services.offers.edit'
+        // ]);
+        Route::get('offers/index', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'index'])->name('offers.index');
+
+        Route::get('offers/create/{service}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'create'])->name('offers.create');
+        // Route already defined by resource above
+        Route::post('offers/store', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'store'])->name('offers.store');
+        Route::get('offers/{serviceOffer}', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'show'])->name('offers.show');
+        Route::get('offers/{serviceOffer}/edit', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'edit'])->name('offers.edit');
+        Route::put('offers/{serviceOffer}/update', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'update'])->name('offers.update');
+        Route::delete('offers/{serviceOffer}/delete', [\App\Http\Controllers\Admin\ServiceOffersController::class, 'destroy'])->name('offers.destroy');
+
     });
 
     //service management old-------------
@@ -145,15 +155,15 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         ]);
 
         // Offers management
-        Route::resource('offers', OfferController::class)->names([
-            'index' => 'offers.index',
-            'create' => 'offers.create',
-            'store' => 'offers.store',
-            'show' => 'offers.show',
-            'edit' => 'offers.edit',
-            'update' => 'offers.update',
-            'destroy' => 'offers.destroy',
-        ]);
+        // Route::resource('offers', OfferController::class)->names([
+        //     'index' => 'offers.index',
+        //     'create' => 'offers.create',
+        //     'store' => 'offers.store',
+        //     'show' => 'offers.show',
+        //     'edit' => 'offers.edit',
+        //     'update' => 'offers.update',
+        //     'destroy' => 'offers.destroy',
+        // ]);
 
         // Campaigns management
         Route::resource('campaigns', CampaignController::class)->names([
@@ -234,11 +244,11 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
-    
+
     // AJAX routes for coupons (must come before parameterized routes)
     Route::get('/coupons/get-subcategories/{categoryId}', [CouponController::class, 'getSubcategories'])->name('coupons.get-subcategories');
     Route::get('/coupons/get-services/{categoryId}/{subcategoryId?}', [CouponController::class, 'getServices'])->name('coupons.get-services');
-    
+
     Route::get('/coupons/{id}', [CouponController::class, 'view'])->name('coupons.view');
     Route::get('/coupons/{id}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
     Route::put('/coupons/{id}', [CouponController::class, 'update'])->name('coupons.update');
@@ -325,7 +335,7 @@ Route::get('/clean-cache', function () {
     return '<h1>Cache facade value cleared</h1>';
 });
 
-Route::get('/test-firebase-push', function() {
+Route::get('/test-firebase-push', function () {
     try {
         \Log::info('Test Firebase Route: Starting test push notification');
 
@@ -352,7 +362,6 @@ Route::get('/test-firebase-push', function() {
             'message' => 'Notification sent successfully!',
             'data' => $result
         ]);
-
     } catch (\Exception $e) {
         \Log::error('Test Firebase Route: Failed to send notification', [
             'error' => $e->getMessage(),

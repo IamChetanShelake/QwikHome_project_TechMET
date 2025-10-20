@@ -7,6 +7,7 @@ use App\Http\Controllers\api\ReviewApiController;
 use App\Http\Controllers\api\ServiceApiController;
 use App\Http\Controllers\api\PolicyApiController;
 use App\Http\Controllers\api\UserApiController;
+use App\Http\Controllers\api\WishlistApiController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -96,3 +97,9 @@ Route::get('/privacy-policy', [PolicyApiController::class, 'getPrivacyPolicy']);
 Route::post('/update-fcm-token', [UserApiController::class, 'updateFcmToken']);
 Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
 Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);
+
+// Wishlist API routes
+Route::post('/wishlist', [WishlistApiController::class, 'store']); // Add to wishlist
+Route::get('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
+Route::delete('/wishlist/{id}', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
+Route::post('/wishlist/remove-item', [WishlistApiController::class, 'removeItem']); // Remove specific service/offer from wishlist

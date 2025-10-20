@@ -33,6 +33,7 @@ class User extends Authenticatable
         'address',
         'image',
         'role',
+        'vendor_id',
         'application_document',
         'trade_license_document',
         'vat_certificate_document',
@@ -116,7 +117,21 @@ class User extends Authenticatable
     // Many-to-many relationship with services
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'user_services')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'user_services')
+            ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
+            ->withTimestamps();
+    }
+
+    // Relationship with vendor (a service provider can belong to a vendor)
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    // Relationship to get service providers under a vendor
+    public function serviceProviders()
+    {
+        return $this->hasMany(User::class, 'vendor_id');
     }
 
     // Feedback relationships

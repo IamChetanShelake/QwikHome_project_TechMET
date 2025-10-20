@@ -15,6 +15,7 @@ class ServiceFrequencyOption extends Model
         'price_per_time' => 'decimal:2',
         'no_of_times' => 'integer',
         'duration' => 'integer',
+        'description' => 'string'
     ];
     
     // Relationship with service

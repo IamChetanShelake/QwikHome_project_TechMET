@@ -43,7 +43,8 @@
                 <div class="search-wrapper">
                     <div class="search-input-group">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..." class="search-input">
+                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..."
+                            class="search-input">
                     </div>
                 </div>
             </div>
@@ -84,6 +85,13 @@
                                         <span>Phone</span>
                                     </div>
                                 </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-user"></i>
+                                        <span>Vendor</span>
+                                    </div>
+                                </th>
+
                                 <th>
                                     <div class="th-content">
                                         <i class="fas fa-map-marker-alt"></i>
@@ -143,6 +151,30 @@
                                                 <i class="fas fa-phone"></i>
                                                 <span>{{ $serviceProvider->phone ?? 'Not provided' }}</span>
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="vendor-info">
+                                                @if(auth()->user()->role === 'vendor')
+
+                                                @if($serviceProvider->vendor->id == auth()->user()->id )
+                                                    {{-- <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small> --}}
+                                                     <span class="admin-assigned">vendor (Default)</span>
+                                                @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                @endif
+                                            </div>
+                                            @elseif(auth()->user()->role === 'admin')
+                                                @if($serviceProvider->vendor)
+                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
+                                                    @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                    @endif
+
+                                            @endif
                                         </div>
                                     </td>
                                     <td>
@@ -438,7 +470,8 @@
         }
 
         .user-avatar-small {
-            height: 50px;
+            height: 60px;
+            width: 60px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid rgba(0, 212, 255, 0.3);
@@ -477,6 +510,27 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .vendor-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .vendor-name {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .vendor-email {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+        }
+
+        .admin-assigned {
+            color: rgba(255, 25, 255, 0.7);
+            font-style: italic;
         }
 
         .joined-date {
@@ -596,6 +650,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
