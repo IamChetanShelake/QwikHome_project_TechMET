@@ -18,11 +18,11 @@
     }
 
     .index-header-section {
-        background: rgba(255, 255, 255, 0.05);
+        background: #ffffff;
         backdrop-filter: blur(10px);
         border-radius: 20px;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -53,14 +53,14 @@
     .header-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #334155;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        text-shadow: none;
     }
 
     .header-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         margin: 5px 0 0 0;
     }
 
@@ -70,11 +70,11 @@
     }
 
     .filters-section {
-        background: rgba(255, 255, 255, 0.08);
+        background: #ffffff;
         backdrop-filter: blur(15px);
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         margin-bottom: 20px;
     }
 
@@ -95,16 +95,16 @@
     .filter-label {
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: #000000;
     }
 
     .modern-filter-input,
     .modern-filter-select {
         padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
         border-radius: 10px;
-        color: #ffffff;
+        color: #000000;
         font-size: 14px;
         transition: all 0.3s ease;
     }
@@ -138,16 +138,16 @@
     }
 
     .table-section {
-        background: rgba(255, 255, 255, 0.08);
+        background: #ffffff;
         backdrop-filter: blur(15px);
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         overflow: hidden;
     }
 
     .table-header {
         padding: 25px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -159,12 +159,12 @@
         gap: 10px;
         font-size: 18px;
         font-weight: 600;
-        color: #ffffff;
+        color: #000000;
         margin: 0;
     }
 
     .record-count {
-        color: rgba(255, 255, 255, 0.7);
+        color: #000000;
         font-size: 14px;
     }
 
@@ -193,8 +193,8 @@
 
     .modern-table td {
         padding: 15px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        color: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        color: #000000;
         vertical-align: middle;
     }
 
@@ -208,7 +208,7 @@
     }
 
     .service-name {
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         font-size: 13px;
         margin-top: 2px;
     }
@@ -257,7 +257,7 @@
     .date-range {
         display: block;
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
     }
 
     .action-buttons {
@@ -313,26 +313,26 @@
     }
 
     .no-data {
-        color: rgba(255, 255, 255, 0.4);
+        color: #94a3b8;
         font-style: italic;
     }
 
     .empty-state {
         text-align: center;
         padding: 60px 20px;
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
     }
 
     .empty-state i {
         font-size: 48px;
-        color: rgba(255, 255, 255, 0.3);
+        color: #cbd5e1;
         margin-bottom: 20px;
     }
 
     .empty-state h3 {
         font-size: 24px;
         margin-bottom: 10px;
-        color: #ffffff;
+        color: #000000;
     }
 
     .empty-state p {
@@ -368,19 +368,19 @@
 
     .modern-btn-outline {
         background: transparent;
-        color: rgba(255, 255, 255, 0.7);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #64748b;
+        border: 2px solid #e2e8f0;
     }
 
     .modern-btn-outline:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.3);
+        background: #f8fafc;
+        color: #000000;
+        border-color: #cbd5e1;
     }
 
     .pagination-section {
         padding: 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid #e2e8f0;
     }
 </style>
 

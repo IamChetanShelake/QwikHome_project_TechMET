@@ -4,11 +4,10 @@
     <style>
         /* Analytics Styles */
         .analytics-header-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             border-bottom: none;
         }
 
@@ -38,18 +37,28 @@
         .filter-group label {
             font-size: 14px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
+            color: #334155;
         }
 
         .filter-input,
         .filter-select {
             padding: 10px 12px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #334155;
             font-size: 14px;
             min-width: 140px;
+        }
+
+        .filter-input::placeholder,
+        .filter-select::placeholder {
+            color: #94a3b8;
+        }
+
+        .filter-select option {
+            background: #ffffff;
+            color: #334155;
         }
 
         .filter-input:focus,
@@ -74,11 +83,10 @@
         }
 
         .summary-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
+            background: #ffffff;
             border-radius: 16px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -90,7 +98,7 @@
         }
 
         .summary-card.revenue-card {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(34, 197, 94, 0.02));
             border-color: rgba(34, 197, 94, 0.3);
         }
 
@@ -114,13 +122,13 @@
         .card-content h3 {
             font-size: 32px;
             font-weight: 700;
-            color: #ffffff;
+            color: #1e293b;
             margin: 0 0 4px 0;
         }
 
         .card-content p {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             margin: 0 0 8px 0;
         }
 
@@ -129,7 +137,7 @@
             align-items: center;
             gap: 4px;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            color: #64748b;
         }
 
         .card-trend.positive {
@@ -159,24 +167,23 @@
         }
 
         .chart-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
+            background: #ffffff;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             overflow: hidden;
         }
 
         .chart-header {
             padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .chart-header h4 {
             margin: 0;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #1e293b;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -206,24 +213,23 @@
         }
 
         .table-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
+            background: #ffffff;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             overflow: hidden;
         }
 
         .table-header {
             padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .table-header h4 {
             margin: 0 0 5px 0;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #1e293b;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -236,7 +242,7 @@
         .table-subtitle {
             margin: 0;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            color: #64748b;
         }
 
         .table-wrapper {
@@ -252,23 +258,23 @@
             padding: 15px 12px;
             text-align: left;
             font-weight: 600;
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #1e293b;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .analytics-table td {
             padding: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .provider-info strong {
-            color: #ffffff;
+            color: #1e293b;
             display: block;
         }
 
         .provider-info small {
-            color: rgba(255, 255, 255, 0.6);
+            color: #64748b;
         }
 
         .rating {
@@ -281,7 +287,7 @@
         .empty-row {
             text-align: center;
             padding: 40px;
-            color: rgba(255, 255, 255, 0.5);
+            color: #94a3b8;
         }
 
         /* Detailed Table */
@@ -298,14 +304,14 @@
             padding: 15px 12px;
             text-align: left;
             font-weight: 600;
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #1e293b;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .detailed-table td {
             padding: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .booking-ref {
@@ -318,12 +324,12 @@
         }
 
         .customer-info strong {
-            color: #ffffff;
+            color: #1e293b;
             display: block;
         }
 
         .customer-info small {
-            color: rgba(255, 255, 255, 0.6);
+            color: #64748b;
         }
 
         .status-badge {
@@ -362,7 +368,7 @@
 
         .empty-state {
             text-align: center;
-            color: rgba(255, 255, 255, 0.5);
+            color: #94a3b8;
         }
 
         .empty-state i {
@@ -374,12 +380,20 @@
         .empty-state h5 {
             margin: 0 0 8px 0;
             font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
         }
 
         .empty-state p {
             margin: 0;
             font-size: 14px;
+        }
+
+        .list-title {
+            color: #1e293b;
+        }
+
+        .list-subtitle {
+            color: #64748b;
         }
 
         /* Responsive Design */
@@ -756,10 +770,10 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                color: 'rgba(0, 0, 0, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)',
+                                color: '#334155',
                                 callback: function(value) {
                                     return value.toLocaleString() + ' AED';
                                 }
@@ -767,10 +781,10 @@
                         },
                         x: {
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                color: 'rgba(0, 0, 0, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: '#334155'
                             }
                         }
                     }
@@ -812,19 +826,19 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                color: 'rgba(0, 0, 0, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)',
+                                color: '#334155',
                                 stepSize: 1
                             }
                         },
                         x: {
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
+                                color: 'rgba(0, 0, 0, 0.1)'
                             },
                             ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
+                                color: '#334155'
                             }
                         }
                     }
@@ -863,7 +877,7 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: 'rgba(255, 255, 255, 0.7)',
+                                color: '#334155',
                                 padding: 20,
                                 usePointStyle: true
                             }

@@ -11,38 +11,38 @@
     }
 
     .form-header {
-        background: rgba(255, 255, 255, 0.05);
+        background: #ffffff;
         backdrop-filter: blur(10px);
         border-radius: 20px;
         padding: 30px;
         margin-bottom: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         text-align: center;
     }
 
     .form-header h1 {
-        color: #ffffff;
+        color: #334155;
         margin: 0;
         font-size: 28px;
         font-weight: 700;
     }
 
     .form-header p {
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         margin: 10px 0 0;
     }
 
     .form-section {
-        background: rgba(255, 255, 255, 0.08);
+        background: #ffffff;
         backdrop-filter: blur(15px);
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         padding: 30px;
         margin-bottom: 20px;
     }
 
     .form-section h3 {
-        color: #00d4ff;
+        color: #334155;
         margin: 0 0 20px 0;
         font-size: 20px;
         font-weight: 600;
@@ -59,7 +59,7 @@
         display: block;
         margin-bottom: 8px;
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
     }
 
@@ -68,10 +68,10 @@
     .form-select {
         width: 100%;
         padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
         border-radius: 10px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         transition: all 0.3s ease;
     }
@@ -110,7 +110,7 @@
     }
 
     .radio-option label {
-        color: #ffffff;
+        color: #334155;
         cursor: pointer;
         font-weight: 500;
     }
@@ -154,32 +154,33 @@
     }
 
     .btn-secondary {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: #f8fafc;
+        color: #64748b;
+        border: 2px solid #e2e8f0;
     }
 
     .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: #e2e8f0;
         border-color: #00d4ff;
+        color: #334155;
     }
 
     .service-info {
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
     }
 
     .service-info h4 {
-        color: #00d4ff;
+        color: #0ea5e9;
         margin: 0 0 10px 0;
         font-weight: 600;
     }
 
     .service-info p {
-        color: #ffffff;
+        color: #334155;
         margin: 5px 0;
         font-size: 14px;
     }
@@ -261,7 +262,7 @@
                        value="{{ old('discount_value', $serviceOffer->discount_value) }}">
             </div>
 
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 20px;">
+            <div style="border-top: 1px solid #e2e8f0; padding-top: 20px; margin-top: 20px;">
                 <p style="color: #00d4ff; margin: 0 0 15px 0; font-weight: 600; font-size: 16px;">
                     <i class="fas fa-dollar-sign"></i> Set Discounted Prices Under All Frequencies:
                 </p>

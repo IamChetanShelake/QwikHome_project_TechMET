@@ -157,11 +157,10 @@
     }
 
     .edit-header-section {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
         border-radius: 20px;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -192,14 +191,13 @@
     .header-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #1e293b;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .header-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         margin: 5px 0 0 0;
     }
 
@@ -209,10 +207,9 @@
     }
 
     .form-container {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(15px);
+        background: #ffffff;
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         overflow: hidden;
         padding: 30px;
     }
@@ -243,31 +240,31 @@
         gap: 6px;
         font-size: 14px;
         font-weight: 500;
-        color: #ffffff;
+        color: #334155;
     }
 
     .form-input,
     .form-textarea {
         padding: 12px 15px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
         border-radius: 10px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         transition: all 0.3s ease;
     }
 
     .form-input::placeholder,
     .form-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
     }
 
     .form-input:focus,
     .form-textarea:focus {
         outline: none;
-        border-color: #00d4ff;
-        background: rgba(255, 255, 255, 0.15);
-        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        border-color: #3b82f6;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     .form-textarea {
@@ -295,10 +292,10 @@
     .radio-label {
         position: relative;
         padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.05);
+        background: #f1f5f9;
         border-radius: 8px;
         transition: all 0.3s ease;
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
     }
 
     .radio-input:checked + .radio-label {
@@ -316,9 +313,9 @@
         align-items: center;
         gap: 15px;
         padding: 15px;
-        background: rgba(255, 255, 255, 0.05);
+        background: #f8fafc;
         border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
     }
 
     .current-image-preview {
@@ -326,7 +323,7 @@
         height: 60px;
         border-radius: 8px;
         object-fit: cover;
-        border: 2px solid rgba(0, 212, 255, 0.3);
+        border: 2px solid #bfdbfe;
     }
 
     .current-image-info {
@@ -337,12 +334,12 @@
 
     .current-image-info span {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #334155;
     }
 
     .image-link {
         font-size: 12px;
-        color: #00d4ff;
+        color: #0284c7;
         text-decoration: none;
     }
 
@@ -355,10 +352,10 @@
         align-items: center;
         gap: 10px;
         padding: 15px;
-        background: rgba(255, 255, 255, 0.05);
+        background: #f8fafc;
         border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.6);
+        border: 1px solid #e2e8f0;
+        color: #64748b;
     }
 
     .no-image i {
@@ -381,33 +378,33 @@
         align-items: center;
         gap: 8px;
         padding: 12px 15px;
-        background: rgba(0, 212, 255, 0.1);
-        border: 2px dashed rgba(0, 212, 255, 0.3);
+        background: #dbeafe;
+        border: 2px dashed #93c5fd;
         border-radius: 10px;
         cursor: pointer;
-        color: #00d4ff;
+        color: #0284c7;
         transition: all 0.3s ease;
         flex: 1;
     }
 
     .file-input-label:hover {
-        background: rgba(0, 212, 255, 0.15);
-        border-color: #00d4ff;
+        background: #bfdbfe;
+        border-color: #3b82f6;
     }
 
     .file-name {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.9);
+        color: #334155;
     }
 
     .file-placeholder {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
     }
 
     .form-hint {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #94a3b8;
         margin-top: 5px;
     }
 
@@ -415,7 +412,7 @@
         display: flex;
         justify-content: center;
         padding-top: 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid #e2e8f0;
         margin-top: 30px;
     }
 
@@ -447,14 +444,14 @@
 
     .modern-btn-outline {
         background: transparent;
-        color: rgba(255, 255, 255, 0.8);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #475569;
+        border: 2px solid #cbd5e1;
     }
 
     .modern-btn-outline:hover {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.3);
-        color: #ffffff;
+        background: #f1f5f9;
+        border-color: #94a3b8;
+        color: #1e293b;
     }
 
     .alert {

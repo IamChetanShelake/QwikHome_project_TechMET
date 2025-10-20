@@ -11,17 +11,17 @@
     }
 
     .show-header {
-        background: rgba(255, 255, 255, 0.05);
+        background: #ffffff;
         backdrop-filter: blur(10px);
         border-radius: 20px;
         padding: 30px;
         margin-bottom: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         text-align: center;
     }
 
     .header-breadcrumb {
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
         margin-bottom: 15px;
         font-size: 14px;
     }
@@ -52,27 +52,27 @@
     .header-title {
         font-size: 32px;
         font-weight: 700;
-        color: #ffffff;
+        color: #334155;
         margin: 10px 0 5px;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        text-shadow: none;
     }
 
     .header-subtitle {
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         font-size: 16px;
     }
 
     .show-section {
-        background: rgba(255, 255, 255, 0.08);
+        background: #ffffff;
         backdrop-filter: blur(15px);
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         padding: 30px;
         margin-bottom: 20px;
     }
 
     .section-title {
-        color: #00d4ff;
+        color: #334155;
         margin: 0 0 25px 0;
         font-size: 22px;
         font-weight: 600;
@@ -80,7 +80,7 @@
         align-items: center;
         gap: 12px;
         padding-bottom: 10px;
-        border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+        border-bottom: 2px solid #e2e8f0;
     }
 
     .info-grid {
@@ -114,20 +114,20 @@
     }
 
     .info-description {
-        color: rgba(255, 255, 255, 0.8);
+        color: #334155;
         font-size: 14px;
         line-height: 1.5;
     }
 
     .service-info-card {
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
         border-radius: 12px;
         padding: 25px;
     }
 
     .service-title {
-        color: #00d4ff;
+        color: #0ea5e9;
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 15px;
@@ -144,14 +144,14 @@
     }
 
     .service-detail {
-        background: rgba(255, 255, 255, 0.05);
+        background: #ffffff;
         border-radius: 8px;
         padding: 12px 15px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid #e2e8f0;
     }
 
     .service-label {
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
         font-size: 11px;
         text-transform: uppercase;
         font-weight: 600;
@@ -159,21 +159,21 @@
     }
 
     .service-value {
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         font-weight: 500;
     }
 
     .discount-summary {
-        background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
-        border: 1px solid rgba(138, 43, 226, 0.3);
+        background: #faf5ff;
+        border: 1px solid #c084fc;
         border-radius: 12px;
         padding: 25px;
         margin-bottom: 20px;
     }
 
     .discount-title {
-        color: #8a2be2;
+        color: #7c3aed;
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 15px;
@@ -189,15 +189,15 @@
     }
 
     .discount-item {
-        background: rgba(138, 43, 226, 0.1);
+        background: #ffffff;
         border-radius: 8px;
         padding: 15px;
         text-align: center;
-        border: 1px solid rgba(138, 43, 226, 0.2);
+        border: 1px solid #e2e8f0;
     }
 
     .discount-label {
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
         font-size: 12px;
         text-transform: uppercase;
         font-weight: 600;
@@ -205,14 +205,14 @@
     }
 
     .discount-value {
-        color: #ffffff;
+        color: #334155;
         font-size: 18px;
         font-weight: 700;
         margin-bottom: 3px;
     }
 
     .discount-percent {
-        color: #8a2be2;
+        color: #7c3aed;
         font-weight: 600;
         font-size: 14px;
     }
@@ -222,7 +222,7 @@
     }
 
     .prices-title {
-        color: #00d4ff;
+        color: #334155;
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 15px;
@@ -238,15 +238,15 @@
     }
 
     .price-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: #ffffff;
         border-radius: 10px;
         padding: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         text-align: center;
     }
 
     .price-frequency {
-        color: #00d4ff;
+        color: #334155;
         font-size: 14px;
         font-weight: 600;
         text-transform: uppercase;
@@ -254,14 +254,14 @@
     }
 
     .price-discounted {
-        color: #ffffff;
+        color: #334155;
         font-size: 24px;
         font-weight: 700;
         margin-bottom: 5px;
     }
 
     .price-original {
-        color: rgba(255, 255, 255, 0.5);
+        color: #94a3b8;
         font-size: 16px;
         text-decoration: line-through;
         margin-bottom: 10px;
@@ -303,18 +303,18 @@
 
     .validity-icon {
         font-size: 48px;
-        color: rgba(255, 255, 255, 0.3);
+        color: #cbd5e1;
         margin-bottom: 15px;
     }
 
     .validity-text {
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         font-size: 16px;
         margin-bottom: 10px;
     }
 
     .validity-dates {
-        color: #ffffff;
+        color: #334155;
         font-size: 18px;
         font-weight: 600;
     }
@@ -352,42 +352,45 @@
     }
 
     .btn-secondary {
-        background: rgba(59, 130, 246, 0.2);
-        color: #3b82f6;
-        border: 2px solid rgba(59, 130, 246, 0.3);
+        background: #f8fafc;
+        color: #64748b;
+        border: 2px solid #e2e8f0;
     }
 
     .btn-secondary:hover {
-        background: rgba(59, 130, 246, 0.3);
+        background: #e2e8f0;
+        border-color: #00d4ff;
+        color: #334155;
         transform: translateY(-2px);
     }
 
     .btn-outline {
-        background: transparent;
-        color: rgba(255, 255, 255, 0.7);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: #f8fafc;
+        color: #64748b;
+        border: 2px solid #e2e8f0;
     }
 
     .btn-outline:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.3);
+        background: #e2e8f0;
+        color: #334155;
+        border-color: #00d4ff;
         transform: translateY(-2px);
     }
 
     .btn-danger {
-        background: rgba(239, 68, 68, 0.2);
-        color: #ef4444;
-        border: 2px solid rgba(239, 68, 68, 0.3);
+        background: #fef2f2;
+        color: #dc2626;
+        border: 2px solid #fecaca;
     }
 
     .btn-danger:hover {
-        background: rgba(239, 68, 68, 0.3);
+        background: #fecaca;
+        border-color: #dc2626;
         transform: translateY(-2px);
     }
 
     .no-price {
-        color: rgba(255, 255, 255, 0.4);
+        color: #94a3b8;
         font-style: italic;
         font-size: 14px;
     }
@@ -499,7 +502,7 @@
             </div>
 
             @if($serviceOffer->description)
-            <div style="margin-top: 20px; color: rgba(255,255,255,0.8);">
+            <div style="margin-top: 20px; color: #64748b;">
                 <strong>Description:</strong> {{ $serviceOffer->description }}
             </div>
             @endif

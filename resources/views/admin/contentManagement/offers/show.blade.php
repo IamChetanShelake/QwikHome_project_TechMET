@@ -154,11 +154,10 @@
     }
 
     .show-header-section {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
         border-radius: 20px;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -189,14 +188,13 @@
     .header-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #1e293b;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .header-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: #64748b;
         margin: 5px 0 0 0;
     }
 
@@ -212,17 +210,16 @@
     }
 
     .details-card {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(15px);
+        background: #ffffff;
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid #e2e8f0;
         overflow: hidden;
     }
 
     .card-header {
         padding: 20px 25px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
     }
 
     .card-title {
@@ -231,7 +228,7 @@
         gap: 10px;
         font-size: 18px;
         font-weight: 600;
-        color: #ffffff;
+        color: #1e293b;
         margin: 0;
     }
 
@@ -254,18 +251,18 @@
         justify-content: space-between;
         align-items: center;
         padding: 8px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid #f1f5f9;
     }
 
     .info-label {
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
         font-size: 14px;
     }
 
     .info-value {
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
     }
 
@@ -292,7 +289,7 @@
     }
 
     .description-text {
-        color: #ffffff;
+        color: #334155;
         line-height: 1.6;
         font-size: 14px;
         margin: 0;
@@ -304,7 +301,7 @@
         align-items: center;
         justify-content: center;
         gap: 10px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #94a3b8;
         font-style: italic;
         padding: 20px;
     }
@@ -317,7 +314,7 @@
         max-width: 100%;
         height: auto;
         border-radius: 10px;
-        border: 2px solid rgba(0, 212, 255, 0.3);
+        border: 2px solid #bfdbfe;
         margin-bottom: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
@@ -335,23 +332,23 @@
         align-items: center;
         gap: 5px;
         padding: 8px 15px;
-        background: rgba(0, 212, 255, 0.1);
-        color: #00d4ff;
+        background: #dbeafe;
+        color: #0284c7;
         text-decoration: none;
         border-radius: 8px;
         font-size: 12px;
-        border: 1px solid rgba(0, 212, 255, 0.3);
+        border: 1px solid #93c5fd;
         transition: all 0.3s ease;
     }
 
     .image-btn:hover {
-        background: rgba(0, 212, 255, 0.2);
+        background: #bfdbfe;
         transform: translateY(-1px);
     }
 
     .image-info {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
         font-family: monospace;
     }
 
@@ -361,7 +358,7 @@
         align-items: center;
         gap: 15px;
         padding: 40px 20px;
-        color: rgba(255, 255, 255, 0.6);
+        color: #64748b;
     }
 
     .no-image-section i {
@@ -392,24 +389,24 @@
     }
 
     .action-edit {
-        background: rgba(59, 130, 246, 0.2);
+        background: #dbeafe;
         color: #3b82f6;
-        border: 2px solid rgba(59, 130, 246, 0.3);
+        border: 2px solid #93c5fd;
     }
 
     .action-edit:hover {
-        background: rgba(59, 130, 246, 0.3);
+        background: #bfdbfe;
         transform: translateY(-2px);
     }
 
     .action-delete {
-        background: rgba(239, 68, 68, 0.2);
+        background: #fee2e2;
         color: #ef4444;
-        border: 2px solid rgba(239, 68, 68, 0.3);
+        border: 2px solid #fca5a5;
     }
 
     .action-delete:hover {
-        background: rgba(239, 68, 68, 0.3);
+        background: #fecaca;
         transform: translateY(-2px);
     }
 
@@ -429,25 +426,25 @@
 
     .modern-btn-outline {
         background: transparent;
-        color: rgba(255, 255, 255, 0.8);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #475569;
+        border: 2px solid #cbd5e1;
     }
 
     .modern-btn-outline:hover {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.3);
-        color: #ffffff;
+        background: #f1f5f9;
+        border-color: #94a3b8;
+        color: #1e293b;
     }
 
     .modern-btn-secondary {
-        background: rgba(0, 212, 255, 0.1);
-        color: #00d4ff;
-        border: 2px solid rgba(0, 212, 255, 0.3);
+        background: #dbeafe;
+        color: #0284c7;
+        border: 2px solid #93c5fd;
     }
 
     .modern-btn-secondary:hover {
-        background: rgba(0, 212, 255, 0.2);
-        border-color: #00d4ff;
+        background: #bfdbfe;
+        border-color: #3b82f6;
     }
 
     @media (max-width: 768px) {

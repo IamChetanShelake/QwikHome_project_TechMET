@@ -9,11 +9,11 @@
         }
 
         .create-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: #ffffff;
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -42,22 +42,22 @@
         .header-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: none;
         }
 
         .header-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #64748b;
             margin: 5px 0 0 0;
         }
 
         .form-container {
-            background: rgba(255, 255, 255, 0.08);
+            background: #ffffff;
             backdrop-filter: blur(15px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #e2e8f0;
             padding: 30px;
         }
 
@@ -70,16 +70,16 @@
             margin-bottom: 8px;
             font-size: 14px;
             font-weight: 500;
-            color: #ffffff;
+            color: #334155;
         }
 
         .form-input {
             width: 100%;
             padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -87,12 +87,12 @@
         .form-input:focus {
             outline: none;
             border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.15);
+            background: #ffffff;
             box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
         }
 
         .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: #94a3b8;
         }
 
         .form-textarea {
@@ -121,10 +121,10 @@
         .radio-label {
             position: relative;
             padding: 10px 16px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #f1f5f9;
             border-radius: 8px;
             transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             border: 2px solid transparent;
         }
 
@@ -140,7 +140,7 @@
             align-items: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid #e2e8f0;
         }
 
         .modern-btn {

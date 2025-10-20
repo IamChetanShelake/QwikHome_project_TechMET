@@ -5,27 +5,29 @@
 @section('content')
 <style>
     .modern-form-container { max-width: 1100px; margin: 0 auto; padding:20px; }
-    .form-header-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 20px 20px 0 0; padding: 30px; border: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:20px; justify-content:space-between; }
+    .form-header-section { background: #ffffff; border-radius: 20px 20px 0 0; padding: 30px; border: 1px solid #e2e8f0; display:flex; align-items:center; gap:20px; justify-content:space-between; }
     .header-content { display:flex; align-items:center; gap:20px; }
     .header-icon-wrapper { width:60px; height:60px; background:linear-gradient(135deg,#00d4ff,#0099cc); border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; box-shadow:0 8px 25px rgba(0,212,255,0.3); }
-    .header-title { font-size:24px; font-weight:700; color:#fff; margin:0; }
-    .modern-form-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); border-radius: 0 0 20px 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.1); }
+    .header-title { font-size:24px; font-weight:700; color:#1e293b; margin:0; }
+    .modern-form-card { background: #ffffff; border-radius: 0 0 20px 20px; padding: 30px; border: 1px solid #e2e8f0; }
     .form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 20px; }
     .form-group-modern { position:relative; }
-    .form-group-modern label { display:flex; align-items:center; gap:8px; font-weight:600; color:#fff; margin-bottom:8px; }
-    .modern-input, .modern-select, .modern-textarea { width:100%; padding: 14px 16px; background: rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.1); border-radius:12px; color:#fff; font-size:14px; transition: all .3s ease; }
-    .modern-input:focus, .modern-select:focus, .modern-textarea:focus { outline:none; border-color:#00d4ff; background: rgba(255,255,255,0.08); box-shadow:0 0 20px rgba(0,212,255,0.2); transform: translateY(-2px); }
+    .form-group-modern label { display:flex; align-items:center; gap:8px; font-weight:600; color:#334155; margin-bottom:8px; }
+    .modern-input, .modern-select, .modern-textarea { width:100%; padding: 14px 16px; background: #f8fafc; border:2px solid #e2e8f0; border-radius:12px; color:#334155; font-size:14px; transition: all .3s ease; }
+    .modern-input:focus, .modern-select:focus, .modern-textarea:focus { outline:none; border-color:#00d4ff; background: #ffffff; box-shadow:0 0 20px rgba(0,212,255,0.2); transform: translateY(-2px); }
+    .modern-input::placeholder, .modern-select::placeholder, .modern-textarea::placeholder { color: #94a3b8; }
     .modern-textarea { min-height:140px; resize:vertical; }
     .form-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:10px; }
     .modern-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:12px; font-size:14px; font-weight:600; transition: all .3s ease; border:none; text-decoration:none; }
     .modern-btn-primary { background: linear-gradient(135deg, #00d4ff, #0099cc); color:#fff; box-shadow: 0 8px 25px rgba(0,212,255,0.3); }
     .modern-btn-primary:hover { transform: translateY(-2px); box-shadow:0 12px 35px rgba(0,212,255,0.4); }
-    .modern-btn-outline { background: transparent; color:#fff; border:2px solid rgba(255,255,255,0.2); }
-    .modern-btn-outline:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
+    .modern-btn-outline { background: transparent; color:#475569; border:2px solid #cbd5e1; }
+    .modern-btn-outline:hover { background: #f1f5f9; border-color: #94a3b8; }
     .current-image { display:flex; align-items:center; gap:10px; }
-    .thumb { width:60px; height:60px; border-radius:8px; object-fit:cover; border:2px solid rgba(0,212,255,0.3); }
+    .thumb { width:60px; height:60px; border-radius:8px; object-fit:cover; border:2px solid #bfdbfe; }
     .error-text { color:#ff4757; font-size:12px; margin-top:6px; }
-    .hint { color: rgba(255,255,255,0.7); font-size:12px; margin-top:6px; }
+    .hint { color: #64748b; font-size:12px; margin-top:6px; }
+    option { background: #ffffff; color: #334155; }
 </style>
 
 <div class="modern-form-container">
