@@ -1068,9 +1068,9 @@
             width: 100%;
             padding: 12px 16px;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(42, 42, 42, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: black;
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -1090,7 +1090,7 @@
 
         .no-services {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-style: italic;
             padding: 20px;
             margin: 0;
@@ -1098,8 +1098,8 @@
 
         /* Service Payment Terms Styles */
         .service-payment-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
@@ -1110,12 +1110,12 @@
         }
 
         .service-payment-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             font-weight: 600;
             margin: 0 0 15px 0;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .service-payment-fields {
