@@ -227,71 +227,74 @@
                         </div>
                     </div>
 
-                    <!-- Payment Terms -->
+                    <!-- Services & Payment Terms -->
                     <div class="additional-info">
                         <div class="info-section">
                             <h3 class="section-title">
-                                <i class="fas fa-money-bill-wave"></i>
-                                Payment Terms
+                                <i class="fas fa-concierge-bell"></i>
+                                Services & Payment Terms
                             </h3>
                             <div class="section-content">
-                                <div class="info-row">
-                                    <span class="info-key">Payment Type:</span>
-                                    <span class="info-val">
-                                        @if($vendor->payment_type)
-                                            <span class="payment-type-badge {{ $vendor->payment_type }}">
-                                                <i class="fas fa-cash-register"></i>
-                                                {{ ucfirst(str_replace('_', ' ', $vendor->payment_type)) }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @if($vendor->payment_type == 'fixed_rate')
-                                <div class="info-row">
-                                    <span class="info-key">Fixed Rate Amount:</span>
-                                    <span class="info-val">
-                                        @if($vendor->fixed_rate_amount)
-                                            <span class="fixed-rate-value">
-                                                AED &nbsp;
-                                                {{ number_format($vendor->fixed_rate_amount, 2) }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @endif
-                                @if($vendor->payment_type == 'commission')
-                                <div class="info-row">
-                                    <span class="info-key">Commission Rate:</span>
-                                    <span class="info-val">
-                                        @if($vendor->commission_rate)
-                                            <span class="commission-rate-value">
-
-                                                {{ $vendor->commission_rate }}%
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                @endif
-                                @if($vendor->payment_type == 'revenue_share')
-                                <div class="info-row">
-                                    <span class="info-key">Revenue Share Ratio:</span>
-                                    <span class="info-val">
-                                        @if($vendor->revenue_share_ratio)
-                                            <span class="revenue-share-value">
-                                                <i class="fas fa-chart-pie"></i>
-                                                {{ $vendor->revenue_share_ratio }}
-                                            </span>
-                                        @else
-                                            <span class="text-muted">Not set</span>
-                                        @endif
-                                    </span>
-                                </div>
+                                @if($vendor->services && $vendor->services->count() > 0)
+                                    <div class="services-list">
+                                        @foreach($vendor->services as $service)
+                                            <div class="service-payment-card">
+                                                <div class="service-header">
+                                                    <h4 class="service-name">
+                                                        <i class="fas fa-tools"></i>
+                                                        {{ $service->name }}
+                                                    </h4>
+                                                    @if($service->category)
+                                                        <span class="service-category-badge">{{ $service->category->name }}</span>
+                                                    @endif
+                                                </div>
+                                                <div class="payment-details">
+                                                    <div class="payment-row">
+                                                        <span class="payment-label">Payment Type:</span>
+                                                        <span class="payment-type-badge {{ $service->pivot->payment_type }}">
+                                                            <i class="fas fa-cash-register"></i>
+                                                            {{ ucfirst(str_replace('_', ' ', $service->pivot->payment_type ?? 'Not set')) }}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    @if($service->pivot->payment_type == 'fixed_rate' && $service->pivot->fixed_rate_amount)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Fixed Rate:</span>
+                                                            <span class="payment-value fixed-rate-value">
+                                                                <i class="fas fa-dollar-sign"></i>
+                                                                AED {{ number_format($service->pivot->fixed_rate_amount, 2) }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'commission' && $service->pivot->commission_rate)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Commission Rate:</span>
+                                                            <span class="payment-value commission-rate-value">
+                                                                <i class="fas fa-percent"></i>
+                                                                {{ $service->pivot->commission_rate }}%
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'revenue_share' && $service->pivot->revenue_share_ratio)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Revenue Share:</span>
+                                                            <span class="payment-value revenue-share-value">
+                                                                <i class="fas fa-chart-pie"></i>
+                                                                {{ $service->pivot->revenue_share_ratio }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="no-services">
+                                        <i class="fas fa-info-circle"></i>
+                                        <p>No services assigned to this vendor</p>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -642,6 +645,102 @@
             border: 1px solid rgba(0, 212, 255, 0.3);
             border-radius: 6px;
             color: #00d4ff;
+        }
+
+        /* Services List Styles */
+        .services-list {
+            display: grid;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .service-payment-card {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .service-payment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .service-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #334155;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .service-name i {
+            color: #00d4ff;
+        }
+
+        .service-category-badge {
+            padding: 4px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #00d4ff;
+        }
+
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .payment-label {
+            font-size: 13px;
+            color: rgba(51, 65, 85, 0.7);
+            font-weight: 500;
+        }
+
+        .payment-value {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .no-services {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(51, 65, 85, 0.6);
+        }
+
+        .no-services i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .no-services p {
+            margin: 0;
+            font-size: 14px;
         }
 
         /* Button Styles */

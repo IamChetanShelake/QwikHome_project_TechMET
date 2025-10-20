@@ -155,7 +155,7 @@ class VendorController extends Controller
      */
     public function show(string $id)
     {
-        $vendor = User::where('role', 'vendor')->findOrFail($id);
+        $vendor = User::where('role', 'vendor')->with(['services.category'])->findOrFail($id);
         return view('admin.vendors.show', compact('vendor'));
     }
 
