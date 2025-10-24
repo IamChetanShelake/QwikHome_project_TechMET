@@ -55,14 +55,15 @@
         .header-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
 
         .header-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 

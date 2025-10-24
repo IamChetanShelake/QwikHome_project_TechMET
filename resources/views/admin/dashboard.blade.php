@@ -200,10 +200,10 @@
             display: block;
             text-decoration: none;
             color: inherit;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(58, 56, 56, 0.08);
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
         }
 
@@ -233,13 +233,13 @@
         .stats-info h4 {
             font-size: 24px;
             font-weight: 700;
-            color: #ffffff;
+            color: #212020;
             margin: 0 0 2px 0;
         }
 
         .stats-info p {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(43, 42, 42, 0.7);
             margin: 0;
         }
 
