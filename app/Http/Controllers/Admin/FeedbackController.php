@@ -13,14 +13,15 @@ class FeedbackController extends Controller
         $query = Feedback::with(['user', 'service', 'employee', 'booking']);
 
         // Apply search
-        if ($request->has('query') && !empty($request->query)) {
-            $query->where(function ($q) use ($request) {
-                $q->whereHas('user', function ($userQuery) use ($request) {
-                    $userQuery->where('name', 'like', '%' . $request->query . '%')
-                        ->orWhere('email', 'like', '%' . $request->query . '%');
+        $queryValue = $request->input('query');
+        if ($queryValue && !empty($queryValue)) {
+            $query->where(function ($q) use ($queryValue) {
+                $q->whereHas('user', function ($userQuery) use ($queryValue) {
+                    $userQuery->where('name', 'like', '%' . $queryValue . '%')
+                        ->orWhere('email', 'like', '%' . $queryValue . '%');
                 })
-                    ->orWhereHas('service', function ($serviceQuery) use ($request) {
-                        $serviceQuery->where('name', 'like', '%' . $request->query . '%');
+                    ->orWhereHas('service', function ($serviceQuery) use ($queryValue) {
+                        $serviceQuery->where('name', 'like', '%' . $queryValue . '%');
                     });
             });
         }
@@ -32,18 +33,19 @@ class FeedbackController extends Controller
 
     public function search(Request $request)
     {
-        if (!$request->has('query') || empty($request->query)) {
+        $queryValue = $request->input('query');
+        if (!$queryValue || empty($queryValue)) {
             return response()->json([]);
         }
 
         $feedbacks = Feedback::with(['user', 'service', 'employee', 'booking'])
-            ->where(function($q) use ($request) {
-                $q->whereHas('user', function($userQuery) use ($request) {
-                    $userQuery->where('name', 'like', '%' . $request->query . '%')
-                             ->orWhere('email', 'like', '%' . $request->query . '%');
+            ->where(function($q) use ($queryValue) {
+                $q->whereHas('user', function($userQuery) use ($queryValue) {
+                    $userQuery->where('name', 'like', '%' . $queryValue . '%')
+                              ->orWhere('email', 'like', '%' . $queryValue . '%');
                 })
-                ->orWhereHas('service', function($serviceQuery) use ($request) {
-                    $serviceQuery->where('name', 'like', '%' . $request->query . '%');
+                ->orWhereHas('service', function($serviceQuery) use ($queryValue) {
+                    $serviceQuery->where('name', 'like', '%' . $queryValue . '%');
                 });
             })
             ->orderBy('created_at', 'desc')

@@ -234,11 +234,11 @@
         }
 
         .index-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -269,23 +269,22 @@
         .header-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
         .filters-section {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 15px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
@@ -309,24 +308,24 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .modern-filter-input {
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .modern-filter-input:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
         }
 
         .filter-actions {
@@ -346,14 +345,15 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .stat-icon {
@@ -371,22 +371,22 @@
         .stat-content h3 {
             font-size: 24px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
         }
 
         .stat-content p {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
             font-weight: 500;
         }
 
         .table-section {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -404,12 +404,12 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
         }
 
         .record-count {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-size: 14px;
         }
 
@@ -423,12 +423,12 @@
         }
 
         .modern-table th {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
             padding: 15px;
             text-align: left;
             font-weight: 600;
-            color: #00d4ff;
-            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+            color: #334155;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
             font-size: 14px;
         }
 
@@ -438,13 +438,13 @@
 
         .modern-table td {
             padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: #ffffff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #334155;
             vertical-align: middle;
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .customer-cell {
@@ -456,19 +456,19 @@
         .customer-name {
             font-weight: 600;
             font-size: 14px;
-            color: #ffffff;
+            color: #334155;
         }
 
         .customer-email {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
         }
 
         .service-name,
         .employee-name {
             font-weight: 500;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 65, 85, 0.9);
         }
 
         .rating-display {
@@ -482,7 +482,7 @@
         }
 
         .comment-text {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             font-size: 13px;
             line-height: 1.4;
             max-width: 250px;
@@ -493,37 +493,37 @@
             display: block;
             font-size: 13px;
             font-weight: 500;
-            color: #ffffff;
+            color: #334155;
         }
 
         .time-text {
             display: block;
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             margin-top: 2px;
         }
 
         .no-data {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(51, 65, 85, 0.4);
             font-style: italic;
         }
 
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .empty-state i {
             font-size: 48px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(51, 65, 85, 0.3);
             margin-bottom: 20px;
         }
 
         .empty-state h3 {
             font-size: 24px;
             margin-bottom: 10px;
-            color: #ffffff;
+            color: #334155;
         }
 
         .empty-state p {
@@ -558,13 +558,13 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.15);
             border-color: #00d4ff;
             color: #00d4ff;
             transform: translateY(-2px);
@@ -572,14 +572,14 @@
 
         .modern-btn-outline {
             background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            color: #334155;
+            border-color: rgba(0, 0, 0, 0.3);
         }
 
         .rating-stars {
@@ -587,11 +587,22 @@
             font-weight: bold;
         }
 
-        /* Responsive Design */
+        /* Additional Responsive Enhancements */
+        @media (max-width: 1024px) {
+            .modern-index-container {
+                padding: 15px;
+            }
+        }
+
         @media (max-width: 768px) {
             .index-header-section {
                 flex-direction: column;
                 text-align: center;
+                gap: 15px;
+            }
+
+            .header-content {
+                width: 100%;
             }
 
             .filters-form {
@@ -629,6 +640,31 @@
             .customer-cell {
                 flex-direction: column;
                 gap: 2px;
+            }
+
+            .service-name,
+            .employee-name {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modern-table th,
+            .modern-table td {
+                padding: 8px 6px;
+            }
+
+            .comment-text {
+                max-width: 200px;
+                font-size: 12px;
+            }
+
+            .date-text {
+                font-size: 12px;
+            }
+
+            .time-text {
+                font-size: 10px;
             }
         }
     </style>

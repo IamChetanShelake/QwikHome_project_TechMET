@@ -3,26 +3,168 @@
 @section('title', 'Add Category')
 
 @section('content')
-    <style>
-        /* Modern Category Form Styling */
-        .modern-form-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+<div class="modern-form-container">
+    <!-- Form Header Section -->
+    <div class="form-header-section">
+        <div class="form-header-content">
+            <div class="form-icon-wrapper">
+                <i class="fas fa-folder-plus"></i>
+            </div>
+            <div class="form-header-text">
+                <h1 class="form-title">Create Category</h1>
+                <p class="form-subtitle">Add a new service category to organize your services</p>
+            </div>
+        </div>
+        <div class="form-header-actions">
+            <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Categories
+            </a>
+        </div>
+    </div>
 
-        .form-header-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px 20px 0 0;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+    <!-- Form Card -->
+    <div class="modern-form-card">
+        <form method="POST" action="{{ route('services.categories.store') }}" id="categoryForm" enctype="multipart/form-data">
+            @csrf
+
+            <div class="form-grid">
+                <!-- Name Input -->
+                <div class="form-group-modern">
+                    <label for="name" class="modern-label">
+                        <i class="fas fa-tag text-cyan"></i>
+                        Category Name
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="modern-input" id="name" name="name"
+                               value="{{ old('name') }}" placeholder="Enter category name" required>
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
+                    @error('name')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Choose a clear and descriptive name for the category
+                    </div>
+                </div>
+
+                <!-- Status Dropdown -->
+                <div class="form-group-modern">
+                    <label for="status" class="modern-label">
+                        <i class="fas fa-toggle-on text-cyan"></i>
+                        Status
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <select class="modern-select" id="status" name="status" required>
+                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                        <i class="fas fa-toggle-on input-icon"></i>
+                    </div>
+                    @error('status')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Set category visibility status
+                    </div>
+                </div>
+
+                <!-- Description Textarea (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label for="description" class="modern-label">
+                        <i class="fas fa-align-left text-cyan"></i>
+                        Description
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <textarea class="modern-textarea" id="description" name="description"
+                                  placeholder="Enter category description">{{ old('description') }}</textarea>
+                        <i class="fas fa-align-left input-icon"></i>
+                    </div>
+                    @error('description')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Provide a detailed description of what services this category includes
+                    </div>
+                </div>
+
+                <!-- Image Upload (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label for="image" class="modern-label">
+                        <i class="fas fa-image text-cyan"></i>
+                        Category Image
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="file" class="modern-input file-input" id="image" name="image" accept="image/*">
+                        <i class="fas fa-image input-icon"></i>
+                    </div>
+                    @error('image')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Upload an image to represent this category (JPG, PNG, GIF - Max 2MB)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                    <i class="fas fa-plus"></i>
+                    <span class="btn-text">Create Category</span>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+                <button type="reset" class="modern-btn modern-btn-secondary">
+                    <i class="fas fa-undo"></i>
+                    Reset Form
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Modern Category Form Styling */
+    .modern-form-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .form-header-section {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px 20px 0 0;
+        padding: 30px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 
         .form-header-content {
             display: flex;
@@ -43,28 +185,28 @@
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .form-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
+    .form-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #334155;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        .form-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            margin: 5px 0 0 0;
-        }
+    .form-subtitle {
+        font-size: 14px;
+        color: rgba(51, 65, 85, 0.8);
+        margin: 5px 0 0 0;
+    }
 
-        .modern-form-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border-radius: 0 0 20px 20px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
-        }
+    .modern-form-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(15px);
+        border-radius: 0 0 20px 20px;
+        padding: 40px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: none;
+    }
 
         .form-grid {
             display: grid;
@@ -77,15 +219,15 @@
             grid-column: 1 / -1;
         }
 
-        .modern-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
+    .modern-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
 
         .text-cyan {
             color: #00d4ff;
@@ -115,39 +257,37 @@
             position: relative;
         }
 
-        .modern-input,
-        .modern-select,
-        .modern-textarea {
-            width: 100%;
-            padding: 16px 20px 16px 50px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
+    .modern-input, .modern-select, .modern-textarea {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        color: #334155;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
 
         .file-input {
             padding: 12px 20px 12px 50px;
         }
 
-        .modern-select {
-            appearance: none;
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-        }
+    .modern-select {
+        appearance: none;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 12px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
 
-        .modern-select option {
-            background-color: #2d2d2d;
-            color: #ffffff;
-            padding: 10px 15px;
-            border: none;
-        }
+    .modern-select option {
+        background-color: #ffffff;
+        color: #334155;
+        padding: 10px 15px;
+        border: none;
+    }
 
         .modern-select option:hover,
         .modern-select option:focus,
@@ -161,31 +301,28 @@
             resize: vertical;
         }
 
-        .modern-input:focus,
-        .modern-select:focus,
-        .modern-textarea:focus {
-            outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-            transform: translateY(-2px);
-        }
+    .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        transform: translateY(-2px);
+    }
 
-        .modern-input::placeholder,
-        .modern-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
+    .modern-input::placeholder, .modern-textarea::placeholder {
+        color: rgba(51, 65, 85, 0.5);
+    }
 
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(51, 65, 85, 0.5);
+        font-size: 14px;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
 
         .input-wrapper:focus-within .input-icon {
             color: #00d4ff;
@@ -202,14 +339,14 @@
             animation: slideInUp 0.3s ease;
         }
 
-        .field-hint {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 11px;
-            margin-top: 4px;
-        }
+    .field-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(51, 65, 85, 0.6);
+        font-size: 11px;
+        margin-top: 4px;
+    }
 
         .form-actions {
             display: flex;
@@ -246,18 +383,18 @@
             color: white;
         }
 
-        .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
+    .modern-btn-secondary {
+        background: rgba(0, 0, 0, 0.1);
+        color: #334155;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
 
-        .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #00d4ff;
-            color: #00d4ff;
-            transform: translateY(-2px);
-        }
+    .modern-btn-secondary:hover {
+        background: rgba(0, 0, 0, 0.15);
+        border-color: #00d4ff;
+        color: #00d4ff;
+        transform: translateY(-2px);
+    }
 
         .btn-loader {
             position: absolute;
@@ -460,18 +597,18 @@
 
 
 
-    <script>
-        $(document).ready(function() {
-            // Form submission with loading state
-            $('#categoryForm').on('submit', function() {
-                const submitBtn = $('#submitBtn');
-                const btnText = submitBtn.find('.btn-text');
-                const btnLoader = submitBtn.find('.btn-loader');
+<script>
+    $(document).ready(function() {
+        // Form submission with loading state
+        $('#categoryForm').on('submit', function() {
+            const submitBtn = $('#submitBtn');
+            const btnText = submitBtn.find('.btn-text');
+            const btnLoader = submitBtn.find('.btn-loader');
 
-                submitBtn.prop('disabled', true);
-                btnText.hide();
-                btnLoader.show();
-            });
+            submitBtn.prop('disabled', true);
+            btnText.hide();
+            btnLoader.show();
+        });
 
             // Input animations
             $('.modern-input, .modern-select, .modern-textarea').on('focus', function() {

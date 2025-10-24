@@ -25,7 +25,7 @@
     <div class="modern-form-card">
         <form method="POST" action="{{ route('faq.store') }}" id="faqForm">
             @csrf
-            
+
             <div class="form-grid">
                 <!-- Category Dropdown -->
                 <div class="form-group-modern">
@@ -195,7 +195,7 @@
 </div>
 
 <style>
-    /* Modern FAQ Form Styling */
+    /* Modern FAQ Form Styling - Same as Feedback Index */
     .modern-form-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -203,11 +203,11 @@
     }
 
     .form-header-section {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(10px);
         border-radius: 20px 20px 0 0;
         padding: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -237,23 +237,22 @@
     .form-title {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #334155;
         margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .form-subtitle {
         font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(51, 65, 85, 0.7);
         margin: 5px 0 0 0;
     }
 
     .modern-form-card {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(15px);
         border-radius: 0 0 20px 20px;
         padding: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-top: none;
     }
 
@@ -274,7 +273,7 @@
         gap: 8px;
         font-size: 14px;
         font-weight: 600;
-        color: #ffffff;
+        color: #334155;
         margin-bottom: 8px;
     }
 
@@ -289,10 +288,10 @@
     .modern-input, .modern-select, .modern-textarea {
         width: 100%;
         padding: 16px 20px 16px 50px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
-        color: #ffffff;
+        color: #334155;
         font-size: 14px;
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
@@ -301,15 +300,15 @@
     .modern-select {
         appearance: none;
         cursor: pointer;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 12px center;
         background-repeat: no-repeat;
         background-size: 16px;
     }
 
     .modern-select option {
-        background-color: #2d2d2d;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #334155;
         padding: 10px 15px;
         border: none;
     }
@@ -317,7 +316,7 @@
     .modern-select option:hover,
     .modern-select option:focus,
     .modern-select option:checked {
-        background-color: #404040;
+        background-color: #f1f5f9;
         color: #00d4ff;
     }
 
@@ -326,63 +325,61 @@
         resize: vertical;
     }
 
-    /* Summernote Editor Styling */
+    /* Summernote Editor Styling - Light theme */
     .note-editor .note-editing-area .note-editable {
-        color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #334155 !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
     }
 
     .note-editing-area .note-editable {
-        color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        color: #334155 !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
         border-radius: 12px !important;
         padding: 16px 20px 16px 50px !important;
     }
 
     .note-editing-area .note-editable:focus {
-        border-color: #00d4ff !important;
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2) !important;
-        transform: translateY(-2px) !important;
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2) !important;
     }
 
     .note-editor {
-        color: #ffffff !important;
+        color: #334155 !important;
     }
 
     .note-editor .note-toolbar {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
         border-radius: 12px 12px 0 0 !important;
         border-bottom: none !important;
     }
 
     .note-editor .note-toolbar .btn {
-        color: #ffffff !important;
+        color: #334155 !important;
         background: transparent !important;
         border: none !important;
     }
 
     .note-editor .note-toolbar .btn:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: #00d4ff !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+        color: #3b82f6 !important;
     }
 
     .note-editor .note-toolbar .btn.active {
-        background: rgba(0, 212, 255, 0.2) !important;
-        color: #ffffff !important;
+        background: rgba(59, 130, 246, 0.2) !important;
+        color: #334155 !important;
     }
 
     .modern-input:focus, .modern-select:focus, .modern-textarea:focus {
         outline: none;
-        border-color: #00d4ff;
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        transform: translateY(-2px);
+        border-color: #3b82f6;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
     }
 
     .modern-input::placeholder, .modern-textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(51, 65, 85, 0.5);
     }
 
     .input-icon {
@@ -390,14 +387,14 @@
         left: 16px;
         top: 50%;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(51, 65, 85, 0.5);
         font-size: 14px;
         pointer-events: none;
         transition: all 0.3s ease;
     }
 
     .input-wrapper:focus-within .input-icon {
-        color: #00d4ff;
+        color: #3b82f6;
         transform: translateY(-50%) scale(1.1);
     }
 
@@ -415,7 +412,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(51, 65, 85, 0.6);
         font-size: 11px;
         margin-top: 4px;
     }
@@ -435,10 +432,10 @@
     }
 
     .qa-item {
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 16px;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.9);
     }
 
     .qa-header {
@@ -449,7 +446,7 @@
     }
 
     .qa-title {
-        color: #ffffff;
+        color: #334155;
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -457,44 +454,54 @@
     }
 
     .modern-btn {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 14px 28px;
+        padding: 12px 20px;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
         transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
     }
 
     .modern-btn-primary {
         background: linear-gradient(135deg, #00d4ff, #0099cc);
         color: white;
-        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
     }
 
     .modern-btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
         color: white;
     }
 
     .modern-btn-secondary {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.1);
+        color: #334155;
+        border: 2px solid rgba(0, 0, 0, 0.2);
     }
 
     .modern-btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.15);
         border-color: #00d4ff;
         color: #00d4ff;
         transform: translateY(-2px);
+    }
+
+    .modern-btn-outline {
+        background: transparent;
+        color: #334155;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .modern-btn-outline:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: #334155;
+        border-color: rgba(0, 0, 0, 0.3);
     }
 
     .btn-loader {
@@ -522,6 +529,12 @@
     }
 
     /* Responsive Design */
+    @media (max-width: 1024px) {
+        .modern-form-container {
+            padding: 15px;
+        }
+    }
+
     @media (max-width: 768px) {
         .form-header-section,
         .modern-form-card {
@@ -548,6 +561,13 @@
             min-width: 140px;
         }
     }
+
+    @media (max-width: 480px) {
+        .modern-btn {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+    }
 </style>
 
 <script>
@@ -557,13 +577,13 @@
             const submitBtn = $('#submitBtn');
             const btnText = submitBtn.find('.btn-text');
             const btnLoader = submitBtn.find('.btn-loader');
-            
+
             submitBtn.prop('disabled', true);
             btnText.hide();
             btnLoader.show();
         });
 
-        // Input animations
+        // Input animations and focus states
         $('.modern-input, .modern-select, .modern-textarea').on('focus', function() {
             $(this).parent().addClass('focused');
         }).on('blur', function() {
@@ -577,6 +597,78 @@
                 $('#faqForm')[0].reset();
                 $('#subcategory_id').html('<option value="">Select a Subcategory</option>');
                 $('#service_id').html('<option value="">Select a Service</option>');
+                // Reset Q&A items
+                $('#qa-container .qa-item').not(':first').remove();
+                $('#qa-container input[name="questions[]"]').val('');
+                $('#qa-container textarea[name="answers[]"]').each(function(){
+                    if ($.fn.summernote && $(this).data('summernote')) {
+                        $(this).summernote('code', '');
+                    } else {
+                        $(this).val('');
+                    }
+                });
+                refreshQaTitles();
+            }
+        });
+
+        // Q&A Repeater Logic
+        function initSummernoteIfAvailable(el) {
+            if ($.fn.summernote && !$(el).data('summernote')) {
+                $(el).summernote({ height: 120 });
+            }
+        }
+
+        function refreshQaTitles() {
+            $('#qa-container .qa-item').each(function(index) {
+                $(this).attr('data-index', index + 1);
+                $(this).find('.qa-title').html('<i class="fas fa-hashtag"></i> Q&A #' + (index + 1));
+            });
+            // Enable remove only if more than 1
+            var count = $('#qa-container .qa-item').length;
+            $('#qa-container .remove-qa').prop('disabled', count <= 1);
+        }
+
+        function addQaItem() {
+            var $item = $('<div class="qa-item" data-index="0">\
+                <div class="qa-header">\
+                    <span class="qa-title"><i class="fas fa-hashtag"></i> Q&A</span>\
+                    <button type="button" class="modern-btn modern-btn-secondary remove-qa">\
+                        <i class="fas fa-trash-alt"></i> Remove\
+                    </button>\
+                </div>\
+                <div class="qa-body">\
+                    <div class="form-group-modern">\
+                        <label class="modern-label"><i class="fas fa-question text-cyan"></i> Question</label>\
+                        <div class="input-wrapper">\
+                            <input type="text" class="modern-input" name="questions[]" placeholder="Enter the frequently asked question" required>\
+                            <i class="fas fa-question input-icon"></i>\
+                        </div>\
+                    </div>\
+                    <div class="form-group-modern">\
+                        <label class="modern-label"><i class="fas fa-comment-dots text-cyan"></i> Answer</label>\
+                        <div class="input-wrapper">\
+                            <textarea class="modern-textarea summernote" name="answers[]" placeholder="Provide a detailed answer to the question" required></textarea>\
+                            <i class="fas fa-comment-dots input-icon"></i>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>');
+            $('#qa-container').append($item);
+            initSummernoteIfAvailable($item.find('textarea.summernote'));
+            refreshQaTitles();
+        }
+
+        // Initialize existing summernote(s)
+        $('#qa-container textarea.summernote').each(function(){ initSummernoteIfAvailable(this); });
+
+        // Add Q&A functionality
+        $('#addQaBtn').on('click', addQaItem);
+
+        // Remove Q&A functionality
+        $('#qa-container').on('click', '.remove-qa', function() {
+            if ($('#qa-container .qa-item').length > 1) {
+                $(this).closest('.qa-item').remove();
+                refreshQaTitles();
             }
         });
 

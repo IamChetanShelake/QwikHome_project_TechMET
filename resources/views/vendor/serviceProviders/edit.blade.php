@@ -26,9 +26,9 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="form-grid">
+                    <div class="">
                         <!-- Basic Information Section -->
-                        <div class="form-section">
+                        <div class="form-section mt-5 mb-5">
                             <div class="section-header">
                                 <i class="fas fa-user"></i>
                                 <h3>Basic Information</h3>
@@ -105,7 +105,7 @@
                         </div>
 
                         <!-- Vendor Assignment Section -->
-                        <div class="form-section">
+                        <div class="form-section mt-5 mb-5">
                             <div class="section-header">
                                 <i class="fas fa-building"></i>
                                 <h3>Vendor Assignment</h3>
@@ -147,7 +147,7 @@
                             </div>
 
                         <!-- Contact Information Section -->
-                        <div class="form-section">
+                        <div class="form-section mt-5 mb-5">
                             <div class="section-header">
                                 <i class="fas fa-address-book"></i>
                                 <h3>Contact Information</h3>
@@ -229,7 +229,7 @@
                         </div>
 
                         <!-- Services Section -->
-                        <div class="form-section">
+                        <div class="form-section mt-5 mb-5">
                             <div class="section-header">
                                 <i class="fas fa-tools"></i>
                                 <h3>Services Offered</h3>
@@ -336,11 +336,11 @@
 
         /* Header Styles */
         .form-header {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: none;
             display: flex;
             justify-content: space-between;
@@ -374,16 +374,13 @@
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             margin: 5px 0 0 0;
         }
 
@@ -392,25 +389,27 @@
             align-items: center;
             gap: 8px;
             padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
             text-decoration: none;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
             transform: translateX(-2px);
         }
 
         /* Form Card */
         .form-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-top: none;
             padding: 40px;
             overflow: hidden;
@@ -422,10 +421,10 @@
         }
 
         .form-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header {
@@ -434,7 +433,7 @@
             gap: 12px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header i {
@@ -443,7 +442,7 @@
         }
 
         .section-header h3 {
-            color: #ffffff;
+            color: #334155;
             font-size: 18px;
             font-weight: 600;
             margin: 0;
@@ -473,7 +472,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 8px;
@@ -489,28 +488,30 @@
         }
 
         .optional {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-size: 12px;
         }
 
         .form-input, .form-textarea {
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .form-input:focus, .form-textarea:focus {
             outline: none;
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
         }
 
         .form-input::placeholder, .form-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .form-textarea {
@@ -529,7 +530,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             cursor: pointer;
             padding: 4px;
             border-radius: 4px;
@@ -538,7 +539,7 @@
 
         .password-toggle:hover {
             color: #f59e0b;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
         }
 
         .file-input-wrapper {
@@ -559,17 +560,17 @@
             justify-content: center;
             gap: 10px;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .file-input-display:hover {
-            border-color: #f59e0b;
-            background: rgba(255, 255, 255, 0.05);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .file-info {
@@ -577,8 +578,8 @@
         }
 
         .file-info small {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
+            color: rgba(51, 65, 85, 0.6);
+            font-size: 11px;
         }
 
         .error-message {
@@ -599,19 +600,18 @@
             margin-top: 8px;
         }
 
-        .current-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 2px solid rgba(245, 158, 11, 0.3);
+        .file-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .image-note {
-            display: block;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 11px;
-            margin-top: 6px;
+        .file-preview p {
+            margin: 0;
+            color: rgba(51, 65, 85, 0.8);
+            font-size: 13px;
         }
 
         .no-current-image {
@@ -636,9 +636,9 @@
 
         /* Image Preview */
         .image-preview-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
@@ -650,7 +650,7 @@
         }
 
         .preview-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             margin: 0;
         }
@@ -688,7 +688,7 @@
             gap: 15px;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .cancel-btn, .submit-btn {
@@ -706,13 +706,15 @@
         }
 
         .cancel-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .cancel-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
             transform: translateY(-2px);
         }
 
@@ -789,17 +791,17 @@
             align-items: center;
             gap: 12px;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #ffffff;
+            color: #334155;
         }
 
         .service-label:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(245, 158, 11, 0.5);
             transform: translateY(-2px);
         }
 
@@ -845,16 +847,16 @@
 
         .service-category {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             line-height: 1.2;
         }
 
         .modern-filter-select {
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
             width: 100%;
@@ -862,19 +864,20 @@
 
         .modern-filter-select:focus {
             outline: none;
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
         }
 
         .modern-filter-select option {
-            background-color: #2d2d2d;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #334155;
             padding: 10px 15px;
         }
 
         .no-services {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-style: italic;
             padding: 20px;
             margin: 0;

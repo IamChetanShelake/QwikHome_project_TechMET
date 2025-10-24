@@ -1,27 +1,30 @@
 @extends('admin.layouts.masterlayout')
 
-@section('content')
-    <div class="content-area">
-        <div class="form-container">
-            <!-- Header Section -->
-            <div class="form-header">
-                <div class="form-title-group">
-                    <div class="form-icon-wrapper">
-                        <i class="fas fa-user-plus form-main-icon"></i>
-                    </div>
-                    <div class="form-title-text">
-                        <h2 class="form-title">Add New Vendor</h2>
-                        <p class="form-subtitle">Create a new vendor account with access to the platform</p>
-                    </div>
-                </div>
-                <a href="{{ route('admin.vendors.index') }}" class="back-btn">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to Vendors</span>
-                </a>
-            </div>
+@section('title', 'Add Vendor')
 
-            <!-- Form Section -->
-            <div class="form-card">
+@section('content')
+<div class="modern-form-container">
+    <!-- Form Header Section -->
+    <div class="form-header-section">
+        <div class="form-header-content">
+            <div class="form-icon-wrapper">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="form-header-text">
+                <h1 class="form-title">Add New Vendor</h1>
+                <p class="form-subtitle">Create a new vendor account with access to the platform</p>
+            </div>
+        </div>
+        <div class="form-header-actions">
+            <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Vendors
+            </a>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="modern-form-card">
                 <form action="{{ route('admin.vendors.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
@@ -367,13 +370,16 @@
                                                 <h4>{{ $service->name }}</h4>
                                             </div>
                                             <div class="service-payment-fields">
+                                                <!-- Hidden input to track service ID -->
+                                                <input type="hidden" name="service_ids[]" value="{{ $service->id }}" class="service-id-input">
+                                                
                                                 <div class="form-row">
                                                     <div class="form-group">
                                                         <label class="form-label">
                                                             <i class="fas fa-cash-register"></i>
                                                             Payment Type <span class="required">*</span>
                                                         </label>
-                                                        <select name="service_payment_type[]" class="modern-filter-select" onchange="togglePaymentFields(this)">
+                                                        <select name="service_payment_type[{{ $service->id }}]" class="modern-filter-select" onchange="togglePaymentFields(this)">
                                                             <option value="">Select Payment Type</option>
                                                             <option value="fixed_rate">Fixed Rate</option>
                                                             <option value="commission">Commission</option>
@@ -392,7 +398,7 @@
                                                             <i class="fas fa-dollar-sign"></i>
                                                             Fixed Rate Amount
                                                         </label>
-                                                        <input type="number" name="fixed_rate_amount[]" class="form-input" step="0.01" placeholder="Enter fixed rate amount">
+                                                        <input type="number" name="fixed_rate_amount[{{ $service->id }}]" class="form-input" step="0.01" placeholder="Enter fixed rate amount">
                                                         @error('fixed_rate_amount.*')
                                                             <div class="error-message">
                                                                 <i class="fas fa-exclamation-circle"></i>
@@ -408,7 +414,7 @@
                                                             <i class="fas fa-percent"></i>
                                                             Commission Rate (%)
                                                         </label>
-                                                        <input type="number" name="commission_rate[]" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate">
+                                                        <input type="number" name="commission_rate[{{ $service->id }}]" class="form-input" step="0.01" min="0" max="100" placeholder="Enter commission rate">
                                                         @error('commission_rate.*')
                                                             <div class="error-message">
                                                                 <i class="fas fa-exclamation-circle"></i>
@@ -422,7 +428,7 @@
                                                             <i class="fas fa-chart-pie"></i>
                                                             Revenue Share Ratio
                                                         </label>
-                                                        <input type="text" name="revenue_share_ratio[]" class="form-input" placeholder="e.g., 40:60">
+                                                        <input type="text" name="revenue_share_ratio[{{ $service->id }}]" class="form-input" placeholder="e.g., 40:60">
                                                         <div class="field-info">
                                                             <small>Format: X:Y (e.g., 40:60 means 40% to vendor, 60% to platform)</small>
                                                         </div>
@@ -574,14 +580,17 @@
 
                     <!-- Form Actions -->
                     <div class="form-actions">
-                        <a href="{{ route('admin.vendors.index') }}" class="cancel-btn">
-                            <i class="fas fa-times"></i>
-                            <span>Cancel</span>
-                        </a>
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-save"></i>
-                            <span>Create Vendor</span>
+                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                            <i class="fas fa-plus"></i>
+                            <span class="btn-text">Create Vendor</span>
+                            <div class="btn-loader" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
                         </button>
+                        <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
@@ -619,20 +628,19 @@
         background: rgba(255, 255, 255, 0.08);
         box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
     }
-        .form-container {
-            max-width: 1200px;
+        /* Modern Vendor Form Styling */
+        .modern-form-container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Header Styles */
-        .form-header {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
+        .form-header-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border-radius: 20px 20px 0 0;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -640,7 +648,7 @@
             gap: 20px;
         }
 
-        .form-title-group {
+        .form-header-content {
             display: flex;
             align-items: center;
             gap: 20px;
@@ -654,57 +662,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
-        }
-
-        .form-main-icon {
             font-size: 24px;
             color: white;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
-            background: linear-gradient(135deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.8);
             margin: 5px 0 0 0;
         }
 
-        .back-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-2px);
-        }
-
-        /* Form Card */
-        .form-card {
-            background: rgba(255, 255, 255, 0.08);
+        .modern-form-card {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 0 0 20px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
             padding: 40px;
-            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: none;
         }
 
         .form-grid {
@@ -713,10 +696,10 @@
         }
 
         .form-section {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header {
@@ -725,7 +708,7 @@
             gap: 12px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .section-header i {
@@ -734,7 +717,7 @@
         }
 
         .section-header h3 {
-            color: #ffffff;
+            color: #334155;
             font-size: 18px;
             font-weight: 600;
             margin: 0;
@@ -764,9 +747,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
@@ -781,22 +764,24 @@
 
         .form-input, .form-textarea {
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .form-input:focus, .form-textarea:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
         }
 
         .form-input::placeholder, .form-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(51, 65, 85, 0.5);
         }
 
         .form-textarea {
@@ -815,7 +800,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             cursor: pointer;
             padding: 4px;
             border-radius: 4px;
@@ -824,7 +809,7 @@
 
         .password-toggle:hover {
             color: #00d4ff;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
         }
 
         .file-input-wrapper {
@@ -845,17 +830,17 @@
             justify-content: center;
             gap: 10px;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .file-input-display:hover {
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.05);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .file-info {
@@ -863,8 +848,8 @@
         }
 
         .file-info small {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
+            color: rgba(51, 65, 85, 0.6);
+            font-size: 11px;
         }
 
         .error-message {
@@ -882,9 +867,9 @@
 
         /* Image Preview */
         .image-preview-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
@@ -896,7 +881,7 @@
         }
 
         .preview-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             margin: 0;
         }
@@ -930,47 +915,66 @@
         /* Form Actions */
         .form-actions {
             display: flex;
-            justify-content: flex-end;
             gap: 15px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
             margin-top: 40px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .cancel-btn, .submit-btn {
+        .modern-btn {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 14px 28px;
+            border: none;
             border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
-            border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cancel-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .cancel-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .submit-btn {
+        .modern-btn-primary {
             background: linear-gradient(135deg, #00d4ff, #0099cc);
             color: white;
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
         }
 
-        .submit-btn:hover {
+        .modern-btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+            color: white;
+        }
+
+        .modern-btn-secondary {
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .modern-btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .modern-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Services Grid Styles */
@@ -1000,17 +1004,17 @@
             align-items: center;
             gap: 12px;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #ffffff;
+            color: #334155;
         }
 
         .service-label:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 212, 255, 0.5);
             transform: translateY(-2px);
         }
 
@@ -1064,9 +1068,9 @@
             width: 100%;
             padding: 12px 16px;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(42, 42, 42, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: black;
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -1086,7 +1090,7 @@
 
         .no-services {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             font-style: italic;
             padding: 20px;
             margin: 0;
@@ -1094,8 +1098,8 @@
 
         /* Service Payment Terms Styles */
         .service-payment-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
@@ -1106,12 +1110,12 @@
         }
 
         .service-payment-header h4 {
-            color: #ffffff;
+            color: #334155;
             font-size: 16px;
             font-weight: 600;
             margin: 0 0 15px 0;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .service-payment-fields {

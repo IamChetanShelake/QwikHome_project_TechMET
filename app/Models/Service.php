@@ -84,7 +84,9 @@ class Service extends Model
     // Many-to-many relationship with users (service providers and vendors)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_services')
+            ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
+            ->withTimestamps();
     }
     public function wishlists()
     {

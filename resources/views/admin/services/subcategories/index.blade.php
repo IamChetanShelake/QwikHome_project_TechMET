@@ -20,11 +20,11 @@
         }
 
         .index-header-section {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -67,11 +67,11 @@
         }
 
         .filters-section {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 15px;
             padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
@@ -95,16 +95,16 @@
             gap: 8px;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .modern-filter-input,
         .modern-filter-select {
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -112,23 +112,23 @@
         .modern-filter-select {
             appearance: none;
             cursor: pointer;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
             background-position: right 12px center;
             background-repeat: no-repeat;
             background-size: 16px;
         }
 
         .modern-filter-select option {
-            background-color: #2d2d2d;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #334155;
         }
 
         .modern-filter-input:focus,
         .modern-filter-select:focus {
             outline: none;
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
         }
 
         .filter-actions {
@@ -138,16 +138,16 @@
         }
 
         .table-section {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .table-header {
             padding: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -159,12 +159,12 @@
             gap: 10px;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
             margin: 0;
         }
 
         .record-count {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
             font-size: 14px;
         }
 
@@ -178,12 +178,12 @@
         }
 
         .modern-table th {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(59, 130, 246, 0.1);
             padding: 15px;
             text-align: left;
             font-weight: 600;
-            color: #00d4ff;
-            border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+            color: #3b82f6;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.2);
             font-size: 14px;
         }
 
@@ -193,13 +193,13 @@
 
         .modern-table td {
             padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: #ffffff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #334155;
             vertical-align: middle;
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.03);
         }
 
         .name-cell {
@@ -219,12 +219,12 @@
         .subcategory-placeholder {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.5);
         }
 
         .subcategory-name {
@@ -233,12 +233,12 @@
         }
 
         .category-text {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             font-size: 13px;
         }
 
         .description-text {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             font-size: 13px;
         }
 
@@ -273,7 +273,7 @@
         .time-text {
             display: block;
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(51, 65, 85, 0.6);
             margin-top: 2px;
         }
 
@@ -320,24 +320,25 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.7);
         }
 
         .empty-state i {
             font-size: 48px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(51, 65, 85, 0.3);
             margin-bottom: 20px;
         }
 
         .empty-state h3 {
             font-size: 24px;
             margin-bottom: 10px;
-            color: #ffffff;
+            color: #334155;
         }
 
         .empty-state p {
             font-size: 16px;
             margin-bottom: 30px;
+            color: #334155;
         }
 
         .modern-btn {
@@ -355,45 +356,45 @@
         }
 
         .modern-btn-primary {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
         .modern-btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
             color: white;
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            color: #334155;
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #00d4ff;
-            color: #00d4ff;
+            background: rgba(0, 0, 0, 0.15);
+            border-color: #3b82f6;
+            color: #3b82f6;
             transform: translateY(-2px);
         }
 
         .modern-btn-outline {
             background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: rgba(51, 65, 85, 0.7);
+            border: 2px solid rgba(0, 0, 0, 0.2);
         }
 
         .modern-btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            color: #334155;
+            border-color: rgba(0, 0, 0, 0.3);
         }
 
         .pagination-section {
             padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         /* Responsive Design */

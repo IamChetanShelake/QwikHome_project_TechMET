@@ -30,14 +30,79 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <style>
+        /* Light Theme Base Styles */
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        .sidebar {
+            background-color: #ffffff;
+            color: #334155;
+        }
+
+        .sidebar-header {
+            background-color: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-nav ul li a {
+            color: #475569;
+        }
+
+        .sidebar-nav ul li a:hover {
+            background-color: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .nav-item.active {
+            background-color: #dbeafe;
+        }
+
+        .nav-item.active a {
+            color: #1e40af;
+        }
+
+        .sidebar-toggle {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+        }
+
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        .page-title {
+            color: #1e293b;
+        }
+
+        .notification-btn {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .user-trigger {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .main-content {
+            background-color: #f8fafc;
+        }
+
         /* Modern Service Management Dropdown Styling */
         .service-dropdown-menu {
             display: none;
-            background: rgba(45, 45, 45, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             min-width: 220px;
             z-index: 1000;
             margin-top: 8px;
@@ -71,7 +136,7 @@
             opacity: 1 !important;
             visibility: visible !important;
             font-size: 18px !important;
-            color: rgba(255, 255, 255, 0.9) !important;
+            color: #475569 !important;
             width: 20px !important;
             height: 20px !important;
             text-align: center !important;
@@ -95,11 +160,11 @@
             position: absolute;
             left: 100%;
             top: 0;
-            background: rgba(45, 45, 45, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             min-width: 220px;
             z-index: 1002;
             margin-left: 10px;
@@ -121,9 +186,9 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #ffffff;
+            color: #334155;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             font-size: 14px;
         }
@@ -133,38 +198,38 @@
         }
 
         .sidebar.collapsed .service-flyout-menu .flyout-item:hover {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            color: #1d4ed8;
             transform: translateX(5px);
         }
 
         .sidebar.collapsed .service-flyout-menu .flyout-item i {
             width: 16px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
         }
 
         .sidebar.collapsed .service-flyout-menu .flyout-item:hover i {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .sidebar.collapsed .service-flyout-menu .flyout-item.active {
-            background: rgba(0, 212, 255, 0.15);
-            color: #00d4ff;
-            border-left: 3px solid #00d4ff;
+            background: rgba(59, 130, 246, 0.15);
+            color: #1d4ed8;
+            border-left: 3px solid #3b82f6;
         }
 
         .sidebar.collapsed .service-flyout-menu .flyout-item.active i {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .sidebar.collapsed .service-menu:hover .service-menu-trigger {
-            background: rgba(0, 212, 255, 0.1) !important;
-            border-left: 3px solid #00d4ff !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+            border-left: 3px solid #3b82f6 !important;
         }
 
         .sidebar.collapsed .service-menu:hover .service-menu-trigger i.fas.fa-cogs {
-            color: #00d4ff !important;
+            color: #1d4ed8 !important;
         }
 
         /* Tooltip for collapsed service menu - hide when flyout is open */
@@ -208,12 +273,12 @@
         }
 
         .sidebar.collapsed .nav-item.active .service-menu-trigger {
-            background: rgba(0, 212, 255, 0.1);
-            border-left-color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
         }
 
         .sidebar.collapsed .nav-item.active .service-menu-trigger i.fas.fa-cogs {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .service-dropdown-menu .dropdown-item {
@@ -221,9 +286,9 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #ffffff;
+            color: #334155;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             font-size: 14px;
             font-weight: 500;
@@ -231,8 +296,8 @@
 
         .service-dropdown-menu .dropdown-item:hover,
         .service-dropdown-menu .dropdown-item.active {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            color: #1d4ed8;
             transform: translateX(4px);
         }
 
@@ -240,13 +305,13 @@
             width: 18px;
             text-align: center;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             transition: all 0.3s ease;
         }
 
         .service-dropdown-menu .dropdown-item:hover i,
         .service-dropdown-menu .dropdown-item.active i {
-            color: #00d4ff;
+            color: #1d4ed8;
             transform: scale(1.1);
         }
 
@@ -262,17 +327,17 @@
         .fa-caret-down.rotate {
             transform: rotate(180deg);
             transition: transform 0.3s ease;
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .fa-caret-down {
             transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
         }
 
         /* Service menu trigger hover effect */
         .service-menu-trigger:hover .fa-caret-down {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         /* Add subtle glow effect */
@@ -283,7 +348,7 @@
             left: -1px;
             right: -1px;
             bottom: -1px;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
             border-radius: 12px;
             z-index: -1;
             opacity: 0;
@@ -331,17 +396,17 @@
 
         /* Enhanced active state for service management */
         .nav-item.active .service-menu-trigger {
-            color: #ffffff !important;
-            background: rgba(0, 212, 255, 0.1) !important;
+            color: #1e293b !important;
+            background: rgba(59, 130, 246, 0.1) !important;
         }
 
         .nav-item.active .service-menu-trigger i {
-            color: #00d4ff !important;
+            color: #1d4ed8 !important;
         }
 
         /* Ensure parent nav-item gets active styling */
         .nav-item.active {
-            border-left: 3px solid #00d4ff;
+            border-left: 3px solid #3b82f6;
         }
 
         /* Specific styling for Employees nav item */
@@ -351,11 +416,11 @@
         }
 
         .nav-item.nav-employees.active .nav-link {
-            color: #ffffff !important;
+            color: #1e293b !important;
         }
 
         .nav-item.nav-employees.active .nav-link i {
-            color: #10b981 !important;
+            color: #059669 !important;
         }
 
         /* Specific styling for Bookings nav item */
@@ -365,11 +430,11 @@
         }
 
         .nav-item.nav-bookings.active .nav-link {
-            color: #ffffff !important;
+            color: #1e293b !important;
         }
 
         .nav-item.nav-bookings.active .nav-link i {
-            color: #3b82f6 !important;
+            color: #2563eb !important;
         }
 
         /* Protection against Service Management JS interference */
@@ -382,11 +447,11 @@
         /* Content Management Dropdown Styling */
         .content-dropdown-menu {
             display: none;
-            background: rgba(45, 45, 45, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             min-width: 220px;
             z-index: 1000;
             margin-top: 8px;
@@ -401,7 +466,7 @@
 
         .content-menu-trigger {
             padding: 12px 15px;
-            color: #ffffff;
+            color: #334155;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -412,19 +477,19 @@
         }
 
         .content-menu-trigger:hover {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            color: #1d4ed8;
         }
 
         .content-menu-trigger i.fas.fa-edit {
             font-size: 16px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #64748b;
             transition: all 0.3s ease;
             margin-right: 12px;
         }
 
         .content-menu-trigger:hover i.fas.fa-edit {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .content-menu-trigger span {
@@ -438,9 +503,9 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #ffffff;
+            color: #334155;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             font-size: 14px;
             font-weight: 500;
@@ -448,8 +513,8 @@
 
         .content-dropdown-menu .dropdown-item:hover,
         .content-dropdown-menu .dropdown-item.active {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            color: #1d4ed8;
             transform: translateX(4px);
         }
 
@@ -457,13 +522,13 @@
             width: 18px;
             text-align: center;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             transition: all 0.3s ease;
         }
 
         .content-dropdown-menu .dropdown-item:hover i,
         .content-dropdown-menu .dropdown-item.active i {
-            color: #00d4ff;
+            color: #1d4ed8;
             transform: scale(1.1);
         }
 
@@ -496,7 +561,7 @@
         .sidebar.collapsed .content-menu-trigger i.fas.fa-edit {
             margin-right: 0 !important;
             font-size: 18px !important;
-            color: rgba(255, 255, 255, 0.9) !important;
+            color: #64748b !important;
             width: 20px !important;
             height: 20px !important;
             text-align: center !important;
@@ -515,11 +580,11 @@
             position: absolute;
             left: 100%;
             top: 0;
-            background: rgba(45, 45, 45, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             min-width: 200px;
             z-index: 1002;
             margin-left: 10px;
@@ -541,9 +606,9 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            color: #ffffff;
+            color: #334155;
             text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             font-size: 14px;
         }
@@ -553,29 +618,29 @@
         }
 
         .sidebar.collapsed .content-flyout-menu .flyout-item:hover {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
+            background: rgba(59, 130, 246, 0.1);
+            color: #1d4ed8;
             transform: translateX(5px);
         }
 
         .sidebar.collapsed .content-flyout-menu .flyout-item i {
             width: 16px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
         }
 
         .sidebar.collapsed .content-flyout-menu .flyout-item:hover i {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         .sidebar.collapsed .content-flyout-menu .flyout-item.active {
-            background: rgba(0, 212, 255, 0.15);
-            color: #00d4ff;
-            border-left: 3px solid #00d4ff;
+            background: rgba(59, 130, 246, 0.15);
+            color: #1d4ed8;
+            border-left: 3px solid #3b82f6;
         }
 
         .sidebar.collapsed .content-flyout-menu .flyout-item.active i {
-            color: #00d4ff;
+            color: #1d4ed8;
         }
 
         /* Tooltip for collapsed content menu */
