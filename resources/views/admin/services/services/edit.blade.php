@@ -743,7 +743,7 @@
             .material-row {
                 grid-template-columns: 1fr;
             }
-            
+
             .material-name,
             .material-description,
             .material-applicable,
@@ -774,26 +774,26 @@
         .nice-select {
             display: none !important;
         }
-        
-        .nice-select + .modern-select {
+
+        .nice-select+.modern-select {
             display: none !important;
         }
-        
+
         .modern-select {
             display: block !important;
             appearance: auto !important;
         }
-        
+
         /* Hide nice-select dropdown lists */
         .nice-select .list {
             display: none !important;
         }
-        
+
         /* Ensure original selects are visible */
         select.modern-select {
             display: block !important;
         }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
 
@@ -883,10 +883,11 @@
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                
+
                 <!-- General Error Display -->
                 @if ($errors->any())
-                    <div class="alert alert-danger" style="background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ff4757;">
+                    <div class="alert alert-danger"
+                        style="background: rgba(255, 71, 87, 0.1); border: 1px solid #ff4757; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #ff4757;">
                         <h4><i class="fas fa-exclamation-triangle"></i> Validation Errors:</h4>
                         <ul style="margin: 10px 0 0 20px;">
                             @foreach ($errors->all() as $error)
@@ -1041,7 +1042,9 @@
                                                         <img src="{{ asset('Service_process_images/' . $process['image']) }}"
                                                             alt="Process Image" class="preview-image">
                                                         <span class="current-image-label">Current Image</span>
-                                                        <input type="hidden" name="processes[{{ $index }}][existing_image]" value="{{ $process['image'] }}">
+                                                        <input type="hidden"
+                                                            name="processes[{{ $index }}][existing_image]"
+                                                            value="{{ $process['image'] }}">
                                                     </div>
                                                 @endif
                                             </div>
@@ -1122,7 +1125,7 @@
                         </label>
                         <div class="dynamic-list-container">
                             <div id="whats_include_container">
-                                
+
                                 @if (old('whats_include', $service->whats_include))
                                     @foreach (old('whats_include', $service->whats_include) as $index => $include)
                                         <div class="dynamic-item">
@@ -1183,8 +1186,8 @@
                                             <div class="requirement-fields">
                                                 <div class="input-wrapper">
                                                     <input type="text" name="requirements[{{ $index }}][title]"
-                                                        value="{{ $req['title'] ?? '' }}"
-                                                        class="modern-input" placeholder="Requirement title">
+                                                        value="{{ $req['title'] ?? '' }}" class="modern-input"
+                                                        placeholder="Requirement title">
                                                     <i class="fas fa-text-width input-icon"></i>
                                                 </div>
                                                 <div class="input-wrapper">
@@ -1197,7 +1200,9 @@
                                                         <img src="{{ asset('Service_requirement_images/' . $req['image']) }}"
                                                             alt="Requirement Image" class="preview-image">
                                                         <span class="current-image-label">Current Image</span>
-                                                        <input type="hidden" name="requirements[{{ $index }}][existing_image]" value="{{ $req['image'] }}">
+                                                        <input type="hidden"
+                                                            name="requirements[{{ $index }}][existing_image]"
+                                                            value="{{ $req['image'] }}">
                                                     </div>
                                                 @endif
                                             </div>
@@ -1242,7 +1247,7 @@
                         </div>
                     </div>
                 </div> <!-- Closing form-grid -->
-                
+
                 <!-- Pricing Section -->
                 <div class="full-width-section">
                     <div class="pricing-section">
@@ -1250,139 +1255,28 @@
                             Pricing & Subscription Options
                         </h3>
 
-                            <!-- One Time Service -->
-                            <div class="frequency-section">
-                                <div class="section-header">
-                                    <input type="checkbox" class="modern-checkbox" id="enable_onetime" checked>
-                                    <label for="enable_onetime" class="checkbox-text">
-                                        <i class="fas fa-hand-point-right text-cyan"></i> One Time Service
-                                    </label>
-                                </div>
+                        <!-- One Time Service -->
+                        <div class="frequency-section">
+                            <div class="section-header">
+                                <input type="checkbox" class="modern-checkbox" id="enable_onetime" checked>
+                                <label for="enable_onetime" class="checkbox-text">
+                                    <i class="fas fa-hand-point-right text-cyan"></i> One Time Service
+                                </label>
+                            </div>
 
-                                <div class="frequency-options" id="onetime_options" style="display: block;">
-                                    <div class="frequency-container" id="onetime_frequencies">
-                                        @if (old('onetime_frequencies'))
-                                            @foreach (old('onetime_frequencies') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">One Time Option {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button" class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="onetime_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="onetime_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency['price_per_time'] ?? '' }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="onetime_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this one time option">{{ $frequency['description'] ?? '' }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'onetime')->count() > 0)
-                                            @foreach ($service->frequencyOptions->where('frequency_type', 'onetime') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">One Time Option {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button" class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="onetime_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->duration == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="onetime_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency->price_per_time }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="onetime_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this one time option">{{ $frequency->description }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @else
+                            <div class="frequency-options" id="onetime_options" style="display: block;">
+                                <div class="frequency-container" id="onetime_frequencies">
+                                    @if (old('onetime_frequencies'))
+                                        @foreach (old('onetime_frequencies') as $index => $frequency)
                                             <div class="frequency-item">
                                                 <div class="frequency-header">
-                                                    <span class="frequency-title">One Time Option 1</span>
+                                                    <span class="frequency-title">One Time Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                                 <div class="frequency-content">
                                                     <div class="frequency-row">
@@ -1393,11 +1287,12 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select"
-                                                                    name="onetime_frequencies[0][duration]">
+                                                                    name="onetime_frequencies[{{ $index }}][duration]">
                                                                     @for ($i = 1; $i <= 10; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
-                                                                            {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                            {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
                                                                         </option>
                                                                     @endfor
                                                                 </select>
@@ -1410,206 +1305,171 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <input type="number" class="modern-input"
-                                                                    name="onetime_frequencies[0][price_per_time]"
+                                                                    name="onetime_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency['price_per_time'] ?? '' }}"
                                                                     step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-align-left text-cyan"></i>
                                                                 Description
                                                             </label>
                                                             <div class="input-wrapper">
-                                                                <textarea class="modern-textarea"
-                                                                    name="onetime_frequencies[0][description]"
-                                                                    placeholder="Describe this one time option"></textarea>
+                                                                <textarea class="modern-textarea" name="onetime_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this one time option">{{ $frequency['description'] ?? '' }}</textarea>
                                                                 <i class="fas fa-align-left input-icon"></i>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                    </div>
-                                    
-                                    <button type="button" id="add_onetime_frequency"
-                                        class="modern-btn modern-btn-outline">
-                                        <i class="fas fa-plus"></i> Add One Time Option
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Weekly Subscription -->
-                            <div class="frequency-section">
-                                <div class="section-header">
-                                    <input type="checkbox" class="modern-checkbox" id="enable_weekly">
-                                    <label for="enable_weekly" class="checkbox-text">
-                                        <i class="fas fa-calendar-week text-cyan"></i> Weekly Subscription
-                                    </label>
-                                </div>
-
-                                <div class="frequency-options" id="weekly_options" style="display: none;">
-                                    <div class="frequency-container" id="weekly_frequencies">
-                                        @if (old('weekly_frequencies'))
-                                            @foreach (old('weekly_frequencies') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Weekly Option
-                                                            {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button"
-                                                                class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Week
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="weekly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 7; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }}
-                                                                                time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="weekly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="weekly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency['price_per_time'] ?? '' }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="weekly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this weekly option">{{ $frequency['description'] ?? '' }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'weekly')->count() > 0)
-                                            @foreach ($service->frequencyOptions->where('frequency_type', 'weekly') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Weekly Option {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button" class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Week
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="weekly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 7; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="weekly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->duration == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="weekly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency->price_per_time }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="weekly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this weekly option">{{ $frequency->description }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @else
+                                        @endforeach
+                                    @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'onetime')->count() > 0)
+                                        @foreach ($service->frequencyOptions->where('frequency_type', 'onetime') as $index => $frequency)
                                             <div class="frequency-item">
                                                 <div class="frequency-header">
-                                                    <span class="frequency-title">Weekly Option 1</span>
+                                                    <span class="frequency-title">One Time Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                <div class="frequency-content">
+                                                    <div class="frequency-row">
+                                                        <div class="form-group-modern frequency-duration">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="onetime_frequencies[{{ $index }}][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->duration == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Price
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="onetime_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency->price_per_time }}"
+                                                                    step="0.01" min="0" placeholder="0.00">
+                                                                <span class="input-suffix">AED</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea" name="onetime_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this one time option">{{ $frequency->description }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="frequency-item">
+                                            <div class="frequency-header">
+                                                <span class="frequency-title">One Time Option 1</span>
+                                            </div>
+                                            <div class="frequency-content">
+                                                <div class="frequency-row">
+                                                    <div class="form-group-modern frequency-duration">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-clock text-cyan"></i>
+                                                            Duration
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select"
+                                                                name="onetime_frequencies[0][duration]">
+                                                                @for ($i = 1; $i <= 10; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern frequency-price">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-money-bill text-cyan"></i>
+                                                            Price
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="number" class="modern-input"
+                                                                name="onetime_frequencies[0][price_per_time]"
+                                                                step="0.01" min="0" placeholder="0.00">
+                                                            <span class="input-suffix">AED</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern full-width"
+                                                        style="grid-column: 1 / -1;">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-align-left text-cyan"></i>
+                                                            Description
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <textarea class="modern-textarea" name="onetime_frequencies[0][description]"
+                                                                placeholder="Describe this one time option"></textarea>
+                                                            <i class="fas fa-align-left input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <button type="button" id="add_onetime_frequency" class="modern-btn modern-btn-outline">
+                                    <i class="fas fa-plus"></i> Add One Time Option
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Subscription -->
+                        <div class="frequency-section">
+                            <div class="section-header">
+                                <input type="checkbox" class="modern-checkbox" id="enable_weekly">
+                                <label for="enable_weekly" class="checkbox-text">
+                                    <i class="fas fa-calendar-week text-cyan"></i> Weekly Subscription
+                                </label>
+                            </div>
+
+                            <div class="frequency-options" id="weekly_options" style="display: none;">
+                                <div class="frequency-container" id="weekly_frequencies">
+                                    @if (old('weekly_frequencies'))
+                                        @foreach (old('weekly_frequencies') as $index => $frequency)
+                                            <div class="frequency-item">
+                                                <div class="frequency-header">
+                                                    <span class="frequency-title">Weekly Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                                 <div class="frequency-content">
                                                     <div class="frequency-row">
@@ -1620,10 +1480,10 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select frequency-no-select"
-                                                                    name="weekly_frequencies[0][no_of_times]">
+                                                                    name="weekly_frequencies[{{ $index }}][no_of_times]">
                                                                     @for ($i = 1; $i <= 7; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
+                                                                            {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
                                                                             {{ $i }}
                                                                             time{{ $i > 1 ? 's' : '' }}
                                                                         </option>
@@ -1631,230 +1491,231 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="weekly_frequencies[0][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $i == 1 ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
+                                                        <div class="form-group-modern frequency-duration">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="weekly_frequencies[{{ $index }}][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
                                                             </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="weekly_frequencies[0][price_per_time]"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Price per Service
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="weekly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency['price_per_time'] ?? '' }}"
+                                                                    step="0.01" min="0" placeholder="0.00">
+                                                                <span class="input-suffix">AED</span>
                                                             </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="weekly_frequencies[0][description]"
-                                                                        placeholder="Describe this weekly option"></textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
+                                                        </div>
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea" name="weekly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this weekly option">{{ $frequency['description'] ?? '' }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
                                                             </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                    </div>
-                                    
-                                    <button type="button" id="add_weekly_frequency"
-                                        class="modern-btn modern-btn-outline">
-                                        <i class="fas fa-plus"></i> Add Weekly Option
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Monthly Subscription -->
-                            <div class="frequency-section">
-                                <div class="section-header">
-                                    <input type="checkbox" class="modern-checkbox" id="enable_monthly">
-                                    <label for="enable_monthly" class="checkbox-text">
-                                        <i class="fas fa-calendar-alt text-cyan"></i> Monthly Subscription
-                                    </label>
-                                </div>
-
-                                <div class="frequency-options" id="monthly_options" style="display: none;">
-                                    <div class="frequency-container" id="monthly_frequencies">
-                                        @if (old('monthly_frequencies'))
-                                            @foreach (old('monthly_frequencies') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Monthly Option
-                                                            {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button"
-                                                                class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Month
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="monthly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 30; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }}
-                                                                                time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="monthly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Time
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="monthly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency['price_per_time'] ?? '' }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="monthly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this monthly option">{{ $frequency['description'] ?? '' }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'monthly')->count() > 0)
-                                            @foreach ($service->frequencyOptions->where('frequency_type', 'monthly') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Monthly Option {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button" class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Month
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="monthly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 30; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="monthly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->duration == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Time
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="monthly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency->price_per_time }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="monthly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this monthly option">{{ $frequency->description }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @else
+                                        @endforeach
+                                    @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'weekly')->count() > 0)
+                                        @foreach ($service->frequencyOptions->where('frequency_type', 'weekly') as $index => $frequency)
                                             <div class="frequency-item">
                                                 <div class="frequency-header">
-                                                    <span class="frequency-title">Monthly Option 1</span>
+                                                    <span class="frequency-title">Weekly Option {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                <div class="frequency-content">
+                                                    <div class="frequency-row">
+                                                        <div class="form-group-modern frequency-no">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-hashtag text-cyan"></i>
+                                                                Times per Week
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select frequency-no-select"
+                                                                    name="weekly_frequencies[{{ $index }}][no_of_times]">
+                                                                    @for ($i = 1; $i <= 7; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            time{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-duration">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="weekly_frequencies[{{ $index }}][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->duration == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Price per Service
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="weekly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency->price_per_time }}"
+                                                                    step="0.01" min="0" placeholder="0.00">
+                                                                <span class="input-suffix">AED</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea" name="weekly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this weekly option">{{ $frequency->description }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="frequency-item">
+                                            <div class="frequency-header">
+                                                <span class="frequency-title">Weekly Option 1</span>
+                                            </div>
+                                            <div class="frequency-content">
+                                                <div class="frequency-row">
+                                                    <div class="form-group-modern frequency-no">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-hashtag text-cyan"></i>
+                                                            Times per Week
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select frequency-no-select"
+                                                                name="weekly_frequencies[0][no_of_times]">
+                                                                @for ($i = 1; $i <= 7; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }}
+                                                                        time{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern frequency-duration">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-clock text-cyan"></i>
+                                                            Duration
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select"
+                                                                name="weekly_frequencies[0][duration]">
+                                                                @for ($i = 1; $i <= 10; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern frequency-price">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-money-bill text-cyan"></i>
+                                                            Price per Service
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="number" class="modern-input"
+                                                                name="weekly_frequencies[0][price_per_time]"
+                                                                step="0.01" min="0" placeholder="0.00">
+                                                            <span class="input-suffix">AED</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern full-width"
+                                                        style="grid-column: 1 / -1;">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-align-left text-cyan"></i>
+                                                            Description
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <textarea class="modern-textarea" name="weekly_frequencies[0][description]"
+                                                                placeholder="Describe this weekly option"></textarea>
+                                                            <i class="fas fa-align-left input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <button type="button" id="add_weekly_frequency" class="modern-btn modern-btn-outline">
+                                    <i class="fas fa-plus"></i> Add Weekly Option
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Subscription -->
+                        <div class="frequency-section">
+                            <div class="section-header">
+                                <input type="checkbox" class="modern-checkbox" id="enable_monthly">
+                                <label for="enable_monthly" class="checkbox-text">
+                                    <i class="fas fa-calendar-alt text-cyan"></i> Monthly Subscription
+                                </label>
+                            </div>
+
+                            <div class="frequency-options" id="monthly_options" style="display: none;">
+                                <div class="frequency-container" id="monthly_frequencies">
+                                    @if (old('monthly_frequencies'))
+                                        @foreach (old('monthly_frequencies') as $index => $frequency)
+                                            <div class="frequency-item">
+                                                <div class="frequency-header">
+                                                    <span class="frequency-title">Monthly Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                                 <div class="frequency-content">
                                                     <div class="frequency-row">
@@ -1865,10 +1726,10 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select frequency-no-select"
-                                                                    name="monthly_frequencies[0][no_of_times]">
+                                                                    name="monthly_frequencies[{{ $index }}][no_of_times]">
                                                                     @for ($i = 1; $i <= 30; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
+                                                                            {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
                                                                             {{ $i }}
                                                                             time{{ $i > 1 ? 's' : '' }}
                                                                         </option>
@@ -1883,11 +1744,12 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select"
-                                                                    name="monthly_frequencies[0][duration]">
+                                                                    name="monthly_frequencies[{{ $index }}][duration]">
                                                                     @for ($i = 1; $i <= 10; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
-                                                                            {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                            {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
                                                                         </option>
                                                                     @endfor
                                                                 </select>
@@ -1900,206 +1762,207 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <input type="number" class="modern-input"
-                                                                    name="monthly_frequencies[0][price_per_time]"
+                                                                    name="monthly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency['price_per_time'] ?? '' }}"
                                                                     step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-align-left text-cyan"></i>
                                                                 Description
                                                             </label>
                                                             <div class="input-wrapper">
-                                                                <textarea class="modern-textarea"
-                                                                    name="monthly_frequencies[0][description]"
-                                                                    placeholder="Describe this monthly option"></textarea>
+                                                                <textarea class="modern-textarea" name="monthly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this monthly option">{{ $frequency['description'] ?? '' }}</textarea>
                                                                 <i class="fas fa-align-left input-icon"></i>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                    </div>
-                                    
-                                    <button type="button" id="add_monthly_frequency"
-                                        class="modern-btn modern-btn-outline">
-                                        <i class="fas fa-plus"></i> Add Monthly Option
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Yearly Subscription -->
-                            <div class="frequency-section">
-                                <div class="section-header">
-                                    <input type="checkbox" class="modern-checkbox" id="enable_yearly">
-                                    <label for="enable_yearly" class="checkbox-text">
-                                        <i class="fas fa-calendar text-cyan"></i> Yearly Subscription
-                                    </label>
-                                </div>
-
-                                <div class="frequency-options" id="yearly_options" style="display: none;">
-                                    <div class="frequency-container" id="yearly_frequencies">
-                                        @if (old('yearly_frequencies'))
-                                            @foreach (old('yearly_frequencies') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Yearly Option
-                                                            {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button"
-                                                                class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Year
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="yearly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 12; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }}
-                                                                                time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="yearly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Time
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="yearly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency['price_per_time'] ?? '' }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="yearly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this yearly option">{{ $frequency['description'] ?? '' }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'yearly')->count() > 0)
-                                            @foreach ($service->frequencyOptions->where('frequency_type', 'yearly') as $index => $frequency)
-                                                <div class="frequency-item">
-                                                    <div class="frequency-header">
-                                                        <span class="frequency-title">Yearly Option {{ $index + 1 }}</span>
-                                                        @if ($index > 0)
-                                                            <button type="button" class="modern-btn-remove remove-frequency">
-                                                                <i class="fas fa-times"></i>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                    <div class="frequency-content">
-                                                        <div class="frequency-row">
-                                                            <div class="form-group-modern frequency-no">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-hashtag text-cyan"></i>
-                                                                    Times per Year
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select frequency-no-select"
-                                                                        name="yearly_frequencies[{{ $index }}][no_of_times]">
-                                                                        @for ($i = 1; $i <= 12; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} time{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-duration">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-clock text-cyan"></i>
-                                                                    Duration per Service
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <select class="modern-select"
-                                                                        name="yearly_frequencies[{{ $index }}][duration]">
-                                                                        @for ($i = 1; $i <= 10; $i++)
-                                                                            <option value="{{ $i }}"
-                                                                                {{ $frequency->duration == $i ? 'selected' : '' }}>
-                                                                                {{ $i }} hour{{ $i > 1 ? 's' : '' }}
-                                                                            </option>
-                                                                        @endfor
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern frequency-price">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-money-bill text-cyan"></i>
-                                                                    Price per Time
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <input type="number" class="modern-input"
-                                                                        name="yearly_frequencies[{{ $index }}][price_per_time]"
-                                                                        value="{{ $frequency->price_per_time }}"
-                                                                        step="0.01" min="0" placeholder="0.00">
-                                                                    <span class="input-suffix">AED</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
-                                                                <label class="modern-label">
-                                                                    <i class="fas fa-align-left text-cyan"></i>
-                                                                    Description
-                                                                </label>
-                                                                <div class="input-wrapper">
-                                                                    <textarea class="modern-textarea"
-                                                                        name="yearly_frequencies[{{ $index }}][description]"
-                                                                        placeholder="Describe this yearly option">{{ $frequency->description }}</textarea>
-                                                                    <i class="fas fa-align-left input-icon"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @else
+                                        @endforeach
+                                    @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'monthly')->count() > 0)
+                                        @foreach ($service->frequencyOptions->where('frequency_type', 'monthly') as $index => $frequency)
                                             <div class="frequency-item">
                                                 <div class="frequency-header">
-                                                    <span class="frequency-title">Yearly Option 1</span>
+                                                    <span class="frequency-title">Monthly Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                <div class="frequency-content">
+                                                    <div class="frequency-row">
+                                                        <div class="form-group-modern frequency-no">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-hashtag text-cyan"></i>
+                                                                Times per Month
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select frequency-no-select"
+                                                                    name="monthly_frequencies[{{ $index }}][no_of_times]">
+                                                                    @for ($i = 1; $i <= 30; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            time{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-duration">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration per Service
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <select class="modern-select"
+                                                                    name="monthly_frequencies[{{ $index }}][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->duration == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern frequency-price">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                                Price per Time
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <input type="number" class="modern-input"
+                                                                    name="monthly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency->price_per_time }}"
+                                                                    step="0.01" min="0" placeholder="0.00">
+                                                                <span class="input-suffix">AED</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
+                                                            <label class="modern-label">
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
+                                                            </label>
+                                                            <div class="input-wrapper">
+                                                                <textarea class="modern-textarea" name="monthly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this monthly option">{{ $frequency->description }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="frequency-item">
+                                            <div class="frequency-header">
+                                                <span class="frequency-title">Monthly Option 1</span>
+                                            </div>
+                                            <div class="frequency-content">
+                                                <div class="frequency-row">
+                                                    <div class="form-group-modern frequency-no">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-hashtag text-cyan"></i>
+                                                            Times per Month
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select frequency-no-select"
+                                                                name="monthly_frequencies[0][no_of_times]">
+                                                                @for ($i = 1; $i <= 30; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }}
+                                                                        time{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern frequency-duration">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-clock text-cyan"></i>
+                                                            Duration per Service
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <select class="modern-select"
+                                                                name="monthly_frequencies[0][duration]">
+                                                                @for ($i = 1; $i <= 10; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern frequency-price">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-money-bill text-cyan"></i>
+                                                            Price per Time
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <input type="number" class="modern-input"
+                                                                name="monthly_frequencies[0][price_per_time]"
+                                                                step="0.01" min="0" placeholder="0.00">
+                                                            <span class="input-suffix">AED</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group-modern full-width"
+                                                        style="grid-column: 1 / -1;">
+                                                        <label class="modern-label">
+                                                            <i class="fas fa-align-left text-cyan"></i>
+                                                            Description
+                                                        </label>
+                                                        <div class="input-wrapper">
+                                                            <textarea class="modern-textarea" name="monthly_frequencies[0][description]"
+                                                                placeholder="Describe this monthly option"></textarea>
+                                                            <i class="fas fa-align-left input-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <button type="button" id="add_monthly_frequency" class="modern-btn modern-btn-outline">
+                                    <i class="fas fa-plus"></i> Add Monthly Option
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Yearly Subscription -->
+                        <div class="frequency-section">
+                            <div class="section-header">
+                                <input type="checkbox" class="modern-checkbox" id="enable_yearly">
+                                <label for="enable_yearly" class="checkbox-text">
+                                    <i class="fas fa-calendar text-cyan"></i> Yearly Subscription
+                                </label>
+                            </div>
+
+                            <div class="frequency-options" id="yearly_options" style="display: none;">
+                                <div class="frequency-container" id="yearly_frequencies">
+                                    @if (old('yearly_frequencies'))
+                                        @foreach (old('yearly_frequencies') as $index => $frequency)
+                                            <div class="frequency-item">
+                                                <div class="frequency-header">
+                                                    <span class="frequency-title">Yearly Option
+                                                        {{ $index + 1 }}</span>
+                                                    @if ($index > 0)
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                                 <div class="frequency-content">
                                                     <div class="frequency-row">
@@ -2110,10 +1973,10 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select frequency-no-select"
-                                                                    name="yearly_frequencies[0][no_of_times]">
+                                                                    name="yearly_frequencies[{{ $index }}][no_of_times]">
                                                                     @for ($i = 1; $i <= 12; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
+                                                                            {{ ($frequency['no_of_times'] ?? $i) == $i ? 'selected' : '' }}>
                                                                             {{ $i }}
                                                                             time{{ $i > 1 ? 's' : '' }}
                                                                         </option>
@@ -2128,11 +1991,12 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select"
-                                                                    name="yearly_frequencies[0][duration]">
+                                                                    name="yearly_frequencies[{{ $index }}][duration]">
                                                                     @for ($i = 1; $i <= 10; $i++)
                                                                         <option value="{{ $i }}"
-                                                                            {{ $i == 1 ? 'selected' : '' }}>
-                                                                            {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                            {{ ($frequency['duration'] ?? 1) == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
                                                                         </option>
                                                                     @endfor
                                                                 </select>
@@ -2145,195 +2009,101 @@
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <input type="number" class="modern-input"
-                                                                    name="yearly_frequencies[0][price_per_time]"
+                                                                    name="yearly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency['price_per_time'] ?? '' }}"
                                                                     step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group-modern full-width" style="grid-column: 1 / -1;">
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-align-left text-cyan"></i>
                                                                 Description
                                                             </label>
                                                             <div class="input-wrapper">
-                                                                <textarea class="modern-textarea"
-                                                                    name="yearly_frequencies[0][description]"
-                                                                    placeholder="Describe this yearly option"></textarea>
+                                                                <textarea class="modern-textarea" name="yearly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this yearly option">{{ $frequency['description'] ?? '' }}</textarea>
                                                                 <i class="fas fa-align-left input-icon"></i>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
-                                    </div>
-                                    
-                                    <button type="button" id="add_yearly_frequency"
-                                        class="modern-btn modern-btn-outline">
-                                        <i class="fas fa-plus"></i> Add Yearly Option
-                                    </button>
-                                </div>
-                                </div>
-                            </div>
-
-                            <!-- Additional Options within Pricing Section -->
-                            <div class="pricing-additional-options" style="margin-top: 20px; border-top: 1px solid rgba(0, 212, 255, 0.1); padding-top: 20px;">
-                                <div class="row">
-                                    <!-- Status -->
-                                    <div class="col-md-6">
-                                        <div class="form-group-modern action-field">
-                                            <label for="status" class="modern-label">
-                                                <i class="fas fa-toggle-on text-cyan"></i>
-                                                Status
-                                                <span class="required-badge">Required</span>
-                                            </label>
-                                            <div class="input-wrapper">
-                                                <select class="modern-select" id="status" name="status" required>
-                                                    <option value="active"
-                                                        {{ old('status', $service->status) == 'active' ? 'selected' : '' }}>Active
-                                                    </option>
-                                                    <option value="inactive"
-                                                        {{ old('status', $service->status) == 'inactive' ? 'selected' : '' }}>Inactive
-                                                    </option>
-                                                </select>
-                                                <i class="fas fa-toggle-on input-icon"></i>
-                                            </div>
-                                            @error('status')
-                                                <div class="error-message">
-                                                    <i class="fas fa-exclamation-circle"></i>
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <!-- Arabic Support -->
-                                    <div class="col-md-6">
-                                        <div class="form-group-modern action-field">
-                                            <label class="modern-label checkbox-label">
-                                                <i class="fas fa-language text-cyan"></i>
-                                                Arabic Support
-                                                <span class="optional-badge">Optional</span>
-                                            </label>
-                                            <div class="checkbox-wrapper">
-                                                <input type="checkbox" class="modern-checkbox" id="is_arabic"
-                                                    name="is_arabic" value="1" {{ old('is_arabic', $service->is_arabic) ? 'checked' : '' }}>
-                                                <label for="is_arabic" class="checkbox-text">This service supports Arabic
-                                                    language</label>
-                                            </div>
-                                            @error('is_arabic')
-                                                <div class="error-message">
-                                                    <i class="fas fa-exclamation-circle"></i>
-                                                        {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Add With Material Section -->
-                    <div class="full-width-section">
-                        <div class="materials-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-tools text-cyan"></i>
-                                Add With Material Section
-                            </h3>
-                            
-                            <div class="materials-container">
-                                <div id="materials_container">
-                                    @if (old('materials', $service->materials->toArray()))
-                                        @foreach (old('materials', $service->materials->toArray()) as $index => $material)
-                                            <div class="material-item">
-                                                <div class="material-header">
-                                                    <span class="material-title">Material {{ $index + 1 }}</span>
+                                        @endforeach
+                                    @elseif ($service->frequencyOptions && $service->frequencyOptions->where('frequency_type', 'yearly')->count() > 0)
+                                        @foreach ($service->frequencyOptions->where('frequency_type', 'yearly') as $index => $frequency)
+                                            <div class="frequency-item">
+                                                <div class="frequency-header">
+                                                    <span class="frequency-title">Yearly Option
+                                                        {{ $index + 1 }}</span>
                                                     @if ($index > 0)
-                                                        <button type="button" class="modern-btn-remove remove-material">
+                                                        <button type="button" class="modern-btn-remove remove-frequency">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     @endif
                                                 </div>
-                                                <div class="material-content">
-                                                    <div class="material-row">
-                                                        <div class="form-group-modern material-name">
+                                                <div class="frequency-content">
+                                                    <div class="frequency-row">
+                                                        <div class="form-group-modern frequency-no">
                                                             <label class="modern-label">
-                                                                <i class="fas fa-box text-cyan"></i>
-                                                                Material Name
-                                                                <span class="required-badge">Required</span>
+                                                                <i class="fas fa-hashtag text-cyan"></i>
+                                                                Times per Year
                                                             </label>
                                                             <div class="input-wrapper">
-                                                                <input type="text" class="modern-input"
-                                                                    name="materials[{{ $index }}][material_name]"
-                                                                    value="{{ $material['material_name'] ?? '' }}"
-                                                                    placeholder="Enter material name" required>
-                                                                <i class="fas fa-box input-icon"></i>
+                                                                <select class="modern-select frequency-no-select"
+                                                                    name="yearly_frequencies[{{ $index }}][no_of_times]">
+                                                                    @for ($i = 1; $i <= 12; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->no_of_times == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            time{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
                                                             </div>
                                                         </div>
-                                                        
-                                                        <div class="form-group-modern material-description">
+                                                        <div class="form-group-modern frequency-duration">
                                                             <label class="modern-label">
-                                                                <i class="fas fa-align-left text-cyan"></i>
-                                                                Material Description
-                                                                <span class="optional-badge">Optional</span>
-                                                            </label>
-                                                            <div class="input-wrapper">
-                                                                <textarea class="modern-textarea"
-                                                                    name="materials[{{ $index }}][material_description]"
-                                                                    placeholder="Describe the material">{{ $material['material_description'] ?? '' }}</textarea>
-                                                                <i class="fas fa-align-left input-icon"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="material-row">
-                                                        <div class="form-group-modern material-applicable">
-                                                            <label class="modern-label">
-                                                                <i class="fas fa-link text-cyan"></i>
-                                                                Set for Which Price
-                                                                <span class="required-badge">Required</span>
+                                                                <i class="fas fa-clock text-cyan"></i>
+                                                                Duration per Service
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <select class="modern-select"
-                                                                    name="materials[{{ $index }}][applicable_to]" required>
-                                                                    <option value="">Select Pricing Option</option>
-                                                                    <option value="onetime" {{ ($material['applicable_to'] ?? '') == 'onetime' ? 'selected' : '' }}>One Time Service</option>
-                                                                    <option value="weekly" {{ ($material['applicable_to'] ?? '') == 'weekly' ? 'selected' : '' }}>Weekly Subscription</option>
-                                                                    <option value="monthly" {{ ($material['applicable_to'] ?? '') == 'monthly' ? 'selected' : '' }}>Monthly Subscription</option>
-                                                                    <option value="yearly" {{ ($material['applicable_to'] ?? '') == 'yearly' ? 'selected' : '' }}>Yearly Subscription</option>
-                                                                    <option value="all" {{ ($material['applicable_to'] ?? '') == 'all' ? 'selected' : '' }}>All Service Subscriptions</option>
+                                                                    name="yearly_frequencies[{{ $index }}][duration]">
+                                                                    @for ($i = 1; $i <= 10; $i++)
+                                                                        <option value="{{ $i }}"
+                                                                            {{ $frequency->duration == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}
+                                                                            hour{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
                                                                 </select>
-                                                                <i class="fas fa-link input-icon"></i>
                                                             </div>
                                                         </div>
-                                                        
-                                                        <div class="form-group-modern material-price">
+                                                        <div class="form-group-modern frequency-price">
                                                             <label class="modern-label">
                                                                 <i class="fas fa-money-bill text-cyan"></i>
-                                                                Material Price
-                                                                <span class="required-badge">Required</span>
+                                                                Price per Time
                                                             </label>
                                                             <div class="input-wrapper">
                                                                 <input type="number" class="modern-input"
-                                                                    name="materials[{{ $index }}][material_price]"
-                                                                    value="{{ $material['material_price'] ?? '' }}"
-                                                                    step="0.01" min="0" placeholder="0.00" required>
+                                                                    name="yearly_frequencies[{{ $index }}][price_per_time]"
+                                                                    value="{{ $frequency->price_per_time }}"
+                                                                    step="0.01" min="0" placeholder="0.00">
                                                                 <span class="input-suffix">AED</span>
                                                             </div>
                                                         </div>
-                                                        
-                                                        <div class="form-group-modern material-image">
+                                                        <div class="form-group-modern full-width"
+                                                            style="grid-column: 1 / -1;">
                                                             <label class="modern-label">
-                                                                <i class="fas fa-image text-cyan"></i>
-                                                                Material Image
-                                                                <span class="optional-badge">Optional</span>
+                                                                <i class="fas fa-align-left text-cyan"></i>
+                                                                Description
                                                             </label>
                                                             <div class="input-wrapper">
-                                                                <input type="file" class="modern-input file-input"
-                                                                    name="materials[{{ $index }}][material_image]"
-                                                                    accept="*">
-                                                                <i class="fas fa-image input-icon"></i>
+                                                                <textarea class="modern-textarea" name="yearly_frequencies[{{ $index }}][description]"
+                                                                    placeholder="Describe this yearly option">{{ $frequency->description }}</textarea>
+                                                                <i class="fas fa-align-left input-icon"></i>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2341,87 +2111,69 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="material-item">
-                                            <div class="material-header">
-                                                <span class="material-title">Material 1</span>
+                                        <div class="frequency-item">
+                                            <div class="frequency-header">
+                                                <span class="frequency-title">Yearly Option 1</span>
                                             </div>
-                                            <div class="material-content">
-                                                <div class="material-row">
-                                                    <div class="form-group-modern material-name">
+                                            <div class="frequency-content">
+                                                <div class="frequency-row">
+                                                    <div class="form-group-modern frequency-no">
                                                         <label class="modern-label">
-                                                            <i class="fas fa-box text-cyan"></i>
-                                                            Material Name
-                                                            <span class="required-badge">Required</span>
+                                                            <i class="fas fa-hashtag text-cyan"></i>
+                                                            Times per Year
                                                         </label>
                                                         <div class="input-wrapper">
-                                                            <input type="text" class="modern-input"
-                                                                name="materials[0][material_name]"
-                                                                placeholder="Enter material name" required>
-                                                            <i class="fas fa-box input-icon"></i>
+                                                            <select class="modern-select frequency-no-select"
+                                                                name="yearly_frequencies[0][no_of_times]">
+                                                                @for ($i = 1; $i <= 12; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }}
+                                                                        time{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <div class="form-group-modern material-description">
+                                                    <div class="form-group-modern frequency-duration">
                                                         <label class="modern-label">
-                                                            <i class="fas fa-align-left text-cyan"></i>
-                                                            Material Description
-                                                            <span class="optional-badge">Optional</span>
-                                                        </label>
-                                                        <div class="input-wrapper">
-                                                            <textarea class="modern-textarea"
-                                                                name="materials[0][material_description]"
-                                                                placeholder="Describe the material"></textarea>
-                                                            <i class="fas fa-align-left input-icon"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="material-row">
-                                                    <div class="form-group-modern material-applicable">
-                                                        <label class="modern-label">
-                                                            <i class="fas fa-link text-cyan"></i>
-                                                            Set for Which Price
-                                                            <span class="required-badge">Required</span>
+                                                            <i class="fas fa-clock text-cyan"></i>
+                                                            Duration per Service
                                                         </label>
                                                         <div class="input-wrapper">
                                                             <select class="modern-select"
-                                                                name="materials[0][applicable_to]" required>
-                                                                <option value="">Select Pricing Option</option>
-                                                                <option value="onetime">One Time Service</option>
-                                                                <option value="weekly">Weekly Subscription</option>
-                                                                <option value="monthly">Monthly Subscription</option>
-                                                                <option value="yearly">Yearly Subscription</option>
-                                                                <option value="all">All Service Subscriptions</option>
+                                                                name="yearly_frequencies[0][duration]">
+                                                                @for ($i = 1; $i <= 10; $i++)
+                                                                    <option value="{{ $i }}"
+                                                                        {{ $i == 1 ? 'selected' : '' }}>
+                                                                        {{ $i }} hour{{ $i > 1 ? 's' : '' }}
+                                                                    </option>
+                                                                @endfor
                                                             </select>
-                                                            <i class="fas fa-link input-icon"></i>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <div class="form-group-modern material-price">
+                                                    <div class="form-group-modern frequency-price">
                                                         <label class="modern-label">
                                                             <i class="fas fa-money-bill text-cyan"></i>
-                                                            Material Price
-                                                            <span class="required-badge">Required</span>
+                                                            Price per Time
                                                         </label>
                                                         <div class="input-wrapper">
                                                             <input type="number" class="modern-input"
-                                                                name="materials[0][material_price]"
-                                                                step="0.01" min="0" placeholder="0.00" required>
+                                                                name="yearly_frequencies[0][price_per_time]"
+                                                                step="0.01" min="0" placeholder="0.00">
                                                             <span class="input-suffix">AED</span>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <div class="form-group-modern material-image">
+                                                    <div class="form-group-modern full-width"
+                                                        style="grid-column: 1 / -1;">
                                                         <label class="modern-label">
-                                                            <i class="fas fa-image text-cyan"></i>
-                                                            Material Image
-                                                            <span class="optional-badge">Optional</span>
+                                                            <i class="fas fa-align-left text-cyan"></i>
+                                                            Description
                                                         </label>
                                                         <div class="input-wrapper">
-                                                            <input type="file" class="modern-input file-input"
-                                                                name="materials[0][material_image]"
-                                                                accept="*">
-                                                            <i class="fas fa-image input-icon"></i>
+                                                            <textarea class="modern-textarea" name="yearly_frequencies[0][description]"
+                                                                placeholder="Describe this yearly option"></textarea>
+                                                            <i class="fas fa-align-left input-icon"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2429,64 +2181,364 @@
                                         </div>
                                     @endif
                                 </div>
-                                
-                                <button type="button" id="add_material" class="modern-btn modern-btn-outline">
-                                    <i class="fas fa-plus"></i>
-                                    Add More With Material
+
+                                <button type="button" id="add_yearly_frequency" class="modern-btn modern-btn-outline">
+                                    <i class="fas fa-plus"></i> Add Yearly Option
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Additional Form Fields (Service Images and Actions) -->
-                    <div class="form-grid">
-                        <!-- Service Images (Full Width) -->
-                    <div class="form-group-modern full-width">
-                        <label for="images" class="modern-label">
-                            <i class="fas fa-images text-cyan"></i>
-                            Service Images
-                            <span class="optional-badge">Optional</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="file" class="modern-input file-input" id="images" name="images[]"
-                                accept="*" multiple>
-                            <i class="fas fa-images input-icon"></i>
-                        </div>
-                        @error('images')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
+                    <!-- Additional Options within Pricing Section -->
+                    <div class="pricing-additional-options"
+                        style="margin-top: 20px; border-top: 1px solid rgba(0, 212, 255, 0.1); padding-top: 20px;">
+                        <div class="row">
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <div class="form-group-modern action-field">
+                                    <label for="status" class="modern-label">
+                                        <i class="fas fa-toggle-on text-cyan"></i>
+                                        Status
+                                        <span class="required-badge">Required</span>
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <select class="modern-select" id="status" name="status" required>
+                                            <option value="active"
+                                                {{ old('status', $service->status) == 'active' ? 'selected' : '' }}>Active
+                                            </option>
+                                            <option value="inactive"
+                                                {{ old('status', $service->status) == 'inactive' ? 'selected' : '' }}>
+                                                Inactive
+                                            </option>
+                                        </select>
+                                        <i class="fas fa-toggle-on input-icon"></i>
+                                    </div>
+                                    @error('status')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
-                        @enderror
-                        @error('images.*')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
+
+                            <!-- Arabic Support -->
+                            <div class="col-md-6">
+                                <div class="form-group-modern action-field">
+                                    <label class="modern-label checkbox-label">
+                                        <i class="fas fa-language text-cyan"></i>
+                                        Arabic Support
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="checkbox-wrapper">
+                                        <input type="checkbox" class="modern-checkbox" id="is_arabic" name="is_arabic"
+                                            value="1" {{ old('is_arabic', $service->is_arabic) ? 'checked' : '' }}>
+                                        <label for="is_arabic" class="checkbox-text">This service supports Arabic
+                                            language</label>
+                                    </div>
+                                    @error('is_arabic')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
-                        @enderror
-                        <div class="field-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Upload multiple image files to represent this service (All formats and sizes accepted, no limit)
                         </div>
+
+                        <!-- Quantity Support Option -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-modern action-field">
+                                    <label class="modern-label checkbox-label">
+                                        <i class="fas fa-plus-circle text-cyan"></i>
+                                        Quantity Support
+                                        <span class="optional-badge">Optional</span>
+                                    </label>
+                                    <div class="checkbox-wrapper">
+                                        <input type="checkbox" class="modern-checkbox" id="allow_quantity_increment"
+                                            name="allow_quantity_increment" value="1"
+                                            {{ old('allow_quantity_increment', $service->allow_quantity_increment == 1) ? 'checked' : '' }}>
+                                        <label for="allow_quantity_increment" class="checkbox-text">This service allows
+                                            quantity incrementation</label>
+                                    </div>
+                                    @error('allow_quantity_increment')
+                                        <div class="error-message">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <div class="field-hint">
+                                        <i class="fas fa-info-circle"></i>
+                                        Enable this if customers can increase the quantity of this service during booking
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Add With Material Section -->
+        <div class="full-width-section">
+            <div class="materials-section">
+                <h3 class="section-title">
+                    <i class="fas fa-tools text-cyan"></i>
+                    Add With Material Section
+                </h3>
+
+                <div class="materials-container">
+                    <div id="materials_container">
+                        @if (old('materials', $service->materials->toArray()))
+                            @foreach (old('materials', $service->materials->toArray()) as $index => $material)
+                                <div class="material-item">
+                                    <div class="material-header">
+                                        <span class="material-title">Material {{ $index + 1 }}</span>
+                                        @if ($index > 0)
+                                            <button type="button" class="modern-btn-remove remove-material">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        @endif
+                                    </div>
+                                    <div class="material-content">
+                                        <div class="material-row">
+                                            <div class="form-group-modern material-name">
+                                                <label class="modern-label">
+                                                    <i class="fas fa-box text-cyan"></i>
+                                                    Material Name
+                                                    <span class="required-badge">Required</span>
+                                                </label>
+                                                <div class="input-wrapper">
+                                                    <input type="text" class="modern-input"
+                                                        name="materials[{{ $index }}][material_name]"
+                                                        value="{{ $material['material_name'] ?? '' }}"
+                                                        placeholder="Enter material name" required>
+                                                    <i class="fas fa-box input-icon"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group-modern material-description">
+                                                <label class="modern-label">
+                                                    <i class="fas fa-align-left text-cyan"></i>
+                                                    Material Description
+                                                    <span class="optional-badge">Optional</span>
+                                                </label>
+                                                <div class="input-wrapper">
+                                                    <textarea class="modern-textarea" name="materials[{{ $index }}][material_description]"
+                                                        placeholder="Describe the material">{{ $material['material_description'] ?? '' }}</textarea>
+                                                    <i class="fas fa-align-left input-icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="material-row">
+                                            <div class="form-group-modern material-applicable">
+                                                <label class="modern-label">
+                                                    <i class="fas fa-link text-cyan"></i>
+                                                    Set for Which Price
+                                                    <span class="required-badge">Required</span>
+                                                </label>
+                                                <div class="input-wrapper">
+                                                    <select class="modern-select"
+                                                        name="materials[{{ $index }}][applicable_to]" required>
+                                                        <option value="">Select Pricing Option</option>
+                                                        <option value="onetime"
+                                                            {{ ($material['applicable_to'] ?? '') == 'onetime' ? 'selected' : '' }}>
+                                                            One Time Service</option>
+                                                        <option value="weekly"
+                                                            {{ ($material['applicable_to'] ?? '') == 'weekly' ? 'selected' : '' }}>
+                                                            Weekly Subscription</option>
+                                                        <option value="monthly"
+                                                            {{ ($material['applicable_to'] ?? '') == 'monthly' ? 'selected' : '' }}>
+                                                            Monthly Subscription</option>
+                                                        <option value="yearly"
+                                                            {{ ($material['applicable_to'] ?? '') == 'yearly' ? 'selected' : '' }}>
+                                                            Yearly Subscription</option>
+                                                        <option value="all"
+                                                            {{ ($material['applicable_to'] ?? '') == 'all' ? 'selected' : '' }}>
+                                                            All Service Subscriptions</option>
+                                                    </select>
+                                                    <i class="fas fa-link input-icon"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group-modern material-price">
+                                                <label class="modern-label">
+                                                    <i class="fas fa-money-bill text-cyan"></i>
+                                                    Material Price
+                                                    <span class="required-badge">Required</span>
+                                                </label>
+                                                <div class="input-wrapper">
+                                                    <input type="number" class="modern-input"
+                                                        name="materials[{{ $index }}][material_price]"
+                                                        value="{{ $material['material_price'] ?? '' }}" step="0.01"
+                                                        min="0" placeholder="0.00" required>
+                                                    <span class="input-suffix">AED</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group-modern material-image">
+                                                <label class="modern-label">
+                                                    <i class="fas fa-image text-cyan"></i>
+                                                    Material Image
+                                                    <span class="optional-badge">Optional</span>
+                                                </label>
+                                                <div class="input-wrapper">
+                                                    <input type="file" class="modern-input file-input"
+                                                        name="materials[{{ $index }}][material_image]"
+                                                        accept="*">
+                                                    <i class="fas fa-image input-icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="material-item">
+                                <div class="material-header">
+                                    <span class="material-title">Material 1</span>
+                                </div>
+                                <div class="material-content">
+                                    <div class="material-row">
+                                        <div class="form-group-modern material-name">
+                                            <label class="modern-label">
+                                                <i class="fas fa-box text-cyan"></i>
+                                                Material Name
+                                                <span class="required-badge">Required</span>
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <input type="text" class="modern-input"
+                                                    name="materials[0][material_name]" placeholder="Enter material name"
+                                                    required>
+                                                <i class="fas fa-box input-icon"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group-modern material-description">
+                                            <label class="modern-label">
+                                                <i class="fas fa-align-left text-cyan"></i>
+                                                Material Description
+                                                <span class="optional-badge">Optional</span>
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <textarea class="modern-textarea" name="materials[0][material_description]" placeholder="Describe the material"></textarea>
+                                                <i class="fas fa-align-left input-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="material-row">
+                                        <div class="form-group-modern material-applicable">
+                                            <label class="modern-label">
+                                                <i class="fas fa-link text-cyan"></i>
+                                                Set for Which Price
+                                                <span class="required-badge">Required</span>
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <select class="modern-select" name="materials[0][applicable_to]" required>
+                                                    <option value="">Select Pricing Option</option>
+                                                    <option value="onetime">One Time Service</option>
+                                                    <option value="weekly">Weekly Subscription</option>
+                                                    <option value="monthly">Monthly Subscription</option>
+                                                    <option value="yearly">Yearly Subscription</option>
+                                                    <option value="all">All Service Subscriptions</option>
+                                                </select>
+                                                <i class="fas fa-link input-icon"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group-modern material-price">
+                                            <label class="modern-label">
+                                                <i class="fas fa-money-bill text-cyan"></i>
+                                                Material Price
+                                                <span class="required-badge">Required</span>
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <input type="number" class="modern-input"
+                                                    name="materials[0][material_price]" step="0.01" min="0"
+                                                    placeholder="0.00" required>
+                                                <span class="input-suffix">AED</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group-modern material-image">
+                                            <label class="modern-label">
+                                                <i class="fas fa-image text-cyan"></i>
+                                                Material Image
+                                                <span class="optional-badge">Optional</span>
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <input type="file" class="modern-input file-input"
+                                                    name="materials[0][material_image]" accept="*">
+                                                <i class="fas fa-image input-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
-                    <!-- Form Actions -->
-                    <div class="form-actions">
-                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
-                            <i class="fas fa-plus"></i>
-                            <span class="btn-text">Edit Service</span>
-                            <div class="btn-loader" style="display: none;">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </div>
-                        </button>
-                        <button type="reset" class="modern-btn modern-btn-secondary">
-                            <i class="fas fa-undo"></i>
-                            Reset Form
-                        </button>
-                    </div>
-                    </div> <!-- Closing form-grid for additional fields -->
-            </form>
+                    <button type="button" id="add_material" class="modern-btn modern-btn-outline">
+                        <i class="fas fa-plus"></i>
+                        Add More With Material
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- Additional Form Fields (Service Images and Actions) -->
+        <div class="form-grid">
+            <!-- Service Images (Full Width) -->
+            <div class="form-group-modern full-width">
+                <label for="images" class="modern-label">
+                    <i class="fas fa-images text-cyan"></i>
+                    Service Images
+                    <span class="optional-badge">Optional</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="file" class="modern-input file-input" id="images" name="images[]"
+                        accept="*" multiple>
+                    <i class="fas fa-images input-icon"></i>
+                </div>
+                @error('images')
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
+                @error('images.*')
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
+                <div class="field-hint">
+                    <i class="fas fa-info-circle"></i>
+                    Upload multiple image files to represent this service (All formats and sizes accepted, no limit)
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                    <i class="fas fa-plus"></i>
+                    <span class="btn-text">Edit Service</span>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+                <button type="reset" class="modern-btn modern-btn-secondary">
+                    <i class="fas fa-undo"></i>
+                    Reset Form
+                </button>
+            </div>
+        </div> <!-- Closing form-grid for additional fields -->
+        </form>
+    </div>
     </div>
 
 
@@ -2494,9 +2546,11 @@
     <script>
         // Prevent nice-select from initializing on admin pages
         if (typeof $.fn.niceSelect !== 'undefined') {
-            $.fn.niceSelect = function() { return this; };
+            $.fn.niceSelect = function() {
+                return this;
+            };
         }
-        
+
         $(document).ready(function() {
             // Form submission with loading state
             $('#serviceForm').on('submit', function() {
@@ -2826,14 +2880,15 @@
             // Materials functionality - using vanilla JS like edit form
             let materialIndex = document.querySelectorAll('#materials_container .material-item').length;
             console.log('Initial material index (from DOM):', materialIndex);
-            
+
             document.getElementById('add_material')?.addEventListener('click', function(e) {
                 e.preventDefault();
                 const container = document.getElementById('materials_container');
                 const currentIndex = materialIndex++;
                 console.log('=== ADDING MATERIAL ===');
                 console.log('Current material index:', currentIndex);
-                console.log('Materials in container before add:', container.querySelectorAll('.material-item').length);
+                console.log('Materials in container before add:', container.querySelectorAll(
+                    '.material-item').length);
                 const newMaterial = document.createElement('div');
                 newMaterial.className = 'material-item';
                 newMaterial.innerHTML = `
@@ -2926,7 +2981,8 @@
                     </div>
                 `;
                 container.appendChild(newMaterial);
-                console.log('Material added. Total materials now:', container.querySelectorAll('.material-item').length);
+                console.log('Material added. Total materials now:', container.querySelectorAll(
+                    '.material-item').length);
                 console.log('New material field names:');
                 newMaterial.querySelectorAll('input, select, textarea').forEach(field => {
                     console.log('  ' + field.getAttribute('name'));
@@ -2952,20 +3008,23 @@
                         hasErrors = true;
                     }
                 });
-                
+
                 if (hasErrors) {
                     e.preventDefault();
                     alert('Please fill in all required fields before submitting.');
                     return false;
                 }
-                
+
                 // Reindex materials sequentially to ensure PHP parses all items
                 $('#materials_container .material-item').each(function(i) {
                     $(this)
-                        .find('input[name^="materials["], select[name^="materials["], textarea[name^="materials["]')
+                        .find(
+                            'input[name^="materials["], select[name^="materials["], textarea[name^="materials["]'
+                            )
                         .each(function() {
                             const oldName = $(this).attr('name');
-                            const newName = oldName.replace(/materials\[\d+\]/, 'materials[' + i + ']');
+                            const newName = oldName.replace(/materials\[\d+\]/, 'materials[' +
+                                i + ']');
                             $(this).attr('name', newName);
                         });
                 });
@@ -2974,7 +3033,7 @@
                 const formElement = this;
                 const allMaterialInputs = document.querySelectorAll('[name^="materials["]');
                 const formMaterialInputs = formElement.querySelectorAll('[name^="materials["]');
-                
+
                 // If material inputs are outside form, create hidden inputs inside form
                 if (formMaterialInputs.length === 0 && allMaterialInputs.length > 0) {
                     allMaterialInputs.forEach(input => {
@@ -3001,14 +3060,14 @@
 
             // Category-Subcategory filtering
             const allSubcategoryOptions = $('#subcategory_id option').clone();
-            
+
             function filterSubcategories() {
                 const selectedCategoryId = $('#category_id').val();
                 const currentSubcategoryId = $('#subcategory_id').val();
-                
+
                 // Clear subcategory dropdown
                 $('#subcategory_id').empty();
-                
+
                 if (selectedCategoryId) {
                     // Filter and add subcategories for selected category
                     let hasSubcategories = false;
@@ -3019,19 +3078,19 @@
                             hasSubcategories = true;
                         }
                     });
-                    
+
                     // Add "None" option only if there are subcategories
                     if (hasSubcategories) {
                         $('#subcategory_id').prepend('<option value="">Select Subcategory</option>');
                     } else {
                         $('#subcategory_id').append('<option value="">No subcategories available</option>');
                     }
-                    
+
                     // Restore previously selected subcategory if it belongs to this category
                     if (currentSubcategoryId && hasSubcategories) {
                         const matchingOption = allSubcategoryOptions.filter(function() {
-                            return $(this).val() == currentSubcategoryId && 
-                                   $(this).data('category-id') == selectedCategoryId;
+                            return $(this).val() == currentSubcategoryId &&
+                                $(this).data('category-id') == selectedCategoryId;
                         });
                         if (matchingOption.length > 0) {
                             $('#subcategory_id').val(currentSubcategoryId);
@@ -3042,10 +3101,10 @@
                     $('#subcategory_id').append(allSubcategoryOptions.clone());
                 }
             }
-            
+
             // Filter on page load
             filterSubcategories();
-            
+
             // Filter when category changes
             $('#category_id').on('change', function() {
                 filterSubcategories();
@@ -3053,7 +3112,3 @@
         });
     </script>
 @endsection
-
-
-
-

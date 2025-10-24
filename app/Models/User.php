@@ -132,6 +132,12 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'vendor_id');
     }
 
+    // Relationship with addresses
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
     // Feedback relationships
     public function feedbacks()
     {

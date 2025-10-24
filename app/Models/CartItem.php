@@ -39,6 +39,12 @@ class CartItem extends Model
         return $this->belongsTo(Cart::class);
     }
 
+    // Relationship with User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // Relationship with Service Frequency
     public function serviceFrequency()
     {

@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Service;
-
-use App\Models\Offer;
+use App\Models\ServiceOffer;
 use Illuminate\Http\Request;
 
 class ServiceApiController extends Controller
@@ -135,6 +134,7 @@ class ServiceApiController extends Controller
     public function viewService(Request $request)
     {
         try {
+            $userId = $request->input('user') ?? null;
             $serviceId = $request->input('service');
             $type = $request->input('type');
 
@@ -146,42 +146,24 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
+            $query = Service::with([
+                'category',
+                'subcategory',
+                'requirements',
+                'processes',
+                'faq',
+                'subscriptionPlans',
+                'materials',
+                'servicePersons'
+            ]);
+
             if ($type == 'qwikpick') {
-                $service = Service::with([
-                    'category',
-                    'subcategory',
-                    'requirements',
-                    'processes',
-                    'faq',
-                    'subscriptionPlans',
-                    'materials',
-                    'servicePersons'
-                ])->where('qwikpick', 1)->find($serviceId);
+                $service = $query->where('qwikpick', 1)->find($serviceId);
             } elseif ($type == 'beauty_and_easy') {
-                $service = Service::with([
-                    'category',
-                    'subcategory',
-                    'requirements',
-                    'processes',
-                    'faq',
-                    'subscriptionPlans',
-                    'materials',
-                    'servicePersons'
-                ])->where('beauty_and_easy', 1)->find($serviceId);
+                $service = $query->where('beauty_and_easy', 1)->find($serviceId);
             } elseif (!$type) {
-
-                $service = Service::with([
-                    'category',
-                    'subcategory',
-                    'requirements',
-                    'processes',
-                    'faq',
-                    'subscriptionPlans',
-                    'materials',
-                    'servicePersons'
-                ])->find($serviceId);
+                $service = $query->find($serviceId);
             }
-
 
             if (!$service) {
                 return response()->json([
@@ -203,6 +185,16 @@ class ServiceApiController extends Controller
             // Create custom service data with restructured FAQ
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
+
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
+
+            // Add onetime_price array before subscription_plans
+            $onetimeOptions = $service->subscriptionPlans->where('frequency_type', 'onetime');
+            $serviceData['onetime_price'] = null;
+            if ($onetimeOptions->isNotEmpty()) {
+                $serviceData['onetime_price'] = $onetimeOptions->first()->price_per_time;
+            }
 
             // Restructure prices into array
             $priceFields = [
@@ -227,11 +219,16 @@ class ServiceApiController extends Controller
                 $serviceData['requirements'] = [[], [], []];
             }
 
+            //check this service in cart
+            $incart = CartItem::where('item_id', $serviceData['id'])->where('user_id', $userId)->first();
+
             return response()->json([
                 'success' => true,
                 'status_code' => 200,
                 'message' => 'Service details retrieved successfully',
                 'data' => [
+                    'in_cart_quantity' => $incart['quantity'] ?? 0,
+                    'allow_increment' => $serviceData['allow_quantity_increment'],
                     'service' => $serviceData,
                 ]
             ], 200);
@@ -376,7 +373,7 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $offer = Offer::find($offerId);
+            $offer = ServiceOffer::find($offerId);
 
             if (!$offer) {
                 return response()->json([

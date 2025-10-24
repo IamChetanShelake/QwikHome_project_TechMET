@@ -116,12 +116,6 @@ class Service extends Model
         return $this->hasMany(ServiceOffer::class);
     }
 
-    // Active offers
-    public function activeOffers()
-    {
-        return $this->hasMany(ServiceOffer::class)->active();
-    }
-
     // Frequency options relationship
     public function frequencyOptions()
     {
@@ -163,5 +157,14 @@ class Service extends Model
     public function subscriptionPlans()
     {
         return $this->hasMany(ServiceFrequencyOption::class, 'service_id');
+    }
+
+    // Get the primary vendor for this service (first vendor associated with it)
+    public function getVendorIdAttribute()
+    {
+        $vendor = $this->belongsToMany(User::class, 'user_services')
+                      ->where('role', 'vendor')
+                      ->first();
+        return $vendor ? $vendor->id : null;
     }
 }
