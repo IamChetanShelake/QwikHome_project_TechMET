@@ -9,28 +9,23 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'service_id',
-        'customer_id',
-        'service_provider_id',
-        'vendor_id',
-        'booking_reference',
-        'scheduled_date',
-        'start_time',
-        'end_time',
-        'status',
-        'price',
-        'customer_notes',
-        'vendor_notes',
-        'completed_at',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'scheduled_date' => 'date',
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
         'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
         'price' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'total_amount' => 'decimal:2',
+        'paid_amount' => 'decimal:2',
+        'refund_amount' => 'decimal:2',
+        'cancellation_fee' => 'decimal:2',
+        'payment_due_date' => 'date',
+        'next_booking_date' => 'date',
     ];
 
     // Relationships
@@ -52,6 +47,37 @@ class Booking extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    // New payment and subscription relationships
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(UserSubscription::class, 'subscription_id');
+    }
+
+    public function parentBooking()
+    {
+        return $this->belongsTo(Booking::class, 'parent_booking_id');
+    }
+
+    public function childBookings()
+    {
+        return $this->hasMany(Booking::class, 'parent_booking_id');
+    }
+
+    public function bookingPayments()
+    {
+        return $this->hasMany(BookingPayment::class);
+    }
+
+    public function paymentTransactions()
+    {
+        return $this->hasManyThrough(PaymentTransaction::class, BookingPayment::class, 'booking_id', 'id', 'id', 'payment_transaction_id');
     }
 
     // Scope for filtering by status

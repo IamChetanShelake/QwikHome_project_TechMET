@@ -8,7 +8,10 @@ use App\Http\Controllers\api\ServiceApiController;
 use App\Http\Controllers\api\PolicyApiController;
 use App\Http\Controllers\api\UserApiController;
 use App\Http\Controllers\api\WishlistApiController;
+use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\api\BookingApiController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\HomeApiController;
@@ -44,7 +47,8 @@ Route::get('/categories', [ServiceApiController::class, 'categories']);
 Route::post('/services', [ServiceApiController::class, 'services']);
 
 //everythingWeOffer-----------------------
-Route::get('/everything-we-offer', [ServiceApiController::class, 'everythingWeOffer']);
+Route::get('/everythingWeOffer', [ServiceApiController::class, 'everythingWeOffer']);
+
 
 //subcategoryServices-----------------------
 Route::post('/servicesOfSubcategory', [ServiceApiController::class, 'subcategoryServices']);
@@ -60,6 +64,8 @@ Route::post('/addresses', [AddressApiController::class, 'index']); // Get all ad
 Route::post('/addresses-store', [AddressApiController::class, 'store']); // Add new address
 Route::post('/addresses-edit', [AddressApiController::class, 'update']); // Edit address
 Route::post('/addresses-delete', [AddressApiController::class, 'destroy']); // Remove address
+Route::post('/addressesToDefault', [AddressApiController::class, 'setAsDefault']); // Set address as default
+
 
 // Reviews API routes (public for viewing reviews)
 Route::get('/services/{serviceId}/reviews', [ReviewApiController::class, 'indexServiceReviews']);
@@ -68,12 +74,6 @@ Route::get('/service-providers/{serviceProviderId}/reviews', [ReviewApiControlle
 // Reviews API routes (protected for submitting reviews)
 Route::post('/services/{serviceId}/reviews', [ReviewApiController::class, 'storeServiceReview']);
 Route::post('/service-providers/{serviceProviderId}/reviews', [ReviewApiController::class, 'storeServiceProviderReview']);
-
-
-
-
-
-
 
 
 // Protected routes (require authentication)
@@ -98,8 +98,32 @@ Route::post('/update-fcm-token', [UserApiController::class, 'updateFcmToken']);
 Route::get('/refund-policy', [PolicyApiController::class, 'getRefundPolicy']);
 Route::get('/terms-conditions', [PolicyApiController::class, 'getTermsConditions']);
 
+// Cart API routes
+Route::post('/addToCart', [CartController::class, 'addToCart']);
+Route::post('/cart', [CartController::class, 'getCart']);
+Route::post('/cartRemove', [CartController::class, 'removeFromCart']);
+Route::post('/cartUpdateQuantity', [CartController::class, 'updateCartItemQuantity']);
+Route::post('/Payment', [CartController::class, 'PaymentPage']);
+Route::post('/processCartPayment', [CartController::class, 'processCartPayment']);
+Route::post('/cartPaymentStatus', [CartController::class, 'getCartPaymentStatus']);
+Route::post('/paymentHistory', [CartController::class, 'getPaymentHistory']);
+Route::post('/paymentSummary', [CartController::class, 'getPaymentSummary']);
+
 // Wishlist API routes
-Route::post('/wishlist', [WishlistApiController::class, 'store']); // Add to wishlist
-Route::get('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
-Route::delete('/wishlist/{id}', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
+Route::post('/wishlist-store', [WishlistApiController::class, 'store']); // Add to wishlist
+Route::post('/wishlist', [WishlistApiController::class, 'index']); // Get user's wishlist
+Route::post('/wishlist-delete', [WishlistApiController::class, 'destroy']); // Remove specific wishlist item
 Route::post('/wishlist/remove-item', [WishlistApiController::class, 'removeItem']); // Remove specific service/offer from wishlist
+
+// Booking API routes
+Route::post('/bookingOptions', [BookingApiController::class, 'getBookingOptions']); // Get booking options (dates, times, service providers)
+Route::post('/createBooking', [BookingApiController::class, 'createBooking']); // Create new booking
+
+Route::post('/myBookings', [BookingApiController::class, 'bookingHistory']); //  booking history
+
+// Push Notification API routes
+Route::post('/notification/send-booking-confirmation', [NotificationController::class, 'sendBookingConfirmation']);
+Route::post('/notification/send-booking-cancellation', [NotificationController::class, 'sendBookingCancellation']);
+Route::post('/notification/send-booking-status-update', [NotificationController::class, 'sendBookingStatusUpdate']);
+Route::post('/notification/send-batch-notifications', [NotificationController::class, 'sendBatchNotifications']);
+Route::post('/notification/cancel-booking', [NotificationController::class, 'cancelBooking']);

@@ -1898,6 +1898,34 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Quantity Support Option -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-modern action-field">
+                                            <label class="modern-label checkbox-label">
+                                                <i class="fas fa-plus-circle text-cyan"></i>
+                                                Quantity Support
+                                                <span class="optional-badge">Optional</span>
+                                            </label>
+                                            <div class="checkbox-wrapper">
+                                                <input type="checkbox" class="modern-checkbox" id="allow_quantity_increment"
+                                                    name="allow_quantity_increment" value="1" {{ old('allow_quantity_increment') ? 'checked' : '' }}>
+                                                <label for="allow_quantity_increment" class="checkbox-text">This service allows quantity incrementation</label>
+                                            </div>
+                                            @error('allow_quantity_increment')
+                                                <div class="error-message">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                        {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <div class="field-hint">
+                                                <i class="fas fa-info-circle"></i>
+                                                Enable this if customers can increase the quantity of this service during booking
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

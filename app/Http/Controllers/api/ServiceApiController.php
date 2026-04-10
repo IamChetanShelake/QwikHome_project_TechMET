@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Service;
-use App\Models\Offer;
+use App\Models\ServiceOffer;
 use Illuminate\Http\Request;
 
 class ServiceApiController extends Controller
@@ -134,6 +134,7 @@ class ServiceApiController extends Controller
     public function viewService(Request $request)
     {
         try {
+            $userId = $request->input('user') ?? null;
             $serviceId = $request->input('service');
             $type = $request->input('type');
 
@@ -145,15 +146,24 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
+            $query = Service::with([
+                'category',
+                'subcategory',
+                'requirements',
+                'processes',
+                'faq',
+                'subscriptionPlans',
+                'materials',
+                'servicePersons'
+            ]);
+
             if ($type == 'qwikpick') {
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->where('qwikpick', 1)->find($serviceId);
+                $service = $query->where('qwikpick', 1)->find($serviceId);
             } elseif ($type == 'beauty_and_easy') {
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->where('beauty_and_easy', 1)->find($serviceId);
+                $service = $query->where('beauty_and_easy', 1)->find($serviceId);
             } elseif (!$type) {
-
-                $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'faq'])->find($serviceId);
+                $service = $query->find($serviceId);
             }
-
 
             if (!$service) {
                 return response()->json([
@@ -176,11 +186,49 @@ class ServiceApiController extends Controller
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
 
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
+
+            // Add onetime_price array before subscription_plans
+            $onetimeOptions = $service->subscriptionPlans->where('frequency_type', 'onetime');
+            $serviceData['onetime_price'] = null;
+            if ($onetimeOptions->isNotEmpty()) {
+                $serviceData['onetime_price'] = $onetimeOptions->first()->price_per_time;
+            }
+
+            // Restructure prices into array
+            $priceFields = [
+                'price_onetime',
+                'price_onetime_description',
+                'duration_onetime',
+                'price_weekly',
+                'price_weekly_description',
+                'price_monthly',
+                'price_monthly_description',
+                'price_yearly',
+                'price_yearly_description'
+            ];
+            $serviceData['prices'] = [];
+            foreach ($priceFields as $field) {
+                $serviceData['prices'][$field] = $serviceData[$field] ?? null;
+                unset($serviceData[$field]);
+            }
+
+            // Modify requirements if exactly 3 items
+            if (isset($serviceData['requirements']) && is_array($serviceData['requirements']) && count($serviceData['requirements']) === 3) {
+                $serviceData['requirements'] = [[], [], []];
+            }
+
+            //check this service in cart
+            $incart = CartItem::where('item_id', $serviceData['id'])->where('user_id', $userId)->first();
+
             return response()->json([
                 'success' => true,
                 'status_code' => 200,
                 'message' => 'Service details retrieved successfully',
                 'data' => [
+                    'in_cart_quantity' => $incart['quantity'] ?? 0,
+                    'allow_increment' => $serviceData['allow_quantity_increment'],
                     'service' => $serviceData,
                 ]
             ], 200);
@@ -198,6 +246,7 @@ class ServiceApiController extends Controller
     {
         try {
             $serviceId = $request->input('service');
+            $userId = $request->input('user');
 
             if (!$serviceId) {
                 return response()->json([
@@ -207,7 +256,9 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq'])->where('id', $serviceId)->where('qwikpick', 1)->first();
+            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq', 'wishlists' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])->where('id', $serviceId)->where('qwikpick', 1)->first();
 
             if (!$service) {
                 return response()->json([
@@ -227,8 +278,13 @@ class ServiceApiController extends Controller
             }
 
             // Create custom service data with restructured FAQ
+            // $serviceData = $service->toArray();
+            // $serviceData['faq'] = $faq;
+            // Add wishlist status
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
 
             return response()->json([
                 'success' => true,
@@ -250,6 +306,7 @@ class ServiceApiController extends Controller
     {
         try {
             $serviceId = $request->input('service');
+            $userId = $request->input('user');
 
             if (!$serviceId) {
                 return response()->json([
@@ -259,7 +316,9 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq'])->where('id', $serviceId)->where('beauty_and_easy', 1)->first();
+            $service = Service::with(['category', 'subcategory', 'requirements', 'processes', 'users', 'faq', 'wishlists' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])->where('id', $serviceId)->where('beauty_and_easy', 1)->first();
 
             if (!$service) {
                 return response()->json([
@@ -279,8 +338,11 @@ class ServiceApiController extends Controller
             }
 
             // Create custom service data with restructured FAQ
+            // Add wishlist status
             $serviceData = $service->toArray();
             $serviceData['faq'] = $faq;
+            $serviceData['is_wishlisted'] = $service->wishlists->isNotEmpty();
+            unset($serviceData['wishlists']); // clean up response
 
             return response()->json([
                 'success' => true,
@@ -311,7 +373,7 @@ class ServiceApiController extends Controller
                 ], 400);
             }
 
-            $offer = Offer::find($offerId);
+            $offer = ServiceOffer::find($offerId);
 
             if (!$offer) {
                 return response()->json([

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\ServiceFrequencyOption;
 use App\Models\ServiceRequirement;
 use App\Models\Process;
 use App\Models\User;
+use App\Models\Wishlist;
 use App\Models\Faq;
 use App\Models\Feedback;
 use App\Models\ServiceReview;
@@ -39,7 +41,7 @@ class Service extends Model
         if ($this->media) {
             $mediaArray = is_array($this->media) ? $this->media : json_decode($this->media, true);
             if (is_array($mediaArray)) {
-                return array_map(function($image) {
+                return array_map(function ($image) {
                     return asset('Service_images/' . $image);
                 }, $mediaArray);
             }
@@ -86,6 +88,11 @@ class Service extends Model
             ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
             ->withTimestamps();
     }
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'service_id');
+    }
+
 
     // Feedback relationships
     public function feedbacks()
@@ -111,42 +118,55 @@ class Service extends Model
         return $this->hasMany(ServiceOffer::class);
     }
 
-    // Active offers
-    public function activeOffers()
-    {
-        return $this->hasMany(ServiceOffer::class)->active();
-    }
-    
     // Frequency options relationship
     public function frequencyOptions()
     {
         return $this->hasMany(ServiceFrequencyOption::class);
     }
-    
+
     // Get frequency options by type
     public function weeklyOptions()
     {
         return $this->frequencyOptions()->ofType('weekly');
     }
-    
+
     public function monthlyOptions()
     {
         return $this->frequencyOptions()->ofType('monthly');
     }
-    
+
     public function yearlyOptions()
     {
         return $this->frequencyOptions()->ofType('yearly');
     }
 
     // Average rating calculation
-    public function getAverageRatingAttribute()
+    public function getAverageRatingAttribute($value)
     {
-        return $this->serviceReviews()->avg('rating') ?? 0;
+        return (float) $value;
     }
 
     public function faq()
     {
         return $this->hasMany(Faq::class);
+    }
+
+    public function servicePersons()
+    {
+        return $this->belongsToMany(User::class, 'user_services', 'service_id', 'user_id');
+    }
+
+    public function subscriptionPlans()
+    {
+        return $this->hasMany(ServiceFrequencyOption::class, 'service_id');
+    }
+
+    // Get the primary vendor for this service (first vendor associated with it)
+    public function getVendorIdAttribute()
+    {
+        $vendor = $this->belongsToMany(User::class, 'user_services')
+                      ->where('role', 'vendor')
+                      ->first();
+        return $vendor ? $vendor->id : null;
     }
 }

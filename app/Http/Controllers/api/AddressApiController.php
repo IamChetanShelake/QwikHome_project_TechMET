@@ -220,4 +220,65 @@ class AddressApiController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Set address as default
+     */
+    public function setAsDefault(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user' => 'required|exists:users,id',
+                'address' => 'required|exists:addresses,id',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 422,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $address = Address::where('id', $request->address)
+                ->where('user_id', $request->user)
+                ->first();
+
+
+
+            if (!$address) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 404,
+                    'message' => 'Address not found or does not belong to user'
+                ], 404);
+            }
+
+            DB::beginTransaction();
+
+            // Set this address as default and unset all other addresses for this user
+            Address::where('user_id', $request->user)
+                ->update(['is_default' => false]);
+
+            $address->update(['is_default' => true]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Address set as default successfully',
+                'data' => $address,
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Failed to set address as default',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

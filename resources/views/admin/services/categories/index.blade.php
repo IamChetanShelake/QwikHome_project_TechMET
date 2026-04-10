@@ -3,192 +3,7 @@
 @section('title', 'Categories')
 
 @section('content')
-    <div class="modern-index-container">
-        <!-- Alert System -->
-        <div id="alertContainer" class="alert-container"></div>
-
-        <!-- Header Section -->
-        <div class="index-header-section">
-            <div class="header-content">
-                <div class="header-icon-wrapper">
-                    <i class="fas fa-folder"></i>
-                </div>
-                <div class="header-text">
-                    <h1 class="header-title">Service Categories</h1>
-                    <p class="header-subtitle">Manage and organize your service categories</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="{{ route('services.categories.create') }}" class="modern-btn modern-btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add New Category
-                </a>
-            </div>
-        </div>
-
-        <!-- Filters Section -->
-        <div class="filters-section">
-            <form method="GET" class="filters-form" id="filtersForm">
-                <div class="filter-group">
-                    <label for="search" class="filter-label">
-                        <i class="fas fa-search"></i>
-                        Search
-                    </label>
-                    <input type="text" name="search" id="search" value="{{ $search }}"
-                        placeholder="Search categories..." class="modern-filter-input">
-                </div>
-
-                <div class="filter-group">
-                    <label for="status" class="filter-label">
-                        <i class="fas fa-toggle-on"></i>
-                        Status
-                    </label>
-                    <select name="status" id="status" class="modern-filter-select">
-                        <option value="">All Status</option>
-                        <option value="active" {{ $status == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ $status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                </div>
-
-                <div class="filter-actions">
-                    <button type="submit" class="modern-btn modern-btn-secondary">
-                        <i class="fas fa-filter"></i>
-                        Filter
-                    </button>
-                    <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-outline">
-                        <i class="fas fa-times"></i>
-                        Clear
-                    </a>
-                </div>
-            </form>
-        </div>
-
-        <!-- Table Section -->
-        <div class="table-section">
-            <div class="table-header">
-                <h3 class="table-title">
-                    <i class="fas fa-list"></i>
-                    Categories List
-                </h3>
-                <div class="table-info">
-                    <span class="record-count">{{ $categories->total() }} categories found</span>
-                </div>
-            </div>
-
-            <div class="modern-table-container">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="th-id">
-                                <i class="fas fa-hashtag"></i>
-                                ID
-                            </th>
-                            <th class="th-name">
-                                <i class="fas fa-tag"></i>
-                                Name
-                            </th>
-                            <th class="th-description">
-                                <i class="fas fa-align-left"></i>
-                                Description
-                            </th>
-                            <th class="th-status">
-                                <i class="fas fa-toggle-on"></i>
-                                Status
-                            </th>
-                            <th class="th-date">
-                                <i class="fas fa-calendar"></i>
-                                Created
-                            </th>
-                            <th class="th-actions">
-                                <i class="fas fa-cogs"></i>
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($categories as $category)
-                            <tr class="table-row">
-                                <td class="td-id">{{ $category->id }}</td>
-                                <td class="td-name">
-                                    <div class="name-cell">
-                                        @if ($category->image)
-                                            <img src="{{ asset('Category_images/' . $category->image) }}"
-                                                alt="{{ $category->name }}" class="category-image">
-                                        @else
-                                            <div class="category-placeholder">
-                                                <i class="fas fa-folder"></i>
-                                            </div>
-                                        @endif
-                                        <span class="category-name">{{ $category->name }}</span>
-                                    </div>
-                                </td>
-                                <td class="td-description">
-                                    <span
-                                        class="description-text">{{ Str::limit($category->description ?: 'No description', 50) }}</span>
-                                </td>
-                                <td class="td-status">
-                                    <span class="status-badge status-{{ $category->status }}">
-                                        <i
-                                            class="fas fa-{{ $category->status == 'active' ? 'check-circle' : 'times-circle' }}"></i>
-                                        {{ ucfirst($category->status) }}
-                                    </span>
-                                </td>
-                                <td class="td-date">
-                                    <span class="date-text">{{ $category->created_at->format('M d, Y') }}</span>
-                                    <span class="time-text">{{ $category->created_at->format('H:i') }}</span>
-                                </td>
-                                <td class="td-actions">
-                                    <div class="action-buttons">
-                                        <a href="{{ route('services.categories.edit', $category) }}"
-                                            class="action-btn action-edit" title="Edit Category">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="action-btn action-delete"
-                                            onclick="confirmDelete({{ $category->id }}, '{{ $category->name }}')"
-                                            title="Delete Category">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-
-                                    <!-- Hidden Delete Form -->
-                                    <form id="deleteForm{{ $category->id }}" method="POST"
-                                        action="{{ route('services.categories.destroy', $category) }}"
-                                        style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="6" class="empty-cell">
-                                    <div class="empty-state">
-                                        <i class="fas fa-folder-open"></i>
-                                        <h3>No Categories Found</h3>
-                                        <p>No categories match your current filters.</p>
-                                        <a href="{{ route('services.categories.create') }}"
-                                            class="modern-btn modern-btn-primary">
-                                            <i class="fas fa-plus"></i>
-                                            Create First Category
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            @if ($categories->hasPages())
-                <div class="pagination-section">
-                    {{ $categories->appends(request()->query())->links() }}
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <style>
+ <style>
         /* Modern Categories Index Styling */
         .modern-index-container {
             max-width: 1400px;
@@ -617,6 +432,192 @@
             }
         }
     </style>
+    <div class="modern-index-container">
+        <!-- Alert System -->
+        <div id="alertContainer" class="alert-container"></div>
+
+        <!-- Header Section -->
+        <div class="index-header-section">
+            <div class="header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="header-title">Service Categories</h1>
+                    <p class="header-subtitle">Manage and organize your service categories</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('services.categories.create') }}" class="modern-btn modern-btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add New Category
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <form method="GET" class="filters-form" id="filtersForm">
+                <div class="filter-group">
+                    <label for="search" class="filter-label">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </label>
+                    <input type="text" name="search" id="search" value="{{ $search }}"
+                        placeholder="Search categories..." class="modern-filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label for="status" class="filter-label">
+                        <i class="fas fa-toggle-on"></i>
+                        Status
+                    </label>
+                    <select name="status" id="status" class="modern-filter-select">
+                        <option value="">All Status</option>
+                        <option value="active" {{ $status == 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="inactive" {{ $status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="modern-btn modern-btn-secondary">
+                        <i class="fas fa-filter"></i>
+                        Filter
+                    </button>
+                    <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-outline">
+                        <i class="fas fa-times"></i>
+                        Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <h3 class="table-title">
+                    <i class="fas fa-list"></i>
+                    Categories List
+                </h3>
+                <div class="table-info">
+                    <span class="record-count">{{ $categories->total() }} categories found</span>
+                </div>
+            </div>
+
+            <div class="modern-table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="th-id">
+                                <i class="fas fa-hashtag"></i>
+                                ID
+                            </th>
+                            <th class="th-name">
+                                <i class="fas fa-tag"></i>
+                                Name
+                            </th>
+                            <th class="th-description">
+                                <i class="fas fa-align-left"></i>
+                                Description
+                            </th>
+                            <th class="th-status">
+                                <i class="fas fa-toggle-on"></i>
+                                Status
+                            </th>
+                            <th class="th-date">
+                                <i class="fas fa-calendar"></i>
+                                Created
+                            </th>
+                            <th class="th-actions">
+                                <i class="fas fa-cogs"></i>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($categories as $category)
+                            <tr class="table-row">
+                                <td class="td-id">{{ $category->id }}</td>
+                                <td class="td-name">
+                                    <div class="name-cell">
+                                        @if ($category->image)
+                                            <img src="{{ asset('Category_images/' . $category->image) }}"
+                                                alt="{{ $category->name }}" class="category-image">
+                                        @else
+                                            <div class="category-placeholder">
+                                                <i class="fas fa-folder"></i>
+                                            </div>
+                                        @endif
+                                        <span class="category-name">{{ $category->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="td-description">
+                                    <span
+                                        class="description-text">{{ Str::limit($category->description ?: 'No description', 50) }}</span>
+                                </td>
+                                <td class="td-status">
+                                    <span class="status-badge status-{{ $category->status }}">
+                                        <i
+                                            class="fas fa-{{ $category->status == 'active' ? 'check-circle' : 'times-circle' }}"></i>
+                                        {{ ucfirst($category->status) }}
+                                    </span>
+                                </td>
+                                <td class="td-date">
+                                    <span class="date-text">{{ $category->created_at->format('M d, Y') }}</span>
+                                    <span class="time-text">{{ $category->created_at->format('H:i') }}</span>
+                                </td>
+                                <td class="td-actions">
+                                    <div class="action-buttons">
+                                        <a href="{{ route('services.categories.edit', $category) }}"
+                                            class="action-btn action-edit" title="Edit Category">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="action-btn action-delete"
+                                            onclick="confirmDelete({{ $category->id }}, '{{ $category->name }}')"
+                                            title="Delete Category">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Hidden Delete Form -->
+                                    <form id="deleteForm{{ $category->id }}" method="POST"
+                                        action="{{ route('services.categories.destroy', $category) }}"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="empty-row">
+                                <td colspan="6" class="empty-cell">
+                                    <div class="empty-state">
+                                        <i class="fas fa-folder-open"></i>
+                                        <h3>No Categories Found</h3>
+                                        <p>No categories match your current filters.</p>
+                                        <a href="{{ route('services.categories.create') }}"
+                                            class="modern-btn modern-btn-primary">
+                                            <i class="fas fa-plus"></i>
+                                            Create First Category
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @if ($categories->hasPages())
+                <div class="pagination-section">
+                    {{ $categories->appends(request()->query())->links() }}
+                </div>
+            @endif
+        </div>
+    </div>
+
+   
 
     <script>
         function confirmDelete(categoryId, categoryName) {

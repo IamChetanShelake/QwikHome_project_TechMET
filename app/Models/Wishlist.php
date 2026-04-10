@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\ServiceOffer;
+
 
 class Wishlist extends Model
 {
@@ -18,8 +21,8 @@ class Wishlist extends Model
         return $this->belongsTo(Service::class);
     }
 
-    public function offer()
+    public function offers()
     {
-        return $this->belongsTo(Offer::class);
+        return $this->belongsTo(ServiceOffer::class);
     }
 }
