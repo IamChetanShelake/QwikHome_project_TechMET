@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <style>
+     <style>
         /* Service View Styling */
         .service-view-container {
             max-width: 1400px;
@@ -47,13 +47,13 @@
         .service-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
             margin: 0 0 5px 0;
         }
 
         .service-subtitle {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(51, 65, 85, 0.8);
             margin: 0 0 10px 0;
         }
 
@@ -125,9 +125,10 @@
         }
 
         .modern-btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+             background: rgba(255, 255, 255, 0.1);
+            color: #334155;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
         }
 
         .modern-btn-secondary:hover {
@@ -172,7 +173,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .card-content {
@@ -193,11 +194,11 @@
 
         .detail-label {
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
         }
 
         .detail-value {
-            color: #ffffff;
+            color: #334155;
             text-align: right;
         }
 
@@ -248,7 +249,7 @@
         }
 
         .description-text {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 65, 85, 0.9);
             line-height: 1.6;
             margin: 0;
         }
@@ -283,7 +284,7 @@
             margin: 0;
             font-size: 20px;
             font-weight: 700;
-            color: #ffffff;
+            color: #334155;
         }
 
         .included-grid {
@@ -308,7 +309,7 @@
         }
 
         .included-item span {
-            color: #ffffff;
+            color: #334155;
             font-size: 14px;
         }
 
@@ -369,12 +370,12 @@
             margin: 0 0 8px 0;
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .process-description {
             margin: 0;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             line-height: 1.5;
             font-size: 14px;
         }
@@ -412,7 +413,7 @@
             margin: 0;
             font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         /* Materials Section */
@@ -461,13 +462,13 @@
             margin: 0 0 10px 0;
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .material-description {
             margin: 0 0 15px 0;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(51, 65, 85, 0.8);
             line-height: 1.5;
         }
 
@@ -485,7 +486,7 @@
             align-items: center;
             gap: 8px;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 65, 85, 0.9);
         }
 
         .material-price i {
@@ -567,7 +568,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 600;
-            color: #ffffff;
+            color: #334155;
         }
 
         .frequency-options-list {
@@ -606,7 +607,7 @@
 
         .frequency-value {
             font-size: 14px;
-            color: #ffffff;
+            color: #334155;
             font-weight: 600;
         }
 
@@ -634,7 +635,7 @@
 
         .frequency-option-description span {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(51, 65, 85, 0.9);
             line-height: 1.5;
         }
 
@@ -1095,7 +1096,7 @@
                         <div class="material-card">
                             @if ($material->material_image)
                                 <div class="material-image">
-                                    <img src="{{ $material->image_url }}" alt="{{ $material->material_name }}">
+                                    <img src="{{ asset('Material_images/'.$material->material_image) }}" alt="{{ $material->material_name }}">
                                 </div>
                             @endif
                             <div class="material-content">

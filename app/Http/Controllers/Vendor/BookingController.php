@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -17,9 +18,10 @@ class BookingController extends Controller
         $vendorId = auth()->id();
 
         // Build query with vendor filter
-        $query = Booking::with(['service', 'customer', 'serviceProvider', 'vendor'])
-            ->forVendor($vendorId);
+        $query = Booking::with(['service', 'customer', 'serviceProvider', 'vendor']);
 
+        // dd($bookings);
+        // dd($query);
         // Filter by status if provided
         if ($request->filled('status') && $request->status !== 'all') {
             $query->byStatus($request->status);
@@ -40,8 +42,8 @@ class BookingController extends Controller
 
         // Get bookings ordered by scheduled date
         $bookings = $query->orderBy('scheduled_date', 'desc')
-            ->orderBy('start_time', 'desc')
-            ->paginate(15);
+            // ->orderBy('start_time', 'desc')
+            ->paginate(10);
 
         // Get service providers for the vendor
         $serviceProviders = User::where('role', 'serviceprovider')
@@ -55,6 +57,7 @@ class BookingController extends Controller
             'ongoing' => Booking::forVendor($vendorId)->byStatus('ongoing')->count(),
             'completed' => Booking::forVendor($vendorId)->byStatus('completed')->count(),
         ];
+        
 
         return view('vendor.bookings.index', compact('bookings', 'serviceProviders', 'stats'));
     }
@@ -117,6 +120,8 @@ class BookingController extends Controller
         $booking->load(['service.category', 'customer', 'serviceProvider', 'vendor']);
         return view('vendor.bookings.show', compact('booking'));
     }
+    
+    
 
     /**
      * Update booking status.
@@ -145,5 +150,52 @@ class BookingController extends Controller
         $booking->update($updateData);
 
         return redirect()->back()->with('success', 'Booking status updated successfully.');
+    }
+    
+     /**
+     * Save auto cancel time limit setting.
+     */
+    public function saveAutoCancelSetting(Request $request)
+    {
+        // Only admin can set this global setting
+        if (!auth()->user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'time_limit' => 'required|integer|min:1|max:168', // Max 1 week
+        ]);
+
+        Setting::set('auto_cancel_time_limit', $request->time_limit);
+
+        return response()->json(['success' => true, 'message' => 'Setting saved successfully.']);
+    }
+
+    /**
+     * Cancel old pending bookings.
+     */
+    public function cancelOldBookings(Request $request)
+    {
+        $vendor = auth()->user();
+        $timeLimit = Setting::get('auto_cancel_time_limit', 8);
+
+        $cutoffTime = now()->subHours($timeLimit);
+
+        $oldBookings = Booking::where('vendor_id', $vendor->id)
+            ->where('status', 'pending')
+            ->where('created_at', '<', $cutoffTime)
+            ->get();
+
+        $count = 0;
+        foreach ($oldBookings as $booking) {
+            $booking->update([
+                'status' => 'cancelled',
+                'cancellation_reason' => 'Auto-cancelled due to no acceptance within ' . $timeLimit . ' hours',
+                'cancelled_at' => now(),
+            ]);
+            $count++;
+        }
+
+        return response()->json(['success' => true, 'message' => $count . ' bookings cancelled.']);
     }
 }

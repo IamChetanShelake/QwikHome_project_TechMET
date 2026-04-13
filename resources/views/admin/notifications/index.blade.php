@@ -118,7 +118,7 @@
                                         <span class="text-muted">-</span>
                                     @endif
                                 </td>
-                                <td>{{ optional($n->creator)->name ?? '—' }}</td>
+                                <td>{{ optional($n->user)->name ?? '—' }}</td>
                                 <td>
                                     <span class="date-text">{{ $n->created_at->format('M d, Y') }}</span>
                                     <span class="time-text">{{ $n->created_at->format('H:i') }}</span>

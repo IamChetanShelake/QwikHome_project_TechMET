@@ -212,7 +212,7 @@
         @endif
 
         <!-- Offer Form -->
-        <form action="{{ route('offers.store') }}" method="POST">
+        <form action="{{ route('offers.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Basic Information -->
@@ -317,6 +317,13 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" name="image" id="image">
                 </div>
             </div>
 

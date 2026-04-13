@@ -16,7 +16,7 @@ class Category extends Model
     // Accessor to get full image URL
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('Category_images/' . $this->image) : null;
+        return $this->image ? asset('Category_images/' . $this->image) : asset('Category_images/3502688.png');
     }
 
     public function subcategories()

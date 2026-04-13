@@ -18,6 +18,6 @@ class Banner extends Model
     // Accessor to get full image URL
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('banner_images/' . $this->image) : null;
+        return $this->image ? asset('banner_images/' . $this->image) : asset('banner_images/defaultBanner.png');
     }
 }

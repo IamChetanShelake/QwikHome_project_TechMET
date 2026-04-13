@@ -6,28 +6,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Service;
-use App\Models\ServiceFrequency;
 use App\Models\ServiceFrequencyOption;
 use App\Models\ServiceMaterial;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Address;
-use App\Models\RefundPolicy;
+use App\Models\CartItem;
+use App\Models\Coupon;
 
 class CartController extends Controller
 {
     /**
      * Add service to cart
      */
-
-    public function addToCart(Request $request)
+      public function addToCart(Request $request)
     {
+
         // Validation rules
         $validator = Validator::make($request->all(), [
             'user' => 'required|exists:users,id',
             'service' => 'required|exists:services,id',
             'package' => 'nullable|exists:service_frequency_options,id',
-            'material' => 'required|boolean',
+            'material' => 'nullable|boolean',
             'providersCount' => 'nullable|integer|min:1',
         ]);
 
@@ -56,6 +55,11 @@ class CartController extends Controller
                 ], 400);
             }
         }
+        else{
+            $frequencyOption = ServiceFrequencyOption::where('frequency_type', 'onetime')
+                ->where('service_id', $service->id)
+                ->first();
+        }
 
         // Simulated available providers count
         $availableProviders = 10;
@@ -69,7 +73,7 @@ class CartController extends Controller
         }
 
         // Base price from the selected package or service default
-        $basePrice = $frequencyOption ? $frequencyOption->price_per_time : $service->price_onetime;
+        $basePrice = $frequencyOption ? $frequencyOption->price_per_time : 0;
 
         // Material handling — if true, include all materials of that service
         $materialsTotal = 0;
@@ -80,16 +84,28 @@ class CartController extends Controller
             $materialsTotal = $materials->sum('material_price');
             $selectedMaterialIds = $materials->pluck('id')->toArray();
         }
-
+       
+       
         // Total price calculation
-        $totalPrice = ($basePrice + $materialsTotal) * $providersCount;
+        $totalPrice = ($basePrice * $providersCount ) + $materialsTotal;
 
         // Get or create cart
-        $cart = Cart::firstOrCreate(['user_id' => $request->user]);
+         $cart = Cart::firstOrCreate(['user_id' => $request->user]);
+         
+        //   return response()->json([
+        //     'data' => [
+        //       'providers count ' => $providersCount,
+        //       'frequencyoption'=>$frequencyOption->price_per_time,
+        //       'baseprice ' => $basePrice,
+        //         'materialstotal' =>$materialsTotal,
+        //       'totalPrice' => ($basePrice + $materialsTotal) * $providersCount
+        //         ]
+        // ]);
+        
 
         // Create cart item
         $cartItem = CartItem::create([
-            'user_id' => $request->user,
+             'user_id'=>$request->user,
             'cart_id' => $cart->id,
             'item_type' => 'service',
             'item_id' => $service->id,
@@ -97,12 +113,12 @@ class CartController extends Controller
             'service_frequency_id' => $frequencyOption ? $frequencyOption->id : null,
             'quantity' => 1,
             'providers_count' => $providersCount,
-            'include_material' => $request->material,
+            'include_material' => $request->material ?? 0,
             'selected_addons' => json_encode($selectedMaterialIds),
             'base_price' => $basePrice,
-            'addons_price' => $materialsTotal,
+            // 'addons_price' => $materialsTotal,
             'unit_price' => $basePrice + $materialsTotal,
-            'total_price' => $totalPrice,
+            'total_price' =>$totalPrice ,
         ]);
 
         // Update cart totals
@@ -115,41 +131,105 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Get user's cart with services listing and total amount
-     */
-    public function getCart(Request $request)
+
+ /**
+      * POST API: Store preferred time and date in cart item
+      */
+    public function storePreferredTimeDate(Request $request)
     {
-        // Validation
-        $validator = Validator::make($request->all(), [
-            'user' => 'required|exists:users,id',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'user' => 'required|exists:users,id', // Customer
+                'cartid' => 'required|exists:cart_items,id',
+                'scheduledDate' => 'required|date|after_or_equal:today',
+                'preferredTime' => 'required|date_format:H:i',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 400,
+                    'message' => 'Validation error',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            $customerId = $request->user;
+
+            // Fetch the specific cart item and ensure it belongs to the user
+            $cartItem = \App\Models\CartItem::with(['cart'])
+                ->where('id', $request->cartid)
+                ->whereHas('cart', function ($query) use ($customerId) {
+                    $query->where('user_id', $customerId);
+                })
+                ->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 400,
+                    'message' => 'Cart item not found or does not belong to user'
+                ], 400);
+            }
+
+            // Update the cart item with preferred time and date
+            $cartItem->update([
+                'scheduled_date' => $request->scheduledDate,
+                'preferred_time' => $request->preferredTime,
+            ]);
+
             return response()->json([
-                'status' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Get user's cart with items
-        $cart = Cart::with(['items' => function ($query) {
-            $query->with(['serviceFrequency'])->where('item_type', 'service');
-        }])->where('user_id', $request->user)->first();
-
-        if (!$cart) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Cart not found',
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Preferred time and date stored in cart item successfully',
                 'data' => [
-                    'cart_items' => [],
-                    'total_amount' => 0,
-                    'total_items' => 0
+                    'cart_item' => $cartItem
                 ]
-            ], 404);
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Failed to store preferred time and date',
+                'error' => $e->getMessage()
+            ], 500);
         }
+    }
+    
+     public function getCart(Request $request)
+        {
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'user' => 'required|exists:users,id',
+            ]);
 
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Get user's cart with items
+            $cart = Cart::with(['items' => function($query) {
+                $query->with(['serviceFrequency', ])->where('item_type', 'service');
+            }])->where('user_id', $request->user)->first();
+
+            if (!$cart) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Cart not found',
+                    'data' => [
+                        'cart_items' => [],
+                        'total_amount' => 0,
+                        'total_items' => 0
+                    ]
+                ], 404);
+            }
+
+            // Format cart items for response
+     
         // Format cart items for response
         $cartItems = $cart->items->map(function ($item) {
             return [
@@ -178,31 +258,173 @@ class CartController extends Controller
             ];
         });
 
-        // Calculate total amount
-        $totalAmount = $cart->items->sum('total_price');
-        $totalItems = $cart->items->count();
+            // Calculate total amount
+            $totalAmount = $cart->items->sum('total_price');
+            $totalItems = $cart->items->count();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Cart retrieved successfully',
-            'data' => [
-                'cart_items' => $cartItems,
-                'total_amount' => $totalAmount,
-                'total_items' => $totalItems,
-                'cart_id' => $cart->id,
-            ]
-        ]);
-    }
-
-    /**
-     * Remove service from cart
+            return response()->json([
+                'status' => true,
+                'message' => 'Cart retrieved successfully',
+                'data' => [
+                    'cart_items' => $cartItems,
+                    'total_amount' => $totalAmount,
+                    'total_items' => $totalItems,
+                    'cart_id' => $cart->id,
+                ]
+            ]);
+        }
+        
+         /**
+     * Update cart item quantity
      */
-    public function removeFromCart(Request $request)
+    public function updateCartItemQuantity(Request $request)
     {
         // Validation rules
         $validator = Validator::make($request->all(), [
             'user' => 'required|exists:users,id',
-            'cart_item_id' => 'required|exists:cart_items,id',
+            'cartid' => 'nullable|exists:cart_items,id',
+            'service' => 'nullable|exists:services,id',
+            'material' => 'required|boolean',
+            'quantity' => 'required|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Find the cart/service item and ensure it belongs to the user
+        if($request->cartid)
+        {
+        $cartItem = CartItem::where('id', $request->cartid)
+            ->whereHas('cart', function ($query) use ($request) {
+                $query->where('user_id', $request->user);
+            })
+            ->first();
+        }
+        else if($request->service){
+            
+             $cartItem = CartItem::
+            where('item_id', $request->service)
+            ->first();
+            
+            if(!$cartItem)
+            {
+            
+             $service = Service::findOrFail($request->service);
+            $frequencyOption = ServiceFrequencyOption::where('service_id', $service->id)
+            ->where('frequency_type', 'onetime')
+                    ->first();
+            // Simulated available providers count
+            $providersCount = 1;
+            // Base price from the selected package or service default
+            $basePrice = $frequencyOption ? $frequencyOption->price_per_time : 0;
+    
+            // Material handling — if true, include all materials of that service
+            $materialsTotal = 0;
+            $selectedMaterialIds = [];
+            
+            if($request->material == true){
+            $materials = ServiceMaterial::where('service_id', $service->id)->get();
+            $materialsTotal = $materials->sum('material_price');
+            $selectedMaterialIds = $materials->pluck('id')->toArray();
+            }
+            //  return response()->json([
+               
+            //     'materialtotal' => $materialsTotal,
+            //     'selectedMaterialIds' => $selectedMaterialIds,
+             
+            // ]);
+    
+            // Total price calculation
+            $totalPrice = ($basePrice + $materialsTotal) * $providersCount;
+    
+            // Get or create cart
+            $cart = Cart::firstOrCreate(['user_id' => $request->user]);
+    
+            // Create cart item
+            $cartItem = CartItem::create([
+                'user_id'=>$request->user,
+                'cart_id' => $cart->id,
+                'item_type' => 'service',
+                'item_id' => $service->id,
+                'item_name' => $service->name,
+                'service_frequency_id' => $frequencyOption ? $frequencyOption->id : null,
+                'quantity' => 1,
+                'providers_count' => $providersCount,
+                'include_material' => 1,
+                'selected_addons' => json_encode($selectedMaterialIds),
+                'base_price' => $basePrice,
+                'addons_price' => $materialsTotal,
+                'unit_price' => $basePrice + $materialsTotal,
+                'total_price' => $basePrice + $materialsTotal,
+            ]);
+            
+            }
+            
+        }
+
+        if (!$cartItem) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cart item not found or does not belong to user'
+            ], 404);
+        }
+
+        $oldQuantity = $cartItem->quantity;
+        $newQuantity = $request->quantity;
+        
+        if($newQuantity == 0){
+            $cartItem->delete();
+            
+            return response()->json([
+            'status' => true,
+            'message' => 'Service deleted from cart successfully',
+            ],200);
+        }
+
+        // Update cart item quantity and recalculate pricing
+        $cartItem->update([
+            'quantity' => $newQuantity,
+            'total_price' => ($cartItem->unit_price * $newQuantity) + $cartItem->addons_price - $cartItem->discount_amount + $cartItem->tax_amount,
+        ]);
+
+        // Recalculate cart totals
+        $cart = $cartItem->cart;
+        $cart->recalculateTotals();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Cart item quantity updated successfully',
+            'data' => [
+                'cart_item' => [
+                    'id' => $cartItem->id,
+                    'item_name' => $cartItem->item_name,
+                    'old_quantity' => $oldQuantity,
+                    'new_quantity' => $newQuantity,
+                    'unit_price' => $cartItem->unit_price,
+                    'total_price' => $cartItem->total_price,
+                ],
+                'cart_totals' => [
+                    'total_amount' => $cart->total,
+                    'total_items' => $cart->total_items,
+                ]
+            ]
+        ]);
+    }
+        
+         /**
+     * Remove service from cart
+     */
+     public function removeFromCart(Request $request)
+    {
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'user' => 'required|exists:users,id',
+            'cartid' => 'required|exists:cart_items,id',
         ]);
 
         if ($validator->fails()) {
@@ -214,7 +436,7 @@ class CartController extends Controller
         }
 
         // Find the cart item and ensure it belongs to the user
-        $cartItem = CartItem::where('id', $request->cart_item_id)
+        $cartItem = CartItem::where('id', $request->cartid)
             ->whereHas('cart', function ($query) use ($request) {
                 $query->where('user_id', $request->user);
             })
@@ -265,78 +487,9 @@ class CartController extends Controller
             ]
         ]);
     }
-
-    /**
-     * Update cart item quantity
-     */
-    public function updateCartItemQuantity(Request $request)
-    {
-        // Validation rules
-        $validator = Validator::make($request->all(), [
-            'user' => 'required|exists:users,id',
-            'cartid' => 'required|exists:cart_items,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Find the cart item and ensure it belongs to the user
-        $cartItem = CartItem::where('id', $request->cartid)
-            ->whereHas('cart', function ($query) use ($request) {
-                $query->where('user_id', $request->user);
-            })
-            ->first();
-
-        if (!$cartItem) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Cart item not found or does not belong to user'
-            ], 404);
-        }
-
-        $oldQuantity = $cartItem->quantity;
-        $newQuantity = $request->quantity;
-
-        // Update cart item quantity and recalculate pricing
-        $cartItem->update([
-            'quantity' => $newQuantity,
-            'total_price' => ($cartItem->unit_price * $newQuantity) + $cartItem->addons_price - $cartItem->discount_amount + $cartItem->tax_amount,
-        ]);
-
-        // Recalculate cart totals
-        $cart = $cartItem->cart;
-        $cart->recalculateTotals();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Cart item quantity updated successfully',
-            'data' => [
-                'cart_item' => [
-                    'id' => $cartItem->id,
-                    'item_name' => $cartItem->item_name,
-                    'old_quantity' => $oldQuantity,
-                    'new_quantity' => $newQuantity,
-                    'unit_price' => $cartItem->unit_price,
-                    'total_price' => $cartItem->total_price,
-                ],
-                'cart_totals' => [
-                    'total_amount' => $cart->total,
-                    'total_items' => $cart->total_items,
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * Process payment using user_id and cart_id from cart_items only
-     */
-    public function PaymentPage(Request $request)
+    
+    //payment page 
+      public function PaymentPage(Request $request)
     {
         // Validation - only cartid required
         $validator = Validator::make($request->all(), [
@@ -376,6 +529,10 @@ class CartController extends Controller
         $defaultAddress = Address::where('user_id', $userId)
             ->where('is_default', true)
             ->first();
+        
+        $preferredTime = $cartItem->preferred_time;
+        $scheduledDate = $cartItem->scheduled_date;
+
 
         // Get the cart that contains this cart item
         $cart = $cartItem->cart;
@@ -394,6 +551,26 @@ class CartController extends Controller
 
         // Get refund policy
         $refundPolicy = \App\Models\RefundPolicy::first();
+        
+         // Fetch applicable coupons
+        $serviceId = $cartItem->item_id;
+        $coupons = Coupon::where('status', 1)
+            ->where('expiry_date', '>', now())
+            ->where(function ($query) use ($serviceId) {
+                $query->where('applicable_to', 'all_services')
+                      ->orWhere(function ($q) use ($serviceId) {
+                          $q->where('applicable_to', 'specific_services')
+                            ->whereJsonContains('service_ids', $serviceId);
+                      });
+            })
+            ->get();
+
+        // Format coupons for response
+        $formattedCoupons = $coupons->map(function ($coupon) {
+            return [
+                'coupon_code' => $coupon,
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -402,6 +579,10 @@ class CartController extends Controller
                 'user_id' => $userId, // From cart_items only
                 'cart_id' => $cartItem->cart_id, // From cart_items only
                 'default_address' => $defaultAddress,
+                'date_time'=> [
+                    $preferredTime ?? null,
+                    $scheduledDate ?? null,
+                    ],
                 'service_id' => $cartItem->item_id, // Service ID from item_id column for all item types
                 'service' => $cartItem->getServiceAttribute() ? [
                     'id' => $cartItem->getServiceAttribute()->id,
@@ -409,6 +590,7 @@ class CartController extends Controller
                     'description' => $cartItem->getServiceAttribute()->description,
                     'image' => $cartItem->getServiceAttribute()->image,
                 ] : null,
+                 'coupons' => $formattedCoupons,
                 'cart_details' => [
                     'id' => $cart->id,
                     'total' => $totalAmount,
@@ -435,7 +617,8 @@ class CartController extends Controller
             ]
         ]);
     }
-
+    
+    
     /**
      * Process payment using user_id from cart_items only
      */
@@ -906,20 +1089,13 @@ class CartController extends Controller
             ]
         ]);
     }
-
-    // public function addToCart(Request $request)
+    
+    //  public function PaymentPage(Request $request)
     // {
-    //     // Validation rules
+    //     // Validation - only cartid required
     //     $validator = Validator::make($request->all(), [
-
     //         'user' => 'required|exists:users,id',
-    //         'service' => 'required|exists:services,id',
-    //         'package' => 'nullable|exists:service_frequency_options,id',
-    //         'material' => 'boolean',
-    //         'materialid' => 'nullable|array',
-    //         'materialids.*' => 'exists:service_materials,id',
-    //         'providersCount' => 'required|integer|min:1',
-
+    //         'cartid' => 'required|exists:cart_items,id',
     //     ]);
 
     //     if ($validator->fails()) {
@@ -930,76 +1106,83 @@ class CartController extends Controller
     //         ], 422);
     //     }
 
-    //     // Fetch service
-    //     $service = Service::findOrFail($request->service);
+    //     // Get cart item and fetch user_id from cart_items only
+    //     $cartItem = CartItem::where('user_id',$request->user)->find($request->cartid);
 
-    //     // Fetch service frequency option if provided
-    //     $frequencyOption = null;
-    //     if ($request->frequency_type) {
-    //         $frequencyOption = ServiceFrequencyOption::where('id', $request->frequency_type)
-    //             ->where('service_id', $service->id)
-    //             ->first();
-
-    //         if (!$frequencyOption) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Invalid service frequency option'
-    //             ], 400);
-    //         }
-    //     }
-
-    //     // Count available providers using relationship
-    //     $availableProviders = 10;
-
-    //     if ($request->providersCount > $availableProviders) {
+    //     if (!$cartItem) {
     //         return response()->json([
     //             'status' => false,
-    //             'message' => 'Limited executives available'
+    //             'message' => 'Cart item not found'
+    //         ], 404);
+    //     }
+
+    //     // Fetch user_id from cart_items table only
+    //     $userId = $cartItem->user_id;
+
+    //     if (!$userId) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'User ID not found in cart item'
     //         ], 400);
     //     }
 
-    //     // Price calculation
-    //     $basePrice = $frequencyOption ?
-    //         $frequencyOption->price_per_time :
-    //         $service->price_onetime;
+    //     // Get user's default address only
+    //     $defaultAddress = Address::where('user_id', $userId)
+    //         ->where('is_default', true)
+    //         ->first();
 
-    //     $materialsTotal = 0;
-    //     if ($request->material && $request->materialids) {
-    //         $materialsTotal = ServiceMaterial::whereIn('id', $request->materialids)
-    //             ->where('service_id', $service->id)
-    //             ->sum('material_price');
-    //     }
+    //     // Get the cart that contains this cart item
+    //     $cart = $cartItem->cart;
 
-    //     $totalPrice = ($basePrice + $materialsTotal) * $request->providersCount;
+    //     // Get all cart items for this cart
+    //     $cartWithItems = CartItem::with(['cart'])
+    //         ->where('cart_id', $cart->id)
+    //         ->get();
 
-    //     // Get or create cart
-    //     $cart = Cart::firstOrCreate(['user_id' => $request->user]);
+    //     // Format cart items for response
+      
 
-    //     // Create cart item
-    //     $cartItem = CartItem::create([
-    //         'cart_id' => $cart->id,
-    //         'service_id' => $service->id,
-    //         'item_type' => 'service',
-    //         'item_id' => $service->id,
-    //         'item_name' => $service->name,
-    //         'service_frequency_id' => $frequencyOption ? $frequencyOption->id : null,
-    //         'quantity' => 1,
-    //         'providers_count' => $request->providersCount,
-    //         'include_material' => $request->material,
-    //         'selected_addons' => json_encode($request->materialids),
-    //         'base_price' => $basePrice,
-    //         'addons_price' => $materialsTotal,
-    //         'unit_price' => $basePrice + $materialsTotal,
-    //         'total_price' => $totalPrice,
-    //     ]);
+    //     // Calculate totals from cart items (keeping existing calculation)
+    //     $totalAmount = $cartWithItems->sum('total_price');
+    //     $totalItems = $cartWithItems->count();
 
-    //     // Update cart totals
-    //     $cart->recalculateTotals();
+    //     // Get refund policy
+    //     $refundPolicy = \App\Models\RefundPolicy::first();
 
     //     return response()->json([
     //         'status' => true,
-    //         'message' => 'Service added to cart successfully',
-    //         'cart_item' => $cartItem
+    //         'message' => 'Payment page data retrieved successfully',
+    //         'data' => [
+    //             'user_id' => $userId, // From cart_items only
+    //             'cart_id' => $cartItem->cart_id, // From cart_items only
+    //             'default_address' => $defaultAddress,
+    //             'service_id' => $cartItem->item_type === 'service' ? $cartItem->item_id : null, // Service ID from cart_items
+    //             'cart_details' => [
+    //                 'id' => $cart->id,
+    //                 'total' => $totalAmount,
+    //                 'total_items' => $totalItems,
+    //             ],
+               
+    //             'pricing_summary' => [
+    //                 'subtotal' => $cartWithItems->sum(function($item) {
+    //                     return $item->base_price * $item->quantity;
+    //                 }),
+    //                 'materials_total' => $cartWithItems->sum('addons_price'),
+    //                 'discount_amount' => $cartWithItems->sum('discount_amount'),
+    //                 'tax_amount' => $cartWithItems->sum('tax_amount'),
+    //                 'total_amount' => $totalAmount,
+    //                 'total_items_count' => $totalItems,
+    //                 'currency' => 'AED'
+    //             ],
+    //             'refund_policy' => $refundPolicy ? [
+    //                 'id' => $refundPolicy->id,
+    //                 'title' => $refundPolicy->title,
+    //                 'content' => $refundPolicy->content,
+    //                 'created_at' => $refundPolicy->created_at,
+    //             ] : null
+    //         ]
     //     ]);
     // }
+ 
+
 }

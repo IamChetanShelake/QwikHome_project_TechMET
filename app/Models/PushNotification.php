@@ -10,17 +10,13 @@ class PushNotification extends Model
 {
     use HasFactory;
 
-    protected $table = 'push_notifications';
+    protected $table = 'notifications';
 
-    protected $fillable = [
-        'audience',
-        'title',
-        'description',
-        'image',
-        'created_by',
+    protected $guarded = [
+      
     ];
 
-    public function creator(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }

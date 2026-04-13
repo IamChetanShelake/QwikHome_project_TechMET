@@ -1,191 +1,7 @@
 @extends('admin.layouts.masterlayout')
 
 @section('content')
-    <div class="content-area">
-        <div class="modern-list-container">
-            <!-- Success Message -->
-            @if (session('success'))
-                <div class="modern-alert modern-alert-success" id="successAlert">
-                    <div class="alert-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Success!</strong>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                    <button class="alert-close" onclick="closeAlert()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            @endif
-
-            <!-- Header Section -->
-            <div class="list-header-section">
-                <div class="list-header-content">
-                    <div class="list-title-group">
-                        <div class="list-icon-wrapper">
-                            <i class="fas fa-tags list-main-icon"></i>
-                        </div>
-                        <div class="list-title-text">
-                            <h2 class="list-title">Promocodes Management</h2>
-                            <p class="list-subtitle">Manage and monitor all promotional codes</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('promocodes.create') }}" class="modern-btn modern-btn-primary">
-                        <i class="fas fa-plus"></i>
-                        <span>Create Promocode</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Table Section -->
-            <div class="modern-table-card">
-                <div class="table-wrapper">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-hashtag"></i>
-                                        <span>Sr.</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-code"></i>
-                                        <span>Code</span>
-                                    </div>
-                                </th>
-                                <th>
-                                     <div class="th-content">
-                                         <i class="fas fa-money-bill-wave"></i>
-                                         <span>Discount</span>
-                                     </div>
-                                 </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-chart-line"></i>
-                                        <span>Status</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span>Expiry Date</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-cogs"></i>
-                                        <span>Actions</span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($promocodes as $promocode)
-                                <tr class="table-row" data-id="{{ $promocode->id }}">
-                                    <td>
-                                        <div class="td-content">
-                                            <span class="serial-number">{{ $loop->iteration }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="code-badge">
-                                                <i class="fas fa-hashtag"></i>
-                                                <span>{{ $promocode->code }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="discount-amount">
-                                                <span class="amount">{{ number_format($promocode->discount, 2) }}</span>
-                                                <span class="currency">{{ config('app.currency', 'AED') }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            @if ($promocode->is_used)
-                                                <span class="modern-status-badge status-used">
-                                                    <i class="fas fa-check-circle"></i>
-                                                    Used
-                                                </span>
-                                            @else
-                                                <span class="modern-status-badge status-available">
-                                                    <i class="fas fa-clock"></i>
-                                                    Available
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="expiry-date">
-                                                @if ($promocode->expiry_date)
-                                                    <i class="fas fa-calendar-check"></i>
-                                                    <span>{{ $promocode->expiry_date->format('d/m/Y') }}</span>
-                                                @else
-                                                    <i class="fas fa-infinity"></i>
-                                                    <span>No Expiry</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="action-buttons">
-                                                <a href="{{ route('promocodes.view', $promocode->id) }}"
-                                                    class="action-btn action-view" title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('promocodes.edit', $promocode->id) }}"
-                                                    class="action-btn action-edit" title="Edit Promocode">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="action-btn action-delete"
-                                                    title="Delete Promocode"
-                                                    onclick="deletePromocode({{ $promocode->id }}, '{{ $promocode->code }}')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="empty-state">
-                                            <div class="empty-icon">
-                                                <i class="fas fa-tags"></i>
-                                            </div>
-                                            <h3>No Promocodes Found</h3>
-                                            <p>Start by creating your first promotional code</p>
-                                            <a href="{{ route('promocodes.create') }}"
-                                                class="modern-btn modern-btn-primary">
-                                                <i class="fas fa-plus"></i>
-                                                <span>Create First Promocode</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Form (Hidden) -->
-    <form id="deleteForm" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-    </form>
-
-    <style>
+ <style>
         /* Modern List Styles */
         .modern-list-container {
             max-width: 1400px;
@@ -593,6 +409,191 @@
             }
         }
     </style>
+    <div class="content-area">
+        <div class="modern-list-container">
+            <!-- Success Message -->
+            @if (session('success'))
+                <div class="modern-alert modern-alert-success" id="successAlert">
+                    <div class="alert-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <strong>Success!</strong>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                    <button class="alert-close" onclick="closeAlert()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            <!-- Header Section -->
+            <div class="list-header-section">
+                <div class="list-header-content">
+                    <div class="list-title-group">
+                        <div class="list-icon-wrapper">
+                            <i class="fas fa-tags list-main-icon"></i>
+                        </div>
+                        <div class="list-title-text">
+                            <h2 class="list-title">Promocodes Management</h2>
+                            <p class="list-subtitle">Manage and monitor all promotional codes</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('promocodes.create') }}" class="modern-btn modern-btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span>Create Promocode</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="modern-table-card">
+                <div class="table-wrapper">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>Sr.</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-code"></i>
+                                        <span>Code</span>
+                                    </div>
+                                </th>
+                                <th>
+                                     <div class="th-content">
+                                         <i class="fas fa-money-bill-wave"></i>
+                                         <span>Discount</span>
+                                     </div>
+                                 </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Status</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Expiry Date</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-cogs"></i>
+                                        <span>Actions</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($promocodes as $promocode)
+                                <tr class="table-row" data-id="{{ $promocode->id }}">
+                                    <td>
+                                        <div class="td-content">
+                                            <span class="serial-number">{{ $loop->iteration }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="code-badge">
+                                                <i class="fas fa-hashtag"></i>
+                                                <span>{{ $promocode->code }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="discount-amount">
+                                                <span class="amount">{{ number_format($promocode->discount, 2) }}</span>
+                                                <span class="currency">{{ config('app.currency', 'AED') }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            @if ($promocode->is_used)
+                                                <span class="modern-status-badge status-used">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Used
+                                                </span>
+                                            @else
+                                                <span class="modern-status-badge status-available">
+                                                    <i class="fas fa-clock"></i>
+                                                    Available
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="expiry-date">
+                                                @if ($promocode->expiry_date)
+                                                    <i class="fas fa-calendar-check"></i>
+                                                    <span>{{ $promocode->expiry_date->format('d/m/Y') }}</span>
+                                                @else
+                                                    <i class="fas fa-infinity"></i>
+                                                    <span>No Expiry</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="action-buttons">
+                                                <a href="{{ route('promocodes.view', $promocode->id) }}"
+                                                    class="action-btn action-view" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('promocodes.edit', $promocode->id) }}"
+                                                    class="action-btn action-edit" title="Edit Promocode">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="action-btn action-delete"
+                                                    title="Delete Promocode"
+                                                    onclick="deletePromocode({{ $promocode->id }}, '{{ $promocode->code }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">
+                                                <i class="fas fa-tags"></i>
+                                            </div>
+                                            <h3>No Promocodes Found</h3>
+                                            <p>Start by creating your first promotional code</p>
+                                            <a href="{{ route('promocodes.create') }}"
+                                                class="modern-btn modern-btn-primary">
+                                                <i class="fas fa-plus"></i>
+                                                <span>Create First Promocode</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Form (Hidden) -->
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
+   
 
     <script>
         // Auto-hide success alert

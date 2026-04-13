@@ -47,12 +47,14 @@ class ServiceMaterial extends Model
     public function getApplicableToLabelAttribute()
     {
         return match($this->applicable_to) {
+            
             'onetime' => 'One Time Service',
             'weekly' => 'Weekly Subscription',
             'monthly' => 'Monthly Subscription',
             'yearly' => 'Yearly Subscription',
             'all' => 'All Service Subscriptions',
-            default => 'Unknown'
+            default => 'Unknown',
+            
         };
     }
 }

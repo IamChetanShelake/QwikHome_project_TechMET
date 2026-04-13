@@ -30,6 +30,8 @@ use App\Models\PrivacyPolicy;
 use App\Models\TermsCondition;
 use App\Models\RefundPolicy;
 use App\Models\ServiceOffer;
+use App\Http\Controllers\Admin\ProfileChangeRequestController;
+use App\Http\Controllers\Admin\ServiceProviderFaqController;
 
 
 //live time od Dubai 
@@ -84,7 +86,7 @@ Route::get('/time', function () {
     </html>";
 });
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 // Policy routes
 Route::get('/disclaimer', function () {
@@ -291,7 +293,6 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/faqs/service/{serviceId}', [faqController::class, 'viewByService'])->name('faqs.service.view');
     Route::get('/faqs/service/{serviceId}/edit', [faqController::class, 'editByService'])->name('faqs.service.edit');
     Route::put('/faqs/service/{serviceId}', [faqController::class, 'updateByService'])->name('faqs.service.update');
-    Route::delete('/faqs/service/{serviceId}/delete-all', [faqController::class, 'deleteAllByService'])->name('faqs.service.delete-all');
 
     //Coupons management-------------
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
@@ -340,6 +341,8 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
         Route::post('bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+        Route::post('bookings/save-auto-cancel-setting', [BookingController::class, 'saveAutoCancelSetting'])->name('bookings.saveAutoCancelSetting');
+        Route::post('bookings/cancel-old-bookings', [BookingController::class, 'cancelOldBookings'])->name('bookings.cancelOldBookings');
     });
 
     //Vendor management-------------
@@ -352,6 +355,17 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
         'update' => 'admin.vendors.update',
         'destroy' => 'admin.vendors.destroy',
     ]);
+    
+        //Profile Change Requests management-------------
+//Profile Change Requests management-------------
+    Route::get('/profile-change-requests', [ProfileChangeRequestController::class, 'index'])->name('admin.profile-change-requests.index');
+    Route::get('/profile-change-requests/{id}', [ProfileChangeRequestController::class, 'show'])->name('admin.profile-change-requests.show');
+    Route::post('/profile-change-requests/{id}/approve', [ProfileChangeRequestController::class, 'approve'])->name('admin.profile-change-requests.approve');
+    Route::post('/profile-change-requests/{id}/reject', [ProfileChangeRequestController::class, 'reject'])->name('admin.profile-change-requests.reject');
+    Route::post('/profile-change-requests/{id}/approve-field/{field}', [ProfileChangeRequestController::class, 'approveField'])->name('admin.profile-change-requests.approve-field');
+    Route::post('/profile-change-requests/{id}/reject-field/{field}', [ProfileChangeRequestController::class, 'rejectField'])->name('admin.profile-change-requests.reject-field');
+    Route::post('/profile-change-requests/{id}/approve-all', [ProfileChangeRequestController::class, 'approveAll'])->name('admin.profile-change-requests.approve-all');
+    Route::post('/profile-change-requests/{id}/reject-all', [ProfileChangeRequestController::class, 'rejectAll'])->name('admin.profile-change-requests.reject-all');
 
     //Analytics management-------------
     Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
@@ -360,6 +374,9 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/upload-image', [ProfileController::class, 'uploadImage'])->name('profile.upload.image');
+    Route::post('/get-pending-profile-change-requests', [ProfileController::class, 'getPendingProfileChangeRequests']);
+    Route::post('/approve-profile-change-request', [ProfileController::class, 'approveProfileChangeRequest']);
+    Route::post('/reject-profile-change-request', [ProfileController::class, 'rejectProfileChangeRequest']);
 
     //Feedback management-------------
     Route::get('/feedback', [\App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('feedback.index');
@@ -367,6 +384,12 @@ Route::middleware(['auth', isAdmin::class])->group(function () {
 
     // Push Notifications management-------------
     Route::resource('push-notifications', PushNotificationController::class);
+    
+    
+    
+     // Service Provider FAQs management-------------
+    Route::resource('service-provider-faqs', ServiceProviderFaqController::class);
+    
 });
 
 Auth::routes();
@@ -432,3 +455,64 @@ Route::get('/test-firebase-push', function () {
         ], 500);
     }
 });
+
+
+
+Route::get('/', [WebsiteHomeController::class, 'index'])->name('website.home');
+
+
+
+Route::get('/demo', function () {
+    return view('website.demo');
+});
+
+Route::get('/login', function () {
+    return view('website.login');
+})->name('login.page');
+
+Route::get('/cart', function () {
+    return view('website.cart');
+})->name('cart.page');
+
+Route::get('/wishlist', function () {
+    return view('website.user.wishlist');
+});
+
+
+Route::get('/iron', function () {
+    return view('website.user.ironing');
+});
+
+// Route::get('/', function () {
+//     return view('user.ironing2');
+// });
+
+//  Route::get('/', function () {
+//      return view('user.booking');
+//  });
+
+//  Route::get('/', function () {
+//       return view('user.booking2');
+//   });
+
+Route::get('/booking', function () {
+    return view('website.user.mybooking');
+})->name('booking.page');
+
+// Route::get('/', function () {
+//      return view('user.desktop');
+//  });
+// Route::get('/', function () {
+//      return view('user.desktop2');
+//  });
+Route::get('/verification', function () {
+    return view('website.verification');
+})->name('verification');
+
+Route::get('/signup', function () {
+    return view('website.signup');
+})->name('signup.page');
+
+Route::get('/coreservices', function () {
+    return view('website.coreservices');
+})->name('coreservices.page');

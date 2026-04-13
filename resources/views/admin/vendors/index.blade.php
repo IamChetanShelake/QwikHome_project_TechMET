@@ -3,169 +3,7 @@
 @section('title', 'Vendors')
 
 @section('content')
-    <div class="modern-index-container">
-        <!-- Alert System -->
-        <div id="alertContainer" class="alert-container"></div>
-
-        <!-- Header Section -->
-        <div class="index-header-section">
-            <div class="header-content">
-                <div class="header-icon-wrapper">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <div class="header-text">
-                    <h1 class="header-title">Vendor Management</h1>
-                    <p class="header-subtitle">Manage vendor accounts and their access to the platform</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="{{ route('admin.vendors.create') }}" class="modern-btn modern-btn-primary">
-                    <i class="fas fa-plus"></i>
-                    Add New Vendor
-                </a>
-            </div>
-        </div>
-
-        <!-- Table Section -->
-        <div class="table-section">
-            <div class="table-header">
-                <h3 class="table-title">
-                    <i class="fas fa-list"></i>
-                    Vendors List
-                </h3>
-                <div class="table-info">
-                    <span class="record-count">{{ $vendors->count() }} vendors found</span>
-                </div>
-            </div>
-
-            <div class="modern-table-container">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="th-id">
-                                <i class="fas fa-hashtag"></i>
-                                ID
-                            </th>
-                            <th class="th-image">
-                                <i class="fas fa-image"></i>
-                                Photo
-                            </th>
-                            <th class="th-name">
-                                <i class="fas fa-user"></i>
-                                Name
-                            </th>
-                            <th class="th-email">
-                                <i class="fas fa-envelope"></i>
-                                Email
-                            </th>
-                            <th class="th-phone">
-                                <i class="fas fa-phone"></i>
-                                Phone
-                            </th>
-                            <th class="th-address">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Address
-                            </th>
-                            <th class="th-date">
-                                <i class="fas fa-calendar"></i>
-                                Joined
-                            </th>
-                            <th class="th-actions">
-                                <i class="fas fa-cogs"></i>
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($vendors as $vendor)
-                            <tr class="table-row">
-                                <td class="td-id">{{ $vendor->id }}</td>
-                                <td class="td-image">
-                                    <div class="name-cell">
-                                        @if ($vendor->image)
-                                            <img src="{{ asset('user_images/' . $vendor->image) }}"
-                                                alt="{{ $vendor->name }}" class="vendor-image">
-                                        @else
-                                            <div class="vendor-placeholder">
-                                                <i class="fas fa-user"></i>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="td-name">
-                                    <span class="vendor-name">{{ $vendor->name }}</span>
-                                </td>
-                                <td class="td-email">
-                                    <span class="email-text">{{ $vendor->email }}</span>
-                                </td>
-                                <td class="td-phone">
-                                    <span class="phone-text">{{ $vendor->phone ?: 'Not provided' }}</span>
-                                </td>
-                                <td class="td-address">
-                                    <span class="address-text" title="{{ $vendor->address }}">
-                                        {{ Str::limit($vendor->address, 30) ?: 'Not provided' }}
-                                    </span>
-                                </td>
-                                <td class="td-date">
-                                    <span class="date-text">{{ $vendor->created_at->format('M d, Y') }}</span>
-                                    <span class="time-text">{{ $vendor->created_at->format('H:i') }}</span>
-                                </td>
-                                <td class="td-actions">
-                                    <div class="action-buttons">
-                                        <a href="{{ route('admin.vendors.show', $vendor->id) }}"
-                                            class="action-btn action-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}"
-                                            class="action-btn action-edit" title="Edit Vendor">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="button" class="action-btn action-delete"
-                                            onclick="confirmDelete({{ $vendor->id }}, '{{ $vendor->name }}')"
-                                            title="Delete Vendor">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-
-                                    <!-- Hidden Delete Form -->
-                                    <form id="deleteForm{{ $vendor->id }}" method="POST"
-                                        action="{{ route('admin.vendors.destroy', $vendor->id) }}"
-                                        style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="empty-row">
-                                <td colspan="8" class="empty-cell">
-                                    <div class="empty-state">
-                                        <i class="fas fa-user-tie"></i>
-                                        <h3>No Vendors Found</h3>
-                                        <p>Start by creating your first vendor account</p>
-                                        <a href="{{ route('admin.vendors.create') }}"
-                                            class="modern-btn modern-btn-primary">
-                                            <i class="fas fa-plus"></i>
-                                            Create First Vendor
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            @if ($vendors instanceof \Illuminate\Pagination\LengthAwarePaginator && $vendors->hasPages())
-                <div class="pagination-section">
-                    {{ $vendors->links() }}
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <style>
+ <style>
         /* Modern Vendors Index Styling */
         .modern-index-container {
             max-width: 1400px;
@@ -474,6 +312,169 @@
             }
         }
     </style>
+    <div class="modern-index-container">
+        <!-- Alert System -->
+        <div id="alertContainer" class="alert-container"></div>
+
+        <!-- Header Section -->
+        <div class="index-header-section">
+            <div class="header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="header-title">Vendor Management</h1>
+                    <p class="header-subtitle">Manage vendor accounts and their access to the platform</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('admin.vendors.create') }}" class="modern-btn modern-btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add New Vendor
+                </a>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <h3 class="table-title">
+                    <i class="fas fa-list"></i>
+                    Vendors List
+                </h3>
+                <div class="table-info">
+                    <span class="record-count">{{ $vendors->count() }} vendors found</span>
+                </div>
+            </div>
+
+            <div class="modern-table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="th-id">
+                                <i class="fas fa-hashtag"></i>
+                                ID
+                            </th>
+                            <th class="th-image">
+                                <i class="fas fa-image"></i>
+                                Photo
+                            </th>
+                            <th class="th-name">
+                                <i class="fas fa-user"></i>
+                                Name
+                            </th>
+                            <th class="th-email">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </th>
+                            <th class="th-phone">
+                                <i class="fas fa-phone"></i>
+                                Phone
+                            </th>
+                            <th class="th-address">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </th>
+                            <th class="th-date">
+                                <i class="fas fa-calendar"></i>
+                                Joined
+                            </th>
+                            <th class="th-actions">
+                                <i class="fas fa-cogs"></i>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($vendors as $vendor)
+                            <tr class="table-row">
+                                <td class="td-id">{{ $vendor->id }}</td>
+                                <td class="td-image">
+                                    <div class="name-cell">
+                                        @if ($vendor->image)
+                                            <img src="{{ asset('user_images/' . $vendor->image) }}"
+                                                alt="{{ $vendor->name }}" class="vendor-image">
+                                        @else
+                                            <div class="vendor-placeholder">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="td-name">
+                                    <span class="vendor-name">{{ $vendor->name }}</span>
+                                </td>
+                                <td class="td-email">
+                                    <span class="email-text">{{ $vendor->email }}</span>
+                                </td>
+                                <td class="td-phone">
+                                    <span class="phone-text">{{ $vendor->phone ?: 'Not provided' }}</span>
+                                </td>
+                                <td class="td-address">
+                                    <span class="address-text" title="{{ $vendor->address }}">
+                                        {{ Str::limit($vendor->address, 30) ?: 'Not provided' }}
+                                    </span>
+                                </td>
+                                <td class="td-date">
+                                    <span class="date-text">{{ $vendor->created_at->format('M d, Y') }}</span>
+                                    <span class="time-text">{{ $vendor->created_at->format('H:i') }}</span>
+                                </td>
+                                <td class="td-actions">
+                                    <div class="action-buttons">
+                                        <a href="{{ route('admin.vendors.show', $vendor->id) }}"
+                                            class="action-btn action-view" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.vendors.edit', $vendor->id) }}"
+                                            class="action-btn action-edit" title="Edit Vendor">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="action-btn action-delete"
+                                            onclick="confirmDelete({{ $vendor->id }}, '{{ $vendor->name }}')"
+                                            title="Delete Vendor">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Hidden Delete Form -->
+                                    <form id="deleteForm{{ $vendor->id }}" method="POST"
+                                        action="{{ route('admin.vendors.destroy', $vendor->id) }}"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="empty-row">
+                                <td colspan="8" class="empty-cell">
+                                    <div class="empty-state">
+                                        <i class="fas fa-user-tie"></i>
+                                        <h3>No Vendors Found</h3>
+                                        <p>Start by creating your first vendor account</p>
+                                        <a href="{{ route('admin.vendors.create') }}"
+                                            class="modern-btn modern-btn-primary">
+                                            <i class="fas fa-plus"></i>
+                                            Create First Vendor
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @if ($vendors instanceof \Illuminate\Pagination\LengthAwarePaginator && $vendors->hasPages())
+                <div class="pagination-section">
+                    {{ $vendors->links() }}
+                </div>
+            @endif
+        </div>
+    </div>
+
+   
 
     <script>
         function confirmDelete(vendorId, vendorName) {

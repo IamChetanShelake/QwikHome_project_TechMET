@@ -7,6 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceOffer extends Model
 {
     protected $guarded = [];
+    
+      protected $appends = ['image_url'];
+
+    // Accessor to get full image URL (backward compatibility - returns first image)
+     public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            // If media column stores the image filename
+            return asset('offer_images/' . $this->image);
+        }
+       
+       else{
+           return asset('offer_images/defaultOffer.jpg');
+       }
+    }
 
     protected $casts = [
         'discount_value' => 'decimal:2',

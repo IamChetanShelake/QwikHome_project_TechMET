@@ -66,6 +66,7 @@ class ServiceOffersController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'status' => 'required|in:active,inactive',
+             'image' => 'nullable|max:3048',
         ]);
 
         // Extract frequency option fields to exclude them from the main service offer creation
@@ -83,6 +84,25 @@ class ServiceOffersController extends Controller
 
         // Create the service offer with filtered input (excluding frequency option fields)
         $serviceOffer = ServiceOffer::create($filteredInput);
+        
+         // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if (!empty($serviceOffer->image)) {
+                $oldFile = public_path('offer_images/' . $serviceOffer->image);
+                if (file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
+            }
+            // Save new image
+            $imageName = time() . '.' . $request->image->extension();
+                // $imageName = $request->image->getClientOriginalName();
+            $request->image->move('offer_images', $imageName);
+
+            // Update serviceOffer record
+            $serviceOffer->image = $imageName;
+            $serviceOffer->save();
+        }
 
         // Get the service to access its frequency options
         $service = Service::findOrFail($request->service_id);
@@ -145,6 +165,8 @@ class ServiceOffersController extends Controller
     /**
      * Update the specified resource in storage.
      */
+     
+     //
     public function update(Request $request, ServiceOffer $serviceOffer)
     {
         $request->validate([
@@ -174,8 +196,27 @@ class ServiceOffersController extends Controller
                 $filteredInput[$key] = $value;
             }
         }
+        
+           //Handle Image Upload
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        $oldPath = public_path('offer_images/' . $serviceOffer->image);
+        if (file_exists($oldPath)) {
+            unlink($oldPath);
+        }
+
+        // Upload new image
+        $imageName = time() . '.' . $request->image->extension();
+            // dd($imageName);
+        //  $imageName = $request->image->getClientOriginalName();
+        $request->image->move('offer_images', $imageName);
+
+        // Save new image name in filtered input
+        $filteredInput['image'] = $imageName;
+    }
 
         // Update the service offer with filtered input (excluding frequency option fields)
+        
         $serviceOffer->update($filteredInput);
 
         // Get the service to access its frequency options

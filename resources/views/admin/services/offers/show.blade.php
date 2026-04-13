@@ -411,10 +411,20 @@
 
         <h1 class="header-title">{{ $serviceOffer->name }}</h1>
         <p class="header-subtitle">Service offer details and pricing</p>
+        
+         <div class="section-image mt-3">
+               
+                <div class="">
+                    <img src="{{asset('offer_images/'.$serviceOffer->image)}}" >
+                </div>
+        </div>
     </div>
 
     <!-- Service Information -->
+    
     <div class="show-section">
+            
+            
         <h2 class="section-title">
             <i class="fas fa-concierge-bell"></i>
             Service Information
@@ -461,6 +471,8 @@
                     Service description not available.
                 @endif
             </div>
+            
+             
         </div>
     </div>
 

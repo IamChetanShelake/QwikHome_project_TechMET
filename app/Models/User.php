@@ -43,7 +43,13 @@ class User extends Authenticatable
         'fixed_rate_amount',
         'commission_rate',
         'revenue_share_ratio',
-        'average_rating'
+        'average_rating',
+         'is_guest',
+          'biography',
+        'alternatePhone',
+        'latitude',
+        'longitude',
+        'last_location_update',
     ];
 
     protected $appends = ['image_url'];
@@ -51,7 +57,8 @@ class User extends Authenticatable
     // Accessor to get full image URL
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('user_images/' . $this->image) : null;
+        return $this->image ? asset('user_images/' . $this->image) : asset('user_images/gray-user-profile-icon-png-fP8Q1P.png');
+        
     }
 
     /**
@@ -117,9 +124,7 @@ class User extends Authenticatable
     // Many-to-many relationship with services
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'user_services')
-            ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
-            ->withTimestamps();
+        return $this->belongsToMany(Service::class, 'user_services')->withTimestamps();
     }
 
     // Relationship with vendor (a service provider can belong to a vendor)
@@ -133,8 +138,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'vendor_id');
     }
-
-    // Relationship with addresses
+    
+       // Relationship with addresses
     public function addresses()
     {
         return $this->hasMany(Address::class);

@@ -3,307 +3,6 @@
 @section('title', 'Vendor Details')
 
 @section('content')
-    <div class="modern-view-container">
-        <!-- Header Section -->
-        <div class="view-header-section">
-            <div class="view-header-content">
-                <div class="header-icon-wrapper">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <div class="header-text">
-                    <h1 class="header-title">Vendor Details</h1>
-                    <p class="header-subtitle">Complete information about this vendor account</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="modern-btn modern-btn-primary">
-                    <i class="fas fa-edit"></i>
-                    Edit Vendor
-                </a>
-                <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to List
-                </a>
-            </div>
-        </div>
-
-            <!-- Content Section -->
-            <div class="modern-view-card">
-                <div class="view-content">
-                    <!-- Vendor Profile Section -->
-                    <div class="vendor-profile-section">
-                        <div class="vendor-avatar">
-                            @if ($vendor->image)
-                                <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}" class="vendor-avatar-img">
-                            @else
-                                <div class="avatar-placeholder">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="vendor-info">
-                            <h2 class="vendor-name">{{ $vendor->name }}</h2>
-                            <p class="vendor-role">Vendor Account</p>
-                        </div>
-                    </div>
-
-                    <!-- Main Info Grid -->
-                    <div class="info-grid">
-                        <!-- Vendor Name -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-user"></i>
-                                <span>Vendor Name</span>
-                            </div>
-                            <div class="info-value">
-                                <span class="text-primary">{{ $vendor->name }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Email Address -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-envelope"></i>
-                                <span>Email Address</span>
-                            </div>
-                            <div class="info-value">
-                                <a href="mailto:{{ $vendor->email }}" class="email-link">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    {{ $vendor->email }}
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Phone Number -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-phone"></i>
-                                <span>Phone Number</span>
-                            </div>
-                            <div class="info-value">
-                                @if($vendor->phone)
-                                    <a href="tel:{{ $vendor->phone }}" class="phone-link">
-                                        <i class="fas fa-external-link-alt"></i>
-                                        {{ $vendor->phone }}
-                                    </a>
-                                @else
-                                    <span class="text-muted">Not provided</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Status -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-toggle-on"></i>
-                                <span>Status</span>
-                            </div>
-                            <div class="info-value">
-                                <span class="status-badge status-active">
-                                    <i class="fas fa-check-circle"></i>
-                                    Active
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Member Since -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-calendar-plus"></i>
-                                <span>Member Since</span>
-                            </div>
-                            <div class="info-value">
-                                <div class="date-display">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>{{ $vendor->created_at->format('d/m/Y H:i') }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Last Updated -->
-                        <div class="info-item">
-                            <div class="info-label">
-                                <i class="fas fa-edit"></i>
-                                <span>Last Updated</span>
-                            </div>
-                            <div class="info-value">
-                                <div class="date-display">
-                                    <i class="fas fa-calendar-edit"></i>
-                                    <span>{{ $vendor->updated_at->format('d/m/Y H:i') }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Address Section -->
-                    @if($vendor->address)
-                    <div class="description-section">
-                        <div class="section-header">
-                            <h3 class="section-title">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Address
-                            </h3>
-                        </div>
-                        <div class="description-content">
-                            <p>{{ $vendor->address }}</p>
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Document Information -->
-                    <div class="additional-info">
-                        <div class="info-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-file-alt"></i>
-                                Required Documents
-                            </h3>
-                            <div class="section-content">
-                                <div class="info-row">
-                                    <span class="info-key">Signed Application:</span>
-                                    <span class="info-val">
-                                        @if($vendor->application_document)
-                                            <a href="{{ asset('vendor_documents/' . $vendor->application_document) }}" target="_blank" class="document-link">
-                                                <i class="fas fa-file-pdf"></i>
-                                                {{ $vendor->application_document }}
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-key">Trade License (Valid):</span>
-                                    <span class="info-val">
-                                        @if($vendor->trade_license_document)
-                                            <a href="{{ asset('vendor_documents/' . $vendor->trade_license_document) }}" target="_blank" class="document-link">
-                                                <i class="fas fa-file-pdf"></i>
-                                                {{ $vendor->trade_license_document }}
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-key">VAT Certificate/Tax Certificate:</span>
-                                    <span class="info-val">
-                                        @if($vendor->vat_certificate_document)
-                                            <a href="{{ asset('vendor_documents/' . $vendor->vat_certificate_document) }}" target="_blank" class="document-link">
-                                                <i class="fas fa-file-pdf"></i>
-                                                {{ $vendor->vat_certificate_document }}
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-key">Staff Documents (Police Clearance):</span>
-                                    <span class="info-val">
-                                        @if($vendor->staff_documents)
-                                            <a href="{{ asset('vendor_documents/' . $vendor->staff_documents) }}" target="_blank" class="document-link">
-                                                <i class="fas fa-file-pdf"></i>
-                                                {{ $vendor->staff_documents }}
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-key">Contract to be Signed:</span>
-                                    <span class="info-val">
-                                        @if($vendor->contract_document)
-                                            <a href="{{ asset('vendor_documents/' . $vendor->contract_document) }}" target="_blank" class="document-link">
-                                                <i class="fas fa-file-pdf"></i>
-                                                {{ $vendor->contract_document }}
-                                            </a>
-                                        @else
-                                            <span class="text-muted">Not provided</span>
-                                        @endif
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Services & Payment Terms -->
-                    <div class="additional-info">
-                        <div class="info-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-concierge-bell"></i>
-                                Services & Payment Terms
-                            </h3>
-                            <div class="section-content">
-                                @if($vendor->services && $vendor->services->count() > 0)
-                                    <div class="services-list">
-                                        @foreach($vendor->services as $service)
-                                            <div class="service-payment-card">
-                                                <div class="service-header">
-                                                    <h4 class="service-name">
-                                                        <i class="fas fa-tools"></i>
-                                                        {{ $service->name }}
-                                                    </h4>
-                                                    @if($service->category)
-                                                        <span class="service-category-badge">{{ $service->category->name }}</span>
-                                                    @endif
-                                                </div>
-                                                <div class="payment-details">
-                                                    <div class="payment-row">
-                                                        <span class="payment-label">Payment Type:</span>
-                                                        <span class="payment-type-badge {{ $service->pivot->payment_type }}">
-                                                            <i class="fas fa-cash-register"></i>
-                                                            {{ ucfirst(str_replace('_', ' ', $service->pivot->payment_type ?? 'Not set')) }}
-                                                        </span>
-                                                    </div>
-                                                    
-                                                    @if($service->pivot->payment_type == 'fixed_rate' && $service->pivot->fixed_rate_amount)
-                                                        <div class="payment-row">
-                                                            <span class="payment-label">Fixed Rate:</span>
-                                                            <span class="payment-value fixed-rate-value">
-                                                                <i class="fas fa-dollar-sign"></i>
-                                                                AED {{ number_format($service->pivot->fixed_rate_amount, 2) }}
-                                                            </span>
-                                                        </div>
-                                                    @endif
-                                                    
-                                                    @if($service->pivot->payment_type == 'commission' && $service->pivot->commission_rate)
-                                                        <div class="payment-row">
-                                                            <span class="payment-label">Commission Rate:</span>
-                                                            <span class="payment-value commission-rate-value">
-                                                                <i class="fas fa-percent"></i>
-                                                                {{ $service->pivot->commission_rate }}%
-                                                            </span>
-                                                        </div>
-                                                    @endif
-                                                    
-                                                    @if($service->pivot->payment_type == 'revenue_share' && $service->pivot->revenue_share_ratio)
-                                                        <div class="payment-row">
-                                                            <span class="payment-label">Revenue Share:</span>
-                                                            <span class="payment-value revenue-share-value">
-                                                                <i class="fas fa-chart-pie"></i>
-                                                                {{ $service->pivot->revenue_share_ratio }}
-                                                            </span>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="no-services">
-                                        <i class="fas fa-info-circle"></i>
-                                        <p>No services assigned to this vendor</p>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <style>
         /* Modern View Styles */
         .modern-view-container {
@@ -841,4 +540,306 @@
             }
         }
     </style>
+    <div class="modern-view-container">
+        <!-- Header Section -->
+        <div class="view-header-section">
+            <div class="view-header-content">
+                <div class="header-icon-wrapper">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="header-title">Vendor Details</h1>
+                    <p class="header-subtitle">Complete information about this vendor account</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="modern-btn modern-btn-primary">
+                    <i class="fas fa-edit"></i>
+                    Edit Vendor
+                </a>
+                <a href="{{ route('admin.vendors.index') }}" class="modern-btn modern-btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to List
+                </a>
+            </div>
+        </div>
+
+            <!-- Content Section -->
+            <div class="modern-view-card">
+                <div class="view-content">
+                    <!-- Vendor Profile Section -->
+                    <div class="vendor-profile-section">
+                        <div class="vendor-avatar">
+                            @if ($vendor->image)
+                                <img src="{{ asset('user_images/' . $vendor->image) }}" alt="{{ $vendor->name }}" class="vendor-avatar-img">
+                            @else
+                                <div class="avatar-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="vendor-info">
+                            <h2 class="vendor-name">{{ $vendor->name }}</h2>
+                            <p class="vendor-role">Vendor Account</p>
+                        </div>
+                    </div>
+
+                    <!-- Main Info Grid -->
+                    <div class="info-grid">
+                        <!-- Vendor Name -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user"></i>
+                                <span>Vendor Name</span>
+                            </div>
+                            <div class="info-value">
+                                <span class="text-primary">{{ $vendor->name }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email Address</span>
+                            </div>
+                            <div class="info-value">
+                                <a href="mailto:{{ $vendor->email }}" class="email-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    {{ $vendor->email }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-phone"></i>
+                                <span>Phone Number</span>
+                            </div>
+                            <div class="info-value">
+                                @if($vendor->phone)
+                                    <a href="tel:{{ $vendor->phone }}" class="phone-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        {{ $vendor->phone }}
+                                    </a>
+                                @else
+                                    <span class="text-muted">Not provided</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-toggle-on"></i>
+                                <span>Status</span>
+                            </div>
+                            <div class="info-value">
+                                <span class="status-badge status-active">
+                                    <i class="fas fa-check-circle"></i>
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Member Since -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Member Since</span>
+                            </div>
+                            <div class="info-value">
+                                <div class="date-display">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ $vendor->created_at->format('d/m/Y H:i') }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Last Updated -->
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-edit"></i>
+                                <span>Last Updated</span>
+                            </div>
+                            <div class="info-value">
+                                <div class="date-display">
+                                    <i class="fas fa-calendar-edit"></i>
+                                    <span>{{ $vendor->updated_at->format('d/m/Y H:i') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address Section -->
+                    @if($vendor->address)
+                    <div class="description-section">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Address
+                            </h3>
+                        </div>
+                        <div class="description-content">
+                            <p>{{ $vendor->address }}</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Document Information -->
+                    <div class="additional-info">
+                        <div class="info-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-file-alt"></i>
+                                Required Documents
+                            </h3>
+                            <div class="section-content">
+                                <div class="info-row">
+                                    <span class="info-key">Signed Application:</span>
+                                    <span class="info-val">
+                                        @if($vendor->application_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->application_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->application_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Trade License (Valid):</span>
+                                    <span class="info-val">
+                                        @if($vendor->trade_license_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->trade_license_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->trade_license_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">VAT Certificate/Tax Certificate:</span>
+                                    <span class="info-val">
+                                        @if($vendor->vat_certificate_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->vat_certificate_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->vat_certificate_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Staff Documents (Police Clearance):</span>
+                                    <span class="info-val">
+                                        @if($vendor->staff_documents)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->staff_documents) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->staff_documents }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-key">Contract to be Signed:</span>
+                                    <span class="info-val">
+                                        @if($vendor->contract_document)
+                                            <a href="{{ asset('vendor_documents/' . $vendor->contract_document) }}" target="_blank" class="document-link">
+                                                <i class="fas fa-file-pdf"></i>
+                                                {{ $vendor->contract_document }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Not provided</span>
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services & Payment Terms -->
+                    <div class="additional-info">
+                        <div class="info-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-concierge-bell"></i>
+                                Services & Payment Terms
+                            </h3>
+                            <div class="section-content">
+                                @if($vendor->services && $vendor->services->count() > 0)
+                                    <div class="services-list">
+                                        @foreach($vendor->services as $service)
+                                            <div class="service-payment-card">
+                                                <div class="service-header">
+                                                    <h4 class="service-name">
+                                                        <i class="fas fa-tools"></i>
+                                                        {{ $service->name }}
+                                                    </h4>
+                                                    @if($service->category)
+                                                        <span class="service-category-badge">{{ $service->category->name }}</span>
+                                                    @endif
+                                                </div>
+                                                <div class="payment-details">
+                                                    <div class="payment-row">
+                                                        <span class="payment-label">Payment Type:</span>
+                                                        <span class="payment-type-badge {{ $service->pivot->payment_type }}">
+                                                            <i class="fas fa-cash-register"></i>
+                                                            {{ ucfirst(str_replace('_', ' ', $service->pivot->payment_type ?? 'Not set')) }}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    @if($service->pivot->payment_type == 'fixed_rate' && $service->pivot->fixed_rate_amount)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Fixed Rate:</span>
+                                                            <span class="payment-value fixed-rate-value">
+                                                                <i class="fas fa-dollar-sign"></i>
+                                                                AED {{ number_format($service->pivot->fixed_rate_amount, 2) }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'commission' && $service->pivot->commission_rate)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Commission Rate:</span>
+                                                            <span class="payment-value commission-rate-value">
+                                                                <i class="fas fa-percent"></i>
+                                                                {{ $service->pivot->commission_rate }}%
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    @if($service->pivot->payment_type == 'revenue_share' && $service->pivot->revenue_share_ratio)
+                                                        <div class="payment-row">
+                                                            <span class="payment-label">Revenue Share:</span>
+                                                            <span class="payment-value revenue-share-value">
+                                                                <i class="fas fa-chart-pie"></i>
+                                                                {{ $service->pivot->revenue_share_ratio }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="no-services">
+                                        <i class="fas fa-info-circle"></i>
+                                        <p>No services assigned to this vendor</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection

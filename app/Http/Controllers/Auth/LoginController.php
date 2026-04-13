@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -40,6 +42,38 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
+    public function username()
+    {
+        return 'emailphone';
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'emailphone' => 'required|string',
+            'password' => 'required|string',
+        ]);
+    }
+
+    protected function credentials(Request $request)
+    {
+        $login = $request->input('emailphone');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+        return [
+            $field => $login,
+            'password' => $request->input('password'),
+        ];
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        return Auth::attempt(
+            $this->credentials($request),
+            $request->boolean('remember')
+        );
+    }
+
     protected function authenticated(Request $request, $user)
     {
         $user = User::where('email', $request->emailphone)
@@ -52,5 +86,11 @@ class LoginController extends Controller
         }
 
         return redirect('/'); // fallback
+    }
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            'emailphone' => [trans('auth.failed')],
+        ]);
     }
 }

@@ -221,12 +221,17 @@
 
         <form id="loginForm" method="POST" action="{{ route('login') }}">
             @csrf
+            @if ($errors->has('emailphone'))
+                <div style="margin-bottom: 20px; padding: 12px 14px; border-radius: 10px; background: rgba(255, 87, 87, 0.14); border: 1px solid rgba(255, 87, 87, 0.35); color: #ffb3b3; font-size: 14px;">
+                    {{ $errors->first('emailphone') }}
+                </div>
+            @endif
             <div class="form-group">
                 <label for="email">Email or Phone</label>
                 <div class="input-wrapper">
                     <i class="fas fa-envelope"></i>
                     <input type="text" id="emailphone" name="emailphone" class="form-input"
-                        placeholder="Enter your email" required>
+                        placeholder="Enter your email" value="{{ old('emailphone') }}" required>
                 </div>
             </div>
 

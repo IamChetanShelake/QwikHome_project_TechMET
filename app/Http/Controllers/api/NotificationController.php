@@ -13,11 +13,124 @@ use App\Services\FirebaseService;
 
 class NotificationController extends Controller
 {
-    protected $firebaseService;
+    // protected $firebaseService;
 
-    public function __construct(FirebaseService $firebaseService)
+    // public function __construct(FirebaseService $firebaseService)
+    // {
+    //     $this->firebaseService = $firebaseService;
+    // }
+    
+     /**
+     * Mark notification as read
+     */
+    public function markAsRead(Request $request)
     {
-        $this->firebaseService = $firebaseService;
+        $validator = Validator::make($request->all(), [
+            'notificationid' => 'required|exists:notifications,id',
+            'user' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $user = User::findOrFail($request->user);
+
+            // Find the notification and verify it belongs to the user
+            $notification = $user->notifications()->where('id', $request->notificationid)->first();
+
+            if (!$notification) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Notification not found or does not belong to the user'
+                ], 404);
+            }
+
+            // Update the read_at timestamp
+            $notification->update(['read_at' => now()]);
+
+            Log::info('NotificationController: Notification marked as read', [
+                'user_id' => $user->id,
+                'notification_id' => $request->notificationid
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Notification marked as read successfully',
+                'data' => [
+                    'notification_id' => $request->notificationid,
+                    'read_at' => $notification->read_at
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('NotificationController: Failed to mark notification as read', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user,
+                'notification_id' => $request->notificationid,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to mark notification as read: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+      /**
+     * Get latest notifications from the database
+     */
+    public function getLatestNotifications(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user' => 'required|exists:users,id', // Customer
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+
+            // Get latest notifications ordered by creation date (newest first)
+
+            $notifications = User::find($request->user)
+                ->notifications()
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // $notifications = \App\Models\PushNotification::where('notifiable_id', $request->user)
+            //     ->orderBy('created_at', 'desc')->get();
+
+
+            return response()->json([
+                'status' => true,
+                'status_code' => 200,
+                'message' => 'Latest notifications retrieved successfully',
+                'data' => [
+                    'notifications' => $notifications,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('NotificationController: Failed to retrieve latest notifications', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve notifications: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -26,8 +139,8 @@ class NotificationController extends Controller
     public function sendBookingConfirmation(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'cart_item_id' => 'required|exists:cart_items,id',
+            'user' => 'required|exists:users,id',
+            'cartid' => 'required|exists:cart_items,id',
             'transaction_id' => 'required|exists:payment_transactions,id',
         ]);
 
@@ -481,4 +594,6 @@ class NotificationController extends Controller
             ], 500);
         }
     }
+    
+   
 }

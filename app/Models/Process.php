@@ -14,7 +14,7 @@ class Process extends Model
     // Accessor to get full image URL
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('Process_images/' . $this->image) : null;
+        return $this->image ? asset('Process_images/' . $this->image) : asset('Process_images/defaultProcess.png');
     }
 
     /**

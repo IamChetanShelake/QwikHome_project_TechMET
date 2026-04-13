@@ -27,7 +27,7 @@ class AuthApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'status_code' => 422,
-                    'message' => 'Validation failed',
+                    'message' => $validator->errors()->first(),
                     'errors' => $validator->errors()
                 ], 422);
             }
@@ -49,6 +49,7 @@ class AuthApiController extends Controller
                 'otp' => '1234',
                 'user' => $user,
             ], 201);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -79,7 +80,7 @@ class AuthApiController extends Controller
                 return response()->json([
                     'success' => false,
                     'status_code' => 422,
-                    'message' => 'Validation failed',
+                    'message' => $validator->errors()->first(),
                     'errors' => $validator->errors()
                 ], 422);
             }
@@ -87,6 +88,8 @@ class AuthApiController extends Controller
             // Check if user exists and OTP is correct
 
             $user = User::where('phone', $request->phone)->first();
+            
+            
 
             if (!$user) {
                 return response()->json([
@@ -97,6 +100,42 @@ class AuthApiController extends Controller
             }
 
 
+            //serviceprovider login 
+            if($user->role == 'serviceprovider'){
+                
+                // Check if user is active
+            if ($user->active == 1) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 403,
+                    'message' => 'Account is deactivated'
+                ], 403);
+            }
+            if ($user->is_deleted == 1) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 403,
+                    'message' => 'Account is deleted'
+                ], 403);
+            }
+
+            // Delete existing tokens (optional - depends on requirement)
+            $user->tokens()->delete();
+
+            // Generate new token
+            $token = $user->createToken('API Token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Service Provider Login successful',
+                'data' => [
+                    'otp' => 1234,
+                    'user' => $user,
+                    'token' => $token
+                ]
+            ]);
+            }
 
             // Check if user is active
             if ($user->active == 1) {
@@ -135,6 +174,59 @@ class AuthApiController extends Controller
                 'success' => false,
                 'status_code' => 500,
                 'message' => 'Login failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    
+     //guestlogin
+    public function guestLogin(Request $request)
+    {
+        try {
+            // Validate input data - skip can be provided
+            // $validator = Validator::make($request->all(), [
+            //     'skip' => 'nullable|string',
+            // ]);
+
+            // if ($validator->fails()) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'status_code' => 422,
+            //         'message' => 'Validation failed',
+            //         'errors' => $validator->errors()
+            //     ], 422);
+            // }
+
+            // Create a guest user or use existing logic
+            // Assuming we create a temporary guest user
+            $guestUser = User::create([
+                'name' => 'Guest User',
+                'email' => 'guest_' . time() . '@example.com', // Generate unique email
+                'phone' => null, // No phone for guest
+                'password' => null,
+                'role' => 'guest',
+                'active' => 1,
+                'is_guest' => 1 // Assuming there's an is_guest field, or add logic as needed
+            ]);
+
+            // Generate token for guest
+            $token = $guestUser->createToken('Guest API Token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Guest login successful',
+                'data' => [
+                    'user' => $guestUser,
+                    'token' => $token
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Guest login failed',
                 'error' => $e->getMessage()
             ], 500);
         }

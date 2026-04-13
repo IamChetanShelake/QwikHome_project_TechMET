@@ -94,6 +94,12 @@
         .main-content {
             background-color: #f8fafc;
         }
+         .btn-secondary{
+            color:black !important;
+        }
+        .stat-info{
+            color:black !important;
+        }
 
         /* Modern Service Management Dropdown Styling */
         .service-dropdown-menu {
@@ -1190,7 +1196,7 @@
                     <li class="nav-item {{ request()->is('vendors*') ? 'active' : '' }}">
                         <a href="{{ route('admin.vendors.index') }}" class="nav-link">
                             <i class="fas fa-user-tie"></i>
-                            <span>Vendor Management</span>
+                            <span>Service Providers </span>
                         </a>
                     </li>
 
@@ -1198,6 +1204,13 @@
                         <a href="{{ route('serviceProviders.index') }}" class="nav-link">
                             <i class="fas fa-user-plus"></i>
                             <span>Employees</span>
+                        </a>
+                    </li>
+                    
+                      <li class="nav-item {{ request()->is('profile-change-requests*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.profile-change-requests.index') }}" class="nav-link">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Profile Change Requests</span>
                         </a>
                     </li>
 
@@ -1213,12 +1226,20 @@
                             <span>Promo Codes</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->is('push-notifications*') ? 'active' : '' }}">
-                        <a href="{{ route('push-notifications.index') }}" class="nav-link">
-                            <i class="fas fa-bell"></i>
-                            <span>Push Notifications</span>
-                        </a>
-                    </li>
+                    <!--<li class="nav-item {{ request()->is('push-notifications*') ? 'active' : '' }}">-->
+                    <!--    <a href="#" class="nav-link">-->
+                    <!--        <i class="fas fa-bell"></i>-->
+                    <!--        <span>Push Notifications</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
+                    
+                    
+                    <!--<li class="nav-item {{ request()->is('push-notifications*') ? 'active' : '' }}">-->
+                    <!--    <a href="{{ route('push-notifications.index') }}" class="nav-link">-->
+                    <!--        <i class="fas fa-bell"></i>-->
+                    <!--        <span>Push Notifications</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
                     <li class="nav-item {{ request()->is('analytics') ? 'active' : '' }}">
                         <a href="{{ route('admin.analytics.index') }}" class="nav-link">
                             <i class="fas fa-chart-bar"></i>
@@ -1332,6 +1353,12 @@
                         </a>
                     </li>
                 @endif
+                  <li class="nav-item {{ request()->is('service-provider-faqs*') ? 'active' : '' }}">
+                        <a href="{{ route('service-provider-faqs.index') }}" class="nav-link">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Service Provider FAQs</span>
+                        </a>
+                    </li>
             </ul>
         </nav>
 

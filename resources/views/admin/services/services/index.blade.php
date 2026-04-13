@@ -650,7 +650,7 @@
                         <tr>
                             <th class="th-id">
                                 <i class="fas fa-hashtag"></i>
-                                ID
+                                Sr.
                             </th>
                             <th class="th-name">
                                 <i class="fas fa-concierge-bell"></i>
@@ -694,7 +694,7 @@
                     <tbody>
                         @forelse($services as $service)
                             <tr class="table-row">
-                                <td class="td-id">{{ $service->id }}</td>
+                                <td class="td-id">{{ $loop->index+1 }}</td>
                                 <td class="td-name">
                                     <div class="name-cell">
                                         @if ($service->image)

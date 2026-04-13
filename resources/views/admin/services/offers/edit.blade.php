@@ -212,7 +212,7 @@
     @endif
 
     <!-- Edit Form -->
-    <form action="{{ route('offers.update', $serviceOffer) }}" method="POST">
+    <form action="{{ route('offers.update', $serviceOffer) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -323,6 +323,17 @@
         <!-- Status -->
         <div class="form-section">
             <h3><i class="fas fa-toggle-on"></i> Status</h3>
+            
+              <div class="form-section">
+                <div class="form-group">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" name="image" id="image">
+                </div>
+                
+                <div class="form-group">
+                    <img src="{{asset('offer_images/'.$serviceOffer->image)}}" >
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="form-label">Offer Status *</label>

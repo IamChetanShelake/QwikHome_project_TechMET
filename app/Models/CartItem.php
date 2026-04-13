@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class CartItem extends Model
 {
     use HasFactory;
@@ -16,8 +17,8 @@ class CartItem extends Model
         'quantity' => 'integer',
         'unit_price' => 'decimal:2',
         'total_price' => 'decimal:2',
-        'scheduled_date' => 'date',
-        'preferred_time' => 'datetime:H:i',
+         'scheduled_date' => 'datetime:Y-m-d H:i:s',
+        'preferred_time' => 'string',
         'auto_renew' => 'boolean',
         'combo_services_config' => 'json',
         'combo_discount_applied' => 'json',
@@ -39,12 +40,6 @@ class CartItem extends Model
         return $this->belongsTo(Cart::class);
     }
 
-    // Relationship with User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     // Relationship with Service Frequency
     public function serviceFrequency()
     {
@@ -55,6 +50,10 @@ class CartItem extends Model
     public function subscriptionPlan()
     {
         return $this->belongsTo(ServiceSubscriptionPlan::class, 'subscription_plan_id');
+    }
+     public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     // Relationship with Combo Offer
@@ -111,12 +110,12 @@ class CartItem extends Model
     {
         parent::boot();
 
-        static::saving(function ($cartItem) {
-            $cartItem->total_price = ($cartItem->unit_price * $cartItem->quantity)
-                                   + $cartItem->addons_price
-                                   - $cartItem->discount_amount
-                                   + $cartItem->tax_amount;
-        });
+        // static::saving(function ($cartItem) {
+        //     $cartItem->total_price = ($cartItem->unit_price * $cartItem->quantity)
+        //                           + $cartItem->addons_price
+        //                           - $cartItem->discount_amount
+        //                           + $cartItem->tax_amount;
+        // });
     }
 
     // Check if item is valid

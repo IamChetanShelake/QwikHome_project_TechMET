@@ -9,23 +9,14 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     protected $casts = [
-        'scheduled_date' => 'date',
+        'scheduled_date' => 'datetime:Y-m-d H:i:s',
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
         'completed_at' => 'datetime',
-        'cancelled_at' => 'datetime',
         'price' => 'decimal:2',
-        'discount_amount' => 'decimal:2',
-        'tax_amount' => 'decimal:2',
-        'total_amount' => 'decimal:2',
-        'paid_amount' => 'decimal:2',
-        'refund_amount' => 'decimal:2',
-        'cancellation_fee' => 'decimal:2',
-        'payment_due_date' => 'date',
-        'next_booking_date' => 'date',
     ];
 
     // Relationships
@@ -39,6 +30,11 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+     public function selectedFrequencyOption()
+    {
+        return $this->belongsTo(ServiceFrequencyOption::class, 'selected_frequency_option_id');
+    }
+    
     public function serviceProvider()
     {
         return $this->belongsTo(User::class, 'service_provider_id');
@@ -48,9 +44,8 @@ class Booking extends Model
     {
         return $this->belongsTo(User::class, 'vendor_id');
     }
-
-    // New payment and subscription relationships
-    public function paymentMethod()
+    
+     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);
     }
@@ -80,6 +75,7 @@ class Booking extends Model
         return $this->hasManyThrough(PaymentTransaction::class, BookingPayment::class, 'booking_id', 'id', 'id', 'payment_transaction_id');
     }
 
+
     // Scope for filtering by status
     public function scopeByStatus($query, $status)
     {
@@ -102,6 +98,12 @@ class Booking extends Model
     public function feedback()
     {
         return $this->hasOne(Feedback::class);
+    }
+    
+     // Attendance relationship
+    public function attendance()
+    {
+        return $this->hasOne(ServiceProviderAttendance::class);
     }
 
     // Generate booking reference

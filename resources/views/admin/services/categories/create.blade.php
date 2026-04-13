@@ -3,147 +3,6 @@
 @section('title', 'Add Category')
 
 @section('content')
-<div class="modern-form-container">
-    <!-- Form Header Section -->
-    <div class="form-header-section">
-        <div class="form-header-content">
-            <div class="form-icon-wrapper">
-                <i class="fas fa-folder-plus"></i>
-            </div>
-            <div class="form-header-text">
-                <h1 class="form-title">Create Category</h1>
-                <p class="form-subtitle">Add a new service category to organize your services</p>
-            </div>
-        </div>
-        <div class="form-header-actions">
-            <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-secondary">
-                <i class="fas fa-arrow-left"></i>
-                Back to Categories
-            </a>
-        </div>
-    </div>
-
-    <!-- Form Card -->
-    <div class="modern-form-card">
-        <form method="POST" action="{{ route('services.categories.store') }}" id="categoryForm" enctype="multipart/form-data">
-            @csrf
-
-            <div class="form-grid">
-                <!-- Name Input -->
-                <div class="form-group-modern">
-                    <label for="name" class="modern-label">
-                        <i class="fas fa-tag text-cyan"></i>
-                        Category Name
-                        <span class="required-badge">Required</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="text" class="modern-input" id="name" name="name"
-                               value="{{ old('name') }}" placeholder="Enter category name" required>
-                        <i class="fas fa-tag input-icon"></i>
-                    </div>
-                    @error('name')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Choose a clear and descriptive name for the category
-                    </div>
-                </div>
-
-                <!-- Status Dropdown -->
-                <div class="form-group-modern">
-                    <label for="status" class="modern-label">
-                        <i class="fas fa-toggle-on text-cyan"></i>
-                        Status
-                        <span class="required-badge">Required</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <select class="modern-select" id="status" name="status" required>
-                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        </select>
-                        <i class="fas fa-toggle-on input-icon"></i>
-                    </div>
-                    @error('status')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Set category visibility status
-                    </div>
-                </div>
-
-                <!-- Description Textarea (Full Width) -->
-                <div class="form-group-modern full-width">
-                    <label for="description" class="modern-label">
-                        <i class="fas fa-align-left text-cyan"></i>
-                        Description
-                        <span class="optional-badge">Optional</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <textarea class="modern-textarea" id="description" name="description"
-                                  placeholder="Enter category description">{{ old('description') }}</textarea>
-                        <i class="fas fa-align-left input-icon"></i>
-                    </div>
-                    @error('description')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Provide a detailed description of what services this category includes
-                    </div>
-                </div>
-
-                <!-- Image Upload (Full Width) -->
-                <div class="form-group-modern full-width">
-                    <label for="image" class="modern-label">
-                        <i class="fas fa-image text-cyan"></i>
-                        Category Image
-                        <span class="optional-badge">Optional</span>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="file" class="modern-input file-input" id="image" name="image" accept="image/*">
-                        <i class="fas fa-image input-icon"></i>
-                    </div>
-                    @error('image')
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i>
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <div class="field-hint">
-                        <i class="fas fa-info-circle"></i>
-                        Upload an image to represent this category (JPG, PNG, GIF - Max 2MB)
-                    </div>
-                </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
-                    <i class="fas fa-plus"></i>
-                    <span class="btn-text">Create Category</span>
-                    <div class="btn-loader" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </div>
-                </button>
-                <button type="reset" class="modern-btn modern-btn-secondary">
-                    <i class="fas fa-undo"></i>
-                    Reset Form
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <style>
     /* Modern Category Form Styling */
@@ -450,150 +309,150 @@
             }
         }
     </style>
-    <div class="modern-form-container">
-        <!-- Form Header Section -->
-        <div class="form-header-section">
-            <div class="form-header-content">
-                <div class="form-icon-wrapper">
-                    <i class="fas fa-folder-plus"></i>
-                </div>
-                <div class="form-header-text">
-                    <h1 class="form-title">Create Category</h1>
-                    <p class="form-subtitle">Add a new service category to organize your services</p>
-                </div>
+<div class="modern-form-container">
+    <!-- Form Header Section -->
+    <div class="form-header-section">
+        <div class="form-header-content">
+            <div class="form-icon-wrapper">
+                <i class="fas fa-folder-plus"></i>
             </div>
-            <div class="form-header-actions">
-                <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Categories
-                </a>
+            <div class="form-header-text">
+                <h1 class="form-title">Create Category</h1>
+                <p class="form-subtitle">Add a new service category to organize your services</p>
             </div>
         </div>
-
-        <!-- Form Card -->
-        <div class="modern-form-card">
-            <form method="POST" action="{{ route('services.categories.store') }}" id="categoryForm"
-                enctype="multipart/form-data">
-                @csrf
-
-                <div class="form-grid">
-                    <!-- Name Input -->
-                    <div class="form-group-modern">
-                        <label for="name" class="modern-label">
-                            <i class="fas fa-tag text-cyan"></i>
-                            Category Name
-                            <span class="required-badge">Required</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="text" class="modern-input" id="name" name="name"
-                                value="{{ old('name') }}" placeholder="Enter category name" required>
-                            <i class="fas fa-tag input-icon"></i>
-                        </div>
-                        @error('name')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <div class="field-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Choose a clear and descriptive name for the category
-                        </div>
-                    </div>
-
-                    <!-- Status Dropdown -->
-                    <div class="form-group-modern">
-                        <label for="status" class="modern-label">
-                            <i class="fas fa-toggle-on text-cyan"></i>
-                            Status
-                            <span class="required-badge">Required</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <select class="modern-select" id="status" name="status" required>
-                                <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active
-                                </option>
-                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive
-                                </option>
-                            </select>
-                            <i class="fas fa-toggle-on input-icon"></i>
-                        </div>
-                        @error('status')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <div class="field-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Set category visibility status
-                        </div>
-                    </div>
-
-                    <!-- Description Textarea (Full Width) -->
-                    <div class="form-group-modern full-width">
-                        <label for="description" class="modern-label">
-                            <i class="fas fa-align-left text-cyan"></i>
-                            Description
-                            <span class="optional-badge">Optional</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <textarea class="modern-textarea" id="description" name="description" placeholder="Enter category description">{{ old('description') }}</textarea>
-                            <i class="fas fa-align-left input-icon"></i>
-                        </div>
-                        @error('description')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <div class="field-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Provide a detailed description of what services this category includes
-                        </div>
-                    </div>
-
-                    <!-- Image Upload (Full Width) -->
-                    <div class="form-group-modern full-width">
-                        <label for="image" class="modern-label">
-                            <i class="fas fa-image text-cyan"></i>
-                            Category Image
-                            <span class="optional-badge">Optional</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <input type="file" class="modern-input file-input" id="image" name="image"
-                                accept="image/*">
-                            <i class="fas fa-image input-icon"></i>
-                        </div>
-                        @error('image')
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <div class="field-hint">
-                            <i class="fas fa-info-circle"></i>
-                            Upload an image to represent this category (JPG, PNG, GIF - Max 2MB)
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
-                        <i class="fas fa-plus"></i>
-                        <span class="btn-text">Create Category</span>
-                        <div class="btn-loader" style="display: none;">
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </div>
-                    </button>
-                    <button type="reset" class="modern-btn modern-btn-secondary">
-                        <i class="fas fa-undo"></i>
-                        Reset Form
-                    </button>
-                </div>
-            </form>
+        <div class="form-header-actions">
+            <a href="{{ route('services.categories.index') }}" class="modern-btn modern-btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Categories
+            </a>
         </div>
     </div>
+
+    <!-- Form Card -->
+    <div class="modern-form-card">
+        <form method="POST" action="{{ route('services.categories.store') }}" id="categoryForm" enctype="multipart/form-data">
+            @csrf
+
+            <div class="form-grid">
+                <!-- Name Input -->
+                <div class="form-group-modern">
+                    <label for="name" class="modern-label">
+                        <i class="fas fa-tag text-cyan"></i>
+                        Category Name
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" class="modern-input" id="name" name="name"
+                               value="{{ old('name') }}" placeholder="Enter category name" required>
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
+                    @error('name')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Choose a clear and descriptive name for the category
+                    </div>
+                </div>
+
+                <!-- Status Dropdown -->
+                <div class="form-group-modern">
+                    <label for="status" class="modern-label">
+                        <i class="fas fa-toggle-on text-cyan"></i>
+                        Status
+                        <span class="required-badge">Required</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <select class="modern-select" id="status" name="status" required>
+                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                        <i class="fas fa-toggle-on input-icon"></i>
+                    </div>
+                    @error('status')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Set category visibility status
+                    </div>
+                </div>
+
+                <!-- Description Textarea (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label for="description" class="modern-label">
+                        <i class="fas fa-align-left text-cyan"></i>
+                        Description
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <textarea class="modern-textarea" id="description" name="description"
+                                  placeholder="Enter category description">{{ old('description') }}</textarea>
+                        <i class="fas fa-align-left input-icon"></i>
+                    </div>
+                    @error('description')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Provide a detailed description of what services this category includes
+                    </div>
+                </div>
+
+                <!-- Image Upload (Full Width) -->
+                <div class="form-group-modern full-width">
+                    <label for="image" class="modern-label">
+                        <i class="fas fa-image text-cyan"></i>
+                        Category Image
+                        <span class="optional-badge">Optional</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="file" class="modern-input file-input" id="image" name="image" accept="image/*">
+                        <i class="fas fa-image input-icon"></i>
+                    </div>
+                    @error('image')
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    <div class="field-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Upload an image to represent this category (JPG, PNG, GIF - Max 2MB)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                    <i class="fas fa-plus"></i>
+                    <span class="btn-text">Create Category</span>
+                    <div class="btn-loader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </button>
+                <button type="reset" class="modern-btn modern-btn-secondary">
+                    <i class="fas fa-undo"></i>
+                    Reset Form
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    
 
 
 

@@ -1,381 +1,7 @@
 @extends('admin.layouts.masterlayout')
 
 @section('content')
-    <div class="content-area">
-        <div class="modern-form-container">
-            <!-- Header Section -->
-            <div class="form-header-section">
-                <div class="form-header-content">
-                    <div class="form-title-group">
-                        <div class="form-icon-wrapper">
-                            <i class="fas fa-edit form-main-icon"></i>
-                        </div>
-                        <div class="form-title-text">
-                            <h2 class="form-title">Edit Coupon</h2>
-                            <p class="form-subtitle">Update coupon details and discount settings</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('coupons.index') }}" class="modern-btn modern-btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Back to List</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Form Section -->
-            <div class="modern-form-card">
-                <form method="POST" action="{{ route('coupons.update', $coupon->id) }}" class="modern-form"
-                    id="couponEditForm">
-                    @csrf
-                    @method('PUT')
-
-                    <!-- Form Grid -->
-                    <div class="form-grid">
-                        <!-- Coupon Code Field -->
-                        <div class="form-group-modern">
-                            <label for="code" class="modern-label">
-                                <i class="fas fa-barcode label-icon"></i>
-                                Coupon Code
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                                <input type="text" class="modern-input @error('code') error @enderror" id="code"
-                                    name="code" value="{{ old('code', $coupon->code) }}"
-                                    placeholder="Enter unique coupon code (e.g. SUMMER2024)" required>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('code')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Create a memorable and unique coupon code
-                            </div>
-                        </div>
-
-
-
-                        <!-- Discount Value Field -->
-                        <div class="form-group-modern">
-                            <label for="discount_value" class="modern-label">
-                                <i class="fas fa-coins label-icon"></i>
-                                Discount Percentage
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-calculator"></i>
-                                </div>
-                                <input type="number" step="0.01" min="0"
-                                    class="modern-input @error('discount_value') error @enderror" id="discount_value"
-                                    name="discount_value" value="{{ old('discount_value', $coupon->discount_value) }}"
-                                    placeholder="0.00" required>
-                                <div class="input-suffix" id="valueSuffix">%</div>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('discount_value')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                <span id="valueHint">Enter percentage value (e.g., 10 for 10%)</span>
-                            </div>
-                        </div>
-
-                        <!-- Expiry Date Field -->
-                        <div class="form-group-modern">
-                            <label for="expiry_date" class="modern-label">
-                                <i class="fas fa-calendar-times label-icon"></i>
-                                Expiry Date
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <input type="datetime-local" class="modern-input @error('expiry_date') error @enderror"
-                                    id="expiry_date" name="expiry_date"
-                                    value="{{ old('expiry_date', $coupon->expiry_date->format('Y-m-d\TH:i')) }}" required>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('expiry_date')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Set when this coupon will expire
-                            </div>
-                        </div>
-
-                        <!-- Usage Limit Field -->
-                        <div class="form-group-modern">
-                            <label for="usage_limit" class="modern-label">
-                                <i class="fas fa-users label-icon"></i>
-                                Usage Limit
-                                <span class="optional-badge">Optional</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                                <input type="number" min="1"
-                                    class="modern-input @error('usage_limit') error @enderror" id="usage_limit"
-                                    name="usage_limit" value="{{ old('usage_limit', $coupon->usage_limit) }}"
-                                    placeholder="Leave empty for unlimited">
-                                <div class="input-border"></div>
-                            </div>
-                            @error('usage_limit')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Maximum number of times this coupon can be used
-                            </div>
-                        </div>
-
-                        <!-- Status Field -->
-                        <div class="form-group-modern">
-                            <label for="status" class="modern-label">
-                                <i class="fas fa-toggle-on label-icon"></i>
-                                Status
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon">
-                                    <i class="fas fa-power-off"></i>
-                                </div>
-                                <select class="modern-select @error('status') error @enderror" id="status"
-                                    name="status" required>
-                                    <option value="1" {{ old('status', $coupon->status) == 1 ? 'selected' : '' }}>
-                                        Active</option>
-                                    <option value="0" {{ old('status', $coupon->status) == 0 ? 'selected' : '' }}>
-                                        Inactive</option>
-                                </select>
-                                <div class="select-arrow">
-                                    <i class="fas fa-chevron-down"></i>
-                                </div>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('status')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Set coupon availability status
-                            </div>
-                        </div>
-
-                        <!-- Service Applicability Section -->
-                        <div class="form-group-modern full-width">
-                            <label class="modern-label">
-                                <i class="fas fa-cogs label-icon"></i>
-                                Service Applicability
-                            </label>
-                            <div class="service-selection-container">
-                                <!-- Applicability Type -->
-                                <div class="applicability-options">
-                                    <div class="radio-group">
-                                        <div class="radio-option">
-                                            <input type="radio" id="all_services" name="applicable_to" value="all_services"
-                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'all_services' ? 'checked' : '' }}>
-                                            <label for="all_services" class="radio-label">
-                                                <div class="radio-icon">
-                                                    <i class="fas fa-globe"></i>
-                                                </div>
-                                                <div class="radio-content">
-                                                    <div class="radio-title">All Services</div>
-                                                    <div class="radio-desc">Apply to all available services</div>
-                                                </div>
-                                            </label>
-                                        </div>
-                                        <div class="radio-option">
-                                            <input type="radio" id="specific_services" name="applicable_to" value="specific_services"
-                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'checked' : '' }}>
-                                            <label for="specific_services" class="radio-label">
-                                                <div class="radio-icon">
-                                                    <i class="fas fa-list-check"></i>
-                                                </div>
-                                                <div class="radio-content">
-                                                    <div class="radio-title">Specific Services</div>
-                                                    <div class="radio-desc">Choose specific services</div>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Service Selection (Hidden by default) -->
-                                <div id="service-selection-panel" class="service-selection-panel"
-                                    style="display: {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'block' : 'none' }};">
-                                    <div class="selection-grid">
-                                        <!-- Category Filter -->
-                                        <div class="form-group-modern">
-                                            <label for="category_filter" class="modern-label">
-                                                <i class="fas fa-folder label-icon"></i>
-                                                Filter by Category
-                                            </label>
-                                            <div class="input-wrapper">
-                                                <div class="input-icon">
-                                                    <i class="fas fa-filter"></i>
-                                                </div>
-                                                <select class="modern-select" id="category_filter" name="category_filter">
-                                                    <option value="">All Categories</option>
-                                                    @foreach ($categories as $category)
-                                                        <option value="{{ $category->id }}"
-                                                            {{ isset($defaultCategoryId) && $defaultCategoryId == $category->id ? 'selected' : '' }}>
-                                                            {{ $category->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <div class="select-arrow">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </div>
-                                                <div class="input-border"></div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Subcategory Filter -->
-                                        <div class="form-group-modern">
-                                            <label for="subcategory_filter" class="modern-label">
-                                                <i class="fas fa-folder-open label-icon"></i>
-                                                Filter by Subcategory
-                                            </label>
-                                            <div class="input-wrapper">
-                                                <div class="input-icon">
-                                                    <i class="fas fa-filter"></i>
-                                                </div>
-                                                <select class="modern-select" id="subcategory_filter" name="subcategory_filter"
-                                                    {{ isset($defaultCategoryId) && $defaultCategoryId ? '' : 'disabled' }}>
-                                                    <option value="">All Subcategories</option>
-                                                    @if(isset($subcategories) && $subcategories->count() > 0)
-                                                        @foreach ($subcategories as $subcategory)
-                                                            <option value="{{ $subcategory->id }}"
-                                                                {{ isset($defaultSubcategoryId) && $defaultSubcategoryId == $subcategory->id ? 'selected' : '' }}>
-                                                                {{ $subcategory->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    @else
-                                                        <option value="">No subcategories available</option>
-                                                    @endif
-                                                </select>
-                                                <div class="select-arrow">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </div>
-                                                <div class="input-border"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Services List -->
-                                    <div class="services-container">
-                                        <div class="services-header">
-                                            <h4>Select Services</h4>
-                                            <div class="bulk-actions">
-                                                <button type="button" class="btn-link" id="select-all-services">Select All</button>
-                                                <button type="button" class="btn-link" id="deselect-all-services">Deselect All</button>
-                                            </div>
-                                        </div>
-                                        <div class="services-grid" id="services-grid">
-                                            @foreach ($services as $service)
-                                                <div class="service-item" data-category="{{ $service->category_id }}" data-subcategory="{{ $service->subcategory_id }}">
-                                                    <input type="checkbox" id="service_{{ $service->id }}" name="service_ids[]" value="{{ $service->id }}" class="service-checkbox"
-                                                        {{ in_array($service->id, old('service_ids', $selectedServiceIds ?? [])) ? 'checked' : '' }}>
-                                                    <label for="service_{{ $service->id }}" class="service-label">
-                                                        <div class="service-info">
-                                                            <div class="service-name">{{ $service->name }}</div>
-                                                            <div class="service-meta">{{ $service->category->name ?? 'No Category' }} > {{ $service->subcategory->name ?? 'No Subcategory' }}</div>
-                                                        </div>
-                                                        <div class="service-check">
-                                                            <i class="fas fa-check"></i>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @error('applicable_to')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            @error('service_ids')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Choose whether this coupon applies to all services or specific ones
-                            </div>
-                        </div>
-
-                        <!-- Description Field -->
-                        <div class="form-group-modern full-width">
-                            <label for="description" class="modern-label">
-                                <i class="fas fa-align-left label-icon"></i>
-                                Description
-                                <span class="optional-badge">Optional</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <div class="input-icon textarea-icon">
-                                    <i class="fas fa-edit"></i>
-                                </div>
-                                <textarea class="modern-textarea @error('description') error @enderror" id="description" name="description"
-                                    rows="4"
-                                    placeholder="Enter a brief description of this coupon (e.g., Summer sale discount for all products)">{{ old('description', $coupon->description) }}</textarea>
-                                <div class="input-border"></div>
-                            </div>
-                            @error('description')
-                                <div class="error-message">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            <div class="field-hint">
-                                <i class="fas fa-info-circle"></i>
-                                Provide additional details about this coupon
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="form-actions">
-                        <button type="button" class="modern-btn modern-btn-outline" onclick="resetForm()">
-                            <i class="fas fa-undo"></i>
-                            <span>Reset Changes</span>
-                        </button>
-                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
-                            <i class="fas fa-save"></i>
-                            <span>Update Coupon</span>
-                            <div class="btn-loader">
-                                <div class="spinner"></div>
-                            </div>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <style>
+ <style>
         /* Modern Form Styles */
         .modern-form-container {
             max-width: 1200px;
@@ -995,6 +621,381 @@
             }
         }
     </style>
+    <div class="content-area">
+        <div class="modern-form-container">
+            <!-- Header Section -->
+            <div class="form-header-section">
+                <div class="form-header-content">
+                    <div class="form-title-group">
+                        <div class="form-icon-wrapper">
+                            <i class="fas fa-edit form-main-icon"></i>
+                        </div>
+                        <div class="form-title-text">
+                            <h2 class="form-title">Edit Coupon</h2>
+                            <p class="form-subtitle">Update coupon details and discount settings</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('coupons.index') }}" class="modern-btn modern-btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to List</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="modern-form-card">
+                <form method="POST" action="{{ route('coupons.update', $coupon->id) }}" class="modern-form"
+                    id="couponEditForm">
+                    @csrf
+                    @method('PUT')
+
+                    <!-- Form Grid -->
+                    <div class="form-grid">
+                        <!-- Coupon Code Field -->
+                        <div class="form-group-modern">
+                            <label for="code" class="modern-label">
+                                <i class="fas fa-barcode label-icon"></i>
+                                Coupon Code
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <input type="text" class="modern-input @error('code') error @enderror" id="code"
+                                    name="code" value="{{ old('code', $coupon->code) }}"
+                                    placeholder="Enter unique coupon code (e.g. SUMMER2024)" required>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('code')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Create a memorable and unique coupon code
+                            </div>
+                        </div>
+
+
+
+                        <!-- Discount Value Field -->
+                        <div class="form-group-modern">
+                            <label for="discount_value" class="modern-label">
+                                <i class="fas fa-coins label-icon"></i>
+                                Discount Percentage
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <input type="number" step="0.01" min="0"
+                                    class="modern-input @error('discount_value') error @enderror" id="discount_value"
+                                    name="discount_value" value="{{ old('discount_value', $coupon->discount_value) }}"
+                                    placeholder="0.00" required>
+                                <div class="input-suffix" id="valueSuffix">%</div>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('discount_value')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="valueHint">Enter percentage value (e.g., 10 for 10%)</span>
+                            </div>
+                        </div>
+
+                        <!-- Expiry Date Field -->
+                        <div class="form-group-modern">
+                            <label for="expiry_date" class="modern-label">
+                                <i class="fas fa-calendar-times label-icon"></i>
+                                Expiry Date
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <input type="datetime-local" class="modern-input @error('expiry_date') error @enderror"
+                                    id="expiry_date" name="expiry_date"
+                                    value="{{ old('expiry_date', $coupon->expiry_date->format('Y-m-d\TH:i')) }}" required>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('expiry_date')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Set when this coupon will expire
+                            </div>
+                        </div>
+
+                        <!-- Usage Limit Field -->
+                        <div class="form-group-modern">
+                            <label for="usage_limit" class="modern-label">
+                                <i class="fas fa-users label-icon"></i>
+                                Usage Limit
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-hashtag"></i>
+                                </div>
+                                <input type="number" min="1"
+                                    class="modern-input @error('usage_limit') error @enderror" id="usage_limit"
+                                    name="usage_limit" value="{{ old('usage_limit', $coupon->usage_limit) }}"
+                                    placeholder="Leave empty for unlimited">
+                                <div class="input-border"></div>
+                            </div>
+                            @error('usage_limit')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Maximum number of times this coupon can be used
+                            </div>
+                        </div>
+
+                        <!-- Status Field -->
+                        <div class="form-group-modern">
+                            <label for="status" class="modern-label">
+                                <i class="fas fa-toggle-on label-icon"></i>
+                                Status
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">
+                                    <i class="fas fa-power-off"></i>
+                                </div>
+                                <select class="modern-select @error('status') error @enderror" id="status"
+                                    name="status" required>
+                                    <option value="1" {{ old('status', $coupon->status) == 1 ? 'selected' : '' }}>
+                                        Active</option>
+                                    <option value="0" {{ old('status', $coupon->status) == 0 ? 'selected' : '' }}>
+                                        Inactive</option>
+                                </select>
+                                <div class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('status')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Set coupon availability status
+                            </div>
+                        </div>
+
+                        <!-- Service Applicability Section -->
+                        <div class="form-group-modern full-width">
+                            <label class="modern-label">
+                                <i class="fas fa-cogs label-icon"></i>
+                                Service Applicability
+                            </label>
+                            <div class="service-selection-container">
+                                <!-- Applicability Type -->
+                                <div class="applicability-options">
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" id="all_services" name="applicable_to" value="all_services"
+                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'all_services' ? 'checked' : '' }}>
+                                            <label for="all_services" class="radio-label">
+                                                <div class="radio-icon">
+                                                    <i class="fas fa-globe"></i>
+                                                </div>
+                                                <div class="radio-content">
+                                                    <div class="radio-title">All Services</div>
+                                                    <div class="radio-desc">Apply to all available services</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" id="specific_services" name="applicable_to" value="specific_services"
+                                                {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'checked' : '' }}>
+                                            <label for="specific_services" class="radio-label">
+                                                <div class="radio-icon">
+                                                    <i class="fas fa-list-check"></i>
+                                                </div>
+                                                <div class="radio-content">
+                                                    <div class="radio-title">Specific Services</div>
+                                                    <div class="radio-desc">Choose specific services</div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Selection (Hidden by default) -->
+                                <div id="service-selection-panel" class="service-selection-panel"
+                                    style="display: {{ old('applicable_to', $coupon->applicable_to ?? 'all_services') == 'specific_services' ? 'block' : 'none' }};">
+                                    <div class="selection-grid">
+                                        <!-- Category Filter -->
+                                        <div class="form-group-modern">
+                                            <label for="category_filter" class="modern-label">
+                                                <i class="fas fa-folder label-icon"></i>
+                                                Filter by Category
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <div class="input-icon">
+                                                    <i class="fas fa-filter"></i>
+                                                </div>
+                                                <select class="modern-select" id="category_filter" name="category_filter">
+                                                    <option value="">All Categories</option>
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}"
+                                                            {{ isset($defaultCategoryId) && $defaultCategoryId == $category->id ? 'selected' : '' }}>
+                                                            {{ $category->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="select-arrow">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </div>
+                                                <div class="input-border"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Subcategory Filter -->
+                                        <div class="form-group-modern">
+                                            <label for="subcategory_filter" class="modern-label">
+                                                <i class="fas fa-folder-open label-icon"></i>
+                                                Filter by Subcategory
+                                            </label>
+                                            <div class="input-wrapper">
+                                                <div class="input-icon">
+                                                    <i class="fas fa-filter"></i>
+                                                </div>
+                                                <select class="modern-select" id="subcategory_filter" name="subcategory_filter"
+                                                    {{ isset($defaultCategoryId) && $defaultCategoryId ? '' : 'disabled' }}>
+                                                    <option value="">All Subcategories</option>
+                                                    @if(isset($subcategories) && $subcategories->count() > 0)
+                                                        @foreach ($subcategories as $subcategory)
+                                                            <option value="{{ $subcategory->id }}"
+                                                                {{ isset($defaultSubcategoryId) && $defaultSubcategoryId == $subcategory->id ? 'selected' : '' }}>
+                                                                {{ $subcategory->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    @else
+                                                        <option value="">No subcategories available</option>
+                                                    @endif
+                                                </select>
+                                                <div class="select-arrow">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </div>
+                                                <div class="input-border"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Services List -->
+                                    <div class="services-container">
+                                        <div class="services-header">
+                                            <h4>Select Services</h4>
+                                            <div class="bulk-actions">
+                                                <button type="button" class="btn-link" id="select-all-services">Select All</button>
+                                                <button type="button" class="btn-link" id="deselect-all-services">Deselect All</button>
+                                            </div>
+                                        </div>
+                                        <div class="services-grid" id="services-grid">
+                                            @foreach ($services as $service)
+                                                <div class="service-item" data-category="{{ $service->category_id }}" data-subcategory="{{ $service->subcategory_id }}">
+                                                    <input type="checkbox" id="service_{{ $service->id }}" name="service_ids[]" value="{{ $service->id }}" class="service-checkbox"
+                                                        {{ in_array($service->id, old('service_ids', $selectedServiceIds ?? [])) ? 'checked' : '' }}>
+                                                    <label for="service_{{ $service->id }}" class="service-label">
+                                                        <div class="service-info">
+                                                            <div class="service-name">{{ $service->name }}</div>
+                                                            <div class="service-meta">{{ $service->category->name ?? 'No Category' }} > {{ $service->subcategory->name ?? 'No Subcategory' }}</div>
+                                                        </div>
+                                                        <div class="service-check">
+                                                            <i class="fas fa-check"></i>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @error('applicable_to')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            @error('service_ids')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Choose whether this coupon applies to all services or specific ones
+                            </div>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="form-group-modern full-width">
+                            <label for="description" class="modern-label">
+                                <i class="fas fa-align-left label-icon"></i>
+                                Description
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <div class="input-icon textarea-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <textarea class="modern-textarea @error('description') error @enderror" id="description" name="description"
+                                    rows="4"
+                                    placeholder="Enter a brief description of this coupon (e.g., Summer sale discount for all products)">{{ old('description', $coupon->description) }}</textarea>
+                                <div class="input-border"></div>
+                            </div>
+                            @error('description')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <div class="field-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Provide additional details about this coupon
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="modern-btn modern-btn-outline" onclick="resetForm()">
+                            <i class="fas fa-undo"></i>
+                            <span>Reset Changes</span>
+                        </button>
+                        <button type="submit" class="modern-btn modern-btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i>
+                            <span>Update Coupon</span>
+                            <div class="btn-loader">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+   
 
     <script>
         // Form Enhancement Scripts

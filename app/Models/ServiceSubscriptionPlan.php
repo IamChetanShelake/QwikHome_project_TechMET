@@ -13,6 +13,7 @@ class ServiceSubscriptionPlan extends Model
 {
     use HasFactory;
 
+    protected $table = 'service_frequency_options';
     protected $guarded = [];
 
     protected $casts = [

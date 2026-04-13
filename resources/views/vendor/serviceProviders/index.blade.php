@@ -1,249 +1,7 @@
 @extends('admin.layouts.masterlayout')
 
 @section('content')
-    <div class="content-area">
-        <div class="modern-list-container">
-            <!-- Success Message -->
-            @if (session('success'))
-                <div class="modern-alert modern-alert-success" id="successAlert">
-                    <div class="alert-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="alert-content">
-                        <strong>Success!</strong>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                    <button class="alert-close" onclick="closeAlert()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            @endif
-
-            <!-- Header Section -->
-            <div class="list-header-section">
-                <div class="list-header-content">
-                    <div class="list-title-group">
-                        <div class="list-icon-wrapper">
-                            <i class="fas fa-user-plus list-main-icon"></i>
-                        </div>
-                        <div class="list-title-text">
-                            <h2 class="list-title">Employee Management</h2>
-                            <p class="list-subtitle">Manage service provider accounts and their access to the platform</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('serviceProviders.create') }}" class="modern-btn modern-btn-primary">
-                        <i class="fas fa-plus"></i>
-                        <span>Add New Employee</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Search Section -->
-            <div class="search-section">
-                <div class="search-wrapper">
-                    <div class="search-input-group">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..."
-                            class="search-input">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Table Section -->
-            <div class="modern-table-card">
-                <div class="table-wrapper">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-hashtag"></i>
-                                        <span>Sr.</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-image"></i>
-                                        <span>Photo</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-user"></i>
-                                        <span>Name</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-envelope"></i>
-                                        <span>Email</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-phone"></i>
-                                        <span>Phone</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-user"></i>
-                                        <span>Vendor</span>
-                                    </div>
-                                </th>
-
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>Address</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Joined Date</span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th-content">
-                                        <i class="fas fa-cogs"></i>
-                                        <span>Actions</span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($serviceProviders as $serviceProvider)
-                                <tr class="table-row" data-id="{{ $serviceProvider->id }}">
-                                    <td>
-                                        <div class="td-content">
-                                            <span class="serial-number">{{ $loop->iteration }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @if ($serviceProvider->image)
-                                            <img src="{{ asset('user_images/' . $serviceProvider->image) }}"
-                                                alt="{{ $serviceProvider->name }}" class="user-avatar-small">
-                                        @else
-                                            <div class="user-avatar-small no-image">
-                                                <i class="fas fa-user"></i>
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="user-info">
-                                                <span class="user-name">{{ $serviceProvider->name }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="email-badge">
-                                                <i class="fas fa-envelope"></i>
-                                                <span>{{ $serviceProvider->email ?? 'Not provided' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="phone-number">
-                                                <i class="fas fa-phone"></i>
-                                                <span>{{ $serviceProvider->phone ?? 'Not provided' }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="vendor-info">
-                                                @if(auth()->user()->role === 'vendor')
-
-                                                @if($serviceProvider->vendor->id == auth()->user()->id )
-                                                    {{-- <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
-                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small> --}}
-                                                     <span class="admin-assigned">vendor (Default)</span>
-                                                @else
-                                                    <span class="admin-assigned">Admin (Default)</span>
-                                                @endif
-                                            </div>
-                                            @elseif(auth()->user()->role === 'admin')
-                                                @if($serviceProvider->vendor)
-                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
-                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
-                                                    @else
-                                                    <span class="admin-assigned">Admin (Default)</span>
-                                                    @endif
-
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="address-text" title="{{ $serviceProvider->address }}">
-                                                {{ Str::limit($serviceProvider->address ?? 'Not provided', 30) }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="joined-date">
-                                                <i class="fas fa-calendar-check"></i>
-                                                <span>{{ $serviceProvider->created_at->format('d/m/Y') }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="td-content">
-                                            <div class="action-buttons">
-                                                <a href="{{ route('serviceProviders.show', $serviceProvider->id) }}"
-                                                    class="action-btn action-view" title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('serviceProviders.edit', $serviceProvider->id) }}"
-                                                    class="action-btn action-edit" title="Edit Employee">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="action-btn action-delete"
-                                                    title="Delete Employee"
-                                                    onclick="deleteEmployee({{ $serviceProvider->id }}, '{{ $serviceProvider->name }}')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8">
-                                        <div class="empty-state">
-                                            <div class="empty-icon">
-                                                <i class="fas fa-user-plus"></i>
-                                            </div>
-                                            <h3>No Employees Found</h3>
-                                            <p>Start by creating your first employee account</p>
-                                            <a href="{{ route('serviceProviders.create') }}"
-                                                class="modern-btn modern-btn-primary">
-                                                <i class="fas fa-plus"></i>
-                                                <span>Add First Employee</span>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Form (Hidden) -->
-    <form id="deleteForm" method="POST" style="display: none;">
-        @csrf
-        @method('DELETE')
-    </form>
-
-    <style>
+ <style>
         /* Modern List Styles */
         .modern-list-container {
             max-width: 1600px;
@@ -688,6 +446,249 @@
             }
         }
     </style>
+    <div class="content-area">
+        <div class="modern-list-container">
+            <!-- Success Message -->
+            @if (session('success'))
+                <div class="modern-alert modern-alert-success" id="successAlert">
+                    <div class="alert-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <strong>Success!</strong>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                    <button class="alert-close" onclick="closeAlert()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            @endif
+
+            <!-- Header Section -->
+            <div class="list-header-section">
+                <div class="list-header-content">
+                    <div class="list-title-group">
+                        <div class="list-icon-wrapper">
+                            <i class="fas fa-user-plus list-main-icon"></i>
+                        </div>
+                        <div class="list-title-text">
+                            <h2 class="list-title">Employee Management</h2>
+                            <p class="list-subtitle">Manage service provider accounts and their access to the platform</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('serviceProviders.create') }}" class="modern-btn modern-btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span>Add New Employee</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Search by name, email, or mobile..."
+                            class="search-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="modern-table-card">
+                <div class="table-wrapper">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-hashtag"></i>
+                                        <span>Sr.</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-image"></i>
+                                        <span>Photo</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-user"></i>
+                                        <span>Name</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>Email</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-phone"></i>
+                                        <span>Phone</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-user"></i>
+                                        <span>Vendor</span>
+                                    </div>
+                                </th>
+
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Address</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Joined Date</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th-content">
+                                        <i class="fas fa-cogs"></i>
+                                        <span>Actions</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($serviceProviders as $serviceProvider)
+                                <tr class="table-row" data-id="{{ $serviceProvider->id }}">
+                                    <td>
+                                        <div class="td-content">
+                                            <span class="serial-number">{{ $loop->iteration }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if ($serviceProvider->image)
+                                            <img src="{{ asset('user_images/' . $serviceProvider->image) }}"
+                                                alt="{{ $serviceProvider->name }}" class="user-avatar-small">
+                                        @else
+                                            <div class="user-avatar-small no-image">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="user-info">
+                                                <span class="user-name">{{ $serviceProvider->name }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="email-badge">
+                                                <i class="fas fa-envelope"></i>
+                                                <span>{{ $serviceProvider->email ?? 'Not provided' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="phone-number">
+                                                <i class="fas fa-phone"></i>
+                                                <span>{{ $serviceProvider->phone ?? 'Not provided' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="vendor-info">
+                                                @if(auth()->user()->role === 'vendor')
+
+                                                @if($serviceProvider->vendor->id == auth()->user()->id )
+                                                    {{-- <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small> --}}
+                                                     <span class="admin-assigned">vendor (Default)</span>
+                                                @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                @endif
+                                            </div>
+                                            @elseif(auth()->user()->role === 'admin')
+                                                @if($serviceProvider->vendor)
+                                                    <span class="vendor-name">{{ $serviceProvider->vendor->name }}</span>
+                                                    <small class="vendor-email">({{ $serviceProvider->vendor->email }})</small>
+                                                    @else
+                                                    <span class="admin-assigned">Admin (Default)</span>
+                                                    @endif
+
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="address-text" title="{{ $serviceProvider->address }}">
+                                                {{ Str::limit($serviceProvider->address ?? 'Not provided', 30) }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="joined-date">
+                                                <i class="fas fa-calendar-check"></i>
+                                                <span>{{ $serviceProvider->created_at->format('d/m/Y') }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="td-content">
+                                            <div class="action-buttons">
+                                                <a href="{{ route('serviceProviders.show', $serviceProvider->id) }}"
+                                                    class="action-btn action-view" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('serviceProviders.edit', $serviceProvider->id) }}"
+                                                    class="action-btn action-edit" title="Edit Employee">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="action-btn action-delete"
+                                                    title="Delete Employee"
+                                                    onclick="deleteEmployee({{ $serviceProvider->id }}, '{{ $serviceProvider->name }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">
+                                                <i class="fas fa-user-plus"></i>
+                                            </div>
+                                            <h3>No Employees Found</h3>
+                                            <p>Start by creating your first employee account</p>
+                                            <a href="{{ route('serviceProviders.create') }}"
+                                                class="modern-btn modern-btn-primary">
+                                                <i class="fas fa-plus"></i>
+                                                <span>Add First Employee</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Form (Hidden) -->
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
+   
 
     <script>
         // Auto-hide success alert

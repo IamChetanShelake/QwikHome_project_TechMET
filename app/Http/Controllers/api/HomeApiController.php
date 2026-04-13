@@ -67,11 +67,10 @@ class HomeApiController extends Controller
                 ],
                 [
                     'title' => 'offers and campaigns',
-                    'items' => $offersAndCampaigns = [
-                        'offers' => $offers,
-                        'campaigns' => $campaigns,
-                    ]
-
+                   
+                        'items' => $offers,
+                        // 'campaigns'=>$campaigns,
+            
                 ],
                 [
                     'title' => 'beauty and easy',

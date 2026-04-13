@@ -16,7 +16,7 @@ class PushNotificationController extends Controller
         $search = $request->get('search');
         $audience = $request->get('audience');
 
-        $query = PushNotification::query()->with('creator')->latest();
+        $query = PushNotification::query()->with('user')->latest();
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")

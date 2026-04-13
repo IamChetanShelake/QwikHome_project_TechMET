@@ -31,8 +31,11 @@ class Service extends Model
             if (is_array($mediaArray) && !empty($mediaArray)) {
                 return asset('Service_images/' . $mediaArray[0]);
             }
+            
         }
-        return null;
+        else{
+                return asset('Service_images/housecleaner.jpg');
+            }
     }
 
     // Accessor to get all media URLs
@@ -84,9 +87,7 @@ class Service extends Model
     // Many-to-many relationship with users (service providers and vendors)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_services')
-            ->withPivot('payment_type', 'fixed_rate_amount', 'commission_rate', 'revenue_share_ratio')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_services')->withTimestamps();
     }
     public function wishlists()
     {
@@ -116,6 +117,12 @@ class Service extends Model
     public function offers()
     {
         return $this->hasMany(ServiceOffer::class);
+    }
+
+    // Active offers
+    public function activeOffers()
+    {
+        return $this->hasMany(ServiceOffer::class)->active();
     }
 
     // Frequency options relationship
@@ -150,19 +157,17 @@ class Service extends Model
     {
         return $this->hasMany(Faq::class);
     }
-
     public function servicePersons()
-    {
-        return $this->belongsToMany(User::class, 'user_services', 'service_id', 'user_id');
-    }
+{
+    return $this->belongsToMany(User::class, 'user_services', 'service_id', 'user_id');
+}
 
     public function subscriptionPlans()
     {
         return $this->hasMany(ServiceFrequencyOption::class, 'service_id');
     }
-
-    // Get the primary vendor for this service (first vendor associated with it)
-    public function getVendorIdAttribute()
+    
+     public function getVendorIdAttribute()
     {
         $vendor = $this->belongsToMany(User::class, 'user_services')
                       ->where('role', 'vendor')

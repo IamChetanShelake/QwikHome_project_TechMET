@@ -121,4 +121,183 @@ class ProfileController extends Controller
     {
         return $this->uploadImage($request);
     }
+    
+    //profile change apis from serviceprovider and admin 
+    
+
+    public function getPendingProfileChangeRequests(Request $request)
+    {
+        try {
+            // This would typically require admin authentication, but for now we'll assume it's handled
+            $requests = ProfileChangeRequest::with('serviceProvider')
+                ->where('status', 'pending')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $formattedRequests = $requests->map(function ($request) {
+                return [
+                    'id' => $request->id,
+                    'service_provider' => [
+                        'id' => $request->serviceProvider->id,
+                        'name' => $request->serviceProvider->name,
+                        'email' => $request->serviceProvider->email,
+                        'phone' => $request->serviceProvider->phone,
+                        'current_image' => $request->serviceProvider->image_url
+                    ],
+                    'requested_data' => $request->requested_data,
+                    'submitted_at' => $request->created_at->format('Y-m-d H:i:s')
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Pending profile change requests fetched successfully',
+                'data' => $formattedRequests
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Failed to fetch pending requests',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function approveProfileChangeRequest(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'requestId' => 'required|exists:profile_change_requests,id',
+                'adminId' => 'required|exists:users,id'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 422,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $changeRequest = ProfileChangeRequest::find($request->requestId);
+            if (!$changeRequest || $changeRequest->status !== 'pending') {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 404,
+                    'message' => 'Profile change request not found or already processed'
+                ], 404);
+            }
+
+            $user = $changeRequest->serviceProvider;
+            $requestedData = $changeRequest->requested_data;
+
+            // Update user data
+            $updateData = [
+                'name' => $requestedData['name'],
+                'email' => $requestedData['email'],
+                'phone' => $requestedData['phone'],
+                'alternate_phone' => $requestedData['alternatePhone'],
+                'biography' => $requestedData['biography'],
+                'address' => $requestedData['address']
+            ];
+
+            // Handle profile image
+            if ($requestedData['profileImage']) {
+                // Delete old image if exists
+                $oldfile = public_path('user_images/' . $user->image);
+                if ($user->image && file_exists($oldfile)) {
+                    unlink($oldfile);
+                }
+
+                // Move temp image to permanent location
+                $tempPath = public_path('user_images/temp/' . $requestedData['profileImage']);
+                $permanentPath = public_path('user_images/' . $requestedData['profileImage']);
+                if (file_exists($tempPath)) {
+                    rename($tempPath, $permanentPath);
+                    $updateData['image'] = str_replace('_temp_', '_', $requestedData['profileImage']);
+                }
+            }
+
+            $user->update($updateData);
+
+            // Update request status
+            $changeRequest->update([
+                'status' => 'approved',
+                'admin_id' => $request->adminId,
+                'approved_at' => now()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Profile change request approved successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Failed to approve profile change request',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function rejectProfileChangeRequest(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'requestId' => 'required|exists:profile_change_requests,id',
+                'adminId' => 'required|exists:users,id'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 422,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $changeRequest = ProfileChangeRequest::find($request->requestId);
+            if (!$changeRequest || $changeRequest->status !== 'pending') {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 404,
+                    'message' => 'Profile change request not found or already processed'
+                ], 404);
+            }
+
+            // Delete temp image if exists
+            if ($changeRequest->requested_data['profileImage']) {
+                $tempPath = public_path('user_images/temp/' . $changeRequest->requested_data['profileImage']);
+                if (file_exists($tempPath)) {
+                    unlink($tempPath);
+                }
+            }
+
+            // Update request status
+            $changeRequest->update([
+                'status' => 'rejected',
+                'admin_id' => $request->adminId,
+                'approved_at' => now()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Profile change request rejected successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'Failed to reject profile change request',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

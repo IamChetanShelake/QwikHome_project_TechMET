@@ -33,7 +33,7 @@ class faqController extends Controller
         // Load service with explicit relationships
         $service = Service::with(['category', 'subcategory'])->findOrFail($serviceId);
         $faqs = Faq::where('service_id', $serviceId)->orderBy('created_at', 'asc')->get();
-
+        
         return view('admin.faqs.view_service', compact('service', 'faqs'));
     }
 
@@ -195,15 +195,15 @@ class faqController extends Controller
         // Load service with explicit relationships
         $service = Service::with(['category', 'subcategory'])->findOrFail($serviceId);
         $faqs = Faq::where('service_id', $serviceId)->orderBy('created_at', 'asc')->get();
-
+        
         // Load all categories for dropdown
         $categories = Category::where('status', 1)->get();
-
+        
         // Get current service details for pre-selection
         $currentCategory = $service->category;
         $currentSubcategory = $service->subcategory;
         $currentService = $service;
-
+        
         return view('admin.faqs.edit_service', compact('service', 'faqs', 'categories', 'currentCategory', 'currentSubcategory', 'currentService'));
     }
 
@@ -290,22 +290,6 @@ class faqController extends Controller
         $faq->delete();
 
         return redirect()->route('faq')->with('success', 'FAQ deleted successfully.');
-    }
-
-    // Delete all FAQs for a specific service
-    public function deleteAllByService($serviceId)
-    {
-        $service = Service::findOrFail($serviceId);
-        $faqCount = Faq::where('service_id', $serviceId)->count();
-
-        if ($faqCount > 0) {
-            Faq::where('service_id', $serviceId)->delete();
-            $message = "Successfully deleted {$faqCount} FAQ(s) for service '{$service->name}'.";
-        } else {
-            $message = "No FAQs found for service '{$service->name}'.";
-        }
-
-        return redirect()->route('faq')->with('success', $message);
     }
 
     // AJAX API methods for cascading dropdowns
