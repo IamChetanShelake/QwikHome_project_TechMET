@@ -512,7 +512,13 @@
                             <td class="td-offer">
                                 <div>
                                     <span class="offer-name">{{ $offer->name }}</span>
-                                    <div class="service-name">{{ $offer->service->name }}</div>
+                                    <div class="service-name">
+    @if($offer->service)
+        {{ $offer->service->name }}
+    @else
+        <span style="color: #ef4444; font-weight: 500;">Service Deleted/Missing</span>
+    @endif
+</div>
                                 </div>
                             </td>
                             <td class="td-discount">

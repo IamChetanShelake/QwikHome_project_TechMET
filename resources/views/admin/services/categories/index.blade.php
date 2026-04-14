@@ -620,29 +620,36 @@
    
 
     <script>
-        function confirmDelete(categoryId, categoryName) {
-            if (confirm(`Are you sure you want to delete the category "${categoryName}"? This action cannot be undone.`)) {
-                document.getElementById('deleteForm' + categoryId).submit();
+    function confirmDelete(categoryId, categoryName) {
+        if (confirm(`Are you sure you want to delete the category "${categoryName}"? This action cannot be undone.`)) {
+            // Find the existing hidden form by ID
+            var form = document.getElementById('deleteForm' + categoryId);
+            
+            if (form) {
+                form.submit();
+            } else {
+                console.error('Delete form not found for ID: ' + categoryId);
             }
         }
+    }
 
-        // Auto-submit filters on change
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('search');
-            const statusSelect = document.getElementById('status');
+    // Auto-submit filters on change (Keep your existing filter code)
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+        const statusSelect = document.getElementById('status');
 
-            let searchTimeout;
+        let searchTimeout;
 
-            searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    document.getElementById('filtersForm').submit();
-                }, 500);
-            });
-
-            statusSelect.addEventListener('change', function() {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
                 document.getElementById('filtersForm').submit();
-            });
+            }, 500);
         });
-    </script>
+
+        statusSelect.addEventListener('change', function() {
+            document.getElementById('filtersForm').submit();
+        });
+    });
+</script>
 @endsection

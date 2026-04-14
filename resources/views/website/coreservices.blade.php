@@ -120,7 +120,7 @@
 ">
 
     <!-- Back Button Image -->
-    <a href="{{ route('home') }}" style="display:flex; align-items:center; flex-shrink:0;">
+    <a href="{{ route('website.home') }}" style="display:flex; align-items:center; flex-shrink:0;">
         <img src="img/arrow.png" 
              alt="Back"
              style="
@@ -214,8 +214,7 @@
         -ms-overflow-style: none;
         padding-bottom: 15px;
     ">
-
-        <!-- Laundry at Home Card -->
+        @foreach ($subcategories as $subcategory)
         <div style="
             display: flex;
             flex-direction: column;
@@ -226,106 +225,22 @@
             cursor: pointer;
             border-radius: 20px;
             background-color: #fff;
-            border: 1.5px solid #004271;
-            box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+            border: 1.5px solid {{ $loop->first ? '#004271' : '#E0E0E0' }};
+            {{ $loop->first ? 'box-shadow: 0px 4px 4px rgba(0,0,0,0.25);' : '' }}
             box-sizing: border-box;
             overflow: hidden;
             flex-shrink:0; 
         ">
             <div style="display: flex; justify-content: center; align-items: center; height: 133px; width: 100%; background-color: #fff;">
-                <img src="img/img1.png" alt="Laundry at Home" style="width: 127px; height: 72px;">
+                <img src="{{ $subcategory->image_url }}" alt="{{ $subcategory->name }}" style="width: 127px; height: 72px; object-fit: contain;">
             </div>
-            <div style="width: 100%; height: 55px; background: #004271; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; display: flex; justify-content: center; align-items: center;">
-                <p style="width: 95px; height: 32px; font-family: 'Roboto', sans-serif; font-weight: 400; font-size: 14px; line-height: 100%; text-align: center; color: #ffffff; margin: 0;">
-                    Laundry at Home
+            <div style="width: 100%; height: 55px; background: {{ $loop->first ? '#004271' : '#EAEAEA' }}; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; display: flex; justify-content: center; align-items: center;">
+                <p style="width: 95px; height: 32px; font-family: 'Roboto', sans-serif; font-weight: 400; font-size: 14px; line-height: 100%; text-align: center; color: {{ $loop->first ? '#ffffff' : '#1F1F1F' }}; margin: 0;">
+                    {{ $subcategory->name }}
                 </p>
             </div>
         </div>
-
-        <!-- Laundry Collection Card -->
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 144px; height: 188px; cursor: pointer; border-radius: 20px; background-color: #fff; border: 1.5px solid #E0E0E0; overflow: hidden; flex-shrink:0; ">
-            <div style="display: flex; justify-content: center; align-items: center; height: 133px; width: 100%; background-color: #fff;">
-                <img src="img/img2.png" alt="Laundry Collection" style="width: 95px; height: 85px;">
-            </div>
-            <div style="width: 100%; height: 55px; background: #EAEAEA; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; display: flex; justify-content: center; align-items: center;">
-                <p style="width: 95px; height: 32px; font-family: 'Roboto', sans-serif; font-weight: 400; font-size: 14px; line-height: 100%; text-align: center; color: #1F1F1F; margin: 0;">
-                    Laundry Collection
-                </p>
-            </div>
-        </div>
-
-        <!-- Deep Cleaning Card -->
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 144px; height: 188px; cursor: pointer; border-radius: 20px; background-color: #fff; border: 1.5px solid #E0E0E0; overflow: hidden; flex-shrink:0;">
-            <div style="display: flex; justify-content: center; align-items: center; height: 133px; width: 100%; background-color: #fff;">
-                <img src="img/img3.png" alt="Deep Cleaning" style="width: 
-110.59px; height: 97.25px">
-            </div>
-            <div style="width: 100%; height: 55px; background: #EAEAEA; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; display: flex; justify-content: center; align-items: center;">
-                <p style="width: 95px; height: 32px; font-family: 'Roboto', sans-serif; font-weight: 400; font-size: 14px; line-height: 100%; text-align: center; color: #1F1F1F; margin: 0;">
-                    Deep Cleaning
-                </p>
-            </div>
-        </div>
-
-        <!-- Move-in/Move-out Card -->
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:144px; height:188px; cursor:pointer; border-radius:20px; background-color:#fff; border:1.5px solid #E0E0E0; overflow:hidden;flex-shrink:0; ">
-            <div style="display:flex; justify-content:center; align-items:center; height:133px; width:100%; background-color:#fff;">
-                <img src="img/img4.png" alt="Move-in/Move-out" style="width: 103px; height: 96px;">
-            </div>
-            <div style="width:100%; height:55px; background:#EAEAEA; border-bottom-left-radius:20px; border-bottom-right-radius:20px; display:flex; justify-content:center; align-items:center;">
-                <p style="width:95px; height:32px; font-family:'Roboto', sans-serif; font-weight:400; font-size:14px; line-height:100%; text-align:center; color:#1F1F1F; margin:0;">
-                    Move-in/Move-out
-                </p>
-            </div>
-        </div>
-
-        <!-- Disinfection Card -->
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:144px; height:188px; cursor:pointer; border-radius:20px; background-color:#fff; border:1.5px solid #E0E0E0; overflow:hidden;flex-shrink:0; ">
-            <div style="display:flex; justify-content:center; align-items:center; height:133px; width:100%; background-color:#fff;">
-                <img src="img/img5.png" alt="Disinfection Services" style="width: 105px; height: 79px;">
-            </div>
-            <div style="width:100%; height:55px; background:#EAEAEA; border-bottom-left-radius:20px; border-bottom-right-radius:20px; display:flex; justify-content:center; align-items:center;">
-                <p style="width:95px; height:32px; font-family:'Roboto', sans-serif; font-weight:400; font-size:14px; line-height:100%; text-align:center; color:#1F1F1F; margin:0;">
-                    Disinfection
-                </p>
-            </div>
-        </div>
-
-        <!-- Refrigerator Cleaning Card -->
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:144px; height:188px; cursor:pointer; border-radius:20px; background-color:#fff; border:1.5px solid #E0E0E0; overflow:hidden;flex-shrink:0; ">
-            <div style="display:flex; justify-content:center; align-items:center; height:133px; width:100%; background-color:#fff;">
-                <img src="img/img6.png" alt="Refrigerator Cleaning" style="width: 100px; height: 100px;">
-            </div>
-            <div style="width:100%; height:55px; background:#EAEAEA; border-bottom-left-radius:20px; border-bottom-right-radius:20px; display:flex; justify-content:center; align-items:center;">
-                <p style="width:95px; height:32px; font-family:'Roboto', sans-serif; font-weight:400; font-size:14px; line-height:100%; text-align:center; color:#1F1F1F; margin:0;">
-                    Refrigerator Cleaning
-                </p>
-            </div>
-        </div>
-
-        <!-- Pest Control Card -->
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:144px; height:188px; cursor:pointer; border-radius:20px; background-color:#fff; border:1.5px solid #E0E0E0; overflow:hidden;flex-shrink:0; ">
-            <div style="display:flex; justify-content:center; align-items:center; height:133px; width:100%; background-color:#fff;">
-                <img src="img/img7.png" alt="Pest Control" style="width: 98px; height: 79px;">
-            </div>
-            <div style="width:100%; height:55px; background:#EAEAEA; border-bottom-left-radius:20px; border-bottom-right-radius:20px; display:flex; justify-content:center; align-items:center;">
-                <p style="width:95px; height:32px; font-family:'Roboto', sans-serif; font-weight:400; font-size:14px; line-height:100%; text-align:center; color:#1F1F1F; margin:0;">
-                    Pest Control
-                </p>
-            </div>
-        </div>
-
-        <!-- Movers & Packers Card -->
-        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; width:144px; height:188px; cursor:pointer; border-radius:20px; background-color:#fff; border:1.5px solid #E0E0E0; overflow:hidden;flex-shrink:0; ">
-            <div style="display:flex; justify-content:center; align-items:center; height:133px; width:100%; background-color:#fff;">
-                <img src="img/img8.png" alt="Movers & Packers" style="width: 116px; height: 78px;">
-            </div>
-            <div style="width:100%; height:55px; background:#EAEAEA; border-bottom-left-radius:20px; border-bottom-right-radius:20px; display:flex; justify-content:center; align-items:center;">
-                <p style="width:95px; height:32px; font-family:'Roboto', sans-serif; font-weight:400; font-size:14px; line-height:100%; text-align:center; color:#1F1F1F; margin:0;">
-                    Movers & Packers
-                </p>
-            </div>
-        </div>
+        @endforeach
 
     </div>
 </div>

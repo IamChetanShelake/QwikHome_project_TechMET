@@ -1197,7 +1197,7 @@ color:#333;
 
             <div id="loginPopup" class="absolute right-0 top-12 w-80 hidden z-50" style="border: 2px solid #004271; border-radius: 0px;">
                 <div class="bg-white border-2 border-[#004271] rounded-xl shadow-lg px-4 py-3 flex items-center justify-between" style="border-radius: 0;">
-                    <a href="{{ route('login.page') }}" class="flex items-center gap-2 text-[#004271] hover:underline text-lg">
+                    <a href="{{ route('login') }}" class="flex items-center gap-2 text-[#004271] hover:underline text-lg">
                         <span>→]</span>
                         <span style="padding-right: 40px;">Login</span>
                     </a>

@@ -318,7 +318,7 @@
                             <i class="fas fa-times"></i>
                             Cancel
                         </a>
-                        <button type="submit" form="deleteForm" class="modern-btn modern-btn-danger"
+                        <button type="button" form="deleteForm" class="modern-btn modern-btn-danger"
                             style="margin-left: 10px;">
                             <i class="fas fa-trash"></i>
                             Delete
@@ -329,6 +329,7 @@
                         Update Disclaimer
                     </button>
                 </div>
+                </form>
 
                 <!-- Hidden Delete Form -->
                 <form id="deleteForm" method="POST"
@@ -336,27 +337,27 @@
                     @csrf
                     @method('DELETE')
                 </form>
-            </form>
+            
         </div>
     </div>
 
     <script>
-        // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                alert.classList.add('fade');
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 150);
-            });
-        }, 5000);
-
-        // Handle delete confirmation
-        document.querySelector('button[form="deleteForm"]').addEventListener('click', function(e) {
-            if (!confirm('Are you sure you want to delete this disclaimer? This action cannot be undone.')) {
-                e.preventDefault();
-            }
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            alert.classList.add('fade');
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }, 150);
         });
-    </script>
+    }, 5000);
+
+    // Dedicated function to handle delete
+    function confirmDelete() {
+        if (confirm('Are you sure you want to delete this disclaimer? This action cannot be undone.')) {
+            document.getElementById('deleteForm').submit();
+        }
+    }
+</script>
 @endsection

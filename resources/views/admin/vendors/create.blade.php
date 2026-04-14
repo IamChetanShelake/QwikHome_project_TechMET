@@ -1045,7 +1045,7 @@
                                         Signed Application <span class="required">*</span>
                                     </label>
                                     <div class="file-input-wrapper">
-                                        <input type="file" id="application_document" name="application_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <input type="file" id="application_document" name="application_document" class="file-input" accept="application/pdf,image/*" required onchange="updateFileDisplay(this)">
                                         <div class="file-input-display">
                                             <i class="fas fa-upload"></i>
                                             <span>Choose signed application...</span>
@@ -1068,7 +1068,7 @@
                                         Trade License (Valid) <span class="required">*</span>
                                     </label>
                                     <div class="file-input-wrapper">
-                                        <input type="file" id="trade_license_document" name="trade_license_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <input type="file" id="trade_license_document" name="trade_license_document" class="file-input" accept="application/pdf,image/*" required onchange="updateFileDisplay(this)">
                                         <div class="file-input-display">
                                             <i class="fas fa-upload"></i>
                                             <span>Choose trade license...</span>
@@ -1093,7 +1093,7 @@
                                         VAT Certificate/Tax Certificate <span class="required">*</span>
                                     </label>
                                     <div class="file-input-wrapper">
-                                        <input type="file" id="vat_certificate_document" name="vat_certificate_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <input type="file" id="vat_certificate_document" name="vat_certificate_document" class="file-input" accept="application/pdf,image/*" required onchange="updateFileDisplay(this)">
                                         <div class="file-input-display">
                                             <i class="fas fa-upload"></i>
                                             <span>Choose VAT certificate...</span>
@@ -1116,7 +1116,7 @@
                                         Staff Documents (Police Clearance) <span class="required">*</span>
                                     </label>
                                     <div class="file-input-wrapper">
-                                        <input type="file" id="staff_documents" name="staff_documents" class="file-input" accept="application/pdf,image/*" required>
+                                        <input type="file" id="staff_documents" name="staff_documents" class="file-input" accept="application/pdf,image/*" required onchange="updateFileDisplay(this)">
                                         <div class="file-input-display">
                                             <i class="fas fa-upload"></i>
                                             <span>Choose staff documents...</span>
@@ -1141,11 +1141,12 @@
                                         Contract to be Signed <span class="required">*</span>
                                     </label>
                                     <div class="file-input-wrapper">
-                                        <input type="file" id="contract_document" name="contract_document" class="file-input" accept="application/pdf,image/*" required>
+                                        <input type="file" id="contract_document" name="contract_document" class="file-input" accept="application/pdf,image/*" required onchange="updateFileDisplay(this)">
                                         <div class="file-input-display">
                                             <i class="fas fa-upload"></i>
                                             <span>Choose contract document...</span>
                                         </div>
+                                    </div>
                                     <div class="file-info">
                                         <small>Supported formats: PDF, JPEG, PNG. Max size: 5MB</small>
                                     </div>
@@ -1198,19 +1199,19 @@
             }
         }
 
-        function previewImage(event) {
-            const file = event.target.files[0];
+        function updateFileDisplay(input) {
+            const file = input.files[0];
+            const wrapper = input.closest('.file-input-wrapper');
+            const display = wrapper.querySelector('.file-input-display');
+            const span = display.querySelector('span');
+            const icon = display.querySelector('i');
+            
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('imagePreview').style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-
-                // Update file display
-                const fileDisplay = event.target.parentElement.querySelector('.file-input-display span');
-                fileDisplay.textContent = file.name;
+                span.textContent = file.name;
+                icon.className = 'fas fa-check-circle';
+                display.style.borderColor = '#00d4ff';
+                display.style.color = '#334155';
+                console.log('File selected: ' + file.name + ' (' + file.size + ' bytes)');
             }
         }
 

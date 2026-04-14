@@ -253,6 +253,10 @@
             color: #334155;
             vertical-align: middle;
         }
+        .modern-table-container {
+    overflow-x: auto;
+}
+
 
         .table-row:hover {
             background: #f8fafc;

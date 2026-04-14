@@ -221,7 +221,7 @@
 ">
 
     <!-- Back Button Image -->
-   <a href="{{ route('home') }}" style="display:flex; align-items:center;">
+   <a href="{{ route('website.home') }}" style="display:flex; align-items:center;">
         <img src="img/arrow.png" 
              alt="Back"
              style="

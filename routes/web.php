@@ -30,8 +30,14 @@ use App\Models\PrivacyPolicy;
 use App\Models\TermsCondition;
 use App\Models\RefundPolicy;
 use App\Models\ServiceOffer;
+use App\Models\Subcategory;
 use App\Http\Controllers\Admin\ProfileChangeRequestController;
 use App\Http\Controllers\Admin\ServiceProviderFaqController;
+
+
+use App\Http\Controllers\Website\HomeController as WebsiteHomeController;
+
+
 
 
 //live time od Dubai 
@@ -461,6 +467,10 @@ Route::get('/test-firebase-push', function () {
 Route::get('/', [WebsiteHomeController::class, 'index'])->name('website.home');
 
 
+Route::get('/demo', function () {
+    return view('website.demo');
+});
+
 
 Route::get('/demo', function () {
     return view('website.demo');
@@ -468,7 +478,7 @@ Route::get('/demo', function () {
 
 Route::get('/login', function () {
     return view('website.login');
-})->name('login.page');
+})->name('login');
 
 Route::get('/cart', function () {
     return view('website.cart');
@@ -514,5 +524,7 @@ Route::get('/signup', function () {
 })->name('signup.page');
 
 Route::get('/coreservices', function () {
-    return view('website.coreservices');
+    $subcategories = Subcategory::where('status', 'active')->latest()->get();
+
+    return view('website.coreservices', compact('subcategories'));
 })->name('coreservices.page');
