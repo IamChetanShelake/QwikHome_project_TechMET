@@ -669,6 +669,10 @@
                                 <i class="fas fa-toggle-on"></i>
                                 Status
                             </th>
+                            <th class="th-everything-offer">
+                                <i class="fas fa-th-large"></i>
+                                Everything We Offer
+                            </th>
                             <th class="th-qwikpick">
                                 <i class="fas fa-star"></i>
                                 Qwikpick
@@ -725,6 +729,14 @@
                                             class="fas fa-{{ $service->status == 'active' ? 'check-circle' : 'times-circle' }}"></i>
                                         {{ ucfirst($service->status) }}
                                     </span>
+                                </td>
+                                <td class="td-everything-offer">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" data-service-id="{{ $service->id }}"
+                                            data-field="everything_we_offer" {{ $service->everything_we_offer ? 'checked' : '' }}
+                                            onchange="toggleField({{ $service->id }}, 'everything_we_offer', this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
                                 </td>
                                 <td class="td-qwikpick">
                                     <label class="toggle-switch">

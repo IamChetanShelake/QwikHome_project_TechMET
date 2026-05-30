@@ -60,6 +60,7 @@ class Service extends Model
         'price_monthly' => 'decimal:2',
         'price_yearly' => 'decimal:2',
         'is_arabic' => 'boolean',
+        'everything_we_offer' => 'boolean',
         'qwikpick' => 'boolean',
         'beauty_and_easy' => 'boolean',
     ];

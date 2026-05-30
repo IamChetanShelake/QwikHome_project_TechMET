@@ -287,6 +287,11 @@
     <main class="main">
         <div class="cards-grid">
 
+            @foreach ($wishlistServices ?? collect() as $service)
+                @include('website.partials.wishlist-service-card', ['service' => $service])
+            @endforeach
+
+            @if(false)
             <!-- Card 1 - Ironing -->
             <div class="wishlist-card">
                 <button class="delete-btn" aria-label="Delete">
@@ -373,6 +378,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
     </main>
@@ -405,9 +411,23 @@
         // Book Now button
         document.querySelectorAll('.book-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                const card = this.closest('.wishlist-card');
-                const title = card.querySelector('.card__title').textContent;
-                alert(`Booking: ${title}`);
+                const serviceId = this.dataset.serviceId;
+
+                if (serviceId) {
+                    fetch(`/cart/add/${serviceId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'Accept': 'application/json'
+                        }
+                    }).finally(() => {
+                        window.location.href = "{{ route('cart.page') }}";
+                    });
+                    return;
+                }
+
+                window.location.href = "{{ route('cart.page') }}";
             });
         });
     </script>

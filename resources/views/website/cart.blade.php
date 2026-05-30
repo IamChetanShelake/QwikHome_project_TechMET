@@ -320,6 +320,11 @@
     box-sizing: border-box;
 ">
 
+    @foreach ($cartServices ?? collect() as $service)
+        @include('website.partials.cart-service-card', ['service' => $service, 'quantity' => $cart[$service->id] ?? 1])
+    @endforeach
+
+    @if(false)
     <!-- BOX 1 -->
     <label style="
         width:100%;
@@ -725,6 +730,7 @@
 
     </div>
 </label>
+@endif
 
 </div>
 {{-- end slider --}}
@@ -733,7 +739,7 @@
 <div style="display: flex; justify-content: flex-end; gap: 22px; font-family: 'Roboto', sans-serif; align-items: center;margin-top: 40px;  ">
 
   <!-- Left Button: Add Services -->
-  <div style="
+  {{-- <div style="
     width: 198px;
     height: 54px;
     border: 1px solid #004271;
@@ -749,7 +755,7 @@
     cursor: pointer;
   ">
     Add Services
-  </div>
+  </div> --}}
 
   <!-- Right Button: Add address & slot -->
   <div onclick="openAddressSection()" style="
@@ -811,7 +817,7 @@
 <div style="width:100%; padding: 0px; margin: 0 auto 40px auto; background-color: #ffffff; ; font-family: 'Roboto', sans-serif;">
     
     <!-- Header -->
-  <div style="
+  {{-- <div style="
     padding: 5px; 
     display: flex;
     align-items: center;
@@ -829,10 +835,10 @@
     ">
         Your Address
     </h2>
-</div>
+</div> --}}
 
     <!-- Current Address Display -->
-    <div style="display: flex; align-items: center; width: 100%; font-family: Roboto, sans-serif;">
+    {{-- <div style="display: flex; align-items: center; width: 100%; font-family: Roboto, sans-serif;">
     <div style="display: flex; align-items: center; flex: 0 1 auto; min-width: 0;">
         <span style="font-size: 18px; font-weight: 300; color: #353535; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Tidake colony, Durwankur Lawns, Nashik .....</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-left: 4px;">
@@ -840,7 +846,7 @@
         </svg>
     </div>
     <button style="flex-shrink: 0; margin-left: 8px; width: 128px; height: 35px; background-color: transparent; color: #FF1818; font-family: Roboto, sans-serif; font-size: 18px; font-weight: 400; border: 1px solid #B4B4B4; border-radius: 15px; cursor: pointer; white-space: nowrap;">Change</button>
-</div>
+</div> --}}
 
     <!-- Form Section -->
 <div style="padding: 0px; margin-top: 50px;">
@@ -949,7 +955,7 @@
 
 <div style="display: flex; flex-wrap: wrap; gap: 28px; font-family: 'Roboto', sans-serif;">
   <!-- Home Button - Selected/Active State -->
-  <div style="
+  <div class="save-as-btn" data-save-as="Home" style="
     min-width: 140px;
     height: 51px;
     background: #E4F9FF;
@@ -961,7 +967,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
   ">
-    <span style="
+    <span class="save-as-label" style="
       font-weight: 600;
       font-size: 18px;
       line-height: 100%;
@@ -971,7 +977,7 @@
   </div>
 
   <!-- Office Button -->
-  <div style="
+  <div class="save-as-btn" data-save-as="Office" style="
     min-width: 140px;
     height: 51px;
     background: #FFFFFF;
@@ -983,7 +989,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
   ">
-    <span style="
+    <span class="save-as-label" style="
       font-weight: 300;
       font-size: 18px;
       line-height: 100%;
@@ -993,7 +999,7 @@
   </div>
 
   <!-- Other Button -->
-  <div style="
+  <div class="save-as-btn" data-save-as="Other" style="
     min-width: 140px;
     height: 51px;
     background: #FFFFFF;
@@ -1005,7 +1011,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
   ">
-    <span style="
+    <span class="save-as-label" style="
       font-weight: 300;
       font-size: 18px;
       line-height: 100%;
@@ -1212,14 +1218,14 @@ style="width:25px;height:25px;cursor:pointer;">
       <div style="display: flex; gap: 20px; align-items: flex-start;">
     
     <!-- Best Match for Your Service -->
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <img src="img/img.png" alt="Best Match" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover;">
-        <div style="margin-top: 5px; font-size: 15px; color: #404040; text-align: center; font-weight: 500;">Best Match for<br>Your Service</div>
+    <div class="expert-option" onclick="selectExpert(this)" style="display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <img src="img/img.png" alt="Best Match" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover; border: 2px solid transparent; transition: all 0.2s ease;">
+        <div style="margin-top: 5px; font-size: 15px; color: #404040; text-align: center; font-weight: 500;">Ramesh</div>
     </div>
 
     <!-- Megha -->
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <img src="img/megha.png" alt="Megha" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover;">
+    <div class="expert-option" onclick="selectExpert(this)" style="display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <img src="img/megha.png" alt="Megha" style="width: 70px; height: 70px; border-radius: 15px; object-fit: cover; border: 2px solid transparent; transition: all 0.2s ease;">
         <div style="margin-top: 5px; font-size: 15px; color: #404040; text-align: center; font-weight: 500;">Megha</div>
     </div>
 
@@ -1381,6 +1387,35 @@ margin-top:45px;
     {{-- LEFT COLUMN WRAPPER --}}
     <div style="flex: 1; display: flex;  flex-direction: column; gap: 40px;">
 
+        @php
+            $selectedCartService = ($cartServices ?? collect())->first();
+        @endphp
+
+        @if($selectedCartService)
+            @php
+                $selectedPrice = $selectedCartService->price_onetime
+                    ?? $selectedCartService->price_weekly
+                    ?? $selectedCartService->price_monthly
+                    ?? $selectedCartService->price_yearly
+                    ?? 0;
+                $selectedDescription = $selectedCartService->short_description ?: $selectedCartService->description;
+            @endphp
+            <div style="width: 100%; max-width: 519px; background: #ffffff; border-radius: 15px; border: 1px solid #B5B5B5; box-sizing: border-box; font-family: Roboto, sans-serif; padding: 20px;">
+                 <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+                    <div style="width: 133px; height: 161px; border-radius: 15px; border: 1px solid #B5B5B5; overflow: hidden; flex-shrink: 0;">
+                        <img src="{{ $selectedCartService->image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 200px;">
+                        <div style="font-weight: 600; font-size: 20px; color: #353535;">{{ $selectedCartService->name }}</div>
+                        <div style="font-size: 16px; color: #353535; margin-top: 8px;">{{ \Illuminate\Support\Str::limit(strip_tags($selectedDescription ?: 'Professional home service.'), 80) }}</div>
+                        <div style="height: 1px; background: #B5B5B5; margin: 12px 0;"></div>
+                        <div style="font-size: 20px; color: #353535;">AED {{ number_format((float) $selectedPrice, 0) }}</div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if(false)
         {{-- 1. HOME DEEP CLEANING CARD --}}
         <div style="width: 100%; max-width: 519px; background: #ffffff; border-radius: 15px; border: 1px solid #B5B5B5; box-sizing: border-box; font-family: Roboto, sans-serif; padding: 20px;">
             <!-- Card content... -->
@@ -1396,6 +1431,7 @@ margin-top:45px;
                 </div>
             </div>
         </div>
+        @endif
 {{------------ COUPONS----------- --}}
      <div id="couponBox" style="background-color: rgba(244,242,242,0.3);
 border:0.5px solid #D2D2D2;
@@ -1468,26 +1504,26 @@ font-family:Roboto, Arial, sans-serif;
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 18px; color: #2D2D2D;">
                 <span>Item total</span>
-                <span>AED 2,499</span>
+                <span>AED {{ number_format($cartSubtotal ?? 0, 0) }}</span>
             </div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 18px; color: #2D2D2D;">
                 <span>Taxes and fee</span>
-                <span>AED 50</span>
+                <span>AED {{ number_format($cartTax ?? 0, 0) }}</span>
             </div>
             
             <div style="width: 100%; height: 1px; background: #D1D1D1; margin-bottom: 20px;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 18px; font-weight: 700; color: #2D2D2D;">
                 <span>Total amount</span>
-                <span>AED 2,549</span>
+                <span>AED {{ number_format($cartTotal ?? 0, 0) }}</span>
             </div>
             
             <div style="width: 100%; height: 1px; background: #D1D1D1; margin-bottom: 20px;"></div>
             
             <div style="display: flex; justify-content: space-between; align-items: center;  font-size: clamp(15px, 2.5vw, 18px); font-weight: 700; color: #2D2D2D;">
                 <span>Amount to pay</span>
-                <span>AED 2,549</span>
+                <span>AED {{ number_format($cartTotal ?? 0, 0) }}</span>
             </div>
             
         </div>
@@ -1507,7 +1543,7 @@ margin-top:40px;
 ">
 
   <div style="font-size:26px;font-weight:600;color:#1f2a33;">
-    Pay AED 2,549
+    Pay AED {{ number_format($cartTotal ?? 0, 0) }}
   </div>
 
   <div style="display:flex;align-items:center;margin-top:28px;justify-content:space-between;">
@@ -1562,7 +1598,7 @@ margin-top:40px;
     margin-right: 60px;
     margin-bottom: clamp(20px,5vw,60px);
     ">
-  Pay AED 2,549
+  Pay AED {{ number_format($cartTotal ?? 0, 0) }}
 </button>
       </div>
 
@@ -1570,6 +1606,86 @@ margin-top:40px;
 </div>
 
 <script>
+const cartCsrfToken = "{{ csrf_token() }}";
+
+function updateCartQuantity(card, quantity) {
+    fetch(`/cart/update/${card.dataset.serviceId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': cartCsrfToken,
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ quantity }),
+    }).then(response => {
+        if (response.ok) {
+            window.location.reload();
+        }
+    });
+}
+
+document.querySelectorAll('.cart-service-card').forEach(card => {
+    const quantityValue = card.querySelector('.cart-quantity-value');
+
+    card.querySelector('.cart-delete-btn')?.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        fetch(`/cart/remove/${card.dataset.serviceId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': cartCsrfToken,
+                'Accept': 'application/json',
+            },
+        }).then(response => {
+            if (response.ok) {
+                card.style.transform = 'scale(0.9)';
+                card.style.opacity = '0';
+                setTimeout(() => window.location.reload(), 200);
+            }
+        });
+    });
+
+    card.querySelector('.cart-quantity-plus')?.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        updateCartQuantity(card, Number(quantityValue.textContent) + 1);
+    });
+
+    card.querySelector('.cart-quantity-minus')?.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        updateCartQuantity(card, Math.max(1, Number(quantityValue.textContent) - 1));
+    });
+});
+
+const saveAsButtons = document.querySelectorAll('.save-as-btn');
+let selectedSaveAsButton = document.querySelector('.save-as-btn[data-save-as="Home"]');
+
+function setSaveAsStyle(button, isActive) {
+    const label = button.querySelector('.save-as-label');
+
+    button.style.background = isActive ? '#E4F9FF' : '#FFFFFF';
+    button.style.border = isActive ? '1px solid #004271' : '1px solid #B4B4B4';
+
+    if (label) {
+        label.style.fontWeight = isActive ? '600' : '300';
+        label.style.color = isActive ? '#004271' : '#353535';
+    }
+}
+
+saveAsButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        selectedSaveAsButton = button;
+        saveAsButtons.forEach(item => setSaveAsStyle(item, item === selectedSaveAsButton));
+    });
+
+    button.addEventListener('mouseenter', () => setSaveAsStyle(button, true));
+    button.addEventListener('mouseleave', () => {
+        setSaveAsStyle(button, button === selectedSaveAsButton);
+    });
+});
+
 function openAddressSection() {
     const section = document.getElementById("address-section");
 
@@ -1660,17 +1776,36 @@ function selectTime(el){
   selectedTime=el.innerText;
 }
 
-function selectExpert(){
-  const check=document.getElementById('expert-check');
-  const card=document.getElementById('expert-card');
-  selectedExpert=!selectedExpert;
-  if(selectedExpert){
-    check.style.color="#2563eb";
-    card.style.border="2px solid #2563eb";
-  } else {
-    check.style.color="transparent";
-    card.style.border="1px solid #e5e7eb";
+function selectExpert(option){
+  document.querySelectorAll('.expert-option').forEach(item => {
+    const image = item.querySelector('img');
+    const label = item.querySelector('div');
+
+    if (image) {
+      image.style.border = '2px solid transparent';
+      image.style.boxShadow = 'none';
+    }
+
+    if (label) {
+      label.style.color = '#404040';
+      label.style.fontWeight = '500';
+    }
+  });
+
+  const selectedImage = option.querySelector('img');
+  const selectedLabel = option.querySelector('div');
+
+  if (selectedImage) {
+    selectedImage.style.border = '2px solid #004271';
+    selectedImage.style.boxShadow = '0 4px 10px rgba(0, 66, 113, 0.18)';
   }
+
+  if (selectedLabel) {
+    selectedLabel.style.color = '#004271';
+    selectedLabel.style.fontWeight = '600';
+  }
+
+  selectedExpert = true;
 }
 
 

@@ -29,10 +29,13 @@ use App\Models\Disclaimer;
 use App\Models\PrivacyPolicy;
 use App\Models\TermsCondition;
 use App\Models\RefundPolicy;
+use App\Models\Service;
 use App\Models\ServiceOffer;
 use App\Models\Subcategory;
 use App\Http\Controllers\Admin\ProfileChangeRequestController;
 use App\Http\Controllers\Admin\ServiceProviderFaqController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\api\AuthApiController;
 
 
 use App\Http\Controllers\Website\HomeController as WebsiteHomeController;
@@ -481,12 +484,83 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/cart', function () {
-    return view('website.cart');
+    $cart = session('website_cart', []);
+    $ids = array_keys($cart);
+    $cartServices = Service::whereIn('id', $ids)->get()->sortBy(function ($service) use ($ids) {
+        return array_search($service->id, $ids);
+    });
+    $cartSubtotal = $cartServices->sum(function ($service) use ($cart) {
+        $price = $service->price_onetime
+            ?? $service->price_weekly
+            ?? $service->price_monthly
+            ?? $service->price_yearly
+            ?? 0;
+
+        return (float) $price * ($cart[$service->id] ?? 1);
+    });
+    $cartTax = $cartServices->isNotEmpty() ? 50 : 0;
+    $cartTotal = $cartSubtotal + $cartTax;
+
+    return view('website.cart', compact('cartServices', 'cart', 'cartSubtotal', 'cartTax', 'cartTotal'));
 })->name('cart.page');
 
+Route::post('/cart/add/{service}', function (Request $request, Service $service) {
+    $cart = session('website_cart', []);
+    $cart[$service->id] = ($cart[$service->id] ?? 0) + 1;
+    session(['website_cart' => $cart]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Service added to cart',
+        'cart_count' => array_sum($cart),
+    ]);
+})->name('cart.add');
+
+Route::post('/cart/update/{service}', function (Request $request, Service $service) {
+    $cart = session('website_cart', []);
+    $quantity = max(1, (int) $request->input('quantity', 1));
+    $cart[$service->id] = $quantity;
+    session(['website_cart' => $cart]);
+
+    return response()->json([
+        'success' => true,
+        'quantity' => $quantity,
+        'cart_count' => array_sum($cart),
+    ]);
+})->name('cart.update');
+
+Route::post('/cart/remove/{service}', function (Request $request, Service $service) {
+    $cart = session('website_cart', []);
+    unset($cart[$service->id]);
+    session(['website_cart' => $cart]);
+
+    return response()->json([
+        'success' => true,
+        'cart_count' => array_sum($cart),
+    ]);
+})->name('cart.remove');
+
 Route::get('/wishlist', function () {
-    return view('website.user.wishlist');
-});
+    $wishlist = session('website_wishlist', []);
+    $ids = array_keys($wishlist);
+    $wishlistServices = Service::whereIn('id', $ids)->get()->sortBy(function ($service) use ($ids) {
+        return array_search($service->id, $ids);
+    });
+
+    return view('website.user.wishlist', compact('wishlistServices'));
+})->name('wishlist.page');
+
+Route::post('/wishlist/add/{service}', function (Request $request, Service $service) {
+    $wishlist = session('website_wishlist', []);
+    $wishlist[$service->id] = true;
+    session(['website_wishlist' => $wishlist]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Service added to wishlist',
+        'wishlist_count' => count($wishlist),
+    ]);
+})->name('wishlist.add');
 
 
 Route::get('/iron', function () {
@@ -519,9 +593,27 @@ Route::get('/verification', function () {
     return view('website.verification');
 })->name('verification');
 
+Route::post('/verification', function () {
+    return redirect('/');
+});
+
 Route::get('/signup', function () {
     return view('website.signup');
 })->name('signup.page');
+
+Route::post('/signup', function (Request $request) {
+    $request->merge([
+        'name' => trim($request->first_name . ' ' . $request->last_name),
+    ]);
+
+    $response = app(AuthApiController::class)->signup($request);
+
+    if ($response->getStatusCode() === 201) {
+        return redirect('/login');
+    }
+
+    return $response;
+});
 
 Route::get('/coreservices', function () {
     $subcategories = Subcategory::where('status', 'active')->latest()->get();

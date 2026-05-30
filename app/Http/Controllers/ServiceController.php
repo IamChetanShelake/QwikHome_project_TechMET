@@ -690,7 +690,7 @@ class ServiceController extends Controller
     public function toggleField(Service $service, string $field)
     {
         // Validate the field
-        if (!in_array($field, ['qwikpick', 'beauty_and_easy'])) {
+        if (!in_array($field, ['everything_we_offer', 'qwikpick', 'beauty_and_easy'])) {
             return response()->json(['success' => false, 'message' => 'Invalid field'], 400);
         }
 
